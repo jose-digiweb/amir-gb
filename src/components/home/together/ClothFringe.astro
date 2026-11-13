@@ -1,0 +1,30 @@
+---
+/**
+ * The {@link Props} type
+ * @description The props of the ClothFringe component, the fringe that hangs under a piece of the cloth
+ */
+type Props = {
+  /** A unique id for the fringe pattern. */
+  id: string;
+};
+
+// Name the pattern
+const { id } = Astro.props;
+const patternUrl = `url(#${id})`;
+---
+
+<span aria-hidden="true" class="pointer-events-none absolute inset-x-0.5 top-full h-2.5">
+  <svg class="block size-full">
+    <defs>
+      <pattern id={id} width="5" height="10" patternUnits="userSpaceOnUse">
+        <path
+          d="M2.5 0v10"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          class="stroke-border-control"
+        ></path>
+      </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill={patternUrl}></rect>
+  </svg>
+</span>

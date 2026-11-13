@@ -1,0 +1,139 @@
+---
+// Dependencies
+import { ArrowRight } from "@lucide/astro";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { WHATS_ON_STATE } from "../../../lib/content/constants";
+import { planWhatsOn } from "../../../lib/content/helpers";
+import { ROUTE } from "../../../site/constants";
+import { BUTTON_TONE, OPENER_TONE, WOVEN_SHADE_TONE } from "../../ui/constants";
+
+// Components
+import Button from "../../ui/Button.astro";
+import Opener from "../../ui/Opener.astro";
+import WovenShade from "../../ui/WovenShade.astro";
+import EventCard from "./EventCard.astro";
+import FeaturedEventCard from "./FeaturedEventCard.astro";
+import NoEventsCard from "./NoEventsCard.astro";
+import WeeklyTile from "./WeeklyTile.astro";
+
+// Types
+import type { HomeEvent, WeeklyActivity } from "../../../lib/content/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the WhatsOnSection component: the navy band with the next events, or the weekly activities when few are announced
+ */
+type Props = {
+  /** The upcoming events, soonest first. */
+  events: HomeEvent[];
+  /** The weekly activities, Monday first. */
+  activities: WeeklyActivity[];
+};
+
+// Decide how the band fills its places, and link the events page in the page's language
+const { events, activities } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const eventsHref = getRelativeLocaleUrl(locale, ROUTE.EVENTS);
+const plan = planWhatsOn(events, activities);
+const isRail = plan.state === WHATS_ON_STATE.RAIL;
+const hasCards = plan.state === WHATS_ON_STATE.CARDS;
+const featured = plan.state === WHATS_ON_STATE.FEATURED ? events[0] : undefined;
+const isNone = plan.state === WHATS_ON_STATE.NONE;
+const gridStyle = `--whats-on-columns: ${plan.columns}; --whats-on-wide: ${plan.wideSpan}`;
+const hasWeekly = plan.weekly.length > 0;
+---
+
+<section
+  id="events"
+  aria-labelledby="events-title"
+  class="relative isolate z-20 -mt-8 rounded-xl bg-surface-brand pt-12 pb-28 text-on-brand tablet:-mt-10 tablet:pt-15 tablet:pb-36 desktop:-mt-14 desktop:px-margin-lg desktop:pt-22 desktop:pb-48"
+>
+  <WovenShade tone={WOVEN_SHADE_TONE.ON_BRAND} />
+  <div class="flex items-end justify-between gap-4 px-margin pb-6 tablet:px-margin-md tablet:pb-7 desktop:px-0 desktop:pb-10">
+    <div class="flex flex-col gap-3">
+      <Opener label={t["events.opener"]} tone={OPENER_TONE.ON_BRAND} />
+      <h2 id="events-title" class="type-section-title">
+        {t["events.title"]}
+      </h2>
+    </div>
+    <a
+      href={eventsHref}
+      class="flex min-h-tap items-center type-button underline underline-offset-5 desktop:hidden"
+    >
+      {t["events.all"]}
+    </a>
+    <div class="hidden desktop:block">
+      <Button href={eventsHref} tone={BUTTON_TONE.OUTLINE_ON_BRAND}>
+        {t["events.all"]}
+        <ArrowRight />
+      </Button>
+    </div>
+  </div>
+
+  {isRail ? (
+    <ul class="events-rail flex snap-x snap-mandatory gap-3 overflow-x-auto px-margin pb-1 tablet:gap-4 tablet:px-margin-md desktop:grid desktop:grid-cols-4 desktop:gap-6 desktop:overflow-visible desktop:px-0">
+      {events.map((event) => (
+        <li class="w-62 shrink-0 snap-start tablet:w-64 desktop:w-auto">
+          <EventCard event={event} class="h-82 tablet:h-90 desktop:h-105" />
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <ul
+      style={gridStyle}
+      class="whats-on-grid grid grid-cols-2 gap-3 px-margin tablet:gap-4 tablet:px-margin-md desktop:gap-6 desktop:px-0"
+    >
+      {isNone ? (
+        <li class="whats-on-wide">
+          <NoEventsCard class:list={["h-full", { "desktop:min-h-105": hasWeekly }]} />
+        </li>
+      ) : null}
+      {featured ? (
+        <li class="whats-on-wide">
+          <FeaturedEventCard event={featured} />
+        </li>
+      ) : null}
+      {hasCards
+        ? events.map((event) => (
+            <li>
+              <EventCard event={event} class="h-65 desktop:h-105" />
+            </li>
+          ))
+        : null}
+      {plan.weekly.map((activity) => (
+        <li>
+          <WeeklyTile activity={activity} href={eventsHref} />
+        </li>
+      ))}
+    </ul>
+  )}
+</section>
+
+<style>
+  @reference "../../../styles/global.css";
+
+  .whats-on-grid {
+    @variant desktop {
+      grid-template-columns: repeat(var(--whats-on-columns), minmax(0, 1fr));
+    }
+  }
+
+  .whats-on-wide {
+    grid-column: span 2;
+
+    @variant desktop {
+      grid-column: span var(--whats-on-wide);
+    }
+  }
+
+  .events-rail {
+    scrollbar-width: none;
+    scroll-padding-inline: var(--grid-margin);
+
+    @variant tablet {
+      scroll-padding-inline: var(--grid-margin-md);
+    }
+  }
+</style>

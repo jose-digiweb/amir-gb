@@ -1,7 +1,7 @@
 // Dependencies
 import { describe, expect, it } from "vitest";
 import { LATTICE, LATTICE_PIECE, LOZENGE } from "./constants";
-import { getLatticeLayout, getNestedLozengePath, getWovenPath } from "./helpers";
+import { getBeadRing, getLatticeLayout, getNestedLozengePath, getWovenPath } from "./helpers";
 
 /**
  * The {@link countThreads} helper
@@ -44,5 +44,14 @@ describe("getLatticeLayout", () => {
   it("leaves a missing piece in place and turns a knocked one", () => {
     expect(getLatticeLayout(LATTICE_PIECE.MISSING).centre.transform).toBe("translate(148 67)");
     expect(getLatticeLayout(LATTICE_PIECE.KNOCKED).centre.transform).toContain("rotate(28");
+  });
+});
+
+describe("getBeadRing", () => {
+  it("alternates solid and ringed beads, the first one at the top of the ring", () => {
+    const ring = getBeadRing({ centreX: 100, centreY: 100, radius: 50, count: 20, size: 27 });
+    expect(ring.solid).toHaveLength(10);
+    expect(ring.ringed).toHaveLength(10);
+    expect(ring.solid[0]?.transform).toBe("translate(86.5 36.5) scale(1)");
   });
 });

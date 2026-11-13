@@ -1,0 +1,89 @@
+---
+// Dependencies
+import { ArrowRight } from "@lucide/astro";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { ROUTE } from "../../../site/constants";
+import { BUTTON_TONE } from "../../ui/constants";
+import { STORY_LAYOUT } from "./constants";
+import { getStoryLayout } from "./helpers";
+
+// Components
+import Button from "../../ui/Button.astro";
+import Opener from "../../ui/Opener.astro";
+import WovenShade from "../../ui/WovenShade.astro";
+import OneStory from "./OneStory.astro";
+import StoryTile from "./StoryTile.astro";
+import StoryWall from "./StoryWall.astro";
+
+// Types
+import type { HomeStory } from "../../../lib/content/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the LifeSection component: Life at AMIR, the newest stories, linking into News
+ */
+type Props = {
+  /** The stories, newest first; at least one. */
+  stories: HomeStory[];
+};
+
+// Decide how the stories show, and link News in the page's language
+const { stories } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const newsHref = getRelativeLocaleUrl(locale, ROUTE.NEWS);
+const layout = getStoryLayout(stories.length);
+const [firstStory] = stories;
+const one = layout === STORY_LAYOUT.ONE ? firstStory : undefined;
+const isPair = layout === STORY_LAYOUT.PAIR;
+const isWall = layout === STORY_LAYOUT.WALL;
+---
+
+<section
+  aria-labelledby="life-title"
+  class="relative isolate flex flex-col gap-3 overflow-x-clip px-margin pt-14 pb-28 tablet:px-margin-md tablet:pt-16 tablet:pb-32 desktop:px-margin-lg desktop:pt-28 desktop:pb-48"
+>
+  <WovenShade />
+  <span
+    aria-hidden="true"
+    class="life-blob absolute top-0 -right-30 -z-10 mt-6 h-65 w-75 bg-bg-alt tablet:mt-10 tablet:h-95 tablet:w-110 desktop:mt-15 desktop:h-130 desktop:w-155"
+  ></span>
+  <Opener label={t["stories.opener"]} />
+  <div class="flex items-end justify-between gap-4 pb-2 tablet:pb-3 desktop:pb-6">
+    <h2 id="life-title" class="type-section-title whitespace-nowrap text-text-heading">
+      {t["stories.title"]}
+    </h2>
+    <a
+      href={newsHref}
+      class="flex min-h-tap items-center type-button text-text-heading underline underline-offset-5 desktop:hidden"
+    >
+      {t["stories.more"]}
+    </a>
+    <div class="hidden desktop:block">
+      <Button href={newsHref} tone={BUTTON_TONE.OUTLINE}>
+        {t["stories.more"]}
+        <ArrowRight />
+      </Button>
+    </div>
+  </div>
+  {one ? <OneStory story={one} /> : null}
+  {isPair ? (
+    <ul class="grid grid-cols-2 gap-3 tablet:grid-cols-3 desktop:gap-6">
+      {stories.map((story) => (
+        <li class="nth-3:max-tablet:hidden">
+          <StoryTile story={story} class="h-65 tablet:h-90 desktop:h-105" />
+        </li>
+      ))}
+    </ul>
+  ) : null}
+  {isWall ? <StoryWall stories={stories} /> : null}
+</section>
+
+<style>
+  @reference "../../../styles/global.css";
+
+  .life-blob {
+    border-radius: 40% 60% 62% 38% / 55% 40% 60% 45%;
+  }
+</style>

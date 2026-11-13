@@ -1,0 +1,119 @@
+---
+// Dependencies
+import { Picture } from "astro:assets";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { getBeadRing } from "../../../lib/woven/helpers";
+import { WOVEN_DEFS } from "../constants";
+import { SUPPORT_RING } from "./constants";
+import joinedHands from "../../../assets/photos/joined-hands.jpg";
+
+// Components
+import Opener from "../../ui/Opener.astro";
+import WovenShade from "../../ui/WovenShade.astro";
+import BankTransfer from "./BankTransfer.astro";
+import DonateForm from "./DonateForm.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the SupportSection component: Support AMIR-GB, people first, then one calm donation form
+ */
+type Props = Record<string, never>;
+
+// Prepare the copy and the ring of beads round the photo
+const t = getTranslations(getLocale(Astro.currentLocale));
+const ring = getBeadRing(SUPPORT_RING);
+const solidHref = `#${WOVEN_DEFS.SOLID}`;
+const ringedHref = `#${WOVEN_DEFS.RINGED}`;
+---
+
+<section
+  id="support"
+  aria-labelledby="support-title"
+  data-overlaps-footer
+  class="support relative isolate z-10 mx-3 overflow-hidden rounded-xl bg-bg-alt px-4 pt-9 pb-24 text-text tablet:mx-6 tablet:grid tablet:grid-cols-2 tablet:items-start tablet:gap-8 tablet:px-margin-md tablet:pt-13 desktop:mx-margin-lg desktop:px-margin-lg desktop:pt-26"
+>
+  <WovenShade />
+  <span
+    aria-hidden="true"
+    class="absolute top-50 -left-15 -z-10 size-120 rounded-full bg-bg opacity-90 tablet:top-6 tablet:-right-15 tablet:left-auto desktop:top-10 desktop:size-160"
+  ></span>
+  <div
+    aria-hidden="true"
+    class="absolute top-84 -left-16 -z-10 hidden size-91 tablet:block desktop:top-88 desktop:-left-22 desktop:size-150"
+  >
+    <svg viewBox={SUPPORT_RING.VIEW_BOX} class="absolute inset-0 size-full overflow-visible">
+      <circle
+        cx={SUPPORT_RING.centreX}
+        cy={SUPPORT_RING.centreY}
+        r={SUPPORT_RING.radius}
+        fill="none"
+        stroke-width="1.5"
+        vector-effect="non-scaling-stroke"
+        class="stroke-accent opacity-60"
+      ></circle>
+      {ring.solid.map((bead) => (
+        <use href={solidHref} transform={bead.transform} />
+      ))}
+      {ring.ringed.map((bead) => (
+        <use href={ringedHref} transform={bead.transform} />
+      ))}
+    </svg>
+    <div class="absolute inset-[7%] overflow-hidden rounded-full shadow-md">
+      <Picture
+        src={joinedHands}
+        alt=""
+        widths={[312, 520, 1040]}
+        sizes="(min-width: 1180px) 520px, 312px"
+        class="size-full object-cover"
+      />
+    </div>
+  </div>
+  <div class="relative flex flex-col px-2 tablet:px-0">
+    <Opener label={t["support.opener"]} />
+    <h2
+      id="support-title"
+      class="mt-2.5 type-section-title text-text-heading tablet:mt-4 desktop:mt-5"
+    >
+      <span class="whitespace-nowrap tablet:block desktop:inline">{t["support.titleStart"]}</span>{" "}
+      <span class="whitespace-nowrap">{t["support.titleEnd"]}</span>
+    </h2>
+    <p class="mt-2.5 type-body text-pretty tablet:mt-3.5 desktop:mt-4.5 desktop:max-w-120 desktop:type-lead">
+      {t["support.text"]}
+    </p>
+  </div>
+  <div class="relative mt-6 flex flex-col gap-3.5 tablet:mt-3 desktop:mt-6 desktop:w-115 desktop:justify-self-end">
+    <DonateForm />
+    <BankTransfer />
+  </div>
+</section>
+
+<style>
+  @reference "../../../styles/global.css";
+
+  /* Without Life at AMIR between them, Support keeps its distance from the navy band */
+  :global(#events) + .support {
+    margin-top: var(--space-16);
+
+    @variant tablet {
+      margin-top: var(--space-20);
+    }
+
+    @variant desktop {
+      margin-top: var(--space-24);
+    }
+  }
+
+  .support {
+    margin-bottom: calc(var(--space-24) * -1);
+
+    @variant tablet {
+      min-height: calc(var(--space-32) * 5 + var(--space-10));
+      margin-bottom: calc(var(--space-24) * -1 - var(--space-4));
+    }
+
+    @variant desktop {
+      min-height: calc(var(--space-32) * 6 + var(--space-12));
+      margin-bottom: calc(var(--space-32) * -1 - var(--space-6));
+    }
+  }
+</style>

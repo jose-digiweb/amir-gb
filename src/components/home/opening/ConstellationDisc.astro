@@ -1,0 +1,45 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { TILE_COLOUR } from "../../../lib/content/constants";
+import { HELP_SERVICE_LABEL } from "../constants";
+
+// Components
+import HelpServiceIcon from "../HelpServiceIcon.astro";
+
+// Types
+import type { ConstellationDisc } from "./types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the ConstellationDisc component, one help service as a tinted disc in the opening
+ */
+type Props = {
+  /** The disc's service, tint, place and size. */
+  disc: ConstellationDisc;
+  /** Whether the disc names its service under the pictogram. */
+  hasLabel: boolean;
+};
+
+// Read the disc and name its service in the page's language
+const { disc, hasLabel } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+const label = t[HELP_SERVICE_LABEL[disc.service]];
+---
+
+<foreignObject x={disc.x} y={disc.y} width={disc.size} height={disc.size} overflow="visible">
+  <div
+    class:list={[
+      "flex size-full flex-col items-center justify-center gap-1 rounded-full px-3 text-center text-text-heading shadow-md ring-5 ring-bg-alt",
+      {
+        "bg-tint-gold": disc.tint === TILE_COLOUR.GOLD,
+        "bg-tint-forest": disc.tint === TILE_COLOUR.FOREST,
+        "bg-tint-brick": disc.tint === TILE_COLOUR.BRICK,
+        "bg-tint-navy": disc.tint === TILE_COLOUR.NAVY,
+      },
+    ]}
+  >
+    <HelpServiceIcon service={disc.service} class="size-icon-md shrink-0" />
+    {hasLabel ? <span class="type-tag text-balance">{label}</span> : null}
+  </div>
+</foreignObject>

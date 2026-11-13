@@ -1,0 +1,21 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { LOCALE } from "../../i18n/constants";
+
+/**
+ * The {@link Props} type
+ * @description The props of the DutchOnlyMark component, the small NL mark after an item that exists only in Dutch
+ */
+type Props = Record<string, never>;
+
+// Say what the mark means in the page's language
+const t = getTranslations(getLocale(Astro.currentLocale));
+---
+
+<span class="ml-1 inline-flex translate-y-[-0.1em] items-center rounded-pill border border-border bg-surface px-1.5 align-middle type-tag text-text-heading">
+  <span aria-hidden="true" lang={LOCALE.NL}>
+    {t["dutchOnly.mark"]}
+  </span>
+  <span class="sr-only">{t["dutchOnly.label"]}</span>
+</span>

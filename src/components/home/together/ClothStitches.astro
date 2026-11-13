@@ -1,0 +1,47 @@
+---
+// Dependencies
+import { CLOTH_SIDE } from "./constants";
+
+// Types
+import type { ClothSide } from "./types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the ClothStitches component, the navy stitches that sew a strip to the photo beside it
+ */
+type Props = {
+  /** The strip edge the stitches run along. */
+  side: ClothSide;
+  /** A unique id for the stitch pattern. */
+  id: string;
+  /** Visibility classes from the caller. */
+  class?: string;
+};
+
+// Read the side and name the pattern
+const { side, id, class: className } = Astro.props;
+const patternUrl = `url(#${id})`;
+---
+
+<span
+  aria-hidden="true"
+  class:list={[
+    "pointer-events-none absolute top-6 bottom-0 z-10 w-3.5",
+    { "-left-2.5": side === CLOTH_SIDE.LEFT, "-right-2.5": side === CLOTH_SIDE.RIGHT },
+    className,
+  ]}
+>
+  <svg class="block size-full overflow-visible">
+    <defs>
+      <pattern id={id} width="14" height="15" patternUnits="userSpaceOnUse">
+        <path
+          d="M0 0L14 4"
+          stroke-width="2.2"
+          stroke-linecap="round"
+          class="stroke-border-strong"
+        ></path>
+      </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill={patternUrl}></rect>
+  </svg>
+</span>

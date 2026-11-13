@@ -1,0 +1,76 @@
+---
+// Dependencies
+import { Megaphone, X } from "@lucide/astro";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { ANNOUNCEMENT } from "../../lib/announcement/constants";
+import { ICON_BUTTON_TONE } from "../ui/constants";
+
+// Components
+import IconButton from "../ui/IconButton.astro";
+
+// Types
+import type { HomeAnnouncement } from "../../lib/content/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the AnnouncementStrip component, the navy strip above the header with one urgent announcement
+ */
+type Props = {
+  /** The announcement to show. */
+  announcement: HomeAnnouncement;
+};
+
+// Read the announcement and the copy
+const { announcement } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+const linkLabel = announcement.linkLabel || t["announcement.more"];
+---
+
+<div
+  id={ANNOUNCEMENT.ELEMENT_ID}
+  role="region"
+  aria-label={t["announcement.label"]}
+  data-announcement={announcement.id}
+  class="relative flex min-h-16 items-center gap-3 bg-surface-brand py-2.5 pr-2 pl-margin text-on-brand tablet:pl-margin-md desktop:min-h-tap desktop:gap-4 desktop:py-0 desktop:pr-margin-lg desktop:pl-margin-lg"
+>
+  <Megaphone class="size-5 shrink-0 text-on-brand-accent" />
+  <p class="min-w-0 flex-1 type-button-sm desktop:text-center">
+    {announcement.text}{" "}
+    <a href={announcement.href} class="whitespace-nowrap underline underline-offset-4">
+      {linkLabel}
+    </a>
+  </p>
+  <IconButton
+    label={t["announcement.dismiss"]}
+    tone={ICON_BUTTON_TONE.BRAND}
+    data-dismiss-announcement
+    class="desktop:-mr-3"
+  >
+    <X />
+  </IconButton>
+</div>
+<script
+  is:inline
+  define:vars={{
+    storageKey: ANNOUNCEMENT.STORAGE_KEY,
+    elementId: ANNOUNCEMENT.ELEMENT_ID,
+    id: announcement.id,
+  }}
+>
+  // A strip the visitor closed stays closed for that announcement
+  try {
+    if (localStorage.getItem(storageKey) === id) {
+      document.getElementById(elementId).hidden = true;
+    }
+  } catch {
+    // Blocked storage shows the strip
+  }
+</script>
+
+<script>
+  // Dependencies
+  import { enableAnnouncementDismiss } from "../../lib/announcement/helpers";
+
+  // The close button hides the strip and remembers it for this announcement
+  enableAnnouncementDismiss();
+</script>

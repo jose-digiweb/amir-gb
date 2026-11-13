@@ -1,0 +1,53 @@
+---
+// Dependencies
+import { INTL_LOCALE } from "../../../i18n/constants";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { getEventWhen } from "../../../lib/content/helpers";
+
+// Components
+import DutchOnlyMark from "../../site/DutchOnlyMark.astro";
+import EventDate from "./EventDate.astro";
+import EventPhoto from "./EventPhoto.astro";
+
+// Types
+import type { HomeEvent } from "../../../lib/content/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the FeaturedEventCard component, the only upcoming event, large, with its day, time and place
+ */
+type Props = {
+  /** The event. */
+  event: HomeEvent;
+  /** Layout classes from the caller. */
+  class?: string;
+};
+
+// Read the event and write when and where in the page's language
+const { event, class: className } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const when = getEventWhen(event.startsAt, event.endsAt, INTL_LOCALE[locale], t["weekly.until"]);
+const where = [event.placeName, event.isOnline ? t["events.online"] : undefined]
+  .filter(Boolean)
+  .join(` ${t["events.and"]} `);
+const meta = [when, where].filter(Boolean).join(" · ");
+---
+
+<a
+  href={event.href}
+  class:list={[
+    "group relative isolate block h-70 touch-manipulation overflow-hidden rounded-lg bg-surface-sunken text-on-brand transition-[translate,scale] duration-fast ease-standard select-none hover:-translate-y-1 active:scale-98 desktop:h-105",
+    className,
+  ]}
+>
+  <EventPhoto image={event.image} sizes="(min-width: 1180px) 640px, 100vw" />
+  <EventDate startsAt={event.startsAt} class="absolute top-4 left-4" />
+  <span class="absolute inset-x-5 bottom-5 flex flex-col gap-1.5">
+    <span class="type-h2 text-balance">
+      {event.title}
+      {event.isDutchOnly ? <DutchOnlyMark /> : null}
+    </span>
+    <span class="type-body-sm font-semibold text-on-brand-muted">{meta}</span>
+  </span>
+</a>

@@ -1,0 +1,89 @@
+---
+// Dependencies
+import { ArrowRight } from "@lucide/astro";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { ROUTE } from "../../../site/constants";
+import {
+  DESKTOP_CONSTELLATION,
+  DESKTOP_CROP_X,
+  PHONE_CONSTELLATION,
+  TABLET_CONSTELLATION,
+} from "./constants";
+
+// Components
+import WhatsAppHelpLink from "../../site/WhatsAppHelpLink.astro";
+import Button from "../../ui/Button.astro";
+import Opener from "../../ui/Opener.astro";
+import Constellation from "./Constellation.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the OpeningSection component: the greeting, the title, Join AMIR-GB and the woven constellation
+ */
+type Props = Record<string, never>;
+
+// Prepare the copy and the join link in the page's language
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const joinHref = getRelativeLocaleUrl(locale, ROUTE.JOIN);
+---
+
+<section
+  aria-labelledby="opening-title"
+  class="opening relative isolate -mt-16 overflow-hidden bg-bg-alt text-text-heading tablet:min-h-svh desktop:-mt-20"
+>
+  <Constellation
+    layout={PHONE_CONSTELLATION}
+    id="opening-phone"
+    class="h-auto w-full tablet:hidden"
+  />
+  <Constellation
+    layout={TABLET_CONSTELLATION}
+    id="opening-tablet"
+    class="absolute top-0 right-0 -z-10 hidden h-full w-auto tablet:block desktop:hidden"
+  />
+  <Constellation
+    layout={DESKTOP_CONSTELLATION}
+    id="opening-desktop"
+    cropX={DESKTOP_CROP_X}
+    class="opening-desktop absolute right-0 -z-10 hidden h-full w-auto desktop:block"
+  />
+
+  <div class="flex flex-col gap-6 px-margin pb-12 tablet:w-sm tablet:pt-36 tablet:pb-24 tablet:pl-margin-md desktop:absolute desktop:top-1/2 desktop:left-margin-lg desktop:w-xl desktop:-translate-y-1/2 desktop:gap-8 desktop:p-0">
+    <div class="flex flex-col gap-3 tablet:gap-4">
+      <Opener label={t["opening.opener"]} />
+      <h1 id="opening-title" class="type-hero">
+        <span class="whitespace-nowrap tablet:block">{t["opening.titleStart"]}</span>{" "}
+        <span class="whitespace-nowrap">{t["opening.titleMiddle"]}</span>
+        <span class="block">{t["opening.titleEnd"]}</span>
+      </h1>
+    </div>
+    <p class="type-body text-pretty text-text desktop:max-w-md desktop:type-lead">
+      {t["opening.text"]}
+    </p>
+    <div class="flex flex-col items-center gap-1 tablet:items-start tablet:gap-2 desktop:flex-row desktop:items-center desktop:gap-8">
+      <Button href={joinHref} block class="tablet:w-auto">
+        {t["opening.join"]}
+        <ArrowRight />
+      </Button>
+      <WhatsAppHelpLink />
+    </div>
+  </div>
+</section>
+
+<style>
+  @reference "../../../styles/global.css";
+
+  .opening {
+    @variant desktop {
+      height: calc(100svh - var(--space-8));
+    }
+  }
+
+  .opening-desktop {
+    top: 50%;
+    translate: 0 -50%;
+    max-height: 100%;
+  }
+</style>

@@ -1,0 +1,51 @@
+---
+// Dependencies
+import { ArrowRight } from "@lucide/astro";
+import { TILE_COLOUR } from "../../../lib/content/constants";
+
+// Components
+import HelpServiceIcon from "../HelpServiceIcon.astro";
+
+// Types
+import type { TileColour } from "../../../lib/content/types";
+import type { HelpService } from "../types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the HelpTile component, one help service as a tinted tile with its pictogram
+ */
+type Props = {
+  /** The help service the tile opens. */
+  service: HelpService;
+  /** The tile's tint. */
+  tint: TileColour;
+  /** The service's name. */
+  label: string;
+  /** Where the tile goes. */
+  href: string;
+};
+
+// Read the tile's service, tint, name and link
+const { service, tint, label, href } = Astro.props;
+---
+
+<a
+  href={href}
+  class:list={[
+    "group flex h-36 touch-manipulation flex-col justify-between rounded-lg p-4 text-text-heading transition-[translate,scale] duration-fast ease-standard select-none hover:-translate-y-1 active:scale-98 tablet:h-44 tablet:p-5 desktop:h-52",
+    {
+      "bg-tint-gold": tint === TILE_COLOUR.GOLD,
+      "bg-tint-forest": tint === TILE_COLOUR.FOREST,
+      "bg-tint-brick": tint === TILE_COLOUR.BRICK,
+      "bg-tint-navy": tint === TILE_COLOUR.NAVY,
+    },
+  ]}
+>
+  <span class="flex items-start justify-between">
+    <span class="grid size-12 place-items-center rounded-full bg-tile-icon tablet:size-14 desktop:size-16">
+      <HelpServiceIcon service={service} class="size-icon-md desktop:size-icon-lg" />
+    </span>
+    <ArrowRight class="hidden size-icon-md opacity-70 tablet:block" />
+  </span>
+  <span class="type-h4 text-balance tablet:type-h3 desktop:type-h2">{label}</span>
+</a>

@@ -1,0 +1,78 @@
+---
+// Dependencies
+import { Heart, Lock } from "@lucide/astro";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { INTL_LOCALE } from "../../../i18n/constants";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { DONATION, FREQUENCY } from "../../../lib/donate/constants";
+import { ROUTE } from "../../../site/constants";
+
+// Components
+import Button from "../../ui/Button.astro";
+import AmountChoice from "./AmountChoice.astro";
+import FrequencyChoice from "./FrequencyChoice.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the DonateForm component, the calm donation form: how often, how much, one button
+ */
+type Props = Record<string, never>;
+
+// Prepare the copy, the amounts in euros and where the form goes in the page's language
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const donateHref = getRelativeLocaleUrl(locale, ROUTE.DONATE);
+const euros = new Intl.NumberFormat(INTL_LOCALE[locale], {
+  style: "currency",
+  currency: DONATION.CURRENCY,
+  maximumFractionDigits: 0,
+});
+const amounts = DONATION.AMOUNTS.map((amount) => ({
+  amount,
+  label: euros.format(amount),
+  isPicked: amount === DONATION.DEFAULT_AMOUNT,
+}));
+const submitLabel = `${t["donate.submit"]} ${euros.format(DONATION.DEFAULT_AMOUNT)}`;
+---
+
+<form
+  action={donateHref}
+  aria-label={t["donate.form"]}
+  class="flex flex-col gap-4 rounded-xl bg-surface p-6 text-text shadow-md desktop:gap-5 desktop:p-8"
+>
+  <fieldset>
+    <legend class="sr-only">{t["donate.frequency"]}</legend>
+    <div class="grid grid-cols-2 rounded-pill bg-surface-sunken p-1">
+      <FrequencyChoice value={FREQUENCY.ONCE} label={t["donate.once"]} isPicked />
+      <FrequencyChoice value={FREQUENCY.MONTHLY} label={t["donate.monthly"]} />
+    </div>
+  </fieldset>
+  <fieldset>
+    <legend class="sr-only">{t["donate.amount"]}</legend>
+    <div class="grid grid-cols-3 gap-2.5">
+      {amounts.map((choice) => (
+        <AmountChoice amount={choice.amount} label={choice.label} isPicked={choice.isPicked} />
+      ))}
+    </div>
+  </fieldset>
+  <label class="flex h-control-lg items-center gap-2 rounded-pill bg-surface-sunken px-5 font-semibold text-text-muted focus-within:outline-(length:--focus-width) focus-within:outline-offset-(--focus-offset) focus-within:outline-focus focus-within:outline-solid">
+    <span aria-hidden="true">€</span>
+    <input
+      type="text"
+      name="other"
+      inputmode="decimal"
+      autocomplete="off"
+      placeholder={t["donate.other"]}
+      aria-label={t["donate.otherLabel"]}
+      class="h-full min-w-0 flex-1 bg-transparent type-body text-text outline-none placeholder:text-text-muted"
+    />
+  </label>
+  <Button type="submit" block>
+    <Heart />
+    {submitLabel}
+  </Button>
+  <p class="flex items-center justify-center gap-1.5 type-small text-text-muted">
+    <Lock class="size-icon-sm" />
+    {t["donate.secure"]}
+  </p>
+</form>

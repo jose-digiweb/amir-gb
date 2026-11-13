@@ -1,0 +1,36 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { VALUE_LABEL } from "../constants";
+import { PILL_BOX } from "./constants";
+
+// Components
+import StarMark from "../../ui/StarMark.astro";
+
+// Types
+import type { ConstellationPill } from "./types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the ConstellationPill component, one of AMIR-GB's values as a starred pill in the opening
+ */
+type Props = {
+  /** The pill's value and centre. */
+  pill: ConstellationPill;
+};
+
+// Read the pill, centre its box on its point and name the value in the page's language
+const { pill } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+const x = pill.x - PILL_BOX.WIDTH / 2;
+const y = pill.y - PILL_BOX.HEIGHT / 2;
+---
+
+<foreignObject x={x} y={y} width={PILL_BOX.WIDTH} height={PILL_BOX.HEIGHT} overflow="visible">
+  <div class="flex size-full items-center justify-center">
+    <p class="flex items-center gap-2 rounded-pill bg-surface py-3 pr-4 pl-3 type-h4 font-extrabold whitespace-nowrap text-text-heading shadow-md ring-5 ring-bg-alt">
+      <StarMark class="size-4 text-accent" />
+      {t[VALUE_LABEL[pill.value]]}
+    </p>
+  </div>
+</foreignObject>

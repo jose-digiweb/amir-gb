@@ -78,6 +78,38 @@ EmDash's admin is at http://localhost:4321/_emdash/admin while the dev server ru
 
 The dev server writes `emdash-env.d.ts` (types for the content model) and `.emdash/`. Do not edit them by hand.
 
+### Content model
+
+The schema lives in `seed/seed.json`, which EmDash applies to an empty database on the first request. Later edits to the seed are not applied to a database that already has a schema: start from a fresh local database to try them. There are no categories, tags or pages: pages, menus and settings stay in code.
+
+| Collection (slug)                | Fields                                                                                                                                                                                                         | Per language                                      |
+| -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
+| News (`posts`)                   | title, type (announcement, news or story), excerpt, featured image, content, `urgent` (show as a strip on the home page), `urgent_until`, `strip_text` (one sentence, about 90 characters), `strip_link_label` | title, excerpt, content, strip sentence and label |
+| Events (`events`)                | title, summary, image, content, starts and ends at, all day, place name, address, online link, registration link, type (youth, help, culture, community)                                                       | title, summary, content                           |
+| Weekly activities (`activities`) | name, weekday, start and end time (HH:MM), place, tile colour (gold, forest, brick or navy)                                                                                                                    | name                                              |
+
+Fields that are not per language are shared: an editor sets them once and every translation shows the same value. A translation written in a seed must repeat the shared values; EmDash does not copy them across when it applies a seed.
+
+The seed also carries example content, all marked [EXAMPLE] or with placeholders such as [PLACE], applied only on request (`/_emdash/api/setup/dev-bypass` locally). Its photos in `seed/media/` are referenced as files. The EmDash CLI attaches them when it seeds a SQLite database; the Workers dev server cannot read local files, so on it the examples start without photos (events then show the woven panel, and stories without a photo are left out). Add photos in the admin, or upload them with `emdash media upload` and set them with `emdash content update`.
+
+## Home page
+
+`src/pages/index.astro`, `en/index.astro` and `pt/index.astro` render `src/components/home/HomePage.astro`. The page shows CMS content, so it renders per request (`export const prerender = false`) and is cached at Cloudflare's edge through Astro's route cache (`cacheCloudflare()` in `astro.config.mjs`, experimental). The cache hints EmDash returns tag the cached page, so publishing purges it. In development the cache is off.
+
+Sections, top to bottom, each in its own folder under `src/components/home/`:
+
+- **Announcement strip** (`AnnouncementStrip.astro`): the newest News post marked urgent whose `urgent_until` has not passed, above the header. Closing it stores the post's translation group in `localStorage`, and a small inline script hides it again before it paints on the next visit; a new announcement shows again.
+- **Opening** (`opening/`): the greeting, the title, Join AMIR-GB and WhatsApp, with the woven constellation (the joined hands in a ring of beads, the six help services, three values, stitched gold threads). Each screen size has its own drawing from its board (`opening/constants.ts`). On desktop the opening fills the window and the drawing scales down to fit shorter windows, never up.
+- **How can we help?** (`help/`): six tinted tiles linking to the Get help page.
+- **Stronger together** (`together/`): the story, the motto chips, the members label and the cloth of photo strips and two pinti strips, sewn with stitches. The strips are the board's own drawings (`ClothStripNavy.astro`, `ClothStripGold.astro`), coloured with design system tokens.
+- **What's on** (`events/`): the next events from EmDash. Four or more fill the band (a sideways rail on phone and tablet, four cards on desktop). With fewer, weekly activities fill the places left: two or three event cards, one featured event across two places, or a calm message when nothing is announced. On desktop the band uses only the columns it fills, so a featured event or the message with no weekly activities beside it spans the whole band (`planWhatsOn` in `src/lib/content/helpers.ts`). An event without a photo shows the woven pinti panel.
+- **Life at AMIR** (`stories/`): the newest Story posts. Four or more make a photo wall whose columns always end on one line (two columns on phone, three on tablet, four on desktop, each wall used only when there are enough stories to fill it); two or three sit side by side; one shows with its title and a few words. With none, the section is left out.
+- **Support AMIR-GB** (`support/`): the donation form's static markup, which sends visitors to the Donate page until the payment flow is built, and the bank transfer bar. Its Copy button copies the account number without spaces and shows "Copied. Paste it in your banking app." with a green check for three seconds (`src/lib/donate/helpers.ts`); a browser that refuses the clipboard leaves the bar as it was. The account number is a placeholder in its real Rabobank shape (`NL00 RABO 0000 0000 00`) until AMIR sends it. Amounts follow the page's language: €25 in English, € 25 in Dutch, 25 € in Portuguese. The section overlaps the footer, which adds the overlap to its own top padding. When Life at AMIR is left out, Support keeps its own distance from the navy band.
+
+Languages: lists in English and Portuguese also show items that exist only in Dutch, one per translation group, each with a small NL mark (`DutchOnlyMark.astro`, read out as "Only in Dutch"). The queries are in `src/lib/content/queries.ts`; dates show in Dutch time, in British English and European Portuguese formats.
+
+Placeholders in the page until AMIR sends them: the account number, the weekly activities and their places, every event except the General meeting, and the photos (example photos from the design canvas, with their credits in the design's notes).
+
 ## Design system files
 
 `src/styles/design-system/amir-tokens.css` and `amir-tailwind.css` are generated by the AMIR-GB design system ([Design System artifact](https://claude.ai/artifact/CMiqDHzbFGF8XPvEU17SEK)), from its `project/tokens.json`. They are copied here unchanged, with one header line naming their source. Never edit them here: a change goes into the design system first.

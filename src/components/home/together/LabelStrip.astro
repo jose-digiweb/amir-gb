@@ -1,0 +1,44 @@
+---
+/**
+ * The {@link Props} type
+ * @description The props of the LabelStrip component, the strip of navy pinti along the members label's edge
+ */
+type Props = {
+  /** Size classes from the caller; the drawing covers the box from the top. */
+  class?: string;
+};
+
+// Read the size the caller gives the strip
+const { class: className } = Astro.props;
+---
+
+<svg
+  aria-hidden="true"
+  viewBox="0 0 26 90"
+  preserveAspectRatio="xMidYMin slice"
+  class:list={["block", className]}
+>
+  <rect width="26" height="90" fill="var(--surface-brand)" />
+  <path d="M2.6 0V90M23.4 0V90" stroke="var(--on-brand)" stroke-opacity="0.85" stroke-width="1.3" />
+  <path
+    d="M6.5 3.25h13v3.03h-13zM6.5 11.92h13v3.03h-13zM10.83 20.58h4.33v3.03h-4.33zM6.5 24.92h4.33v3.03h-4.33zM15.17 24.92h4.33v3.03h-4.33zM10.83 29.25h4.33v3.03h-4.33z"
+    fill="var(--on-brand)"
+  />
+  <path d="M6.5 7.58h13v3.03h-13zM10.83 24.92h4.33v3.03h-4.33z" fill="var(--on-brand-accent)" />
+  <path d="M6.5 7.58h13v3.03h-13zM10.83 24.92h4.33v3.03h-4.33z" fill="var(--on-brand-accent)" />
+  <path
+    d="M6.5 37.92h13v3.03h-13zM6.5 46.58h13v3.03h-13zM6.5 55.25h13v3.03h-13zM10.83 59.58h4.33v3.03h-4.33zM6.5 63.92h13v3.03h-13z"
+    fill="var(--on-brand)"
+  />
+  <path d="M6.5 42.25h13v3.03h-13z" fill="var(--on-brand-accent)" />
+  <path d="M6.5 42.25h13v3.03h-13z" fill="var(--on-brand-accent)" />
+  <path d="M6.5 72.58h13v3.03h-13zM6.5 81.25h13v3.03h-13z" fill="var(--on-brand)" />
+  <path
+    d="M6.5 76.92h13v3.03h-13zM10.83 89.92h4.33v3.03h-4.33zM6.5 94.25h13v3.03h-13zM10.83 98.58h4.33v3.03h-4.33z"
+    fill="var(--on-brand-accent)"
+  />
+  <path
+    d="M6.5 76.92h13v3.03h-13zM10.83 89.92h4.33v3.03h-4.33zM6.5 94.25h13v3.03h-13zM10.83 98.58h4.33v3.03h-4.33z"
+    fill="var(--on-brand-accent)"
+  />
+</svg>

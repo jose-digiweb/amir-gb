@@ -1,0 +1,27 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { VALUE, VALUE_LABEL } from "../constants";
+
+// Components
+import StarMark from "../../ui/StarMark.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the MottoChips component, AMIR-GB's four values as starred chips
+ */
+type Props = Record<string, never>;
+
+// Name every value in the page's language
+const t = getTranslations(getLocale(Astro.currentLocale));
+const values = Object.values(VALUE).map((value) => ({ value, label: t[VALUE_LABEL[value]] }));
+---
+
+<ul aria-label={t["values.label"]} class="grid grid-cols-2 gap-2 tablet:flex tablet:flex-wrap">
+  {values.map((item) => (
+    <li class="flex h-chip items-center gap-2 rounded-pill bg-surface pr-4 pl-3 type-button-sm whitespace-nowrap text-text-heading">
+      <StarMark class="size-4 text-accent" />
+      {item.label}
+    </li>
+  ))}
+</ul>

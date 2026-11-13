@@ -1,0 +1,75 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { CLOTH_SIDE } from "./constants";
+import drummer from "../../../assets/photos/drummer.jpg";
+import friendsLaughing from "../../../assets/photos/friends-laughing.jpg";
+import waxPrintDancers from "../../../assets/photos/wax-print-dancers.jpg";
+
+// Components
+import ClothFringe from "./ClothFringe.astro";
+import ClothPhoto from "./ClothPhoto.astro";
+import ClothStitches from "./ClothStitches.astro";
+import ClothStripGold from "./ClothStripGold.astro";
+import ClothStripNavy from "./ClothStripNavy.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the Cloth component, photo strips and two pinti strips sewn into one cloth
+ */
+type Props = {
+  /** Layout classes from the caller. */
+  class?: string;
+};
+
+// Read the layout classes and the photos' descriptions in the page's language
+const { class: className } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+---
+
+<div
+  role="img"
+  aria-label={t["together.clothLabel"]}
+  class:list={[
+    "flex aspect-[350/300] items-end gap-1.5 tablet:aspect-[406/480] desktop:aspect-[698/600]",
+    className,
+  ]}
+>
+  <ClothPhoto
+    src={drummer}
+    alt=""
+    id="cloth-fringe-drummer"
+    focus="object-[42%_40%]"
+    class="order-2 h-full grow-[126] desktop:order-1 desktop:h-[96%] desktop:grow-[186]"
+  />
+  <div class="relative order-1 h-[93%] grow-[40] basis-0 desktop:order-2 desktop:h-full desktop:grow-[76]">
+    <ClothStripNavy class="size-full rounded-t-lg" />
+    <ClothStitches
+      side={CLOTH_SIDE.LEFT}
+      id="cloth-stitch-navy-left"
+      class="hidden desktop:block"
+    />
+    <ClothStitches side={CLOTH_SIDE.RIGHT} id="cloth-stitch-navy-right" />
+    <ClothFringe id="cloth-fringe-navy" />
+  </div>
+  <ClothPhoto
+    src={friendsLaughing}
+    alt=""
+    id="cloth-fringe-friends"
+    focus="object-[52%_30%]"
+    class="order-4 h-[97%] grow-[126] desktop:order-3 desktop:h-[93%] desktop:grow-[186]"
+  />
+  <div class="relative order-3 h-[88%] grow-[40] basis-0 desktop:order-4 desktop:h-[98%] desktop:grow-[76]">
+    <ClothStripGold class="size-full rounded-t-lg" />
+    <ClothStitches side={CLOTH_SIDE.LEFT} id="cloth-stitch-gold-left" />
+    <ClothStitches side={CLOTH_SIDE.RIGHT} id="cloth-stitch-gold-right" />
+    <ClothFringe id="cloth-fringe-gold" />
+  </div>
+  <ClothPhoto
+    src={waxPrintDancers}
+    alt=""
+    id="cloth-fringe-dancers"
+    focus="object-[40%_35%]"
+    class="order-5 hidden h-[90%] grow-[150] desktop:block"
+  />
+</div>

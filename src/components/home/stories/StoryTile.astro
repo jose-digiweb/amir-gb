@@ -1,0 +1,47 @@
+---
+// Dependencies
+import { Image } from "emdash/ui";
+
+// Components
+import DutchOnlyMark from "../../site/DutchOnlyMark.astro";
+
+// Types
+import type { HomeStory } from "../../../lib/content/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the StoryTile component, a story's photo with its label, linking into News
+ */
+type Props = {
+  /** The story. */
+  story: HomeStory;
+  /** Size and placement classes from the caller. */
+  class?: string;
+  /** Its place on the photo wall, as custom properties. */
+  style?: string;
+};
+
+// Read the story and where the tile sits
+const { story, class: className, style } = Astro.props;
+---
+
+<a
+  href={story.href}
+  style={style}
+  class:list={[
+    "group relative isolate block touch-manipulation overflow-hidden rounded-lg bg-surface-sunken transition-[translate,scale] duration-fast ease-standard select-none hover:-translate-y-1 active:scale-98",
+    className,
+  ]}
+>
+  <Image
+    image={story.image}
+    alt=""
+    sizes="(min-width: 1180px) 300px, (min-width: 700px) 250px, 50vw"
+    loading="lazy"
+    class="absolute inset-0 size-full object-cover transition-transform duration-base ease-standard group-hover:scale-103"
+  />
+  <span class="absolute bottom-3 left-3 inline-flex min-h-7 items-center rounded-pill bg-surface px-3 type-tag text-text-heading desktop:bottom-3.5 desktop:left-3.5">
+    {story.title}
+    {story.isDutchOnly ? <DutchOnlyMark /> : null}
+  </span>
+</a>

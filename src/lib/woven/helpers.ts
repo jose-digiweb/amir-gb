@@ -1,8 +1,8 @@
 // Dependencies
-import { LATTICE, LATTICE_PIECE, LOZENGE, WEAVE } from "./constants";
+import { BEAD, LATTICE, LATTICE_PIECE, LOZENGE, WEAVE } from "./constants";
 
 // Types
-import type { LatticeLayout, LatticePiece, PlacedPiece } from "./types";
+import type { BeadRing, LatticeLayout, LatticePiece, PlacedPiece, RingSpec } from "./types";
 
 /**
  * The {@link getWovenPath} helper
@@ -103,4 +103,45 @@ function getCentreTransform(centrePiece: LatticePiece, x: number, y: number): st
 
   // A knocked piece is moved and turned about its own centre
   return `translate(${x + LATTICE.KNOCK_X} ${y + LATTICE.KNOCK_Y}) rotate(${LATTICE.KNOCK_TURN} ${half} ${half})`;
+}
+
+/**
+ * The {@link getBeadRing} helper
+ * @description Strings beads round a circle, solid and ringed in turn, the first one at the top
+ * @param {RingSpec} ring - The ring's centre, radius, bead count and bead size
+ * @returns {BeadRing} Every bead with its transform, split by kind
+ */
+export function getBeadRing(ring: RingSpec): BeadRing {
+  const solid: PlacedPiece[] = [];
+  const ringed: PlacedPiece[] = [];
+  const scale = ring.size / BEAD.UNITS;
+  const half = ring.size / 2;
+
+  // Place each bead at its angle round the ring
+  for (let index = 0; index < ring.count; index += 1) {
+    const angle = ((BEAD.START_TURN + (360 / ring.count) * index) * Math.PI) / 180;
+    const x = round(ring.centreX + ring.radius * Math.cos(angle) - half);
+    const y = round(ring.centreY + ring.radius * Math.sin(angle) - half);
+    const bead = { key: `${index}`, transform: `translate(${x} ${y}) scale(${round(scale)})` };
+
+    // Even beads are solid, odd ones ringed
+    if (index % 2 === 0) {
+      solid.push(bead);
+    } else {
+      ringed.push(bead);
+    }
+  }
+
+  // The ring, ready to render
+  return { solid, ringed };
+}
+
+/**
+ * The {@link round} helper
+ * @description Rounds a coordinate to two decimals, so SVG attributes stay short
+ * @param {number} value - The coordinate
+ * @returns {number} The rounded coordinate
+ */
+function round(value: number): number {
+  return Math.round(value * 100) / 100;
 }

@@ -50,3 +50,12 @@ export const LATTICE_PIECE = {
   MISSING: "missing",
   KNOCKED: "knocked",
 } as const;
+
+/**
+ * The {@link BEAD} constant
+ * @description A bead is one woven member piece, 9 cells of 3 units, scaled to the size it is drawn at
+ */
+export const BEAD = {
+  UNITS: 27,
+  START_TURN: -90,
+} as const;
