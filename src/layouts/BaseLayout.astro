@@ -1,0 +1,45 @@
+---
+// Dependencies
+import { i18n } from "astro:config/server";
+import "../styles/global.css";
+
+// Components
+import { Font } from "astro:assets";
+
+/**
+ * The {@link Props} type
+ * @description The props of the BaseLayout component, the document shell every page renders through
+ */
+type Props = {
+  /** Page title, shown in the browser tab and search results. */
+  title: string;
+  /** One-sentence summary for search results and link previews. */
+  description: string;
+};
+
+// Read the page's title and description
+const { title, description } = Astro.props;
+
+// Use the language of the URL, or the site's default language where Astro reports none
+const lang = Astro.currentLocale ?? i18n?.defaultLocale;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <Font cssVariable="--font-montserrat" preload />
+    <Font cssVariable="--font-inter" preload />
+    <slot name="head" />
+  </head>
+  <body class="bg-bg type-body text-text">
+    <slot />
+  </body>
+</html>

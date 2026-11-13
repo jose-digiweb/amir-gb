@@ -1,0 +1,43 @@
+// Cloudflare Workers config (free plan). Bindings follow EmDash's Cloudflare guide:
+// https://docs.emdashcms.com/deployment/cloudflare/
+// The project is named amir-gb: the Worker, its D1 database (amir-gb) and its R2 bucket
+// (amir-gb-media). Nothing exists on Cloudflare yet; the first deploy creates them.
+// Local dev needs no IDs: Wrangler simulates D1 and R2 in .wrangler/.
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "amir-gb",
+  "main": "./src/worker.ts",
+  "compatibility_date": "2026-11-03",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+  },
+  "observability": {
+    "enabled": true,
+  },
+
+  // EmDash content database.
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "amir-gb",
+    },
+  ],
+  // EmDash media library.
+  "r2_buckets": [
+    {
+      "binding": "MEDIA",
+      "bucket_name": "amir-gb-media",
+    },
+  ],
+  // EmDash co-editing rooms.
+  "durable_objects": {
+    "bindings": [{ "name": "EMDASH_ROOMS", "class_name": "EmDashRoom" }],
+  },
+  "exports": {
+    "EmDashRoom": { "type": "durable-object", "storage": "sqlite" },
+  },
+  // Scheduled publishing and EmDash maintenance.
+  "triggers": { "crons": ["* * * * *"] },
+}

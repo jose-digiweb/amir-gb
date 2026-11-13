@@ -1,0 +1,323 @@
+/* GENERATED: copied unchanged from the AMIR-GB Design System artifact, https://claude.ai/artifact/CMiqDHzbFGF8XPvEU17SEK, file project/build/amir-tailwind.css. Do not edit by hand; refresh as the README's "Design system files" section says. */
+/* AMIR-GB Tailwind CSS v4 theme. Built from tokens.json: change a value there, then rebuild this file. Do not edit by hand.
+   Import order in the site's main stylesheet:
+     @import "tailwindcss";
+     @import "./amir-tokens.css";
+     @import "./amir-tailwind.css";
+   Every utility points at a variable in amir-tokens.css, so light and dark switch there. No dark: variant is needed for colour. */
+
+/* The design system replaces only what it owns: colours, breakpoints, font families, text sizes, corners, shadows and easing.
+   Everything else is Tailwind's default: the 0.25rem spacing base, font weights, tracking, leading, blur, containers, animations. */
+@theme {
+  --color-*: initial;
+  --breakpoint-*: initial;
+  --font-*: initial;
+  --text-*: initial;
+  --radius-*: initial;
+  --shadow-*: initial;
+  --ease-*: initial;
+  --breakpoint-tablet: 700px;
+  --breakpoint-desktop: 1180px;
+}
+
+@theme inline reference {
+  /* colour: bg-*, text-*, border-*, outline-*, fill-*, stroke-*, ring-* */
+  --color-brand-navy: var(--brand-navy);
+  --color-brand-deep-navy: var(--brand-deep-navy);
+  --color-brand-gold: var(--brand-gold);
+  --color-brand-bright-gold: var(--brand-bright-gold);
+  --color-brand-white: var(--brand-white);
+  --color-bg: var(--bg);
+  --color-bg-alt: var(--bg-alt);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-sunken: var(--surface-sunken);
+  --color-surface-brand: var(--surface-brand);
+  --color-surface-accent: var(--surface-accent);
+  --color-surface-inverse: var(--surface-inverse);
+  --color-text-heading: var(--text-heading);
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-text-accent: var(--text-accent);
+  --color-link: var(--link);
+  --color-on-brand: var(--on-brand);
+  --color-on-brand-muted: var(--on-brand-muted);
+  --color-on-brand-accent: var(--on-brand-accent);
+  --color-on-accent: var(--on-accent);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-pressed: var(--primary-pressed);
+  --color-on-primary: var(--on-primary);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-pressed: var(--accent-pressed);
+  --color-on-accent-fill: var(--on-accent-fill);
+  --color-selected: var(--selected);
+  --color-on-selected: var(--on-selected);
+  --color-hover-quiet: var(--hover-quiet);
+  --color-pressed-quiet: var(--pressed-quiet);
+  --color-hover-quiet-on-brand: var(--hover-quiet-on-brand);
+  --color-pressed-quiet-on-brand: var(--pressed-quiet-on-brand);
+  --color-border: var(--border);
+  --color-border-subtle: var(--border-subtle);
+  --color-border-control: var(--border-control);
+  --color-border-strong: var(--border-strong);
+  --color-focus: var(--focus);
+  --color-focus-on-brand: var(--focus-on-brand);
+  --color-success: var(--success);
+  --color-success-bg: var(--success-bg);
+  --color-success-solid: var(--success-solid);
+  --color-danger: var(--danger);
+  --color-danger-bg: var(--danger-bg);
+  --color-danger-solid: var(--danger-solid);
+  --color-warning: var(--warning);
+  --color-warning-bg: var(--warning-bg);
+  --color-info: var(--info);
+  --color-info-bg: var(--info-bg);
+  --color-on-status: var(--on-status);
+  --color-disabled-bg: var(--disabled-bg);
+  --color-disabled-text: var(--disabled-text);
+  --color-scrim: var(--scrim);
+  --color-decor: var(--decor);
+  --color-tint-gold: var(--tint-gold);
+  --color-tint-forest: var(--tint-forest);
+  --color-tint-brick: var(--tint-brick);
+  --color-tint-navy: var(--tint-navy);
+  --color-tile-icon: var(--tile-icon);
+  --color-motif: var(--motif);
+  --color-motif-eye: var(--motif-eye);
+  --color-motif-band: var(--motif-band);
+  --color-motif-on-brand: var(--motif-on-brand);
+  --color-motif-eye-on-brand: var(--motif-eye-on-brand);
+  --color-motif-band-on-brand: var(--motif-band-on-brand);
+  --color-decor-strong: var(--decor-strong);
+
+  /* fonts: font-heading, font-text */
+  --font-heading: var(--font-heading);
+  --font-text: var(--font-text);
+
+  /* named sizes, added to Tailwind's own spacing base (p-4 is 16px, gap-6 is 24px): h-control, min-h-tap, size-icon-md, px-margin */
+  --spacing-tap: var(--tap-min);
+  --spacing-control: var(--control-height);
+  --spacing-control-lg: var(--control-height-lg);
+  --spacing-icon-sm: var(--icon-sm);
+  --spacing-icon-md: var(--icon-md);
+  --spacing-icon-lg: var(--icon-lg);
+  --spacing-pictogram: var(--pictogram);
+  --spacing-margin: var(--grid-margin);
+  --spacing-margin-md: var(--grid-margin-md);
+  --spacing-margin-lg: var(--grid-margin-lg);
+  --spacing-gutter: var(--grid-gutter);
+  --spacing-gutter-md: var(--grid-gutter-md);
+  --spacing-gutter-lg: var(--grid-gutter-lg);
+  --spacing-chip: var(--chip-height);
+  --spacing-bridge: var(--bridge-height);
+  --spacing-bridge-md: var(--bridge-height-md);
+  --spacing-bridge-lg: var(--bridge-height-lg);
+
+  /* a plain "transition" uses the base duration and the standard easing */
+  --default-transition-duration: var(--duration-base);
+  --default-transition-timing-function: var(--ease-standard);
+
+  /* width limits, added to Tailwind's container sizes: max-w-page, max-w-measure */
+  --container-page: var(--container-max);
+  --container-measure: var(--measure);
+
+  /* corners: rounded-md, rounded-pill */
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+  --radius-pill: var(--radius-pill);
+
+  /* shadows: shadow-md */
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+
+  /* easing: ease-standard */
+  --ease-standard: var(--ease-standard);
+  --ease-enter: var(--ease-enter);
+  --ease-exit: var(--ease-exit);
+}
+
+/* type: one class per text style, with its family, size, line height, weight and spacing; hero, section-title, display and h1 grow on tablet and desktop */
+@utility type-hero {
+  font-family: var(--font-heading);
+  font-size: 2.5rem;
+  line-height: 2.75rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  @media (min-width: 700px) {
+    font-size: 4.5rem;
+    line-height: 4.625rem;
+  }
+  @media (min-width: 1180px) {
+    font-size: 6rem;
+    line-height: 6.125rem;
+  }
+}
+@utility type-section-title {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  line-height: 2.25rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  @media (min-width: 700px) {
+    font-size: 2.75rem;
+    line-height: 2.875rem;
+  }
+  @media (min-width: 1180px) {
+    font-size: 3.5rem;
+    line-height: 3.75rem;
+  }
+}
+@utility type-display {
+  font-family: var(--font-heading);
+  font-size: 2.5rem;
+  line-height: 2.75rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  @media (min-width: 700px) {
+    font-size: 3rem;
+    line-height: 3.25rem;
+  }
+  @media (min-width: 1180px) {
+    font-size: 3.5rem;
+    line-height: 3.75rem;
+  }
+}
+@utility type-h1 {
+  font-family: var(--font-heading);
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  @media (min-width: 700px) {
+    font-size: 2.125rem;
+    line-height: 2.5rem;
+  }
+  @media (min-width: 1180px) {
+    font-size: 2.25rem;
+    line-height: 2.625rem;
+  }
+}
+@utility type-h2 {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  line-height: 1.875rem;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+@utility type-h3 {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  line-height: 1.625rem;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+@utility type-h4 {
+  font-family: var(--font-heading);
+  font-size: 1.0625rem;
+  line-height: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+@utility type-lead {
+  font-family: var(--font-text);
+  font-size: 1.1875rem;
+  line-height: 1.875rem;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+@utility type-body {
+  font-family: var(--font-text);
+  font-size: 1.0625rem;
+  line-height: 1.6875rem;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+@utility type-body-strong {
+  font-family: var(--font-text);
+  font-size: 1.0625rem;
+  line-height: 1.6875rem;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+@utility type-body-sm {
+  font-family: var(--font-text);
+  font-size: 0.9375rem;
+  line-height: 1.4375rem;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+@utility type-small {
+  font-family: var(--font-text);
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+@utility type-label {
+  font-family: var(--font-heading);
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+}
+@utility type-tag {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+@utility type-button {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  line-height: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+@utility type-button-sm {
+  font-family: var(--font-heading);
+  font-size: 0.875rem;
+  line-height: 1.125rem;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+@utility type-field-label {
+  font-family: var(--font-heading);
+  font-size: 0.9375rem;
+  line-height: 1.25rem;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+/* motion durations (Tailwind has no theme namespace for these) */
+@utility duration-fast {
+  transition-duration: var(--duration-fast);
+}
+@utility duration-base {
+  transition-duration: var(--duration-base);
+}
+@utility duration-slow {
+  transition-duration: var(--duration-slow);
+}
+
+/* stagger: delay-stagger-2 is two steps of --stagger (0 with reduced motion) */
+@utility delay-stagger-* {
+  transition-delay: calc(var(--stagger) * --value(integer));
+  animation-delay: calc(var(--stagger) * --value(integer));
+}
+
+/* layers */
+@utility z-header {
+  z-index: var(--z-header);
+}
+@utility z-overlay {
+  z-index: var(--z-overlay);
+}
+@utility z-toast {
+  z-index: var(--z-toast);
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  // Formats the whole .astro file (frontmatter, markup, expressions, <style>, <script>)
+  // through @astrojs/compiler-rs, which Astro 7 installs.
+  "astro": true,
+  // Tailwind class order, read from the site's own theme.
+  "sortTailwindcss": { "stylesheet": "./src/styles/global.css" },
+  // Generated files stay exactly as their source made them.
+  "ignorePatterns": [
+    "src/styles/design-system/**",
+    "worker-configuration.d.ts",
+    "emdash-env.d.ts",
+    ".emdash/**",
+  ],
+}

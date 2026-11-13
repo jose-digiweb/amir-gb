@@ -1,0 +1,16 @@
+# Local environment for `pnpm dev` and `pnpm preview`.
+# Copy to .dev.vars (git-ignored) and fill in test values. Never put real or live keys here.
+# Wrangler reads .dev.vars, or .env when there is no .dev.vars; not both.
+# Deployed values: `pnpm exec wrangler secret put <NAME>` for secrets, "vars" in wrangler.jsonc for the rest.
+
+# Public origin of the site. Leave empty on localhost.
+SITE_URL=
+
+# Stripe test-mode keys (sk_test_..., whsec_...). Needed once donations are built.
+STRIPE_SECRET_KEY=
+STRIPE_WEBHOOK_SECRET=
+
+# EmDash: encrypts plugin settings saved as secrets. Generate one with:
+#   pnpm exec emdash secrets generate
+# Back the production key up separately; without it EmDash cannot read those settings.
+EMDASH_ENCRYPTION_KEY=

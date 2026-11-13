@@ -1,0 +1,17 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  // Oxlint's default rules (the "correctness" category), including the rules that need type
+  // information (for example no-floating-promises), which run through oxlint-tsgolint.
+  // In .astro files Oxlint lints the frontmatter and <script> blocks only.
+  // Type errors are `astro check`'s job, for .astro and .ts files: Oxlint's own type check
+  // ("typeCheck") cannot resolve imports of .astro files, so it stays off.
+  "options": {
+    "typeAware": true,
+  },
+  "ignorePatterns": [
+    "src/styles/design-system/**",
+    "worker-configuration.d.ts",
+    "emdash-env.d.ts",
+    ".emdash/**",
+  ],
+}

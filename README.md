@@ -1,46 +1,88 @@
-# Astro Starter Kit: Basics
+# AMIR-GB website
 
-```sh
-pnpm create astro@latest -- --template basics
+The website of AMIR-GB, the association for migrants and the Guinea-Bissau community across the Netherlands. It informs, takes donations and posts news, updates and events. Most visitors use only a phone.
+
+Astro 7 on Cloudflare Workers, with EmDash as the CMS, Tailwind CSS v4 fed by the AMIR-GB design system, and Vue 3 for the interactive parts. React is installed only for EmDash's admin. Oxlint and Oxfmt lint and format, Vitest tests. Languages: Dutch at the root, English at `/en/`, Portuguese at `/pt/`.
+
+## Setup
+
+You need pnpm. `package.json` pins Node.js 26.13.1 and pnpm 12.18.0 in `devEngines`; pnpm downloads and uses both.
+
+```bash
+pnpm install
+cp .dev.vars.example .dev.vars
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Fill `.dev.vars` with test values only. It is git-ignored.
 
-## 🚀 Project Structure
+## Commands
 
-Inside of your Astro project, you'll see the following folders and files:
+| What                                      | Command                                                                 |
+| ----------------------------------------- | ----------------------------------------------------------------------- |
+| Dev server at http://localhost:4321       | `pnpm dev`                                                              |
+| Dev server in the background              | `pnpm dev --background`, then `pnpm astro dev stop`, `status` or `logs` |
+| Format                                    | `pnpm format` (check only: `pnpm format:check`)                         |
+| Lint                                      | `pnpm lint`                                                             |
+| Type-check                                | `pnpm check` (`astro check`, then `vue-tsc` for `.vue` files)           |
+| Tests (Vitest)                            | `pnpm test`                                                             |
+| Production build                          | `pnpm build`                                                            |
+| Everything above, in order                | `pnpm verify`                                                           |
+| Preview the build in Cloudflare's runtime | `pnpm preview`                                                          |
+| Regenerate Cloudflare binding types       | `pnpm types` (after any change to `wrangler.jsonc`)                     |
+| Deploy                                    | `pnpm run deploy` (see Deploy; plain `pnpm deploy` is a pnpm command)   |
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
+Before you hand work over, `pnpm verify` passes.
+
+Oxfmt formats every part of an `.astro` file and sorts Tailwind classes (`.oxfmtrc.jsonc`). Oxlint runs its default rules, including the type-aware ones through `oxlint-tsgolint` (`.oxlintrc.jsonc`); in an `.astro` file it lints the frontmatter and `<script>` blocks, not the template expressions. `astro check` reports type errors in `.astro` and `.ts` files.
+
+In a `.vue` file, Oxfmt formats everything and Oxlint lints the `<script>` block without its type-aware rules. `astro check` skips the inside of `.vue` files, so `pnpm check` also runs `vue-tsc` on them (script and template), with `tsconfig.vue.json`. Props passed to a Vue component from an `.astro` file are checked by `astro check`.
+
+Vitest uses the project's Astro config through Astro's `getViteConfig()` (`vitest.config.ts`), so a test can import and render an `.astro` component with the Container API; `src/layouts/BaseLayout.test.ts` is the example. Two limits:
+
+- The Cloudflare adapter is left out of the test config, because Vitest cannot start Cloudflare's runtime. Tests run in Node, so anything that needs a Cloudflare binding (D1, R2) or live EmDash content has to be mocked.
+- The Container API does not load the i18n config, so `Astro.currentLocale` is undefined in a test. Check per-language output in the browser.
+
+## CMS
+
+EmDash holds content only: news articles, events and the like. The rest of the site is static (`output: "static"`): pages are built once and served as files. A page that shows CMS content opts into per-request rendering with `export const prerender = false`. EmDash's own admin and API routes are always on demand.
+
+EmDash's admin is at http://localhost:4321/_emdash/admin while the dev server runs. Locally its database, media and Durable Objects live in `.wrangler/` (git-ignored). Delete `.wrangler/state` to start the local CMS from scratch.
+
+The dev server writes `emdash-env.d.ts` (types for the content model) and `.emdash/`. Do not edit them by hand.
+
+## Design system files
+
+`src/styles/design-system/amir-tokens.css` and `amir-tailwind.css` are generated by the AMIR-GB design system ([Design System artifact](https://claude.ai/artifact/CMiqDHzbFGF8XPvEU17SEK)), from its `project/tokens.json`. They are copied here unchanged, with one header line naming their source. Never edit them here: a change goes into the design system first.
+
+To refresh them after the design system changes:
+
+1. Open the design system artifact and take the current `project/build/amir-tokens.css` and `project/build/amir-tailwind.css`. A Claude session can read them with the Artifact tool's read action.
+2. In each file under `src/styles/design-system/`, keep line 1 (the header) and replace everything below it with the new file's content.
+3. Run `pnpm verify` (the tests check the headers and the stylesheet order) and look at the site in light and dark.
+
+`src/styles/global.css` imports Tailwind, then the tokens, then the Tailwind theme, in that order.
+
+## Environment
+
+Variables are typed in `astro.config.mjs` (`env.schema`) and read through `astro:env`. Locally they come from `.dev.vars`. On Cloudflare, secrets are set with `pnpm exec wrangler secret put <NAME>` and public values go in `vars` in `wrangler.jsonc`. No real key is ever committed.
+
+| Variable                | Kind   | Purpose                                                                                                                   |
+| ----------------------- | ------ | ------------------------------------------------------------------------------------------------------------------------- |
+| `SITE_URL`              | public | The site's public origin. EmDash uses it for passkeys, redirects and the sitemap.                                         |
+| `STRIPE_SECRET_KEY`     | secret | Stripe Checkout. Needed once donations are built.                                                                         |
+| `STRIPE_WEBHOOK_SECRET` | secret | Verifies Stripe webhooks. Needed once donations are built.                                                                |
+| `EMDASH_ENCRYPTION_KEY` | secret | Encrypts plugin settings saved as secrets. Generate with `pnpm exec emdash secrets generate`; back the production key up. |
+
+## Deploy
+
+Not set up yet: the Cloudflare account and the domain are still to be confirmed. The project is named `amir-gb`: `wrangler.jsonc` names the Worker `amir-gb`, the D1 database `amir-gb` and the R2 bucket `amir-gb-media`. None of them exists on Cloudflare yet.
+
+Once they are:
+
+```bash
+pnpm exec wrangler login
+pnpm exec wrangler secret put EMDASH_ENCRYPTION_KEY
+pnpm run deploy
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+The first deploy creates the D1 database and the R2 bucket if they do not exist. See EmDash's [Cloudflare guide](https://docs.emdashcms.com/deployment/cloudflare/).

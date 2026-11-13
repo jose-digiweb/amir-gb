@@ -22,3 +22,19 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# local environment (examples are committed)
+.dev.vars*
+!.dev.vars.example
+.env.*
+!.env.example
+
+# Cloudflare / Wrangler local state (local D1, R2, Durable Objects)
+.wrangler/
+
+# EmDash local files (the Cloudflare setup keeps data in .wrangler/)
+data.db*
+uploads/
+
+# agent plans (local working notes, never committed)
+.agent-plans/

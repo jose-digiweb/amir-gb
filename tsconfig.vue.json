@@ -1,0 +1,7 @@
+{
+  // Used only by vue-tsc, to type-check .vue files (script and template). `astro check` skips them.
+  // It lists just the .vue files and the generated type files: plain TypeScript tools cannot
+  // resolve imports of .astro files, so the .ts and .astro files stay with `astro check`.
+  "extends": "./tsconfig.json",
+  "include": ["src/**/*.vue", ".astro/types.d.ts", "worker-configuration.d.ts"]
+}
