@@ -1,0 +1,39 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { getLanguageLinks } from "../../site/helpers";
+
+/**
+ * The {@link Props} type
+ * @description The props of the LanguageToggle component, the three-way language switch in the menu
+ */
+type Props = {
+  /** Layout classes from the caller. */
+  class?: string;
+};
+
+// Prepare the page in every language, the current one marked
+const { class: className } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const languages = getLanguageLinks(locale, Astro.url.pathname);
+---
+
+<div class:list={["flex flex-col gap-3", className]}>
+  <p class="type-label text-text-muted">{t["language.heading"]}</p>
+  <ul aria-label={t["language.label"]} class="grid grid-cols-3 rounded-pill bg-surface-sunken p-1">
+    {languages.map((language) => (
+      <li class="flex">
+        <a
+          href={language.href}
+          lang={language.locale}
+          hreflang={language.locale}
+          aria-current={language.isCurrent ? "true" : undefined}
+          class="grid h-control flex-1 touch-manipulation place-items-center rounded-pill type-button-sm text-text-muted transition-colors duration-base select-none active:bg-pressed-quiet aria-[current=true]:bg-surface aria-[current=true]:text-text-heading aria-[current=true]:shadow-sm"
+        >
+          {language.name}
+        </a>
+      </li>
+    ))}
+  </ul>
+</div>

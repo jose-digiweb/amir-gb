@@ -1,0 +1,23 @@
+---
+// Dependencies
+import { MessageCircle } from "@lucide/astro";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { CONTACT } from "../../site/constants";
+
+/**
+ * The {@link Props} type
+ * @description The props of the WhatsAppHelpLink component, the quiet "Need help? WhatsApp us" link
+ */
+type Props = Record<string, never>;
+
+// Label the link in the page's language
+const t = getTranslations(getLocale(Astro.currentLocale));
+---
+
+<a
+  href={CONTACT.WHATSAPP_HREF}
+  class="flex min-h-tap touch-manipulation items-center gap-2 type-button text-text-heading underline-offset-4 select-none hover:underline"
+>
+  <MessageCircle class="size-icon-md" />
+  {t["contact.whatsappHelp"]}
+</a>

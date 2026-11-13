@@ -1,0 +1,42 @@
+---
+// Dependencies
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { ROUTE } from "../../site/constants";
+import logoColour from "../../assets/brand/amir-gb_horizontal-short_colour.svg";
+import logoReverse from "../../assets/brand/amir-gb_horizontal-short_reverse.svg";
+
+/**
+ * The {@link Props} type
+ * @description The props of the SiteLogo component, the short horizontal logo linking home
+ */
+type Props = {
+  /** Always the reverse logo, for navy and near-black grounds such as the footer. */
+  reverse?: boolean;
+};
+
+// Read whether the logo sits on a dark ground whatever the theme
+const { reverse = false } = Astro.props;
+
+// Link home in the page's language
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const homeHref = getRelativeLocaleUrl(locale, ROUTE.HOME);
+---
+
+<a href={homeHref} aria-label={t["site.home"]} class="flex h-10 shrink-0 items-center">
+  <img
+    src={logoColour.src}
+    width={logoColour.width}
+    height={logoColour.height}
+    alt=""
+    class:list={["h-full w-auto", { hidden: reverse, "theme-dark:hidden": !reverse }]}
+  />
+  <img
+    src={logoReverse.src}
+    width={logoReverse.width}
+    height={logoReverse.height}
+    alt=""
+    class:list={["h-full w-auto", { "hidden theme-dark:block": !reverse }]}
+  />
+</a>

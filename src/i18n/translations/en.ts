@@ -1,0 +1,50 @@
+/**
+ * The {@link en} translations
+ * @description The site's interface copy in English, the source every other language follows
+ */
+export const en = {
+  "site.name": "AMIR-GB",
+  "site.home": "AMIR-GB, home",
+  "nav.label": "Main",
+  "nav.getHelp": "Get help",
+  "nav.events": "Events",
+  "nav.news": "News",
+  "nav.about": "About us",
+  "nav.join": "Join in",
+  "nav.contact": "Contact",
+  "nav.donate": "Donate",
+  "menu.open": "Open menu",
+  "menu.close": "Close menu",
+  "menu.label": "Menu",
+  "menu.heading": "MENU",
+  "language.label": "Language",
+  "language.heading": "LANGUAGE · TAAL · LÍNGUA",
+  "language.button": "Change language",
+  "contact.whatsappHelp": "Need help? WhatsApp us",
+  "contact.whatsapp": "WhatsApp us",
+  "contact.call": "Call us",
+  "contact.hoursWeekdays": "Mon to Fri 08:00 to 20:00",
+  "contact.hoursWeekend": "Sat and Sun 10:00 to 16:00",
+  "footer.opener": "DUTCH · PORTUGUESE · KRIOL",
+  "footer.questions": "Questions?",
+  "footer.talk": "Talk to us.",
+  "footer.label": "Footer",
+  "footer.legalName":
+    "AMIR-GB, Association for the support of migrants and the Guinea-Bissau community in the Netherlands",
+  "social.label": "AMIR-GB on social media",
+  "notFound.title": "Page not found",
+  "notFound.description": "We can’t find this page on the AMIR-GB website.",
+  "notFound.opener": "PAGE NOT FOUND · 404",
+  "notFound.heading": "We can’t find this page",
+  "notFound.text":
+    "It may have moved, or the link has a small typo. These pages are a good place to start.",
+  "notFound.home": "Go to the home page",
+  "notFound.waysIn": "Good places to start",
+  "error.title": "Something went wrong",
+  "error.description": "Something went wrong on the AMIR-GB website.",
+  "error.opener": "SOMETHING WENT WRONG",
+  "error.heading": "Something went wrong on our side",
+  "error.text":
+    "It isn’t you. Please try again in a moment. If it keeps happening, WhatsApp us and we will help you directly.",
+  "error.retry": "Try again",
+};

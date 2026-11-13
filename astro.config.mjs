@@ -6,6 +6,8 @@ import tailwindcss from "@tailwindcss/vite";
 import { defineConfig, envField, fontProviders } from "astro/config";
 import emdash from "emdash/astro";
 
+import { DEFAULT_LOCALE, LOCALES } from "./src/i18n/constants.ts";
+
 import vue from "@astrojs/vue";
 
 // https://astro.build/config
@@ -16,12 +18,12 @@ export default defineConfig({
   output: "static",
   adapter: cloudflare(),
 
-  // NL is the default language at the root; EN and PT get a prefix.
+  // NL is the default language at the root; EN and PT get a prefix (src/i18n/constants.ts).
   // EmDash reads this same block. Keep the default locale unprefixed: EmDash's admin
   // returns 404 with prefixDefaultLocale or "prefix-always".
   i18n: {
-    defaultLocale: "nl",
-    locales: ["nl", "en", "pt"],
+    defaultLocale: DEFAULT_LOCALE,
+    locales: [...LOCALES],
     routing: { prefixDefaultLocale: false },
   },
 

@@ -1,0 +1,64 @@
+---
+// Dependencies
+import { LATTICE, LATTICE_PIECE, LOZENGE } from "../../lib/woven/constants";
+import { getLatticeLayout, getWovenPath } from "../../lib/woven/helpers";
+
+// Types
+import type { LatticePiece } from "../../lib/woven/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the ErrorLattice component, AMIR's members lattice with its centre piece out of place
+ */
+type Props = {
+  /** Missing on the 404 page, knocked out of line on the 500 page. */
+  centrePiece: LatticePiece;
+  /** Size classes from the caller. */
+  class?: string;
+};
+
+// Place the pieces and draw the two woven lozenges once
+const { centrePiece, class: className } = Astro.props;
+const layout = getLatticeLayout(centrePiece);
+const isMissing = centrePiece === LATTICE_PIECE.MISSING;
+const solidPath = getWovenPath(LOZENGE.PIECE_RADIUS, () => true);
+const ringPath = getWovenPath(
+  LOZENGE.PIECE_RADIUS,
+  (distance) => distance >= LOZENGE.PIECE_RING_FROM,
+);
+const eyePath = getWovenPath(LOZENGE.PIECE_RADIUS, (distance) => distance <= LOZENGE.PIECE_EYE_TO);
+const viewBox = `0 0 ${LATTICE.WIDTH} ${LATTICE.HEIGHT}`;
+---
+
+<svg aria-hidden="true" viewBox={viewBox} class:list={["h-auto", className]}>
+  <defs>
+    <g id="lattice-solid">
+      <path d={solidPath} class="fill-text-heading"></path>
+    </g>
+    <g id="lattice-ringed">
+      <path d={ringPath} class="fill-accent"></path>
+      <path d={eyePath} class="fill-on-accent-fill"></path>
+    </g>
+  </defs>
+  {layout.solid.map((piece) => (
+    <use href="#lattice-solid" transform={piece.transform} />
+  ))}
+  {layout.ringed.map((piece) => (
+    <use href="#lattice-ringed" transform={piece.transform} />
+  ))}
+  {isMissing ? (
+    <g transform={layout.centre.transform}>
+      <rect
+        width={LATTICE.PIECE_SIZE}
+        height={LATTICE.PIECE_SIZE}
+        rx="3"
+        transform={LATTICE.OUTLINE_TRANSFORM}
+        class="fill-none stroke-border-control"
+        stroke-width="2"
+        stroke-dasharray="4 3"
+      />
+    </g>
+  ) : (
+    <use href="#lattice-ringed" transform={layout.centre.transform} />
+  )}
+</svg>

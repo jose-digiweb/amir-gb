@@ -1,0 +1,61 @@
+---
+// Dependencies
+import { BUTTON_SIZE, BUTTON_TONE } from "./constants";
+
+// Types
+import type { HTMLAttributes } from "astro/types";
+import type { ButtonSize, ButtonTone } from "./types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the Button component, a pill-shaped action that links or acts
+ */
+type Props = Omit<HTMLAttributes<"a"> & HTMLAttributes<"button">, "class"> & {
+  /** Where it goes; without it the button acts on the page. */
+  href?: string;
+  /** The main action, the second action, or the second action on navy. */
+  tone?: ButtonTone;
+  /** 56px for a main action, 48px inside a bar. */
+  size?: ButtonSize;
+  /** Fill the width of its container, as the main action does on a phone. */
+  block?: boolean;
+  /** Layout classes from the caller. */
+  class?: string;
+};
+
+// Read the button's look and pass the rest to the element
+const {
+  href,
+  tone = BUTTON_TONE.PRIMARY,
+  size = BUTTON_SIZE.LARGE,
+  block = false,
+  class: className,
+  ...rest
+} = Astro.props;
+
+// Render a link when it goes somewhere, a button when it acts in place
+const Element = href ? "a" : "button";
+---
+
+<Element
+  href={href}
+  type={href ? undefined : "button"}
+  class:list={[
+    "inline-flex shrink-0 touch-manipulation items-center justify-center gap-2 rounded-pill px-6 type-button whitespace-nowrap transition-[background-color,scale] duration-fast ease-standard select-none active:scale-97 [&_svg]:size-icon-md",
+    {
+      "h-control-lg": size === BUTTON_SIZE.LARGE,
+      "h-control": size === BUTTON_SIZE.COMPACT,
+      "w-full": block,
+      "bg-primary text-on-primary hover:bg-primary-hover active:bg-primary-pressed":
+        tone === BUTTON_TONE.PRIMARY,
+      "border-2 border-border-strong text-text-heading hover:bg-hover-quiet active:bg-pressed-quiet":
+        tone === BUTTON_TONE.OUTLINE,
+      "border-2 border-on-brand text-on-brand hover:bg-hover-quiet-on-brand active:bg-pressed-quiet-on-brand":
+        tone === BUTTON_TONE.OUTLINE_ON_BRAND,
+    },
+    className,
+  ]}
+  {...rest}
+>
+  <slot />
+</Element>
