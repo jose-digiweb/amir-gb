@@ -1,0 +1,47 @@
+---
+// Dependencies
+import { Check } from "@lucide/astro";
+
+// Types
+import type { ThemeChoice } from "../../lib/theme/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the ThemeListRow component, one choice in the desktop appearance card
+ */
+type Props = {
+  /** The choice this row picks. */
+  value: ThemeChoice;
+  /** Its name. */
+  label: string;
+  /** A second line under the name. */
+  hint?: string;
+  /** Checked before the script reads the remembered choice. */
+  checked?: boolean;
+};
+
+// Read the row's choice and copy
+const { value, label, hint, checked = false } = Astro.props;
+---
+
+<label
+  data-theme-list-row
+  class="group relative flex min-h-tap cursor-pointer touch-manipulation items-center gap-3 rounded-md px-3 py-2 text-text-heading transition-colors duration-fast select-none hover:bg-hover-quiet active:bg-pressed-quiet has-checked:bg-selected has-checked:text-on-selected [&_svg]:size-5 [&_svg]:shrink-0"
+>
+  <input
+    type="radio"
+    name="theme-list"
+    value={value}
+    checked={checked}
+    data-theme-input
+    class="sr-only"
+  />
+  <slot />
+  <span class="flex flex-1 flex-col">
+    <span class="type-button">{label}</span>
+    {hint ? (
+      <span class="type-small text-text-muted group-has-checked:text-on-selected">{hint}</span>
+    ) : null}
+  </span>
+  <Check class="hidden group-has-checked:block" />
+</label>

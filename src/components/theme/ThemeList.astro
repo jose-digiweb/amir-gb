@@ -1,0 +1,105 @@
+---
+// Dependencies
+import { Moon, Sun, SunMoon } from "@lucide/astro";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { THEME } from "../../lib/theme/constants";
+
+// Components
+import ThemeListRow from "./ThemeListRow.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the ThemeList component, the desktop appearance button and the card it opens
+ */
+type Props = Record<string, never>;
+
+// Prepare the copy; the button's icon and name follow the choice through CSS
+const t = getTranslations(getLocale(Astro.currentLocale));
+---
+
+<button
+  type="button"
+  popovertarget="theme-list"
+  class="theme-button grid size-10 touch-manipulation place-items-center rounded-pill text-text-heading transition-colors duration-fast select-none hover:bg-hover-quiet active:bg-pressed-quiet [&_svg]:size-5 [&:has(+:popover-open)]:bg-pressed-quiet"
+>
+  <SunMoon class="hidden choice-auto:block" />
+  <Sun class="hidden choice-light:block" />
+  <Moon class="hidden choice-dark:block" />
+  <span class="sr-only">
+    <span class="hidden choice-auto:inline">{t["appearance.buttonAutomatic"]}</span>
+    <span class="hidden choice-light:inline">{t["appearance.buttonLight"]}</span>
+    <span class="hidden choice-dark:inline">{t["appearance.buttonDark"]}</span>
+  </span>
+</button>
+<div
+  id="theme-list"
+  popover="auto"
+  class="theme-list w-xs rounded-lg bg-surface-raised p-2 text-text-heading shadow-lg ring-1 ring-border"
+>
+  <fieldset class="m-0 flex min-w-0 flex-col gap-1 border-0 p-0">
+    <legend class="px-3 pt-2 pb-2 type-label text-text-muted">{t["appearance.heading"]}</legend>
+    <ThemeListRow
+      value={THEME.AUTO}
+      label={t["appearance.automatic"]}
+      hint={t["appearance.automaticHint"]}
+      checked
+    >
+      <SunMoon />
+    </ThemeListRow>
+    <ThemeListRow value={THEME.LIGHT} label={t["appearance.light"]}>
+      <Sun />
+    </ThemeListRow>
+    <ThemeListRow value={THEME.DARK} label={t["appearance.dark"]}>
+      <Moon />
+    </ThemeListRow>
+  </fieldset>
+</div>
+
+<script>
+  // Dependencies
+  import { enableThemeListClose } from "../../lib/theme/helpers";
+
+  // A pointer pick in the card closes it
+  enableThemeListClose();
+</script>
+
+<style>
+  @reference "../../styles/global.css";
+
+  .theme-button {
+    anchor-name: --theme-button;
+  }
+
+  .theme-list {
+    position: fixed;
+    inset: auto;
+    margin: 0;
+    border: 0;
+    top: calc(var(--space-20) + env(safe-area-inset-top, 0px));
+    right: var(--grid-margin-lg);
+
+    @supports (top: anchor(--theme-button bottom)) {
+      top: calc(anchor(--theme-button bottom) + var(--space-2));
+      right: anchor(--theme-button right);
+    }
+    transform-origin: top right;
+    opacity: 0;
+    scale: 0.96;
+    transition-property: opacity, scale, display, overlay;
+    transition-duration: var(--duration-fast);
+    transition-timing-function: var(--ease-exit);
+    transition-behavior: allow-discrete;
+  }
+
+  .theme-list:popover-open {
+    opacity: 1;
+    scale: 1;
+    transition-duration: var(--duration-base);
+    transition-timing-function: var(--ease-enter);
+
+    @starting-style {
+      opacity: 0;
+      scale: 0.96;
+    }
+  }
+</style>

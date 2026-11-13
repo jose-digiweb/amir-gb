@@ -17,6 +17,11 @@
   }
 }
 
+/* The visitor's appearance choice, for showing what is picked: none set is Automatic. */
+@custom-variant choice-auto (&:where(:root:not([data-theme]) *));
+@custom-variant choice-light (&:where([data-theme="light"] *));
+@custom-variant choice-dark (&:where([data-theme="dark"] *));
+
 @layer base {
   html {
     /* No grey flash over a tapped control; each control has its own pressed state */
@@ -29,5 +34,18 @@
   :focus-visible {
     outline: var(--focus-width) solid var(--focus);
     outline-offset: var(--focus-offset);
+  }
+
+  /* A radio hidden inside its label rings the label instead */
+  label:has(> .sr-only:focus-visible) {
+    outline: var(--focus-width) solid var(--focus);
+    outline-offset: var(--focus-offset);
+  }
+
+  /* Switching the theme is instant: nothing cross-fades for the frame it takes */
+  [data-theme-switching] *,
+  [data-theme-switching] *::before,
+  [data-theme-switching] *::after {
+    transition: none !important;
   }
 }

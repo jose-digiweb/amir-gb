@@ -6,6 +6,7 @@ import { ROUTE } from "../../site/constants";
 import { BUTTON_SIZE } from "../ui/constants";
 
 // Components
+import ThemeList from "../theme/ThemeList.astro";
 import Button from "../ui/Button.astro";
 import HeaderNav from "./HeaderNav.astro";
 import LanguageList from "./LanguageList.astro";
@@ -31,6 +32,9 @@ const donateHref = getRelativeLocaleUrl(locale, ROUTE.DONATE);
       <HeaderNav />
     </div>
     <div class="flex items-center gap-1 tablet:gap-2">
+      <div class="hidden desktop:block">
+        <ThemeList />
+      </div>
       <div class="hidden tablet:block">
         <LanguageList />
       </div>
@@ -41,6 +45,14 @@ const donateHref = getRelativeLocaleUrl(locale, ROUTE.DONATE);
     </div>
   </div>
 </header>
+
+<script>
+  // Dependencies
+  import { enableThemeChoice } from "../../lib/theme/helpers";
+
+  // The header's appearance controls, in the card and in the menu, apply and remember a pick
+  enableThemeChoice();
+</script>
 
 <style>
   @reference "../../styles/global.css";
