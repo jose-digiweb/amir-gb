@@ -1,9 +1,18 @@
 ---
+// Dependencies
+import { getLocale } from "../i18n/helpers";
+import { cacheHomePage } from "../lib/content/helpers";
+import { getHomeContent } from "../lib/content/queries";
+
 // Components
 import HomePage from "../components/home/HomePage.astro";
 
 // The home page shows CMS content, so it renders per request
 export const prerender = false;
+
+// Read the content and set the edge cache here, before rendering starts, so the response headers carry it
+const content = await getHomeContent(getLocale(Astro.currentLocale), new Date());
+cacheHomePage(Astro.cache, content.cacheHints);
 ---
 
-<HomePage />
+<HomePage content={content} />

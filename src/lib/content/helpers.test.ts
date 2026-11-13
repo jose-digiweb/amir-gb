@@ -1,6 +1,7 @@
 // Dependencies
 import { describe, expect, it } from "vitest";
 import {
+  cacheHomePage,
   compareWeekly,
   getEventDay,
   getEventWhen,
@@ -8,6 +9,9 @@ import {
   mergeWithDutch,
   planWhatsOn,
 } from "./helpers";
+
+// Types
+import type { AstroGlobal } from "astro";
 
 const entry = (id: string, group: string, locale: string) => ({
   id,
@@ -112,5 +116,23 @@ describe("event dates", () => {
   it("writes the weekday, date and times in the page's language", () => {
     expect(getEventWhen(start, end, "en-GB", "to")).toBe("Saturday 21 November · 14:30 to 18:00");
     expect(getEventWhen(start, end, "nl-NL", "tot")).toBe("Zaterdag 21 november · 14:30 tot 18:00");
+  });
+});
+
+type CacheOptions = Parameters<AstroGlobal["cache"]["set"]>[0];
+
+describe("cacheHomePage", () => {
+  it("keeps the page for a while and adds every query's tags", () => {
+    const calls: CacheOptions[] = [];
+    cacheHomePage({ enabled: true, set: (options) => calls.push(options) }, [{ tags: ["events"] }]);
+    expect(calls).toEqual([{ maxAge: 600, swr: 3600 }, { tags: ["events"] }]);
+  });
+
+  it("sets nothing without a cache provider", () => {
+    const calls: CacheOptions[] = [];
+    cacheHomePage({ enabled: false, set: (options) => calls.push(options) }, [
+      { tags: ["events"] },
+    ]);
+    expect(calls).toHaveLength(0);
   });
 });
