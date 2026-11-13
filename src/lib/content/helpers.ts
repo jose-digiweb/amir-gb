@@ -1,7 +1,9 @@
 // Dependencies
-import { SITE_TIME_ZONE, WEEKDAYS, WHATS_ON_SLOTS, WHATS_ON_STATE } from "./constants";
+import { HOME_CACHE, SITE_TIME_ZONE, WEEKDAYS, WHATS_ON_SLOTS, WHATS_ON_STATE } from "./constants";
 
 // Types
+import type { AstroGlobal } from "astro";
+import type { CacheHint } from "emdash";
 import type {
   EventDay,
   HomeEvent,
@@ -189,4 +191,27 @@ export function getEventWhen(
  */
 function capitalise(text: string): string {
   return `${text.charAt(0).toLocaleUpperCase()}${text.slice(1)}`;
+}
+
+/**
+ * The {@link cacheHomePage} helper
+ * @description Caches the home page at the edge for a while and tags it so publishing in EmDash purges it
+ * @param {AstroGlobal["cache"]} cache - The page route's cache, set before rendering starts so the headers carry it
+ * @param {CacheHint[]} hints - The cache hints from the home page's queries
+ * @returns {void}
+ */
+export function cacheHomePage(
+  cache: Pick<AstroGlobal["cache"], "enabled" | "set">,
+  hints: CacheHint[],
+): void {
+  // Without a cache provider, as in development, there is nothing to set
+  if (!cache.enabled) {
+    return;
+  }
+
+  // Keep the page for a while, then tag it with everything it read
+  cache.set({ maxAge: HOME_CACHE.MAX_AGE, swr: HOME_CACHE.STALE_WHILE_REVALIDATE });
+  for (const hint of hints) {
+    cache.set(hint);
+  }
 }

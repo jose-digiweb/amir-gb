@@ -94,7 +94,9 @@ The seed also carries example content, all marked [EXAMPLE] or with placeholders
 
 ## Home page
 
-`src/pages/index.astro`, `en/index.astro` and `pt/index.astro` render `src/components/home/HomePage.astro`. The page shows CMS content, so it renders per request (`export const prerender = false`) and is cached at Cloudflare's edge through Astro's route cache (`cacheCloudflare()` in `astro.config.mjs`, experimental). The cache hints EmDash returns tag the cached page, so publishing purges it. In development the cache is off.
+`src/pages/index.astro`, `en/index.astro` and `pt/index.astro` read the page's content (`getHomeContent`) and render `src/components/home/HomePage.astro` with it. The page shows CMS content, so it renders per request (`export const prerender = false`) and is cached at Cloudflare's edge for ten minutes through Astro's route cache (`cacheCloudflare()` in `astro.config.mjs`, experimental). The cache hints EmDash returns tag the cached page, so publishing purges it. In development the cache is off.
+
+The cache is set in the page routes (`cacheHomePage` in `src/lib/content/helpers.ts`), never in a component: Astro sends the response headers before it renders components, so a cache rule set inside one never reaches Cloudflare. A live response shows `cf-cache-status: MISS` on the first request and `HIT` after it.
 
 Sections, top to bottom, each in its own folder under `src/components/home/`:
 
