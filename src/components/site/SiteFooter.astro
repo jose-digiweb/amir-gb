@@ -1,0 +1,133 @@
+---
+// Dependencies
+import { MessageCircle, Phone } from "@lucide/astro";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { CONTACT, FOOTER_NAV, LEGAL, ROUTE } from "../../site/constants";
+import { getLanguageLinks, getPageLinks } from "../../site/helpers";
+import { BUTTON_TONE, ICON_BUTTON_TONE, OPENER_TONE } from "../ui/constants";
+import bridgeLine from "../../assets/brand/amir-gb_braid_white-gold.svg";
+
+// Components
+import Button from "../ui/Button.astro";
+import Opener from "../ui/Opener.astro";
+import SiteLogo from "./SiteLogo.astro";
+import SocialLinks from "./SocialLinks.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the SiteFooter component: talk to us, the bridge line, the links and the small print
+ */
+type Props = Record<string, never>;
+
+// Prepare the copy, the page links and the languages for this page
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const links = getPageLinks(FOOTER_NAV, locale, Astro.url.pathname);
+const languages = getLanguageLinks(locale, Astro.url.pathname);
+const donateHref = getRelativeLocaleUrl(locale, ROUTE.DONATE);
+const bridgeStyle = `background-image: url(${bridgeLine.src})`;
+---
+
+<footer class="flex flex-col gap-8 overflow-hidden rounded-t-xl bg-surface-inverse px-margin pt-12 pb-8 text-on-brand tablet:px-margin-md tablet:pt-16 desktop:gap-12 desktop:px-margin-lg desktop:pt-20 desktop:pb-10">
+  <section
+    aria-labelledby="footer-talk"
+    class="grid items-end gap-6 desktop:grid-cols-[3fr_2fr] desktop:gap-16"
+  >
+    <div class="flex flex-col gap-3">
+      <Opener label={t["footer.opener"]} tone={OPENER_TONE.ON_BRAND} />
+      <h2 id="footer-talk" class="type-section-title text-balance text-on-brand">
+        <span class="block tablet:inline">{t["footer.questions"]}</span> {t["footer.talk"]}
+      </h2>
+    </div>
+    <div class="flex flex-col gap-4">
+      <div class="flex flex-col gap-3 tablet:flex-row">
+        <Button href={CONTACT.WHATSAPP_HREF} class="tablet:flex-1">
+          <MessageCircle />
+          {t["contact.whatsapp"]}
+        </Button>
+        <Button href={CONTACT.PHONE_HREF} tone={BUTTON_TONE.OUTLINE_ON_BRAND} class="tablet:flex-1">
+          <Phone />
+          {t["contact.call"]}
+        </Button>
+      </div>
+      <div class="flex flex-col gap-1 type-body-sm text-on-brand-muted">
+        <p class="flex flex-wrap gap-x-4">
+          <a href={CONTACT.PHONE_HREF} class="font-semibold text-on-brand">
+            {CONTACT.PHONE}
+          </a>
+          <a href={CONTACT.EMAIL_HREF} class="font-semibold text-on-brand">
+            {CONTACT.EMAIL}
+          </a>
+        </p>
+        <p class="flex flex-wrap gap-x-4">
+          <span>{t["contact.hoursWeekdays"]}</span>
+          <span>{t["contact.hoursWeekend"]}</span>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <div
+    aria-hidden="true"
+    style={bridgeStyle}
+    class="-mx-margin h-bridge bg-size-[auto_100%] bg-center bg-repeat-x tablet:-mx-margin-md tablet:h-bridge-md desktop:-mx-margin-lg desktop:h-bridge-lg"
+  ></div>
+
+  <div class="flex flex-wrap items-center justify-between gap-5">
+    <SiteLogo reverse />
+    <nav aria-label={t["footer.label"]}>
+      <ul class="flex flex-wrap gap-2">
+        {links.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              aria-current={link.isCurrent ? "page" : undefined}
+              class="flex min-h-tap touch-manipulation items-center rounded-pill bg-surface-brand px-4 type-button-sm text-on-brand transition-colors duration-fast select-none hover:bg-pressed-quiet-on-brand active:bg-pressed-quiet-on-brand"
+            >
+              {link.label}
+            </a>
+          </li>
+        ))}
+        <li>
+          <a
+            href={donateHref}
+            class="flex min-h-tap touch-manipulation items-center rounded-pill bg-primary px-4 type-button-sm text-on-primary transition-colors duration-fast select-none hover:bg-primary-hover active:bg-primary-pressed"
+          >
+            {t["nav.donate"]}
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <SocialLinks tone={ICON_BUTTON_TONE.BRAND} />
+  </div>
+
+  <div class="flex flex-col gap-3 type-small text-on-brand-muted">
+    <p>
+      {t["footer.legalName"]}
+      {" · "}
+      <span class="whitespace-nowrap">{LEGAL.STREET}</span>
+      {", "}
+      <span class="whitespace-nowrap">{LEGAL.POSTCODE_CITY}</span>
+      {" · "}
+      <span class="whitespace-nowrap">{LEGAL.KVK}</span>
+      {" · "}
+      <span class="whitespace-nowrap">{LEGAL.RSIN}</span>
+    </p>
+    <ul aria-label={t["language.label"]} class="flex gap-4 self-end">
+      {languages.map((language) => (
+        <li>
+          <a
+            href={language.href}
+            lang={language.locale}
+            hreflang={language.locale}
+            aria-current={language.isCurrent ? "true" : undefined}
+            class="inline-flex min-h-tap items-center aria-[current=true]:font-bold aria-[current=true]:text-on-brand aria-[current=true]:underline"
+          >
+            {language.code}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</footer>

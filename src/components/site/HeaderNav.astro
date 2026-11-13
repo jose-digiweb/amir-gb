@@ -1,0 +1,33 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { MAIN_NAV } from "../../site/constants";
+import { getPageLinks } from "../../site/helpers";
+
+/**
+ * The {@link Props} type
+ * @description The props of the HeaderNav component, the main links in the desktop header
+ */
+type Props = Record<string, never>;
+
+// Prepare the links in the page's language, the current page marked
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const links = getPageLinks(MAIN_NAV, locale, Astro.url.pathname);
+---
+
+<nav aria-label={t["nav.label"]}>
+  <ul class="flex items-center gap-1">
+    {links.map((link) => (
+      <li>
+        <a
+          href={link.href}
+          aria-current={link.isCurrent ? "page" : undefined}
+          class="relative flex min-h-tap touch-manipulation items-center rounded-pill px-3 type-button-sm text-text-heading transition-colors duration-fast select-none after:absolute after:bottom-1 after:left-1/2 after:h-1 after:w-5 after:-translate-x-1/2 after:rounded-pill after:bg-text-heading after:opacity-0 hover:bg-hover-quiet active:bg-pressed-quiet aria-[current=page]:after:opacity-100"
+        >
+          {link.label}
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>

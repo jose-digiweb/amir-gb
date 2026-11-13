@@ -22,7 +22,9 @@ describe("BaseLayout", () => {
 
   it("declares the viewport and both colour schemes", async () => {
     const html = await render();
-    expect(html).toContain('<meta name="viewport" content="width=device-width, initial-scale=1">');
+    expect(html).toContain(
+      '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">',
+    );
     expect(html).toContain('<meta name="color-scheme" content="light dark">');
   });
 

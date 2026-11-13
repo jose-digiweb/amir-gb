@@ -1,0 +1,192 @@
+---
+// Dependencies
+import { ChevronRight, Menu, X } from "@lucide/astro";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { getNestedLozengePath } from "../../lib/woven/helpers";
+import { MAIN_NAV, ROUTE } from "../../site/constants";
+import { getPageLinks } from "../../site/helpers";
+import { ICON_BUTTON_TONE } from "../ui/constants";
+
+// Components
+import Button from "../ui/Button.astro";
+import IconButton from "../ui/IconButton.astro";
+import StarMark from "../ui/StarMark.astro";
+import LanguageToggle from "./LanguageToggle.astro";
+import SiteLogo from "./SiteLogo.astro";
+import SocialLinks from "./SocialLinks.astro";
+import WhatsAppHelpLink from "./WhatsAppHelpLink.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the SiteMenu component, the menu button and the menu it opens on phone and tablet
+ */
+type Props = Record<string, never>;
+
+// Prepare the links in the page's language, each with its place in the cascade
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const links = getPageLinks(MAIN_NAV, locale, Astro.url.pathname).map((link, index) => ({
+  ...link,
+  cascade: `--cascade: ${index}`,
+}));
+const donateHref = getRelativeLocaleUrl(locale, ROUTE.DONATE);
+const shadePath = getNestedLozengePath();
+---
+
+<IconButton
+  label={t["menu.open"]}
+  command="show-modal"
+  commandfor="site-menu"
+  aria-haspopup="dialog"
+  class="desktop:hidden"
+>
+  <Menu />
+</IconButton>
+
+<dialog
+  id="site-menu"
+  aria-label={t["menu.label"]}
+  closedby="any"
+  class="site-menu inset-0 m-0 h-dvh max-h-none w-full max-w-none overflow-y-auto border-0 bg-bg p-0 text-text-heading tablet:left-auto tablet:w-md tablet:rounded-l-xl tablet:shadow-lg"
+>
+  <div class="relative isolate flex min-h-full flex-col overflow-hidden">
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 219 219"
+      class="pointer-events-none absolute -right-12 -bottom-16 -z-10 size-32 fill-decor-strong"
+    >
+      <path d={shadePath}></path>
+    </svg>
+
+    <div class="flex h-16 shrink-0 items-center justify-between pt-[env(safe-area-inset-top)] pr-2 pl-margin tablet:h-20 tablet:pr-4 tablet:pl-8">
+      <div class="tablet:hidden">
+        <SiteLogo />
+      </div>
+      <p class="hidden type-label text-text-muted tablet:block">{t["menu.heading"]}</p>
+      <IconButton
+        label={t["menu.close"]}
+        tone={ICON_BUTTON_TONE.TINTED}
+        command="close"
+        commandfor="site-menu"
+        autofocus
+      >
+        <X />
+      </IconButton>
+    </div>
+
+    <nav aria-label={t["nav.label"]} class="pt-2">
+      <ul class="border-t border-border-subtle">
+        {links.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              aria-current={link.isCurrent ? "page" : undefined}
+              style={link.cascade}
+              class="site-menu-link flex min-h-control-lg touch-manipulation items-center gap-3 border-b border-border-subtle pr-4 pl-5 type-h2 font-extrabold text-text-heading select-none active:bg-pressed-quiet tablet:min-h-16 tablet:pr-6 tablet:pl-8"
+            >
+              {link.isCurrent ? <StarMark class="size-3 text-accent" /> : null}
+              <span class="flex-1">{link.label}</span>
+              <ChevronRight class="size-5 text-text-muted" />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <LanguageToggle class="px-5 pt-8 tablet:px-8" />
+
+    <div class="mt-auto flex flex-col items-center gap-3 px-5 pt-10 pb-[calc(var(--space-8)+env(safe-area-inset-bottom))] tablet:px-8">
+      <SocialLinks tone={ICON_BUTTON_TONE.SUNKEN} class="mb-4" />
+      <Button href={donateHref} block>
+        {t["nav.donate"]}
+      </Button>
+      <WhatsAppHelpLink />
+    </div>
+  </div>
+</dialog>
+
+<script>
+  // Dependencies
+  import { enableDialogFallbacks } from "../../lib/dom/helpers";
+
+  // Older browsers open, close and light-dismiss the menu by script
+  enableDialogFallbacks();
+</script>
+
+<style>
+  @reference "../../styles/global.css";
+
+  .site-menu {
+    overscroll-behavior: contain;
+    opacity: 0;
+    translate: 0 calc(var(--space-2) * -1);
+    transition-property: opacity, translate, display, overlay;
+    transition-duration: var(--duration-fast);
+    transition-timing-function: var(--ease-exit);
+    transition-behavior: allow-discrete;
+
+    @variant tablet {
+      opacity: 1;
+      translate: 100% 0;
+    }
+  }
+
+  .site-menu[open] {
+    opacity: 1;
+    translate: 0 0;
+    transition-duration: var(--duration-base);
+    transition-timing-function: var(--ease-enter);
+
+    @starting-style {
+      opacity: 0;
+      translate: 0 calc(var(--space-2) * -1);
+    }
+
+    @variant tablet {
+      transition-duration: var(--duration-slow);
+
+      @starting-style {
+        opacity: 1;
+        translate: 100% 0;
+      }
+    }
+  }
+
+  .site-menu::backdrop {
+    overflow: hidden;
+    overscroll-behavior: contain;
+    background-color: transparent;
+    transition-property: background-color, display, overlay;
+    transition-duration: var(--duration-fast);
+    transition-behavior: allow-discrete;
+  }
+
+  .site-menu[open]::backdrop {
+    background-color: var(--scrim);
+    transition-duration: var(--duration-slow);
+
+    @starting-style {
+      background-color: transparent;
+    }
+  }
+
+  .site-menu-link {
+    opacity: 0;
+    translate: 0 calc(var(--space-2) * -1);
+    transition-property: opacity, translate;
+    transition-duration: var(--duration-base);
+    transition-timing-function: var(--ease-enter);
+  }
+
+  .site-menu[open] .site-menu-link {
+    opacity: 1;
+    translate: 0 0;
+    transition-delay: calc(var(--stagger) * var(--cascade));
+
+    @starting-style {
+      opacity: 0;
+      translate: 0 calc(var(--space-2) * -1);
+    }
+  }
+</style>

@@ -1,14 +1,14 @@
 ---
-// Placeholder: proves routing, fonts, tokens and light/dark. Replaced when the pages are built.
-import BaseLayout from "../layouts/BaseLayout.astro";
+// Components
+import SiteLayout from "../layouts/SiteLayout.astro";
 ---
 
-<BaseLayout
+<SiteLayout
   title="AMIR-GB"
   description="Placeholder page while the AMIR-GB website is being built."
 >
-  <main class="flex flex-col gap-2 px-margin py-12">
+  <div class="flex flex-col gap-2 px-margin py-12 tablet:px-margin-md desktop:px-margin-lg">
     <h1 class="type-h1 text-text-heading">AMIR-GB</h1>
     <p>Placeholder page in Dutch (nl), the default language, at /</p>
-  </main>
-</BaseLayout>
+  </div>
+</SiteLayout>

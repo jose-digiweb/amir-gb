@@ -1,0 +1,55 @@
+---
+// Dependencies
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { getLocale, getTranslations } from "../i18n/helpers";
+import { LATTICE_PIECE } from "../lib/woven/constants";
+import { ERROR_PAGE_LINKS, ROUTE } from "../site/constants";
+import { getPageLinks } from "../site/helpers";
+
+// Components
+import ErrorLattice from "../components/site/ErrorLattice.astro";
+import WhatsAppHelpLink from "../components/site/WhatsAppHelpLink.astro";
+import Button from "../components/ui/Button.astro";
+import Opener from "../components/ui/Opener.astro";
+import SiteLayout from "../layouts/SiteLayout.astro";
+
+// Prepare the copy and the ways back in, in the page's language
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const homeHref = getRelativeLocaleUrl(locale, ROUTE.HOME);
+const waysIn = getPageLinks(ERROR_PAGE_LINKS, locale, Astro.url.pathname);
+---
+
+<SiteLayout title={t["notFound.title"]} description={t["notFound.description"]}>
+  <section class="grid items-center gap-8 bg-bg-alt px-margin pt-8 pb-16 tablet:px-margin-md tablet:pt-12 desktop:grid-cols-2 desktop:gap-16 desktop:px-margin-lg desktop:py-24">
+    <ErrorLattice
+      centrePiece={LATTICE_PIECE.MISSING}
+      class="w-full max-w-sm justify-self-center desktop:order-last desktop:max-w-none"
+    />
+    <div class="flex flex-col gap-4">
+      <Opener label={t["notFound.opener"]} />
+      <h1 class="type-section-title text-balance text-text-heading">{t["notFound.heading"]}</h1>
+      <p class="max-w-measure type-body text-text">{t["notFound.text"]}</p>
+      <div class="flex flex-col gap-3 pt-2 tablet:flex-row tablet:items-center tablet:gap-6">
+        <Button href={homeHref} class="w-full tablet:w-auto">
+          {t["notFound.home"]}
+        </Button>
+        <WhatsAppHelpLink />
+      </div>
+      <nav aria-label={t["notFound.waysIn"]} class="pt-4">
+        <ul class="flex flex-wrap gap-2">
+          {waysIn.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                class="flex min-h-tap touch-manipulation items-center rounded-pill bg-surface px-4 type-button-sm text-text-heading transition-colors duration-fast select-none hover:bg-hover-quiet active:bg-pressed-quiet"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </div>
+  </section>
+</SiteLayout>

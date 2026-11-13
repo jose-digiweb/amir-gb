@@ -1,0 +1,35 @@
+---
+// Dependencies
+import { OPENER_TONE } from "./constants";
+
+// Components
+import StarMark from "./StarMark.astro";
+
+// Types
+import type { OpenerTone } from "./types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the Opener component, the logo's star and a small label in capitals over a heading
+ */
+type Props = {
+  /** The label, already in capitals. */
+  label: string;
+  /** The ground it sits on. */
+  tone?: OpenerTone;
+};
+
+// Read the label and the ground, light by default
+const { label, tone = OPENER_TONE.LIGHT } = Astro.props;
+const isOnBrand = tone === OPENER_TONE.ON_BRAND;
+---
+
+<p
+  class:list={[
+    "flex items-center gap-2 type-label",
+    { "text-text-accent": !isOnBrand, "text-on-brand-accent": isOnBrand },
+  ]}
+>
+  <StarMark class="size-3" />
+  <span>{label}</span>
+</p>

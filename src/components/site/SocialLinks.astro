@@ -1,0 +1,38 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { SOCIAL_LINKS } from "../../site/constants";
+
+// Components
+import IconButton from "../ui/IconButton.astro";
+
+// Types
+import type { IconButtonTone } from "../ui/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the SocialLinks component, AMIR-GB's social profiles as round icon links
+ */
+type Props = {
+  /** The ground of each round link: sunken in the menu, navy in the footer. */
+  tone: IconButtonTone;
+  /** Layout classes from the caller. */
+  class?: string;
+};
+
+// Read the ground and label the list in the page's language
+const { tone, class: className } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+---
+
+<ul aria-label={t["social.label"]} class:list={["flex gap-2", className]}>
+  {SOCIAL_LINKS.map((social) => (
+    <li>
+      <IconButton href={social.href} label={social.name} tone={tone}>
+        <svg aria-hidden="true" viewBox="0 0 24 24" class="fill-current">
+          <path d={social.path} />
+        </svg>
+      </IconButton>
+    </li>
+  ))}
+</ul>

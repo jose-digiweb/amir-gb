@@ -1,0 +1,74 @@
+---
+// Dependencies
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { ROUTE } from "../../site/constants";
+import { BUTTON_SIZE } from "../ui/constants";
+
+// Components
+import Button from "../ui/Button.astro";
+import HeaderNav from "./HeaderNav.astro";
+import LanguageList from "./LanguageList.astro";
+import SiteLogo from "./SiteLogo.astro";
+import SiteMenu from "./SiteMenu.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the SiteHeader component: a blurred bar on phone and tablet, a paper sheet that lifts into an island on desktop
+ */
+type Props = Record<string, never>;
+
+// Link Donate in the page's language
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const donateHref = getRelativeLocaleUrl(locale, ROUTE.DONATE);
+---
+
+<header class="sticky top-0 z-header pt-[env(safe-area-inset-top)] desktop:box-content desktop:h-20">
+  <div class="site-header-bar flex h-16 items-center justify-between gap-3 border-b border-border bg-surface/72 pr-2 pl-margin backdrop-blur-lg backdrop-saturate-150 tablet:pr-6 tablet:pl-margin-md desktop:absolute desktop:inset-x-0 desktop:h-20 desktop:gap-6 desktop:rounded-b-xl desktop:border-b-0 desktop:bg-bg desktop:px-margin-lg desktop:backdrop-blur-none">
+    <SiteLogo />
+    <div class="hidden desktop:block">
+      <HeaderNav />
+    </div>
+    <div class="flex items-center gap-1 tablet:gap-2">
+      <div class="hidden tablet:block">
+        <LanguageList />
+      </div>
+      <Button href={donateHref} size={BUTTON_SIZE.COMPACT} class="px-4 tablet:px-6">
+        {t["nav.donate"]}
+      </Button>
+      <SiteMenu />
+    </div>
+  </div>
+</header>
+
+<style>
+  @reference "../../styles/global.css";
+
+  @keyframes header-lift {
+    to {
+      margin-inline: var(--space-5);
+      margin-top: var(--space-3);
+      height: var(--space-16);
+      padding-inline: var(--space-6) var(--space-3);
+      border-radius: var(--radius-lg);
+      background-color: color-mix(in srgb, var(--surface) 94%, transparent);
+      box-shadow:
+        var(--shadow-md),
+        inset 0 0 0 var(--border-width) var(--border);
+      backdrop-filter: blur(var(--blur-lg)) saturate(1.5);
+    }
+  }
+
+  @supports ((animation-timeline: scroll()) and (animation-range: 0% 100%)) {
+    @variant desktop {
+      @variant motion-safe {
+        .site-header-bar {
+          animation: header-lift linear both;
+          animation-timeline: scroll(root block);
+          animation-range: 0 var(--space-16);
+        }
+      }
+    }
+  }
+</style>

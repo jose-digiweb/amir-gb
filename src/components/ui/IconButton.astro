@@ -1,0 +1,52 @@
+---
+// Dependencies
+import { ICON_BUTTON_TONE } from "./constants";
+
+// Types
+import type { HTMLAttributes } from "astro/types";
+import type { IconButtonTone } from "./types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the IconButton component, a round 48px control that shows only an icon
+ */
+type Props = Omit<HTMLAttributes<"a"> & HTMLAttributes<"button">, "class"> & {
+  /** What it does or where it goes, read out by screen readers. */
+  label: string;
+  /** Where it goes; without it the control acts on the page. */
+  href?: string;
+  /** Its ground. */
+  tone?: IconButtonTone;
+  /** Layout classes from the caller. */
+  class?: string;
+};
+
+// Read the control's label and look and pass the rest to the element
+const { label, href, tone = ICON_BUTTON_TONE.PLAIN, class: className, ...rest } = Astro.props;
+
+// Render a link when it goes somewhere, a button when it acts in place
+const Element = href ? "a" : "button";
+---
+
+<Element
+  href={href}
+  type={href ? undefined : "button"}
+  aria-label={label}
+  class:list={[
+    "grid size-tap shrink-0 touch-manipulation place-items-center rounded-pill transition-[background-color,scale] duration-fast ease-standard select-none active:scale-97 [&_svg]:size-icon-md",
+    {
+      "text-text-heading hover:bg-hover-quiet active:bg-pressed-quiet":
+        tone === ICON_BUTTON_TONE.PLAIN,
+      "bg-hover-quiet text-text-heading hover:bg-pressed-quiet active:bg-pressed-quiet":
+        tone === ICON_BUTTON_TONE.TINTED,
+      "bg-surface-sunken text-text-heading hover:bg-pressed-quiet active:bg-pressed-quiet":
+        tone === ICON_BUTTON_TONE.SUNKEN,
+      "bg-surface-brand text-on-brand hover:bg-pressed-quiet-on-brand active:bg-pressed-quiet-on-brand":
+        tone === ICON_BUTTON_TONE.BRAND,
+    },
+    className,
+  ]}
+  {...rest}
+>
+  <slot />
+</Element>

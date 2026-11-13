@@ -178,6 +178,12 @@ importers:
       '@emdash-cms/cloudflare':
         specifier: ^1.5.0
         version: 1.5.0(e6b141a912ec3bf42f0dbc15caf039f7)
+      '@lucide/astro':
+        specifier: ^1.72.0
+        version: 1.72.0(astro@7.4.11(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(yaml@2.9.1))
+      '@lucide/vue':
+        specifier: ^1.72.0
+        version: 1.72.0(vue@3.5.45(typescript@6.0.3))
       '@tailwindcss/vite':
         specifier: ^4.3.5
         version: 4.3.5(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(yaml@2.9.1))
@@ -193,6 +199,9 @@ importers:
       react-dom:
         specifier: ^19.3.1
         version: 19.3.1(react@19.3.1)
+      simple-icons:
+        specifier: ^16.37.0
+        version: 16.37.0
       tailwindcss:
         specifier: ^4.3.5
         version: 4.3.5
@@ -1449,6 +1458,16 @@ packages:
         optional: true
       babel-plugin-macros:
         optional: true
+
+  '@lucide/astro@1.72.0':
+    resolution: {integrity: sha512-+kBS2kCF0eAOzQom0OIJY0YfaVyRYICgeimNZgOeGIEtwov4EVhMEGjOP3Yb2fWjlLIADY6DfsIaUBW6toVhjg==}
+    peerDependencies:
+      astro: ^4 || ^5 || ^6 || ^7
+
+  '@lucide/vue@1.72.0':
+    resolution: {integrity: sha512-BPcYejGErv+kg4ilXyPU7j6YdA0kQaMiBnlcCElTsoLdQgD+6aoquA/0I4amN5yzkJrZgpULvpDonXui94ez8A==}
+    peerDependencies:
+      vue: '>=3.0.1'
 
   '@marijn/find-cluster-break@1.0.4':
     resolution: {integrity: sha512-Wy0V7+SGUjnF9/TkiM1hKVDPj7jKXduPNboMVtHTA8dySMURWqfg/JZ9E2Sq8JgSJmkl7k7Qe9FLeMSrSraWmQ==}
@@ -4256,6 +4275,10 @@ packages:
   signal-exit@3.0.7:
     resolution: {integrity: sha512-wnD2ZE+l+SPC/uoS0vXeE9L1+0wuaMqKlfz9AMUo38JsyLSBWSFcHR1Rri62LZc12vLr1gb3jl7iwQhgwpAbGQ==}
 
+  simple-icons@16.37.0:
+    resolution: {integrity: sha512-8mCJIhpMYOL9g13GW59EiL3sVXJnTEKGCTZFaekl9UQ3Qo0SwVjnLaJ82QiaH8BKBdouEDzrHMXIWh8cBIy48A==}
+    engines: {node: '>=0.12.18'}
+
   sirv@3.0.2:
     resolution: {integrity: sha512-2wcC/oGxHis/BoHkkPwldgiPSYcpZK3JU28WoMVv55yHJgcZ8rlXvuG9iZggz+sU1d4bRgIGASwyWqjxu3FM0g==}
     engines: {node: '>=18'}
@@ -6331,6 +6354,14 @@ snapshots:
       '@babel/runtime': 7.29.13
       '@lingui/core': 5.9.5
       react: 19.3.1
+
+  '@lucide/astro@1.72.0(astro@7.4.11(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(yaml@2.9.1))':
+    dependencies:
+      astro: 7.4.11(@types/node@26.6.6)(esbuild@0.28.2)(jiti@2.7.0)(yaml@2.9.1)
+
+  '@lucide/vue@1.72.0(vue@3.5.45(typescript@6.0.3))':
+    dependencies:
+      vue: 3.5.45(typescript@6.0.3)
 
   '@marijn/find-cluster-break@1.0.4': {}
 
@@ -9082,6 +9113,8 @@ snapshots:
       side-channel-weakmap: 1.0.2
 
   signal-exit@3.0.7: {}
+
+  simple-icons@16.37.0: {}
 
   sirv@3.0.2:
     dependencies:

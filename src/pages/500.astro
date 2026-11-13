@@ -1,0 +1,40 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../i18n/helpers";
+import { LATTICE_PIECE } from "../lib/woven/constants";
+
+// Components
+import ErrorLattice from "../components/site/ErrorLattice.astro";
+import WhatsAppHelpLink from "../components/site/WhatsAppHelpLink.astro";
+import Button from "../components/ui/Button.astro";
+import Opener from "../components/ui/Opener.astro";
+import SiteLayout from "../layouts/SiteLayout.astro";
+
+// Rendered per request, so Try again reloads the page that failed
+export const prerender = false;
+
+// Prepare the copy in the page's language; the error itself is never shown to the visitor
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const retryHref = `${Astro.url.pathname}${Astro.url.search}`;
+---
+
+<SiteLayout title={t["error.title"]} description={t["error.description"]}>
+  <section class="grid items-center gap-8 bg-bg-alt px-margin pt-8 pb-16 tablet:px-margin-md tablet:pt-12 desktop:grid-cols-2 desktop:gap-16 desktop:px-margin-lg desktop:py-24">
+    <ErrorLattice
+      centrePiece={LATTICE_PIECE.KNOCKED}
+      class="w-full max-w-sm justify-self-center desktop:order-last desktop:max-w-none"
+    />
+    <div class="flex flex-col gap-4">
+      <Opener label={t["error.opener"]} />
+      <h1 class="type-section-title text-balance text-text-heading">{t["error.heading"]}</h1>
+      <p class="max-w-measure type-body text-text">{t["error.text"]}</p>
+      <div class="flex flex-col gap-3 pt-2 tablet:flex-row tablet:items-center tablet:gap-6">
+        <Button href={retryHref} class="w-full tablet:w-auto">
+          {t["error.retry"]}
+        </Button>
+        <WhatsAppHelpLink />
+      </div>
+    </div>
+  </section>
+</SiteLayout>

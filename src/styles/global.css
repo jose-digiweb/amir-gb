@@ -3,3 +3,31 @@
 @import "tailwindcss";
 @import "./design-system/amir-tokens.css";
 @import "./design-system/amir-tailwind.css";
+
+/* Dark as the tokens define it: the system setting, unless data-theme on <html> says otherwise.
+   For swapping a file such as the logo; colour never needs it, the tokens switch by themselves. */
+@custom-variant theme-dark {
+  @media (prefers-color-scheme: dark) {
+    &:where(:root:not([data-theme="light"]) *) {
+      @slot;
+    }
+  }
+  &:where([data-theme="dark"] *) {
+    @slot;
+  }
+}
+
+@layer base {
+  html {
+    /* No grey flash over a tapped control; each control has its own pressed state */
+    -webkit-tap-highlight-color: transparent;
+    /* A focused control is never hidden under the sticky header */
+    scroll-padding-top: calc(var(--space-20) + env(safe-area-inset-top, 0px));
+  }
+
+  /* The design system's focus ring: 3px, 2px away, in the focus colour */
+  :focus-visible {
+    outline: var(--focus-width) solid var(--focus);
+    outline-offset: var(--focus-offset);
+  }
+}

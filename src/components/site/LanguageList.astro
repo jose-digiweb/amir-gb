@@ -1,0 +1,103 @@
+---
+// Dependencies
+import { Check, ChevronDown } from "@lucide/astro";
+import { LANGUAGES } from "../../i18n/constants";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { getLanguageLinks } from "../../site/helpers";
+
+/**
+ * The {@link Props} type
+ * @description The props of the LanguageList component, the language button and the list it opens
+ */
+type Props = Record<string, never>;
+
+// Prepare the page in every language; the list sits under the button, or under the header without anchors
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const languages = getLanguageLinks(locale, Astro.url.pathname);
+---
+
+<button
+  type="button"
+  popovertarget="language-list"
+  aria-label={t["language.button"]}
+  class="language-button group flex min-h-tap touch-manipulation items-center gap-1 rounded-pill px-3 type-button text-text-heading transition-colors duration-fast select-none hover:bg-hover-quiet active:bg-pressed-quiet [&:has(+:popover-open)]:bg-pressed-quiet"
+>
+  <span>{LANGUAGES[locale].code}</span>
+  <ChevronDown class="size-icon-sm transition-transform duration-fast group-[&:has(+:popover-open)]:rotate-180" />
+</button>
+<div
+  id="language-list"
+  popover="auto"
+  class="language-list w-xs rounded-lg bg-surface-raised p-2 text-text-heading shadow-lg ring-1 ring-border"
+>
+  <p class="px-3 pt-2 pb-2 type-label text-text-muted">{t["language.heading"]}</p>
+  <ul aria-label={t["language.label"]} class="flex flex-col gap-1">
+    {languages.map((language) => (
+      <li>
+        <a
+          href={language.href}
+          lang={language.locale}
+          hreflang={language.locale}
+          aria-current={language.isCurrent ? "true" : undefined}
+          class="group flex min-h-tap touch-manipulation items-center gap-3 rounded-md px-3 type-button text-text-heading transition-colors duration-fast select-none hover:bg-hover-quiet active:bg-pressed-quiet aria-[current=true]:bg-selected aria-[current=true]:text-on-selected"
+        >
+          <span class="flex-1">{language.name}</span>
+          <span class="type-tag text-text-muted group-aria-[current=true]:hidden">
+            {language.code}
+          </span>
+          <Check class="hidden size-5 group-aria-[current=true]:block" />
+        </a>
+      </li>
+    ))}
+  </ul>
+</div>
+
+<style>
+  @reference "../../styles/global.css";
+
+  .language-button {
+    anchor-name: --language-button;
+  }
+
+  .language-list {
+    position: fixed;
+    inset: auto;
+    margin: 0;
+    border: 0;
+    top: calc(var(--space-20) + env(safe-area-inset-top, 0px));
+    right: var(--grid-margin);
+
+    @variant tablet {
+      right: var(--grid-margin-md);
+    }
+
+    @variant desktop {
+      right: var(--grid-margin-lg);
+    }
+
+    @supports (top: anchor(--language-button bottom)) {
+      top: calc(anchor(--language-button bottom) + var(--space-2));
+      right: anchor(--language-button right);
+    }
+    transform-origin: top right;
+    opacity: 0;
+    scale: 0.96;
+    transition-property: opacity, scale, display, overlay;
+    transition-duration: var(--duration-fast);
+    transition-timing-function: var(--ease-exit);
+    transition-behavior: allow-discrete;
+  }
+
+  .language-list:popover-open {
+    opacity: 1;
+    scale: 1;
+    transition-duration: var(--duration-base);
+    transition-timing-function: var(--ease-enter);
+
+    @starting-style {
+      opacity: 0;
+      scale: 0.96;
+    }
+  }
+</style>
