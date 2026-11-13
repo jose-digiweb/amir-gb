@@ -1,0 +1,38 @@
+---
+// Components
+import DutchOnlyMark from "../../site/DutchOnlyMark.astro";
+import EventDate from "./EventDate.astro";
+import EventPhoto from "./EventPhoto.astro";
+
+// Types
+import type { HomeEvent } from "../../../lib/content/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the EventCard component, an upcoming event as a photo card with its date badge
+ */
+type Props = {
+  /** The event. */
+  event: HomeEvent;
+  /** Size classes from the caller. */
+  class?: string;
+};
+
+// Read the event and the card's size
+const { event, class: className } = Astro.props;
+---
+
+<a
+  href={event.href}
+  class:list={[
+    "group relative isolate block touch-manipulation overflow-hidden rounded-lg bg-surface-sunken text-on-brand transition-[translate,scale] duration-fast ease-standard select-none hover:-translate-y-1 active:scale-98",
+    className,
+  ]}
+>
+  <EventPhoto image={event.image} sizes="(min-width: 1180px) 300px, 256px" />
+  <EventDate startsAt={event.startsAt} class="absolute top-3 left-3 tablet:top-4 tablet:left-4" />
+  <span class="absolute inset-x-4 bottom-4 type-h3 text-balance tablet:inset-x-5 tablet:bottom-5">
+    {event.title}
+    {event.isDutchOnly ? <DutchOnlyMark /> : null}
+  </span>
+</a>

@@ -1,0 +1,31 @@
+---
+// Dependencies
+import { INTL_LOCALE } from "../../../i18n/constants";
+import { getLocale } from "../../../i18n/helpers";
+import { getEventDay } from "../../../lib/content/helpers";
+
+/**
+ * The {@link Props} type
+ * @description The props of the EventDate component, the white date badge on an event's photo
+ */
+type Props = {
+  /** When the event starts. */
+  startsAt: Date;
+  /** Placement classes from the caller. */
+  class?: string;
+};
+
+// Read the start and write its day and month in the page's language
+const { startsAt, class: className } = Astro.props;
+const { day, month } = getEventDay(startsAt, INTL_LOCALE[getLocale(Astro.currentLocale)]);
+---
+
+<span
+  class:list={[
+    "flex h-16 w-14 flex-col items-center justify-center rounded-md bg-on-brand text-surface-brand shadow-sm desktop:h-18 desktop:w-16",
+    className,
+  ]}
+>
+  <b class="type-h2 font-extrabold desktop:type-h1 desktop:font-extrabold">{day}</b>
+  <span class="type-tag uppercase">{month}</span>
+</span>

@@ -36,3 +36,12 @@ export const ICON_BUTTON_TONE = {
   SUNKEN: "sunken",
   BRAND: "brand",
 } as const;
+
+/**
+ * The {@link WOVEN_SHADE_TONE} constant
+ * @description The grounds a section's woven corner sits on: a light section, or the navy band
+ */
+export const WOVEN_SHADE_TONE = {
+  LIGHT: "light",
+  ON_BRAND: "on-brand",
+} as const;

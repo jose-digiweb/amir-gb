@@ -1,0 +1,161 @@
+---
+// Dependencies
+import { Picture } from "astro:assets";
+import { getBeadRing } from "../../../lib/woven/helpers";
+import { BEAD } from "../../../lib/woven/constants";
+import { WOVEN_DEFS } from "../constants";
+import joinedHands from "../../../assets/photos/joined-hands.jpg";
+
+// Components
+import ConstellationDisc from "./ConstellationDisc.astro";
+import ConstellationPill from "./ConstellationPill.astro";
+
+// Types
+import type { ConstellationLayout } from "./types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the Constellation component, the joined hands in a ring of beads with the services and values round them
+ */
+type Props = {
+  /** The screen size's drawing. */
+  layout: ConstellationLayout;
+  /** A prefix for the drawing's own pattern ids, unique on the page. */
+  id: string;
+  /** Where the drawing starts on the left, to leave room for the words. */
+  cropX?: number;
+  /** Size and placement classes from the caller. */
+  class?: string;
+};
+
+// Read the drawing and work out every bead, lozenge and the dot field before rendering
+const { layout, id, cropX = 0, class: className } = Astro.props;
+const viewBox = `${cropX} 0 ${layout.width - cropX} ${layout.height}`;
+const ring = getBeadRing({
+  centreX: layout.centreX,
+  centreY: layout.centreY,
+  radius: layout.ring.radius,
+  count: layout.ring.count,
+  size: layout.ring.size,
+});
+const lozenges = layout.lozenges.map((lozenge) => ({
+  key: `${lozenge.x}-${lozenge.y}`,
+  href: `#${lozenge.isRinged ? WOVEN_DEFS.RINGED : WOVEN_DEFS.SOLID}`,
+  transform: `translate(${lozenge.x} ${lozenge.y}) scale(${lozenge.size / BEAD.UNITS})`,
+}));
+const photo = {
+  x: layout.centreX - layout.photoSize / 2,
+  y: layout.centreY - layout.photoSize / 2,
+  size: layout.photoSize,
+};
+const dots = {
+  patternId: `${id}-dots`,
+  fadeId: `${id}-fade`,
+  maskId: `${id}-mask`,
+  x: layout.dots.centreX - layout.dots.radius,
+  y: layout.dots.centreY - layout.dots.radius,
+  size: layout.dots.radius * 2,
+};
+const solidHref = `#${WOVEN_DEFS.SOLID}`;
+const ringedHref = `#${WOVEN_DEFS.RINGED}`;
+---
+
+<svg
+  aria-hidden="true"
+  viewBox={viewBox}
+  width={layout.width - cropX}
+  height={layout.height}
+  class:list={["overflow-visible", className]}
+>
+  <defs>
+    <pattern
+      id={dots.patternId}
+      width={layout.dots.step}
+      height={layout.dots.step}
+      patternUnits="userSpaceOnUse"
+    >
+      <circle
+        cx={layout.dots.step / 2}
+        cy={layout.dots.step / 2}
+        r="1.5"
+        class="fill-decor-strong"
+      ></circle>
+    </pattern>
+    <radialGradient id={dots.fadeId}>
+      <stop offset="0.62"></stop>
+      <stop offset="1" stop-opacity="0"></stop>
+    </radialGradient>
+    <mask id={dots.maskId} mask-type="alpha">
+      <rect
+        x={dots.x}
+        y={dots.y}
+        width={dots.size}
+        height={dots.size}
+        fill={`url(#${dots.fadeId})`}
+      ></rect>
+    </mask>
+  </defs>
+  <rect
+    x={dots.x}
+    y={dots.y}
+    width={dots.size}
+    height={dots.size}
+    fill={`url(#${dots.patternId})`}
+    mask={`url(#${dots.maskId})`}
+  ></rect>
+  <circle
+    cx={layout.centreX}
+    cy={layout.centreY}
+    r={layout.ring.radius}
+    fill="none"
+    stroke-width="1.5"
+    class="stroke-accent opacity-60"
+  ></circle>
+  <path
+    d={layout.threads.path}
+    fill="none"
+    stroke-width={layout.threads.width}
+    stroke-linecap="round"
+    stroke-dasharray={layout.threads.dash}
+    class="stroke-accent opacity-80"
+  ></path>
+  {ring.solid.map((bead) => (
+    <use href={solidHref} transform={bead.transform} />
+  ))}
+  {ring.ringed.map((bead) => (
+    <use href={ringedHref} transform={bead.transform} />
+  ))}
+  {lozenges.map((lozenge) => (
+    <use href={lozenge.href} transform={lozenge.transform} />
+  ))}
+  <foreignObject x={photo.x} y={photo.y} width={photo.size} height={photo.size} overflow="visible">
+    <div class="constellation-photo size-full overflow-hidden rounded-full bg-surface shadow-md">
+      <Picture
+        src={joinedHands}
+        alt=""
+        widths={[photo.size, photo.size * 2]}
+        sizes={`${photo.size}px`}
+        class="size-full object-cover"
+      />
+    </div>
+  </foreignObject>
+  {layout.discs.map((disc) => (
+    <ConstellationDisc disc={disc} hasLabel={layout.hasLabels} />
+  ))}
+  {layout.pills.map((pill) => (
+    <ConstellationPill pill={pill} />
+  ))}
+</svg>
+
+<style>
+  @reference "../../../styles/global.css";
+
+  .constellation-photo {
+    box-shadow:
+      0 0 0 var(--border-width) color-mix(in srgb, var(--accent) 40%, transparent),
+      0 0 0 var(--space-2) var(--bg-alt),
+      0 0 0 calc(var(--space-2) + var(--border-width))
+        color-mix(in srgb, var(--accent) 35%, transparent),
+      var(--shadow-md);
+  }
+</style>

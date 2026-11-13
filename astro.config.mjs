@@ -1,5 +1,6 @@
 // @ts-check
 import cloudflare from "@astrojs/cloudflare";
+import { cacheCloudflare } from "@astrojs/cloudflare/cache";
 import react from "@astrojs/react";
 import { d1, r2 } from "@emdash-cms/cloudflare";
 import tailwindcss from "@tailwindcss/vite";
@@ -17,6 +18,12 @@ export default defineConfig({
   // EmDash marks its own admin and API routes as on-demand itself.
   output: "static",
   adapter: cloudflare(),
+
+  // Pages that show CMS content are cached at Cloudflare's edge (experimental provider) and
+  // purged by the cache hints EmDash's queries return, so publishing shows at once.
+  cache: {
+    provider: cacheCloudflare(),
+  },
 
   // NL is the default language at the root; EN and PT get a prefix (src/i18n/constants.ts).
   // EmDash reads this same block. Keep the default locale unprefixed: EmDash's admin

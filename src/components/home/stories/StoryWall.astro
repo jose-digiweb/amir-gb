@@ -1,0 +1,70 @@
+---
+// Dependencies
+import { planStoryWall } from "./helpers";
+
+// Components
+import StoryTile from "./StoryTile.astro";
+
+// Types
+import type { HomeStory } from "../../../lib/content/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the StoryWall component, the stories as a photo wall whose columns end on one line
+ */
+type Props = {
+  /** The stories, newest first. */
+  stories: HomeStory[];
+};
+
+// Place every story on the wall for each screen size
+const { stories } = Astro.props;
+const plan = planStoryWall(stories.length);
+const tiles = stories.map((story, index) => ({ story, style: plan.tiles[index] }));
+---
+
+<ul class="story-wall gap-3 desktop:gap-6" style={plan.grid}>
+  {tiles.map((tile) => (
+    <li class="story-wall-tile" style={tile.style}>
+      <StoryTile story={tile.story} class="size-full" />
+    </li>
+  ))}
+</ul>
+
+<style>
+  @reference "../../../styles/global.css";
+
+  .story-wall {
+    display: grid;
+    grid-template-columns: repeat(var(--columns-sm), minmax(0, 1fr));
+    grid-template-rows: var(--rows-sm);
+    aspect-ratio: var(--ratio-sm);
+
+    @variant tablet {
+      grid-template-columns: repeat(var(--columns-md), minmax(0, 1fr));
+      grid-template-rows: var(--rows-md);
+      aspect-ratio: var(--ratio-md);
+    }
+
+    @variant desktop {
+      grid-template-columns: repeat(var(--columns-lg), minmax(0, 1fr));
+      grid-template-rows: var(--rows-lg);
+      aspect-ratio: var(--ratio-lg);
+    }
+  }
+
+  .story-wall-tile {
+    display: var(--show-sm);
+    grid-area: var(--area-sm);
+
+    @variant tablet {
+      display: var(--show-md);
+      grid-area: var(--area-md);
+    }
+
+    @variant desktop {
+      display: var(--show-lg);
+      grid-area: var(--area-lg);
+    }
+  }
+</style>

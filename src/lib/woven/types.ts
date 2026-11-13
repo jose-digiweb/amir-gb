@@ -25,3 +25,24 @@ export type LatticeLayout = {
   ringed: PlacedPiece[];
   centre: PlacedPiece;
 };
+
+/**
+ * The {@link BeadRing} type
+ * @description A ring of beads split into the solid and the ringed ones, alternating round the ring
+ */
+export type BeadRing = {
+  solid: PlacedPiece[];
+  ringed: PlacedPiece[];
+};
+
+/**
+ * The {@link RingSpec} type
+ * @description Where a ring of beads sits and how it is strung
+ */
+export type RingSpec = {
+  centreX: number;
+  centreY: number;
+  radius: number;
+  count: number;
+  size: number;
+};

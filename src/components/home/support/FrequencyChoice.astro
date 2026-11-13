@@ -1,0 +1,27 @@
+---
+// Types
+import type { FREQUENCY } from "../../../lib/donate/constants";
+
+/**
+ * The {@link Props} type
+ * @description The props of the FrequencyChoice component, one side of the Once or Monthly switch
+ */
+type Props = {
+  /** The frequency this side picks. */
+  value: (typeof FREQUENCY)[keyof typeof FREQUENCY];
+  /** Its name. */
+  label: string;
+  /** Picked before the visitor chooses. */
+  isPicked?: boolean;
+};
+
+// Read the side's frequency and name
+const { value, label, isPicked = false } = Astro.props;
+---
+
+<label class="relative flex">
+  <input type="radio" name="frequency" value={value} checked={isPicked} class="peer sr-only" />
+  <span class="grid h-control flex-1 cursor-pointer place-items-center rounded-pill type-button text-text-muted transition-colors duration-base select-none peer-checked:bg-surface peer-checked:text-text-heading peer-checked:shadow-sm">
+    {label}
+  </span>
+</label>

@@ -1,0 +1,101 @@
+---
+// Dependencies
+import { MessageCircle } from "@lucide/astro";
+import { Picture } from "astro:assets";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { getWovenPath } from "../../../lib/woven/helpers";
+import { ROUTE } from "../../../site/constants";
+import { BUTTON_TONE } from "../../ui/constants";
+import { HELP_SERVICES } from "../constants";
+import { HELP_DISC } from "./constants";
+import volunteerHelping from "../../../assets/photos/volunteer-helping.jpg";
+
+// Components
+import Button from "../../ui/Button.astro";
+import Opener from "../../ui/Opener.astro";
+import WovenShade from "../../ui/WovenShade.astro";
+import HelpTile from "./HelpTile.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the HelpSection component: How can we help? with the six help tiles
+ */
+type Props = Record<string, never>;
+
+// Prepare the copy, each tile's name and link, and the woven disc behind the photo
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const helpHref = getRelativeLocaleUrl(locale, ROUTE.GET_HELP);
+const contactHref = getRelativeLocaleUrl(locale, ROUTE.CONTACT);
+const tiles = HELP_SERVICES.map((tile) => ({
+  ...tile,
+  name: t[tile.label],
+  href: `${helpHref}#${tile.service}`,
+}));
+const discPath = getWovenPath(HELP_DISC.RADIUS, (distance) => distance > HELP_DISC.EYE);
+const eyePath = getWovenPath(
+  HELP_DISC.RADIUS,
+  (distance) => distance <= HELP_DISC.EYE && distance > 0,
+);
+const centrePath = getWovenPath(HELP_DISC.RADIUS, (distance) => distance === 0);
+---
+
+<section
+  id="help"
+  aria-labelledby="help-title"
+  class="relative isolate z-10 -mt-10 flex flex-col gap-3 rounded-t-xl bg-bg px-margin pt-14 pb-28 tablet:-mt-12 tablet:px-margin-md tablet:pt-12 tablet:pb-32 desktop:-mt-14 desktop:grid desktop:grid-cols-12 desktop:items-center desktop:gap-x-6 desktop:px-margin-lg desktop:pb-44"
+>
+  <WovenShade />
+  <div class="relative flex flex-col gap-3 pb-3 desktop:col-span-5 desktop:h-140 desktop:pb-0">
+    <Opener label={t["help.opener"]} />
+    <h2 id="help-title" class="type-section-title text-balance text-text-heading desktop:w-sm">
+      {t["help.title"]}
+    </h2>
+    <div aria-hidden="true" class="hidden desktop:block">
+      <svg viewBox="0 0 150 90" class="absolute top-44 right-0 w-36 overflow-visible">
+        <path
+          d="M6 70 C 40 10, 90 0, 132 34 M114 22 L134 36 L112 46"
+          fill="none"
+          stroke-width="5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="stroke-text-accent"
+        ></path>
+      </svg>
+      <svg viewBox={HELP_DISC.VIEW_BOX} class="absolute top-60 left-56 size-64">
+        <path d={discPath} class="fill-motif"></path>
+        <path d={eyePath} class="fill-motif-eye"></path>
+        <path d={centrePath} class="fill-bg"></path>
+      </svg>
+      <div class="help-photo absolute top-52 left-16 h-85 w-84 overflow-hidden bg-border">
+        <Picture
+          src={volunteerHelping}
+          alt={t["help.photoAlt"]}
+          widths={[340, 680]}
+          sizes="340px"
+          class="size-full object-cover object-[62%_40%]"
+        />
+      </div>
+    </div>
+  </div>
+  <ul class="grid grid-cols-2 gap-3 tablet:grid-cols-3 tablet:gap-4 desktop:col-span-7 desktop:gap-5">
+    {tiles.map((tile) => (
+      <li>
+        <HelpTile service={tile.service} tint={tile.tint} label={tile.name} href={tile.href} />
+      </li>
+    ))}
+  </ul>
+  <Button href={contactHref} tone={BUTTON_TONE.OUTLINE} block class="mt-1 tablet:hidden">
+    {t["help.ask"]}
+    <MessageCircle />
+  </Button>
+</section>
+
+<style>
+  @reference "../../../styles/global.css";
+
+  .help-photo {
+    border-radius: 50% 50% 46% 54% / 60% 60% 40% 40%;
+  }
+</style>

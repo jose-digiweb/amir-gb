@@ -1,0 +1,35 @@
+---
+// Dependencies
+import { LOZENGE } from "../../lib/woven/constants";
+import { getWovenPath } from "../../lib/woven/helpers";
+import { WOVEN_DEFS } from "./constants";
+
+/**
+ * The {@link Props} type
+ * @description The props of the WovenDefs component, the woven beads drawn once for every home drawing to reuse
+ */
+type Props = Record<string, never>;
+
+// Draw the solid bead, the ringed bead with its eye, and the open bead for the next member
+const solidPath = getWovenPath(LOZENGE.PIECE_RADIUS, () => true);
+const ringPath = getWovenPath(
+  LOZENGE.PIECE_RADIUS,
+  (distance) => distance >= LOZENGE.PIECE_RING_FROM,
+);
+const eyePath = getWovenPath(LOZENGE.PIECE_RADIUS, (distance) => distance <= LOZENGE.PIECE_EYE_TO);
+---
+
+<svg aria-hidden="true" class="absolute size-0 overflow-hidden">
+  <defs>
+    <g id={WOVEN_DEFS.SOLID}>
+      <path d={solidPath} class="fill-text-heading"></path>
+    </g>
+    <g id={WOVEN_DEFS.RINGED}>
+      <path d={ringPath} class="fill-accent"></path>
+      <path d={eyePath} class="fill-on-accent-fill"></path>
+    </g>
+    <g id={WOVEN_DEFS.OPEN}>
+      <path d={ringPath} class="fill-text-muted"></path>
+    </g>
+  </defs>
+</svg>

@@ -1,5 +1,11 @@
 // Types
-import type { BUTTON_SIZE, BUTTON_TONE, ICON_BUTTON_TONE, OPENER_TONE } from "./constants";
+import type {
+  BUTTON_SIZE,
+  BUTTON_TONE,
+  ICON_BUTTON_TONE,
+  OPENER_TONE,
+  WOVEN_SHADE_TONE,
+} from "./constants";
 
 /**
  * The {@link OpenerTone} type
@@ -24,3 +30,9 @@ export type ButtonSize = (typeof BUTTON_SIZE)[keyof typeof BUTTON_SIZE];
  * @description One of the {@link ICON_BUTTON_TONE} values
  */
 export type IconButtonTone = (typeof ICON_BUTTON_TONE)[keyof typeof ICON_BUTTON_TONE];
+
+/**
+ * The {@link WovenShadeTone} type
+ * @description One of the {@link WOVEN_SHADE_TONE} values
+ */
+export type WovenShadeTone = (typeof WOVEN_SHADE_TONE)[keyof typeof WOVEN_SHADE_TONE];

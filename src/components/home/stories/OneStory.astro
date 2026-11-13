@@ -1,0 +1,44 @@
+---
+// Dependencies
+import { ArrowRight } from "@lucide/astro";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+
+// Components
+import DutchOnlyMark from "../../site/DutchOnlyMark.astro";
+import StoryTile from "./StoryTile.astro";
+
+// Types
+import type { HomeStory } from "../../../lib/content/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the OneStory component, the only story with its photo, title and a few words
+ */
+type Props = {
+  /** The story. */
+  story: HomeStory;
+};
+
+// Read the story and the copy
+const { story } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+---
+
+<div class="grid gap-4 tablet:grid-cols-2 tablet:items-center tablet:gap-8 desktop:gap-12">
+  <StoryTile story={story} class="h-75 tablet:h-90 desktop:h-105" />
+  <div class="flex flex-col items-start gap-2">
+    <p class="type-label text-text-muted">{t["stories.label"]}</p>
+    <h3 class="type-h3 text-balance text-text-heading desktop:type-h2">
+      {story.title}
+      {story.isDutchOnly ? <DutchOnlyMark /> : null}
+    </h3>
+    {story.excerpt ? <p class="type-body text-pretty text-text">{story.excerpt}</p> : null}
+    <a
+      href={story.href}
+      class="flex min-h-tap items-center gap-2 type-button text-text-heading underline underline-offset-5"
+    >
+      {t["stories.read"]}
+      <ArrowRight class="size-icon-md" />
+    </a>
+  </div>
+</div>

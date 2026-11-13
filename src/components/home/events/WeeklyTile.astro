@@ -1,0 +1,58 @@
+---
+// Dependencies
+import { Repeat } from "@lucide/astro";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { TILE_COLOUR } from "../../../lib/content/constants";
+
+// Components
+import DutchOnlyMark from "../../site/DutchOnlyMark.astro";
+
+// Types
+import type { WeeklyActivity } from "../../../lib/content/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the WeeklyTile component, a weekly activity as a tinted tile with its day and times
+ */
+type Props = {
+  /** The weekly activity. */
+  activity: WeeklyActivity;
+  /** Where the tile goes. */
+  href: string;
+};
+
+// Read the activity and write its day and times in the page's language
+const { activity, href } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+const day = `${t["weekly.every"]} ${t[`weekday.${activity.weekday}`]}`;
+const times = `${activity.startTime} ${t["weekly.until"]} ${activity.endTime}`;
+---
+
+<a
+  href={href}
+  class:list={[
+    "flex min-h-42 touch-manipulation flex-col justify-between gap-3 rounded-lg p-4 text-text-heading transition-[translate,scale] duration-fast ease-standard select-none hover:-translate-y-1 active:scale-98 tablet:p-5 desktop:h-105 desktop:p-6",
+    {
+      "bg-tint-gold": activity.tileColour === TILE_COLOUR.GOLD,
+      "bg-tint-forest": activity.tileColour === TILE_COLOUR.FOREST,
+      "bg-tint-brick": activity.tileColour === TILE_COLOUR.BRICK,
+      "bg-tint-navy": activity.tileColour === TILE_COLOUR.NAVY,
+    },
+  ]}
+>
+  <span class="grid size-12 shrink-0 place-items-center rounded-full bg-tile-icon desktop:size-20">
+    <Repeat class="size-icon-md desktop:size-icon-lg" />
+  </span>
+  <span class="flex flex-col gap-1">
+    <span class="type-label opacity-75">{t["weekly.label"]}</span>
+    <span class="type-h4 text-balance desktop:type-h2">
+      {activity.name}
+      {activity.isDutchOnly ? <DutchOnlyMark /> : null}
+    </span>
+    <span class="type-small font-semibold opacity-85 desktop:type-body-sm desktop:font-semibold">
+      {day}
+      <br />
+      {times}
+    </span>
+  </span>
+</a>

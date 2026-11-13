@@ -1,0 +1,49 @@
+---
+// Dependencies
+import { CalendarDays } from "@lucide/astro";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { WOVEN_SHADE_TONE } from "../../ui/constants";
+
+// Components
+import WovenShade from "../../ui/WovenShade.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the NoEventsCard component, the calm message What's on shows while no event is announced
+ */
+type Props = {
+  /** Layout classes from the caller. */
+  class?: string;
+};
+
+// Read the layout classes and the copy
+const { class: className } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+---
+
+<div
+  class:list={[
+    "no-events relative isolate flex flex-col justify-between gap-5 overflow-hidden rounded-lg p-5 text-on-brand desktop:p-8",
+    className,
+  ]}
+>
+  <WovenShade tone={WOVEN_SHADE_TONE.ON_BRAND} />
+  <span class="grid size-14 place-items-center rounded-full bg-pressed-quiet-on-brand">
+    <CalendarDays class="size-icon-md" />
+  </span>
+  <span class="flex max-w-md flex-col gap-2">
+    <span class="type-h3 text-balance desktop:type-h1 desktop:font-extrabold">
+      {t["events.noneTitle"]}
+    </span>
+    <span class="type-body-sm text-on-brand-muted">{t["events.noneText"]}</span>
+  </span>
+</div>
+
+<style>
+  @reference "../../../styles/global.css";
+
+  .no-events {
+    background: var(--hover-quiet-on-brand);
+    box-shadow: inset 0 0 0 var(--border-width) var(--pressed-quiet-on-brand);
+  }
+</style>

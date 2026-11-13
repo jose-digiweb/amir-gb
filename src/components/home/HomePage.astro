@@ -1,0 +1,48 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { HOME_CACHE } from "../../lib/content/constants";
+import { getHomeContent } from "../../lib/content/queries";
+
+// Components
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import AnnouncementStrip from "./AnnouncementStrip.astro";
+import WhatsOnSection from "./events/WhatsOnSection.astro";
+import HelpSection from "./help/HelpSection.astro";
+import OpeningSection from "./opening/OpeningSection.astro";
+import LifeSection from "./stories/LifeSection.astro";
+import SupportSection from "./support/SupportSection.astro";
+import TogetherSection from "./together/TogetherSection.astro";
+import WovenDefs from "./WovenDefs.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the HomePage component, the home page in the page's language
+ */
+type Props = Record<string, never>;
+
+// Read the page's language and its content, and let publishing in EmDash purge the cached page
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const content = await getHomeContent(locale, new Date());
+if (Astro.cache.enabled) {
+  Astro.cache.set({ maxAge: HOME_CACHE.MAX_AGE, swr: HOME_CACHE.STALE_WHILE_REVALIDATE });
+  for (const hint of content.cacheHints) {
+    Astro.cache.set(hint);
+  }
+}
+const hasStories = content.stories.length > 0;
+---
+
+<SiteLayout title={t["home.title"]} description={t["home.description"]}>
+  {content.announcement ? (
+    <AnnouncementStrip slot="announcement" announcement={content.announcement} />
+  ) : null}
+  <WovenDefs />
+  <OpeningSection />
+  <HelpSection />
+  <TogetherSection />
+  <WhatsOnSection events={content.events} activities={content.activities} />
+  {hasStories ? <LifeSection stories={content.stories} /> : null}
+  <SupportSection />
+</SiteLayout>

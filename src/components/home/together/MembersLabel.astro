@@ -1,0 +1,44 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+
+// Components
+import MembersLattice from "./MembersLattice.astro";
+import LabelStrip from "./LabelStrip.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the MembersLabel component, the sewn label with the founding year and the members lattice
+ */
+type Props = {
+  /** Layout classes from the caller. */
+  class?: string;
+};
+
+// Read the layout classes and the copy
+const { class: className } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+---
+
+<div
+  class:list={[
+    "relative isolate flex flex-col gap-4 overflow-hidden rounded-lg bg-surface py-3 pr-4 pl-10 text-text-heading shadow-md tablet:py-5 tablet:pr-5 tablet:pl-14 desktop:flex-row desktop:items-center desktop:justify-between desktop:gap-3 desktop:py-4 desktop:pr-4 desktop:pl-16",
+    className,
+  ]}
+>
+  <LabelStrip class="absolute inset-y-0 left-0 w-6.5 tablet:w-10 desktop:w-13" />
+  <span
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-1.5 z-10 rounded-md border-2 border-dashed border-accent"
+  ></span>
+  <div class="flex items-center gap-3">
+    <p class="flex flex-col gap-1">
+      <span class="type-h1 font-extrabold">{t["together.year"]}</span>
+      <span class="type-body-strong whitespace-nowrap text-text-muted">
+        {t["together.founded"]}
+      </span>
+    </p>
+    <MembersLattice class="w-24 desktop:w-20" />
+  </div>
+  <slot />
+</div>

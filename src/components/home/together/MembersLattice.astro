@@ -1,0 +1,33 @@
+---
+// Dependencies
+import { BEAD } from "../../../lib/woven/constants";
+import { MEMBERS_LATTICE } from "./constants";
+
+/**
+ * The {@link Props} type
+ * @description The props of the MembersLattice component, a few woven lozenges, one per member, the open one for you
+ */
+type Props = {
+  /** Size classes from the caller. */
+  class?: string;
+};
+
+// Read the size and place every piece before rendering
+const { class: className } = Astro.props;
+const scale = MEMBERS_LATTICE.PIECE / BEAD.UNITS;
+const pieces = MEMBERS_LATTICE.PIECES.map((piece) => ({
+  key: `${piece.x}-${piece.y}`,
+  href: `#${piece.kind}`,
+  transform: `translate(${piece.x} ${piece.y}) scale(${scale})`,
+}));
+---
+
+<svg
+  aria-hidden="true"
+  viewBox={MEMBERS_LATTICE.VIEW_BOX}
+  class:list={["h-auto shrink-0", className]}
+>
+  {pieces.map((piece) => (
+    <use href={piece.href} transform={piece.transform} />
+  ))}
+</svg>

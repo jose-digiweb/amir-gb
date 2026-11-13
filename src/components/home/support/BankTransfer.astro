@@ -1,0 +1,50 @@
+---
+// Dependencies
+import { Check, Copy } from "@lucide/astro";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { BANK_TRANSFER } from "../../../lib/donate/constants";
+
+/**
+ * The {@link Props} type
+ * @description The props of the BankTransfer component, the bar with AMIR-GB's account number and a button that copies it
+ */
+type Props = Record<string, never>;
+
+// Read the copy
+const t = getTranslations(getLocale(Astro.currentLocale));
+---
+
+<div
+  data-copy-account={BANK_TRANSFER.IBAN}
+  class="group flex min-h-16 items-center gap-3 rounded-lg bg-surface py-2.5 pr-2.5 pl-5 shadow-sm"
+>
+  <p class="flex min-w-0 flex-1 flex-col gap-0.5">
+    <span aria-live="polite" class="type-small text-text-muted">
+      <span class="group-data-copied:hidden">{t["bank.line"]}</span>
+      <span class="hidden group-data-copied:inline">{t["bank.copied"]}</span>
+    </span>
+    <span class="type-body-strong tracking-wider whitespace-nowrap text-text-heading tabular-nums">
+      {BANK_TRANSFER.IBAN}
+    </span>
+  </p>
+  <button
+    type="button"
+    data-copy-account-button
+    aria-label={t["bank.copyLabel"]}
+    class="flex size-tap shrink-0 touch-manipulation items-center justify-center gap-1.5 rounded-pill bg-surface-sunken type-button-sm text-text-heading transition-[background-color,scale] duration-fast ease-standard select-none hover:bg-pressed-quiet active:scale-97 tablet:w-auto tablet:px-4"
+  >
+    <Copy class="size-icon-sm group-data-copied:hidden" />
+    <Check class="hidden size-icon-sm text-success group-data-copied:block" />
+    <span aria-hidden="true" class="hidden tablet:inline">
+      {t["bank.copy"]}
+    </span>
+  </button>
+</div>
+
+<script>
+  // Dependencies
+  import { enableCopyAccount } from "../../../lib/donate/helpers";
+
+  // The copy button copies the account number and shows it was copied
+  enableCopyAccount();
+</script>

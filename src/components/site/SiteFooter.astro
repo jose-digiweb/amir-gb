@@ -29,7 +29,7 @@ const donateHref = getRelativeLocaleUrl(locale, ROUTE.DONATE);
 const bridgeStyle = `background-image: url(${bridgeLine.src})`;
 ---
 
-<footer class="flex flex-col gap-8 overflow-hidden rounded-t-xl bg-surface-inverse px-margin pt-12 pb-8 text-on-brand tablet:px-margin-md tablet:pt-16 desktop:gap-12 desktop:px-margin-lg desktop:pt-20 desktop:pb-10">
+<footer class="site-footer flex flex-col gap-8 overflow-hidden rounded-t-xl bg-surface-inverse px-margin pt-12 pb-8 text-on-brand tablet:px-margin-md tablet:pt-16 desktop:gap-12 desktop:px-margin-lg desktop:pt-20 desktop:pb-10">
   <section
     aria-labelledby="footer-talk"
     class="grid items-end gap-6 desktop:grid-cols-[3fr_2fr] desktop:gap-16"
@@ -131,3 +131,20 @@ const bridgeStyle = `background-image: url(${bridgeLine.src})`;
     </ul>
   </div>
 </footer>
+
+<style>
+  @reference "../../styles/global.css";
+
+  /* A section that overlaps the footer (Support AMIR-GB) gets its overlap added to the footer's top */
+  :global(main:has([data-overlaps-footer])) + .site-footer {
+    padding-top: calc(var(--space-12) + var(--space-24));
+
+    @variant tablet {
+      padding-top: calc(var(--space-16) + var(--space-24) + var(--space-4));
+    }
+
+    @variant desktop {
+      padding-top: calc(var(--space-20) + var(--space-32) + var(--space-6));
+    }
+  }
+</style>

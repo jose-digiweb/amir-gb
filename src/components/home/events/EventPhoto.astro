@@ -1,0 +1,49 @@
+---
+// Dependencies
+import { Image } from "emdash/ui";
+import pintiPanel from "../../../assets/woven/pinti-panel.svg";
+
+// Types
+import type { MediaImage } from "../../../lib/content/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the EventPhoto component, an event's photo, or the woven pinti panel when it has none
+ */
+type Props = {
+  /** The event's image, if it has one. */
+  image?: MediaImage;
+  /** The widths the photo is shown at, for the browser to pick a file. */
+  sizes: string;
+};
+
+// Read the image and how wide it shows
+const { image, sizes } = Astro.props;
+---
+
+{image ? (
+  <Image
+    image={image}
+    alt=""
+    sizes={sizes}
+    loading="lazy"
+    class="absolute inset-0 size-full object-cover transition-transform duration-base ease-standard group-hover:scale-103"
+  />
+) : (
+  <img
+    src={pintiPanel.src}
+    alt=""
+    loading="lazy"
+    class="absolute inset-0 size-full object-cover transition-transform duration-base ease-standard group-hover:scale-103"
+  />
+)}
+<span aria-hidden="true" class="event-fade absolute inset-0"></span>
+
+<style>
+  @reference "../../../styles/global.css";
+
+  .event-fade {
+    background: linear-gradient(to top, var(--surface-inverse) 0%, transparent 64%);
+    opacity: 0.86;
+  }
+</style>

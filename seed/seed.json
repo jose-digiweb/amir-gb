@@ -1,0 +1,989 @@
+{
+  "$schema": "https://emdashcms.com/seed.schema.json",
+  "version": "1",
+  "meta": {
+    "name": "AMIR-GB",
+    "description": "News, events and weekly activities of AMIR-GB"
+  },
+  "settings": {
+    "title": "AMIR-GB",
+    "timezone": "Europe/Amsterdam"
+  },
+  "collections": [
+    {
+      "slug": "posts",
+      "label": "News",
+      "labelSingular": "News item",
+      "supports": ["drafts", "revisions", "search", "seo"],
+      "titleField": "title",
+      "fields": [
+        {
+          "slug": "title",
+          "label": "Title",
+          "type": "string",
+          "required": true,
+          "searchable": true
+        },
+        {
+          "slug": "type",
+          "label": "Type",
+          "type": "select",
+          "required": true,
+          "translatable": false,
+          "defaultValue": "news",
+          "validation": {
+            "options": ["announcement", "news", "story"]
+          }
+        },
+        {
+          "slug": "excerpt",
+          "label": "Excerpt",
+          "type": "text",
+          "searchable": true
+        },
+        {
+          "slug": "featured_image",
+          "label": "Featured image",
+          "type": "image",
+          "translatable": false
+        },
+        {
+          "slug": "content",
+          "label": "Content",
+          "type": "portableText",
+          "searchable": true
+        },
+        {
+          "slug": "urgent",
+          "label": "Show as a strip on the home page",
+          "type": "boolean",
+          "translatable": false,
+          "defaultValue": false
+        },
+        {
+          "slug": "urgent_until",
+          "label": "Strip shows until",
+          "type": "datetime",
+          "translatable": false
+        },
+        {
+          "slug": "strip_text",
+          "label": "Strip sentence (about 90 characters)",
+          "type": "string",
+          "validation": {
+            "maxLength": 120
+          }
+        },
+        {
+          "slug": "strip_link_label",
+          "label": "Strip link label (about 20 characters, empty shows Read more)",
+          "type": "string",
+          "validation": {
+            "maxLength": 30
+          }
+        }
+      ]
+    },
+    {
+      "slug": "events",
+      "label": "Events",
+      "labelSingular": "Event",
+      "supports": ["drafts", "revisions", "search", "seo"],
+      "titleField": "title",
+      "dateField": "starts_at",
+      "fields": [
+        {
+          "slug": "title",
+          "label": "Title",
+          "type": "string",
+          "required": true,
+          "searchable": true
+        },
+        {
+          "slug": "summary",
+          "label": "Summary",
+          "type": "text",
+          "searchable": true
+        },
+        {
+          "slug": "image",
+          "label": "Image",
+          "type": "image",
+          "translatable": false
+        },
+        {
+          "slug": "content",
+          "label": "Content",
+          "type": "portableText",
+          "searchable": true
+        },
+        {
+          "slug": "starts_at",
+          "label": "Starts at",
+          "type": "datetime",
+          "required": true,
+          "translatable": false,
+          "indexed": true
+        },
+        {
+          "slug": "ends_at",
+          "label": "Ends at",
+          "type": "datetime",
+          "translatable": false
+        },
+        {
+          "slug": "all_day",
+          "label": "All day",
+          "type": "boolean",
+          "translatable": false,
+          "defaultValue": false
+        },
+        {
+          "slug": "place_name",
+          "label": "Place name",
+          "type": "string",
+          "translatable": false
+        },
+        {
+          "slug": "address",
+          "label": "Address",
+          "type": "string",
+          "translatable": false
+        },
+        {
+          "slug": "online_link",
+          "label": "Online link",
+          "type": "url",
+          "translatable": false
+        },
+        {
+          "slug": "registration_link",
+          "label": "Registration link",
+          "type": "url",
+          "translatable": false
+        },
+        {
+          "slug": "type",
+          "label": "Type",
+          "type": "select",
+          "required": true,
+          "translatable": false,
+          "validation": {
+            "options": ["youth", "help", "culture", "community"]
+          }
+        }
+      ]
+    },
+    {
+      "slug": "activities",
+      "label": "Weekly activities",
+      "labelSingular": "Weekly activity",
+      "supports": ["drafts", "revisions"],
+      "titleField": "name",
+      "fields": [
+        {
+          "slug": "name",
+          "label": "Name",
+          "type": "string",
+          "required": true,
+          "searchable": true
+        },
+        {
+          "slug": "weekday",
+          "label": "Weekday",
+          "type": "select",
+          "required": true,
+          "translatable": false,
+          "validation": {
+            "options": [
+              "monday",
+              "tuesday",
+              "wednesday",
+              "thursday",
+              "friday",
+              "saturday",
+              "sunday"
+            ]
+          }
+        },
+        {
+          "slug": "start_time",
+          "label": "Start time (HH:MM)",
+          "type": "string",
+          "required": true,
+          "translatable": false,
+          "validation": {
+            "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9]$"
+          }
+        },
+        {
+          "slug": "end_time",
+          "label": "End time (HH:MM)",
+          "type": "string",
+          "required": true,
+          "translatable": false,
+          "validation": {
+            "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9]$"
+          }
+        },
+        {
+          "slug": "place",
+          "label": "Place",
+          "type": "string",
+          "translatable": false
+        },
+        {
+          "slug": "tile_colour",
+          "label": "Tile colour",
+          "type": "select",
+          "required": true,
+          "translatable": false,
+          "defaultValue": "forest",
+          "validation": {
+            "options": ["gold", "forest", "brick", "navy"]
+          }
+        }
+      ]
+    }
+  ],
+  "taxonomies": [],
+  "content": {
+    "events": [
+      {
+        "id": "general-meeting",
+        "slug": "general-meeting",
+        "status": "published",
+        "data": {
+          "title": "General meeting",
+          "summary": "The general meeting of members, in person in Rotterdam and online.",
+          "starts_at": "2026-11-21T14:30:00+01:00",
+          "ends_at": "2026-11-21T18:00:00+01:00",
+          "all_day": false,
+          "place_name": "Westersingel 14",
+          "address": "Westersingel 14, Rotterdam",
+          "type": "community",
+          "content": [
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "The general meeting of members, in person in Rotterdam and online."
+                }
+              ]
+            }
+          ],
+          "online_link": "https://example.org/online"
+        }
+      },
+      {
+        "id": "general-meeting-en",
+        "slug": "general-meeting",
+        "status": "published",
+        "locale": "en",
+        "translationOf": "general-meeting",
+        "data": {
+          "title": "General meeting",
+          "summary": "The general meeting of members, in person in Rotterdam and online.",
+          "content": [
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "The general meeting of members, in person in Rotterdam and online."
+                }
+              ]
+            }
+          ],
+          "starts_at": "2026-11-21T14:30:00+01:00",
+          "ends_at": "2026-11-21T18:00:00+01:00",
+          "all_day": false,
+          "place_name": "Westersingel 14",
+          "address": "Westersingel 14, Rotterdam",
+          "online_link": "https://example.org/online",
+          "type": "community"
+        }
+      },
+      {
+        "id": "drop-in-help",
+        "slug": "drop-in-help",
+        "status": "published",
+        "data": {
+          "title": "Drop-in help",
+          "summary": "[EXAMPLE] Help with letters, forms and questions, without an appointment.",
+          "starts_at": "2026-11-24T10:00:00+01:00",
+          "ends_at": "2026-11-24T13:00:00+01:00",
+          "all_day": false,
+          "place_name": "[PLACE]",
+          "address": "[ADDRESS]",
+          "type": "help",
+          "content": [
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "[EXAMPLE] Help with letters, forms and questions, without an appointment."
+                }
+              ]
+            }
+          ],
+          "image": {
+            "$media": {
+              "file": "seed/media/drop-in-help.jpg",
+              "alt": "A volunteer helping at a table",
+              "filename": "drop-in-help.jpg"
+            }
+          }
+        }
+      },
+      {
+        "id": "drop-in-help-en",
+        "slug": "drop-in-help",
+        "status": "published",
+        "locale": "en",
+        "translationOf": "drop-in-help",
+        "data": {
+          "title": "Drop-in help",
+          "summary": "[EXAMPLE] Help with letters, forms and questions, without an appointment.",
+          "content": [
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "[EXAMPLE] Help with letters, forms and questions, without an appointment."
+                }
+              ]
+            }
+          ],
+          "image": {
+            "$media": {
+              "file": "seed/media/drop-in-help.jpg",
+              "alt": "A volunteer helping at a table",
+              "filename": "drop-in-help.jpg"
+            }
+          },
+          "starts_at": "2026-11-24T10:00:00+01:00",
+          "ends_at": "2026-11-24T13:00:00+01:00",
+          "all_day": false,
+          "place_name": "[PLACE]",
+          "address": "[ADDRESS]",
+          "type": "help"
+        }
+      },
+      {
+        "id": "community-dinner",
+        "slug": "community-dinner",
+        "status": "published",
+        "data": {
+          "title": "Community dinner",
+          "summary": "[EXAMPLE] Dinner together, everyone brings something.",
+          "starts_at": "2026-12-05T18:00:00+01:00",
+          "ends_at": "2026-12-05T22:00:00+01:00",
+          "all_day": false,
+          "place_name": "[PLACE]",
+          "address": "[ADDRESS]",
+          "type": "community",
+          "content": [
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "[EXAMPLE] Dinner together, everyone brings something."
+                }
+              ]
+            }
+          ],
+          "image": {
+            "$media": {
+              "file": "seed/media/community-dinner.jpg",
+              "alt": "A family sharing a meal",
+              "filename": "community-dinner.jpg"
+            }
+          }
+        }
+      },
+      {
+        "id": "community-dinner-en",
+        "slug": "community-dinner",
+        "status": "published",
+        "locale": "en",
+        "translationOf": "community-dinner",
+        "data": {
+          "title": "Community dinner",
+          "summary": "[EXAMPLE] Dinner together, everyone brings something.",
+          "content": [
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "[EXAMPLE] Dinner together, everyone brings something."
+                }
+              ]
+            }
+          ],
+          "image": {
+            "$media": {
+              "file": "seed/media/community-dinner.jpg",
+              "alt": "A family sharing a meal",
+              "filename": "community-dinner.jpg"
+            }
+          },
+          "starts_at": "2026-12-05T18:00:00+01:00",
+          "ends_at": "2026-12-05T22:00:00+01:00",
+          "all_day": false,
+          "place_name": "[PLACE]",
+          "address": "[ADDRESS]",
+          "type": "community"
+        }
+      },
+      {
+        "id": "national-heroes-day",
+        "slug": "national-heroes-day",
+        "status": "published",
+        "data": {
+          "title": "National Heroes Day",
+          "summary": "[EXAMPLE] Music and stories for National Heroes Day.",
+          "starts_at": "2027-01-20T14:00:00+01:00",
+          "ends_at": "2027-01-20T18:00:00+01:00",
+          "all_day": false,
+          "place_name": "[PLACE]",
+          "address": "[ADDRESS]",
+          "type": "culture",
+          "content": [
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "[EXAMPLE] Music and stories for National Heroes Day."
+                }
+              ]
+            }
+          ],
+          "image": {
+            "$media": {
+              "file": "seed/media/choir.jpg",
+              "alt": "A choir singing",
+              "filename": "choir.jpg"
+            }
+          }
+        }
+      }
+    ],
+    "activities": [
+      {
+        "id": "drop-in-weekly",
+        "status": "published",
+        "data": {
+          "name": "Drop-in help",
+          "weekday": "tuesday",
+          "start_time": "10:00",
+          "end_time": "13:00",
+          "place": "[PLACE]",
+          "tile_colour": "forest"
+        },
+        "slug": "drop-in-weekly"
+      },
+      {
+        "id": "drop-in-weekly-en",
+        "status": "published",
+        "locale": "en",
+        "translationOf": "drop-in-weekly",
+        "data": {
+          "name": "Drop-in help",
+          "weekday": "tuesday",
+          "start_time": "10:00",
+          "end_time": "13:00",
+          "place": "[PLACE]",
+          "tile_colour": "forest"
+        },
+        "slug": "drop-in-weekly"
+      },
+      {
+        "id": "homework-weekly",
+        "status": "published",
+        "data": {
+          "name": "Homework club",
+          "weekday": "wednesday",
+          "start_time": "15:30",
+          "end_time": "17:30",
+          "place": "[PLACE]",
+          "tile_colour": "gold"
+        },
+        "slug": "homework-weekly"
+      },
+      {
+        "id": "homework-weekly-en",
+        "status": "published",
+        "locale": "en",
+        "translationOf": "homework-weekly",
+        "data": {
+          "name": "Homework club",
+          "weekday": "wednesday",
+          "start_time": "15:30",
+          "end_time": "17:30",
+          "place": "[PLACE]",
+          "tile_colour": "gold"
+        },
+        "slug": "homework-weekly"
+      }
+    ],
+    "posts": [
+      {
+        "id": "story-independence",
+        "slug": "independence-day",
+        "status": "published",
+        "data": {
+          "title": "Independence Day",
+          "type": "story",
+          "excerpt": "[EXAMPLE] Music, food and families from across the Netherlands: photos from the day.",
+          "featured_image": {
+            "$media": {
+              "file": "seed/media/independence-day.jpg",
+              "alt": "People celebrating in a street parade",
+              "filename": "independence-day.jpg"
+            }
+          },
+          "content": [
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "[EXAMPLE] Music, food and families from across the Netherlands: photos from the day."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "story-independence-en",
+        "slug": "independence-day",
+        "status": "published",
+        "locale": "en",
+        "translationOf": "story-independence",
+        "data": {
+          "title": "Independence Day",
+          "excerpt": "[EXAMPLE] Music, food and families from across the Netherlands: photos from the day.",
+          "content": [
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "[EXAMPLE] Music, food and families from across the Netherlands: photos from the day."
+                }
+              ]
+            }
+          ],
+          "type": "story",
+          "featured_image": {
+            "$media": {
+              "file": "seed/media/independence-day.jpg",
+              "alt": "People celebrating in a street parade",
+              "filename": "independence-day.jpg"
+            }
+          }
+        }
+      },
+      {
+        "id": "story-food-bank",
+        "slug": "food-bank-team",
+        "status": "published",
+        "data": {
+          "title": "Food bank team",
+          "type": "story",
+          "excerpt": "[EXAMPLE] Our volunteers at the food bank.",
+          "featured_image": {
+            "$media": {
+              "file": "seed/media/food-bank-team.jpg",
+              "alt": "Volunteers sorting food",
+              "filename": "food-bank-team.jpg"
+            }
+          },
+          "content": [
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "[EXAMPLE] Our volunteers at the food bank."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "story-dutch-class",
+        "slug": "dutch-class",
+        "status": "published",
+        "data": {
+          "title": "Dutch class",
+          "type": "story",
+          "excerpt": "[EXAMPLE] A morning at the Dutch class.",
+          "featured_image": {
+            "$media": {
+              "file": "seed/media/dutch-class.jpg",
+              "alt": "A Dutch language class",
+              "filename": "dutch-class.jpg"
+            }
+          },
+          "content": [
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "[EXAMPLE] A morning at the Dutch class."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "story-dutch-class-en",
+        "slug": "dutch-class",
+        "status": "published",
+        "locale": "en",
+        "translationOf": "story-dutch-class",
+        "data": {
+          "title": "Dutch class",
+          "excerpt": "[EXAMPLE] A morning at the Dutch class.",
+          "content": [
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "[EXAMPLE] A morning at the Dutch class."
+                }
+              ]
+            }
+          ],
+          "type": "story",
+          "featured_image": {
+            "$media": {
+              "file": "seed/media/dutch-class.jpg",
+              "alt": "A Dutch language class",
+              "filename": "dutch-class.jpg"
+            }
+          }
+        }
+      },
+      {
+        "id": "story-homework",
+        "slug": "homework-club",
+        "status": "published",
+        "data": {
+          "title": "Homework club",
+          "type": "story",
+          "excerpt": "[EXAMPLE] Children doing homework together.",
+          "featured_image": {
+            "$media": {
+              "file": "seed/media/homework-club.jpg",
+              "alt": "Children doing homework",
+              "filename": "homework-club.jpg"
+            }
+          },
+          "content": [
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "[EXAMPLE] Children doing homework together."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "story-homework-en",
+        "slug": "homework-club",
+        "status": "published",
+        "locale": "en",
+        "translationOf": "story-homework",
+        "data": {
+          "title": "Homework club",
+          "excerpt": "[EXAMPLE] Children doing homework together.",
+          "content": [
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "[EXAMPLE] Children doing homework together."
+                }
+              ]
+            }
+          ],
+          "type": "story",
+          "featured_image": {
+            "$media": {
+              "file": "seed/media/homework-club.jpg",
+              "alt": "Children doing homework",
+              "filename": "homework-club.jpg"
+            }
+          }
+        }
+      },
+      {
+        "id": "story-members",
+        "slug": "member-stories",
+        "status": "published",
+        "data": {
+          "title": "Member stories",
+          "type": "story",
+          "excerpt": "[EXAMPLE] Members tell their own story.",
+          "featured_image": {
+            "$media": {
+              "file": "seed/media/member-stories.jpg",
+              "alt": "A woman in a wax print dress",
+              "filename": "member-stories.jpg"
+            }
+          },
+          "content": [
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "[EXAMPLE] Members tell their own story."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "story-members-en",
+        "slug": "member-stories",
+        "status": "published",
+        "locale": "en",
+        "translationOf": "story-members",
+        "data": {
+          "title": "Member stories",
+          "excerpt": "[EXAMPLE] Members tell their own story.",
+          "content": [
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "[EXAMPLE] Members tell their own story."
+                }
+              ]
+            }
+          ],
+          "type": "story",
+          "featured_image": {
+            "$media": {
+              "file": "seed/media/member-stories.jpg",
+              "alt": "A woman in a wax print dress",
+              "filename": "member-stories.jpg"
+            }
+          }
+        }
+      },
+      {
+        "id": "story-kids-games",
+        "slug": "kids-games",
+        "status": "published",
+        "data": {
+          "title": "Kids’ games",
+          "type": "story",
+          "excerpt": "[EXAMPLE] Games for the youngest members.",
+          "featured_image": {
+            "$media": {
+              "file": "seed/media/kids-games.jpg",
+              "alt": "Children playing outside",
+              "filename": "kids-games.jpg"
+            }
+          },
+          "content": [
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "[EXAMPLE] Games for the youngest members."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "story-kids-games-en",
+        "slug": "kids-games",
+        "status": "published",
+        "locale": "en",
+        "translationOf": "story-kids-games",
+        "data": {
+          "title": "Kids’ games",
+          "excerpt": "[EXAMPLE] Games for the youngest members.",
+          "content": [
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "[EXAMPLE] Games for the youngest members."
+                }
+              ]
+            }
+          ],
+          "type": "story",
+          "featured_image": {
+            "$media": {
+              "file": "seed/media/kids-games.jpg",
+              "alt": "Children playing outside",
+              "filename": "kids-games.jpg"
+            }
+          }
+        }
+      },
+      {
+        "id": "story-cycling",
+        "slug": "cycling-lessons",
+        "status": "published",
+        "data": {
+          "title": "Cycling lessons",
+          "type": "story",
+          "excerpt": "[EXAMPLE] Learning to cycle the Dutch way.",
+          "featured_image": {
+            "$media": {
+              "file": "seed/media/cycling-lessons.jpg",
+              "alt": "A cycling lesson",
+              "filename": "cycling-lessons.jpg"
+            }
+          },
+          "content": [
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "[EXAMPLE] Learning to cycle the Dutch way."
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "story-cycling-en",
+        "slug": "cycling-lessons",
+        "status": "published",
+        "locale": "en",
+        "translationOf": "story-cycling",
+        "data": {
+          "title": "Cycling lessons",
+          "excerpt": "[EXAMPLE] Learning to cycle the Dutch way.",
+          "content": [
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "[EXAMPLE] Learning to cycle the Dutch way."
+                }
+              ]
+            }
+          ],
+          "type": "story",
+          "featured_image": {
+            "$media": {
+              "file": "seed/media/cycling-lessons.jpg",
+              "alt": "A cycling lesson",
+              "filename": "cycling-lessons.jpg"
+            }
+          }
+        }
+      },
+      {
+        "id": "announce-meeting",
+        "slug": "general-meeting-online",
+        "status": "published",
+        "data": {
+          "title": "The General meeting also runs online",
+          "type": "announcement",
+          "excerpt": "Join the General meeting on 21 November online.",
+          "content": [
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "Join the General meeting on 21 November online. [LINK]"
+                }
+              ]
+            }
+          ],
+          "urgent": true,
+          "urgent_until": "2026-11-21T18:00:00+01:00",
+          "strip_text": "The General meeting on 21 November also runs online.",
+          "strip_link_label": "How to join"
+        }
+      },
+      {
+        "id": "announce-meeting-en",
+        "slug": "general-meeting-online",
+        "status": "published",
+        "locale": "en",
+        "translationOf": "announce-meeting",
+        "data": {
+          "title": "The General meeting also runs online",
+          "excerpt": "Join the General meeting on 21 November online.",
+          "content": [
+            {
+              "_type": "block",
+              "style": "normal",
+              "children": [
+                {
+                  "_type": "span",
+                  "text": "Join the General meeting on 21 November online. [LINK]"
+                }
+              ]
+            }
+          ],
+          "strip_text": "The General meeting on 21 November also runs online.",
+          "strip_link_label": "How to join",
+          "type": "announcement",
+          "urgent": true,
+          "urgent_until": "2026-11-21T18:00:00+01:00"
+        }
+      }
+    ]
+  }
+}

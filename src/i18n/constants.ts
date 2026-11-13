@@ -29,3 +29,13 @@ export const LANGUAGES = {
   [LOCALE.EN]: { name: "English", code: "EN" },
   [LOCALE.PT]: { name: "Português", code: "PT" },
 } as const;
+
+/**
+ * The {@link INTL_LOCALE} constant
+ * @description Each language's locale for dates and numbers: British English and European Portuguese
+ */
+export const INTL_LOCALE = {
+  [LOCALE.NL]: "nl-NL",
+  [LOCALE.EN]: "en-GB",
+  [LOCALE.PT]: "pt-PT",
+} as const;

@@ -1,0 +1,29 @@
+---
+// Dependencies
+import { Briefcase, GraduationCap, HeartPulse, Languages, Mail, EighthNotes } from "@lucide/astro";
+import { HELP_SERVICE } from "./constants";
+
+// Types
+import type { HelpService } from "./types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the HelpServiceIcon component, the Lucide pictogram of one help service
+ */
+type Props = {
+  /** The help service to draw. */
+  service: HelpService;
+  /** Size classes from the caller. */
+  class?: string;
+};
+
+// Read the service and the size
+const { service, class: className } = Astro.props;
+---
+
+{service === HELP_SERVICE.LETTERS ? <Mail class={className} /> : null}
+{service === HELP_SERVICE.DUTCH ? <Languages class={className} /> : null}
+{service === HELP_SERVICE.WORK ? <Briefcase class={className} /> : null}
+{service === HELP_SERVICE.KIDS ? <GraduationCap class={className} /> : null}
+{service === HELP_SERVICE.HEALTH ? <HeartPulse class={className} /> : null}
+{service === HELP_SERVICE.CULTURE ? <EighthNotes class={className} /> : null}

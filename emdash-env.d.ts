@@ -5,12 +5,40 @@
 
 import type { BylineSummary, ContentBylineCredit, TaxonomyTerm, PortableTextBlock } from "emdash";
 
-export interface Page {
+export interface Activity {
+  id: string;
+  slug: string | null;
+  status: string;
+  name: string;
+  weekday: "monday" | "tuesday" | "wednesday" | "thursday" | "friday" | "saturday" | "sunday";
+  start_time: string;
+  end_time: string;
+  place?: string;
+  tile_colour: "gold" | "forest" | "brick" | "navy";
+  createdAt: Date;
+  updatedAt: Date;
+  publishedAt: Date | null;
+  byline?: BylineSummary | null;
+  bylines?: ContentBylineCredit[];
+  terms?: Record<string, TaxonomyTerm[]>;
+}
+
+export interface Event {
   id: string;
   slug: string | null;
   status: string;
   title: string;
+  summary?: string;
+  image?: { id: string; src?: string; alt?: string; caption?: string; width?: number; height?: number; filename?: string; mimeType?: string; blurhash?: string; dominantColor?: string; focalX?: number; focalY?: number; provider?: string; previewUrl?: string; meta?: Record<string, unknown>; darkVariant?: { id: string; src?: string; alt?: string; caption?: string; width?: number; height?: number; filename?: string; mimeType?: string; blurhash?: string; dominantColor?: string; focalX?: number; focalY?: number; provider?: string; previewUrl?: string; meta?: Record<string, unknown> } };
   content?: PortableTextBlock[];
+  starts_at: string;
+  ends_at?: string;
+  all_day?: boolean;
+  place_name?: string;
+  address?: string;
+  online_link?: string;
+  registration_link?: string;
+  type: "youth" | "help" | "culture" | "community";
   createdAt: Date;
   updatedAt: Date;
   publishedAt: Date | null;
@@ -24,9 +52,14 @@ export interface Post {
   slug: string | null;
   status: string;
   title: string;
+  type: "announcement" | "news" | "story";
+  excerpt?: string;
   featured_image?: { id: string; src?: string; alt?: string; caption?: string; width?: number; height?: number; filename?: string; mimeType?: string; blurhash?: string; dominantColor?: string; focalX?: number; focalY?: number; provider?: string; previewUrl?: string; meta?: Record<string, unknown>; darkVariant?: { id: string; src?: string; alt?: string; caption?: string; width?: number; height?: number; filename?: string; mimeType?: string; blurhash?: string; dominantColor?: string; focalX?: number; focalY?: number; provider?: string; previewUrl?: string; meta?: Record<string, unknown> } };
   content?: PortableTextBlock[];
-  excerpt?: string;
+  urgent?: boolean;
+  urgent_until?: string;
+  strip_text?: string;
+  strip_link_label?: string;
   createdAt: Date;
   updatedAt: Date;
   publishedAt: Date | null;
@@ -37,7 +70,8 @@ export interface Post {
 
 declare module "emdash" {
   interface EmDashCollections {
-    pages: Page;
+    activities: Activity;
+    events: Event;
     posts: Post;
   }
 }
