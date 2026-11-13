@@ -28,6 +28,14 @@ describe("BaseLayout", () => {
     expect(html).toContain('<meta name="color-scheme" content="light dark">');
   });
 
+  it("applies a remembered appearance in the head, right after the colour schemes", async () => {
+    const html = await render();
+    const meta = html.indexOf('<meta name="color-scheme"');
+    const script = html.indexOf("amir-gb-theme");
+    expect(script).toBeGreaterThan(meta);
+    expect(script).toBeLessThan(html.indexOf("</head>"));
+  });
+
   it("loads Montserrat and Inter through Astro's Fonts API", async () => {
     const html = await render();
     expect(html).toContain("--font-montserrat:");

@@ -1,0 +1,39 @@
+---
+// Dependencies
+import { Moon, Sun, SunMoon } from "@lucide/astro";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { THEME } from "../../lib/theme/constants";
+
+// Components
+import ThemeToggleOption from "./ThemeToggleOption.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the ThemeToggle component, the three-way appearance switch in the menu
+ */
+type Props = {
+  /** Layout classes from the caller. */
+  class?: string;
+};
+
+// Read the layout classes and the copy
+const { class: className } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+---
+
+<div class={className}>
+  <fieldset class="m-0 min-w-0 border-0 p-0">
+    <legend class="mb-3 type-label text-text-muted">{t["appearance.heading"]}</legend>
+    <div class="grid grid-cols-3 rounded-pill bg-surface-sunken p-1">
+      <ThemeToggleOption value={THEME.AUTO} label={t["appearance.automatic"]} checked>
+        <SunMoon />
+      </ThemeToggleOption>
+      <ThemeToggleOption value={THEME.LIGHT} label={t["appearance.light"]}>
+        <Sun />
+      </ThemeToggleOption>
+      <ThemeToggleOption value={THEME.DARK} label={t["appearance.dark"]}>
+        <Moon />
+      </ThemeToggleOption>
+    </div>
+  </fieldset>
+</div>

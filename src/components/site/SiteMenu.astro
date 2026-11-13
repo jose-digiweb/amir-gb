@@ -9,6 +9,7 @@ import { getPageLinks } from "../../site/helpers";
 import { ICON_BUTTON_TONE } from "../ui/constants";
 
 // Components
+import ThemeToggle from "../theme/ThemeToggle.astro";
 import Button from "../ui/Button.astro";
 import IconButton from "../ui/IconButton.astro";
 import StarMark from "../ui/StarMark.astro";
@@ -95,9 +96,12 @@ const shadePath = getNestedLozengePath();
     </nav>
 
     <LanguageToggle class="px-5 pt-8 tablet:px-8" />
+    <ThemeToggle class="px-5 pt-6 tablet:px-8" />
 
     <div class="mt-auto flex flex-col items-center gap-3 px-5 pt-10 pb-[calc(var(--space-8)+env(safe-area-inset-bottom))] tablet:px-8">
-      <SocialLinks tone={ICON_BUTTON_TONE.SUNKEN} class="mb-4" />
+      <div class="hidden pb-4 tablet:block">
+        <SocialLinks tone={ICON_BUTTON_TONE.SUNKEN} />
+      </div>
       <Button href={donateHref} block>
         {t["nav.donate"]}
       </Button>

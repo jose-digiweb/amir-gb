@@ -1,0 +1,33 @@
+---
+// Types
+import type { ThemeChoice } from "../../lib/theme/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the ThemeToggleOption component, one segment of the appearance toggle in the menu
+ */
+type Props = {
+  /** The choice this segment picks. */
+  value: ThemeChoice;
+  /** Its name. */
+  label: string;
+  /** Checked before the script reads the remembered choice. */
+  checked?: boolean;
+};
+
+// Read the segment's choice and name
+const { value, label, checked = false } = Astro.props;
+---
+
+<label class="relative flex h-control cursor-pointer touch-manipulation items-center justify-center gap-2 rounded-pill type-button-sm text-text-muted transition-colors duration-base select-none active:bg-pressed-quiet has-checked:bg-surface has-checked:text-text-heading has-checked:shadow-sm [&_svg]:size-icon-sm [&_svg]:shrink-0">
+  <input
+    type="radio"
+    name="theme-toggle"
+    value={value}
+    checked={checked}
+    data-theme-input
+    class="sr-only"
+  />
+  <slot />
+  <span>{label}</span>
+</label>

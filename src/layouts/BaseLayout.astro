@@ -1,6 +1,12 @@
 ---
 // Dependencies
 import { i18n } from "astro:config/server";
+import {
+  COLOR_SCHEME_AUTO,
+  THEME_OVERRIDES,
+  THEME_SELECTOR,
+  THEME_STORAGE_KEY,
+} from "../lib/theme/constants";
 import "../styles/global.css";
 
 // Components
@@ -29,7 +35,26 @@ const lang = Astro.currentLocale ?? i18n?.defaultLocale;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="color-scheme" content="light dark" />
+    <meta name="color-scheme" content={COLOR_SCHEME_AUTO} />
+    <script
+      is:inline
+      define:vars={{
+        storageKey: THEME_STORAGE_KEY,
+        overrides: THEME_OVERRIDES,
+        metaSelector: THEME_SELECTOR.COLOR_SCHEME_META,
+      }}
+    >
+      // Apply a remembered Light or Dark before the first paint; nothing remembered follows the device
+      try {
+        const choice = localStorage.getItem(storageKey);
+        if (overrides.includes(choice)) {
+          document.documentElement.dataset.theme = choice;
+          document.querySelector(metaSelector).content = choice;
+        }
+      } catch {
+        // Blocked storage leaves the page on Automatic
+      }
+    </script>
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
