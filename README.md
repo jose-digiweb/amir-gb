@@ -135,9 +135,16 @@ Variables are typed in `astro.config.mjs` (`env.schema`) and read through `astro
 
 ## Deploy
 
-Not set up yet: the Cloudflare account and the domain are still to be confirmed. The project is named `amir-gb`: `wrangler.jsonc` names the Worker `amir-gb`, the D1 database `amir-gb` and the R2 bucket `amir-gb-media`. None of them exists on Cloudflare yet.
+The site deploys to the **Jose Digiweb** Cloudflare account, pinned by `account_id` in `wrangler.jsonc`, so a deploy can never land in another account the same login reaches. The Worker is `amir-gb`, on the account's workers.dev subdomain (`josefurtado-digital`) until the site has its own domain.
 
-Once they are:
+| Resource            | Name            | State                                                                    |
+| ------------------- | --------------- | ------------------------------------------------------------------------ |
+| D1 database (`DB`)  | `amir-gb`       | Created 2026-11-14 in the EU jurisdiction; its id is in `wrangler.jsonc` |
+| R2 bucket (`MEDIA`) | `amir-gb-media` | Created 2026-11-14 in the EU jurisdiction                                |
+
+Both are in the EU jurisdiction, so the content and media stay inside the EU. A jurisdiction is set when a resource is created and cannot change afterwards.
+
+To deploy:
 
 ```bash
 pnpm exec wrangler login
@@ -145,4 +152,4 @@ pnpm exec wrangler secret put EMDASH_ENCRYPTION_KEY
 pnpm run deploy
 ```
 
-The first deploy creates the D1 database and the R2 bucket if they do not exist. See EmDash's [Cloudflare guide](https://docs.emdashcms.com/deployment/cloudflare/).
+EmDash runs its migrations on the first request. See EmDash's [Cloudflare guide](https://docs.emdashcms.com/deployment/cloudflare/).
