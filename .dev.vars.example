@@ -6,9 +6,13 @@
 # Public origin of the site. Leave empty on localhost.
 SITE_URL=
 
-# Stripe test-mode keys (sk_test_..., whsec_...). Needed once donations are built.
+# Stripe sandbox key for donations: a restricted key (rk_test_...) with Checkout Sessions write and
+# read, or the sandbox secret key (sk_test_...). Without it the donation form says the payment could not start.
 STRIPE_SECRET_KEY=
-STRIPE_WEBHOOK_SECRET=
+
+# The sandbox's customer portal login page (https://billing.stripe.com/p/login/test_...), where a
+# monthly donor stops or changes a gift. Not a secret. Without it the links to it are left out.
+STRIPE_PORTAL_URL=
 
 # EmDash: encrypts plugin settings saved as secrets. Generate one with:
 #   pnpm exec emdash secrets generate

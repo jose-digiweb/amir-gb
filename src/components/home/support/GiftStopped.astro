@@ -1,0 +1,60 @@
+---
+// Dependencies
+import { Heart, Undo2 } from "@lucide/astro";
+import { actions } from "astro:actions";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { DONATE_FIELD, GIFT_RETURN } from "../../../lib/donate/constants";
+import { getChoiceLabel, toEuroText } from "../../../lib/donate/helpers";
+import { ROUTE } from "../../../site/constants";
+import { RETURN_TONE } from "./constants";
+
+// Components
+import Button from "../../ui/Button.astro";
+import ReturnCard from "./ReturnCard.astro";
+
+// Types
+import type { GiftChoice } from "../../../lib/donate/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the GiftStopped component, shown when a donor stopped at Stripe: their choice, ready to try again
+ */
+type Props = {
+  /** The choice the donor made before stopping. */
+  choice: GiftChoice;
+};
+
+// Prepare the button that repeats the choice, the form that posts it again, and the way back to the full form
+const { choice } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const submitLabel = getChoiceLabel(
+  locale,
+  choice,
+  t["donate.submitOnce"],
+  t["donate.submitMonthly"],
+);
+const euros = toEuroText(choice.amountCents);
+const formAction = `${actions.donate}${GIFT_RETURN.HASH}`;
+const changeHref = `${getRelativeLocaleUrl(locale, ROUTE.HOME)}${GIFT_RETURN.HASH}`;
+---
+
+<ReturnCard tone={RETURN_TONE.NEUTRAL} title={t["gift.stoppedTitle"]} text={t["gift.stoppedText"]}>
+  <Undo2 slot="mark" />
+  <form method="post" action={formAction} class="flex flex-col">
+    <input type="hidden" name={DONATE_FIELD.FREQUENCY} value={choice.frequency} />
+    <input type="hidden" name={DONATE_FIELD.AMOUNT} value={euros} />
+    <input type="hidden" name={DONATE_FIELD.LOCALE} value={locale} />
+    <Button type="submit" block>
+      <Heart />
+      {submitLabel}
+    </Button>
+  </form>
+  <a
+    href={changeHref}
+    class="inline-flex min-h-tap items-center self-center type-button text-text-heading underline underline-offset-4"
+  >
+    {t["gift.changeAmount"]}
+  </a>
+</ReturnCard>

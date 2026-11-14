@@ -1,0 +1,52 @@
+---
+// Dependencies
+import { RETURN_TONE } from "./constants";
+
+// Components
+import Opener from "../../ui/Opener.astro";
+
+// Types
+import type { ReturnTone } from "./types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the ReturnCard component, the card that takes the donation form's place when a donor comes back from Stripe
+ */
+type Props = {
+  /** The heading. */
+  title: string;
+  /** The sentence under it. */
+  text: string;
+  /** A small label over the heading, in capitals. */
+  opener?: string;
+  /** The colour of the round mark. */
+  tone: ReturnTone;
+};
+
+// Read the card's words and the mark's colour
+const { title, text, opener, tone } = Astro.props;
+---
+
+<div
+  role="status"
+  class="flex flex-col gap-4 rounded-xl bg-surface p-6 text-text shadow-md desktop:p-8"
+>
+  <span
+    class:list={[
+      "grid size-16 place-items-center rounded-full [&_svg]:size-icon-lg",
+      {
+        "bg-success-bg text-success": tone === RETURN_TONE.SUCCESS,
+        "bg-surface-sunken text-text-heading": tone === RETURN_TONE.NEUTRAL,
+        "bg-danger-bg text-danger": tone === RETURN_TONE.DANGER,
+      },
+    ]}
+  >
+    <slot name="mark" />
+  </span>
+  {opener ? <Opener label={opener} /> : null}
+  <div class="flex flex-col gap-2">
+    <h3 class="type-h2 text-balance text-text-heading">{title}</h3>
+    <p class="type-body text-pretty">{text}</p>
+  </div>
+  <slot />
+</div>

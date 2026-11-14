@@ -39,6 +39,7 @@ export const en = {
   "footer.label": "Footer",
   "footer.legalName":
     "AMIR-GB, Association for the support of migrants and the Guinea-Bissau community in the Netherlands",
+  "footer.manageGift": "Stop or change a monthly gift",
   "social.label": "AMIR-GB on social media",
   "notFound.title": "Page not found",
   "notFound.description": "We can’t find this page on the AMIR-GB website.",
@@ -123,7 +124,34 @@ export const en = {
   "donate.other": "Other amount",
   "donate.otherLabel": "Other amount in euros",
   "donate.submit": "Donate",
+  "donate.submitOnce": "Donate {amount}",
+  "donate.submitMonthly": "Donate {amount} a month",
+  "donate.taking": "Taking you to iDEAL",
   "donate.secure": "Secure with iDEAL",
+  "donate.secureMonthly": "Secure with iDEAL · Stop any time",
+  "donate.tooSmall": "The smallest gift is €1.",
+  "donate.tooLarge": "For more than €10,000, please use the bank transfer below.",
+  "donate.startFailed": "The payment could not start. Try again, or use the bank transfer below.",
+  "gift.thanksOpener": "THANK\u00a0YOU · DANK\u00a0JE · OBRIGADU",
+  "gift.thanksTitle": "Thank you for your gift",
+  "gift.paidText":
+    "{amount} has reached AMIR-GB. It keeps the help going for anyone in our community who needs it. A confirmation is on its way to your email.",
+  "gift.monthlyText":
+    "Your gift of {amount} a month has started. It keeps the help going for anyone in our community who needs it. A confirmation is on its way to your email.",
+  "gift.processingText":
+    "Your gift of {amount} is on its way. Your bank confirms it within a few days, and a confirmation follows by email.",
+  "gift.share": "Share on WhatsApp",
+  "gift.shareText":
+    "I just gave to AMIR-GB, which supports migrants and the Guinea-Bissau community in the Netherlands. You can give too:",
+  "gift.manage": "Stop or change your monthly gift",
+  "gift.stoppedTitle": "Payment stopped",
+  "gift.stoppedText":
+    "You stopped before paying, so nothing was charged. Your choice is still here if you want to try again.",
+  "gift.changeAmount": "Change the amount",
+  "gift.failedTitle": "The payment did not go through",
+  "gift.failedText":
+    "Your bank did not confirm it, and nothing was charged. You can try again, or give by bank transfer below.",
+  "gift.tryAgain": "Try again",
   "bank.line": "Or by bank transfer, to AMIR-GB",
   "bank.copy": "Copy",
   "bank.copyLabel": "Copy the account number",

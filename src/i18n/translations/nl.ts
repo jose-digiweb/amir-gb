@@ -42,6 +42,7 @@ export const nl: Translations = {
   "footer.label": "Voettekst",
   "footer.legalName":
     "AMIR-GB, Vereniging voor de ondersteuning van migranten en de Guinee-Bissause gemeenschap in Nederland",
+  "footer.manageGift": "Maandelijkse gift stoppen of wijzigen",
   "social.label": "AMIR-GB op sociale media",
   "notFound.title": "Pagina niet gevonden",
   "notFound.description": "We kunnen deze pagina niet vinden op de website van AMIR-GB.",
@@ -125,7 +126,35 @@ export const nl: Translations = {
   "donate.other": "Ander bedrag",
   "donate.otherLabel": "Ander bedrag in euro",
   "donate.submit": "Doneer",
+  "donate.submitOnce": "Doneer {amount}",
+  "donate.submitMonthly": "Doneer {amount} per maand",
+  "donate.taking": "We brengen je naar iDEAL",
   "donate.secure": "Veilig met iDEAL",
+  "donate.secureMonthly": "Veilig met iDEAL · Altijd te stoppen",
+  "donate.tooSmall": "De kleinste gift is € 1.",
+  "donate.tooLarge": "Voor meer dan € 10.000 gebruik je de bankoverschrijving hieronder.",
+  "donate.startFailed":
+    "De betaling kon niet starten. Probeer het opnieuw, of gebruik de bankoverschrijving hieronder.",
+  "gift.thanksOpener": "THANK\u00a0YOU · DANK\u00a0JE · OBRIGADU",
+  "gift.thanksTitle": "Dank je voor je gift",
+  "gift.paidText":
+    "{amount} is bij AMIR-GB aangekomen. Zo blijft de hulp gaande, voor iedereen in onze gemeenschap die het nodig heeft. Je krijgt een bevestiging per e-mail.",
+  "gift.monthlyText":
+    "Je gift van {amount} per maand is begonnen. Zo blijft de hulp gaande, voor iedereen in onze gemeenschap die het nodig heeft. Je krijgt een bevestiging per e-mail.",
+  "gift.processingText":
+    "Je gift van {amount} is onderweg. Je bank bevestigt hem binnen een paar dagen, en daarna krijg je een bevestiging per e-mail.",
+  "gift.share": "Vertel het via WhatsApp",
+  "gift.shareText":
+    "Ik heb net gegeven aan AMIR-GB, dat migranten en de Guinee-Bissause gemeenschap in Nederland steunt. Jij kunt ook geven:",
+  "gift.manage": "Je maandelijkse gift stoppen of wijzigen",
+  "gift.stoppedTitle": "Betaling gestopt",
+  "gift.stoppedText":
+    "Je stopte voordat je betaalde, dus er is niets afgeschreven. Je keuze staat hier nog als je het opnieuw wilt proberen.",
+  "gift.changeAmount": "Bedrag wijzigen",
+  "gift.failedTitle": "De betaling is niet gelukt",
+  "gift.failedText":
+    "Je bank heeft hem niet bevestigd, en er is niets afgeschreven. Je kunt het opnieuw proberen, of hieronder geven per bankoverschrijving.",
+  "gift.tryAgain": "Opnieuw proberen",
   "bank.line": "Of per bankoverschrijving, aan AMIR-GB",
   "bank.copy": "Kopieer",
   "bank.copyLabel": "Kopieer het rekeningnummer",

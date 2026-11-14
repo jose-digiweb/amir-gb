@@ -1,7 +1,10 @@
 ---
 // Dependencies
+import { actions } from "astro:actions";
 import { Picture } from "astro:assets";
 import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { GIFT_RETURN, GIFT_STATE } from "../../../lib/donate/constants";
+import { getDonateFormCopy } from "../../../lib/donate/helpers";
 import { getBeadRing } from "../../../lib/woven/helpers";
 import { WOVEN_DEFS } from "../constants";
 import { SUPPORT_RING } from "./constants";
@@ -11,16 +14,31 @@ import joinedHands from "../../../assets/photos/joined-hands.jpg";
 import Opener from "../../ui/Opener.astro";
 import WovenShade from "../../ui/WovenShade.astro";
 import BankTransfer from "./BankTransfer.astro";
-import DonateForm from "./DonateForm.astro";
+import DonateForm from "./DonateForm.vue";
+import GiftFailed from "./GiftFailed.astro";
+import GiftProcessing from "./GiftProcessing.astro";
+import GiftStopped from "./GiftStopped.astro";
+import GiftThanks from "./GiftThanks.astro";
+import MonthlyGiftThanks from "./MonthlyGiftThanks.astro";
+
+// Types
+import type { SupportState } from "../../../lib/donate/types";
 
 /**
  * The {@link Props} type
- * @description The props of the SupportSection component: Support AMIR-GB, people first, then one calm donation form
+ * @description The props of the SupportSection component: Support AMIR-GB, people first, then one calm donation form, or the result of a gift in its place
  */
-type Props = Record<string, never>;
+type Props = {
+  /** The form, or the result of a return from Stripe, read by the page route. */
+  support: SupportState;
+};
 
-// Prepare the copy and the ring of beads round the photo
-const t = getTranslations(getLocale(Astro.currentLocale));
+// Prepare the copy, the form's copy and action, and the ring of beads round the photo
+const { support } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const formCopy = getDonateFormCopy(t);
+const formAction = `${actions.donate}${GIFT_RETURN.HASH}`;
 const ring = getBeadRing(SUPPORT_RING);
 const solidHref = `#${WOVEN_DEFS.SOLID}`;
 const ringedHref = `#${WOVEN_DEFS.RINGED}`;
@@ -82,7 +100,24 @@ const ringedHref = `#${WOVEN_DEFS.RINGED}`;
     </p>
   </div>
   <div class="relative mt-6 flex flex-col gap-3.5 tablet:mt-3 desktop:mt-6 desktop:w-115 desktop:justify-self-end">
-    <DonateForm />
+    {support.state === GIFT_STATE.FORM ? (
+      <DonateForm
+        client:visible
+        locale={locale}
+        copy={formCopy}
+        action={formAction}
+        initialError={support.error}
+      />
+    ) : null}
+    {support.state === GIFT_STATE.PAID ? <GiftThanks amountCents={support.amountCents} /> : null}
+    {support.state === GIFT_STATE.PAID_MONTHLY ? (
+      <MonthlyGiftThanks amountCents={support.amountCents} />
+    ) : null}
+    {support.state === GIFT_STATE.PROCESSING ? (
+      <GiftProcessing amountCents={support.amountCents} />
+    ) : null}
+    {support.state === GIFT_STATE.STOPPED ? <GiftStopped choice={support.choice} /> : null}
+    {support.state === GIFT_STATE.FAILED ? <GiftFailed /> : null}
     <BankTransfer />
   </div>
 </section>

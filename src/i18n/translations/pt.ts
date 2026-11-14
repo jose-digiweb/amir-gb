@@ -42,6 +42,7 @@ export const pt: Translations = {
   "footer.label": "Rodapé",
   "footer.legalName":
     "AMIR-GB, Associação de Apoio aos Migrantes e à Comunidade Guineense nos Países Baixos",
+  "footer.manageGift": "Parar ou alterar um donativo mensal",
   "social.label": "AMIR-GB nas redes sociais",
   "notFound.title": "Página não encontrada",
   "notFound.description": "Não encontramos esta página no site da AMIR-GB.",
@@ -125,7 +126,35 @@ export const pt: Translations = {
   "donate.other": "Outro valor",
   "donate.otherLabel": "Outro valor em euros",
   "donate.submit": "Doar",
+  "donate.submitOnce": "Doar {amount}",
+  "donate.submitMonthly": "Doar {amount} por mês",
+  "donate.taking": "A levá-lo para o iDEAL",
   "donate.secure": "Seguro com iDEAL",
+  "donate.secureMonthly": "Seguro com iDEAL · Pare quando quiser",
+  "donate.tooSmall": "O donativo mínimo é de 1 €.",
+  "donate.tooLarge": "Para mais de 10 000 €, use a transferência bancária abaixo.",
+  "donate.startFailed":
+    "Não foi possível iniciar o pagamento. Tente de novo, ou use a transferência bancária abaixo.",
+  "gift.thanksOpener": "THANK\u00a0YOU · DANK\u00a0JE · OBRIGADU",
+  "gift.thanksTitle": "Obrigado pelo seu donativo",
+  "gift.paidText":
+    "{amount} chegou à AMIR-GB. Assim a ajuda continua, para quem na nossa comunidade precisar. Vai receber uma confirmação por e-mail.",
+  "gift.monthlyText":
+    "O seu donativo de {amount} por mês começou. Assim a ajuda continua, para quem na nossa comunidade precisar. Vai receber uma confirmação por e-mail.",
+  "gift.processingText":
+    "O seu donativo de {amount} está a caminho. O seu banco confirma-o dentro de poucos dias, e depois recebe uma confirmação por e-mail.",
+  "gift.share": "Partilhe no WhatsApp",
+  "gift.shareText":
+    "Acabei de fazer um donativo à AMIR-GB, que apoia migrantes e a comunidade guineense nos Países Baixos. Também pode contribuir:",
+  "gift.manage": "Parar ou alterar o seu donativo mensal",
+  "gift.stoppedTitle": "Pagamento interrompido",
+  "gift.stoppedText":
+    "Parou antes de pagar, por isso nada foi cobrado. A sua escolha continua aqui, se quiser tentar de novo.",
+  "gift.changeAmount": "Alterar o valor",
+  "gift.failedTitle": "O pagamento não foi concluído",
+  "gift.failedText":
+    "O seu banco não o confirmou, e nada foi cobrado. Pode tentar de novo, ou fazer um donativo por transferência bancária abaixo.",
+  "gift.tryAgain": "Tentar de novo",
   "bank.line": "Ou por transferência bancária, para a AMIR-GB",
   "bank.copy": "Copiar",
   "bank.copyLabel": "Copiar o número da conta",

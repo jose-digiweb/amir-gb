@@ -1,0 +1,45 @@
+---
+// Dependencies
+import { Check } from "@lucide/astro";
+import { STRIPE_PORTAL_URL } from "astro:env/server";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { fillAmount, formatAmount } from "../../../lib/donate/helpers";
+import { RETURN_TONE } from "./constants";
+
+// Components
+import GiftShareLink from "./GiftShareLink.astro";
+import ReturnCard from "./ReturnCard.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the MonthlyGiftThanks component, the thank you after a monthly gift started, with the way to stop or change it
+ */
+type Props = {
+  /** The monthly gift in cents, as Stripe charged it. */
+  amountCents: number;
+};
+
+// Write the sentence with the amount in the page's language
+const { amountCents } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const text = fillAmount(t["gift.monthlyText"], formatAmount(locale, amountCents));
+---
+
+<ReturnCard
+  tone={RETURN_TONE.SUCCESS}
+  opener={t["gift.thanksOpener"]}
+  title={t["gift.thanksTitle"]}
+  text={text}
+>
+  <Check slot="mark" />
+  <GiftShareLink />
+  {STRIPE_PORTAL_URL ? (
+    <a
+      href={STRIPE_PORTAL_URL}
+      class="inline-flex min-h-tap items-center self-center type-body-sm font-semibold text-text-muted underline underline-offset-4"
+    >
+      {t["gift.manage"]}
+    </a>
+  ) : null}
+</ReturnCard>

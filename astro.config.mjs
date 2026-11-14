@@ -77,11 +77,16 @@ export default defineConfig({
       // Public origin of the site, e.g. https://www.example.nl. EmDash reads SITE_URL too
       // (passkeys, CSRF, redirects, sitemap). Optional on localhost.
       SITE_URL: envField.string({ context: "server", access: "public", url: true, optional: true }),
-      // Stripe Checkout (iDEAL, one-off and monthly). Optional until donations are built.
+      // Stripe Checkout for donations, one-off and monthly. A restricted key (rk_) with Checkout
+      // Sessions write and read is enough. Optional so the site builds without it; without it the
+      // donation form says the payment could not start.
       STRIPE_SECRET_KEY: envField.string({ context: "server", access: "secret", optional: true }),
-      STRIPE_WEBHOOK_SECRET: envField.string({
+      // The login page of Stripe's customer portal, where a monthly donor stops or changes a gift.
+      // Not a secret, but read at runtime like one, so the Worker's variable picks the Stripe account.
+      STRIPE_PORTAL_URL: envField.string({
         context: "server",
         access: "secret",
+        url: true,
         optional: true,
       }),
       // EmDash: encrypts plugin settings stored as secrets. Generate with `pnpm exec emdash secrets generate`.
@@ -94,6 +99,27 @@ export default defineConfig({
   },
 
   vite: {
-    plugins: [tailwindcss()],
+    // In development the Worker's server code pre-bundles Vue, but @astrojs/vue's renderer
+    // (@astrojs/vue-renderer and vue/server-renderer) stayed unbundled with its own copy of Vue.
+    // A Vue component then rendered on one copy and read its instance on the other, so inject()
+    // (used by @lucide/vue) failed. Pre-bundling both keeps one Vue. Builds are not affected.
+    ssr: {
+      optimizeDeps: {
+        include: ["@astrojs/vue > @astrojs/vue-renderer/server.js", "vue/server-renderer"],
+      },
+    },
+    plugins: [
+      tailwindcss(),
+      // React's plugin turns on oxc's fast refresh for the whole dev server, and the Vue plugin
+      // reuses those oxc options for the TypeScript in .vue files without React's file filter.
+      // A Vue component that calls a use* function (defineModel, a composable) then gets React
+      // refresh code and fails with "$RefreshSig$ is not defined". The site has no React files
+      // and EmDash's admin is prebuilt, so fast refresh is switched off after React sets it.
+      {
+        name: "amir:no-react-refresh",
+        enforce: "post",
+        config: () => ({ oxc: { jsx: { refresh: false } } }),
+      },
+    ],
   },
 });
