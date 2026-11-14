@@ -125,13 +125,13 @@ One-off and monthly gifts go through Stripe Checkout, Stripe's own payment page.
 
 **What Support shows on the way back** (`src/lib/donate/support.ts`). The home route reads the session from Stripe and the card takes the form's place, with the bank transfer bar under it:
 
-| Return                                                           | Shows                                                                |
-| ---------------------------------------------------------------- | -------------------------------------------------------------------- |
-| Session complete and paid, one-off                               | Thank you, the amount, Tell a friend on WhatsApp                     |
-| Session complete and paid, monthly                               | The same, plus Stop or change your monthly gift                      |
-| Session complete but unpaid (SEPA Direct Debit takes a few days) | Thank you, the gift is on its way                                    |
-| Stopped                                                          | Payment stopped, a button that repeats the choice, Change the amount |
-| A session that did not complete, or one Stripe does not know     | The payment did not go through, Try again                            |
+| Return                                                                          | Shows                                                                   |
+| ------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| Session complete and paid, one-off                                              | Thank you, the amount, Share on WhatsApp, Give again (back to the form) |
+| Session complete and paid, monthly (also while its first SEPA debit is pending) | The same, plus Stop or change your monthly gift                         |
+| Session complete but unpaid (SEPA Direct Debit takes a few days)                | Thank you, the gift is on its way, Share on WhatsApp, Give again        |
+| Stopped                                                                         | Payment stopped, a button that repeats the choice, Change the amount    |
+| A session that did not complete, or one Stripe does not know                    | The payment did not go through, Try again                               |
 
 A bank's refusal shows on Stripe's own page, which lets the donor try again, so the failed card is rare. A page that shows a return or a failed try is sent with `Cache-Control: private, no-store` and never reaches the edge cache, so no donor sees another's gift. When Stripe does not answer, the form says the payment could not start and points at the bank transfer; the Worker's logs say why.
 

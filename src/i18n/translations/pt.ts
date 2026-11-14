@@ -146,6 +146,7 @@ export const pt: Translations = {
   "gift.share": "Partilhe no WhatsApp",
   "gift.shareText":
     "Acabei de fazer um donativo à AMIR-GB, que apoia migrantes e a comunidade guineense nos Países Baixos. Também pode contribuir:",
+  "gift.giveAgain": "Fazer outro donativo",
   "gift.manage": "Parar ou alterar o seu donativo mensal",
   "gift.stoppedTitle": "Pagamento interrompido",
   "gift.stoppedText":
