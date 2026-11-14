@@ -62,9 +62,7 @@ export const nl: Translations = {
   "home.description":
     "AMIR-GB steunt migranten en de Guinee-Bissause gemeenschap in heel Nederland: hulp, activiteiten en nieuws.",
   "opening.opener": "WELCOME · WELKOM · BO TXIGA",
-  "opening.titleStart": "Samen",
-  "opening.titleMiddle": "in",
-  "opening.titleEnd": "Nederland",
+  "opening.title": "Samen in Nederland",
   "opening.text": "Steun voor migranten en de Guinee-Bissause gemeenschap, overal in Nederland.",
   "opening.join": "Word lid van AMIR-GB",
   "help.opener": "WE ZIJN ER VOOR JE",
