@@ -143,6 +143,7 @@ export const en = {
   "gift.share": "Share on WhatsApp",
   "gift.shareText":
     "I just gave to AMIR-GB, which supports migrants and the Guinea-Bissau community in the Netherlands. You can give too:",
+  "gift.giveAgain": "Give again",
   "gift.manage": "Stop or change your monthly gift",
   "gift.stoppedTitle": "Payment stopped",
   "gift.stoppedText":
