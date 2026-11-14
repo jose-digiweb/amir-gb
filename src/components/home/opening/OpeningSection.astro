@@ -50,16 +50,14 @@ const joinHref = getRelativeLocaleUrl(locale, ROUTE.JOIN);
     class="opening-desktop absolute right-0 -z-10 hidden h-full w-auto desktop:block"
   />
 
-  <div class="flex flex-col gap-6 px-margin pb-12 tablet:w-sm tablet:pt-36 tablet:pb-24 tablet:pl-margin-md desktop:absolute desktop:top-1/2 desktop:left-margin-lg desktop:w-xl desktop:-translate-y-1/2 desktop:gap-8 desktop:p-0">
+  <div class="flex flex-col gap-6 px-margin pb-12 tablet:w-xl tablet:pt-36 tablet:pb-24 tablet:pl-margin-md desktop:absolute desktop:top-1/2 desktop:left-margin-lg desktop:w-xl desktop:-translate-y-1/2 desktop:gap-8 desktop:p-0">
     <div class="flex flex-col gap-3 tablet:gap-4">
       <Opener label={t["opening.opener"]} />
-      <h1 id="opening-title" class="type-hero">
-        <span class="whitespace-nowrap tablet:block">{t["opening.titleStart"]}</span>{" "}
-        <span class="whitespace-nowrap">{t["opening.titleMiddle"]}</span>
-        <span class="block">{t["opening.titleEnd"]}</span>
+      <h1 id="opening-title" class="type-hero text-balance">
+        {t["opening.title"]}
       </h1>
     </div>
-    <p class="type-body text-pretty text-text desktop:max-w-md desktop:type-lead">
+    <p class="type-body text-pretty text-text tablet:max-w-sm desktop:max-w-md desktop:type-lead">
       {t["opening.text"]}
     </p>
     <div class="flex flex-col items-center gap-1 tablet:items-start tablet:gap-2 desktop:flex-row desktop:items-center desktop:gap-8">

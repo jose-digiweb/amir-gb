@@ -59,9 +59,7 @@ export const en = {
   "home.description":
     "AMIR-GB supports migrants and the Guinea-Bissau community everywhere in the Netherlands: help, events and news.",
   "opening.opener": "WELCOME · WELKOM · BO TXIGA",
-  "opening.titleStart": "Together",
-  "opening.titleMiddle": "in the",
-  "opening.titleEnd": "Netherlands",
+  "opening.title": "Together in the Netherlands",
   "opening.text":
     "Support for migrants and the Guinea-Bissau community, everywhere in the Netherlands.",
   "opening.join": "Join AMIR-GB",

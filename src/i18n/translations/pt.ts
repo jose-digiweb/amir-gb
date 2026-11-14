@@ -62,9 +62,7 @@ export const pt: Translations = {
   "home.description":
     "A AMIR-GB apoia migrantes e a comunidade guineense em todos os Países Baixos: ajuda, eventos e notícias.",
   "opening.opener": "WELCOME · WELKOM · BO TXIGA",
-  "opening.titleStart": "Juntos",
-  "opening.titleMiddle": "nos",
-  "opening.titleEnd": "Países Baixos",
+  "opening.title": "Juntos nos Países Baixos",
   "opening.text": "Apoio a migrantes e à comunidade guineense, em todos os Países Baixos.",
   "opening.join": "Junte-se à AMIR-GB",
   "help.opener": "ESTAMOS AQUI PARA SI",

@@ -28,9 +28,9 @@ const y = pill.y - PILL_BOX.HEIGHT / 2;
 
 <foreignObject x={x} y={y} width={PILL_BOX.WIDTH} height={PILL_BOX.HEIGHT} overflow="visible">
   <div class="flex size-full items-center justify-center">
-    <p class="flex items-center gap-2 rounded-pill bg-surface py-3 pr-4 pl-3 type-h4 font-extrabold whitespace-nowrap text-text-heading shadow-md ring-5 ring-bg-alt">
-      <StarMark class="size-4 text-accent" />
-      {t[VALUE_LABEL[pill.value]]}
+    <p class="flex max-w-60 items-center gap-2 rounded-pill bg-surface py-3 pr-4 pl-3 type-h4 font-extrabold text-text-heading shadow-md ring-5 ring-bg-alt">
+      <StarMark class="size-4 shrink-0 text-accent" />
+      <span class="text-balance">{t[VALUE_LABEL[pill.value]]}</span>
     </p>
   </div>
 </foreignObject>

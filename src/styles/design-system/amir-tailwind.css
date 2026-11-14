@@ -141,7 +141,7 @@
   --ease-exit: var(--ease-exit);
 }
 
-/* type: one class per text style, with its family, size, line height, weight and spacing; hero, section-title, display and h1 grow on tablet and desktop */
+/* type: one class per text style, with its family, size, line height, weight and spacing; section-title, display and h1 grow on tablet and desktop; hero grows once, on tablet */
 @utility type-hero {
   font-family: var(--font-heading);
   font-size: 2.5rem;
@@ -151,10 +151,6 @@
   @media (min-width: 700px) {
     font-size: 4.5rem;
     line-height: 4.625rem;
-  }
-  @media (min-width: 1180px) {
-    font-size: 6rem;
-    line-height: 6.125rem;
   }
 }
 @utility type-section-title {
