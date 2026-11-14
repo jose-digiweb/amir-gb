@@ -45,7 +45,7 @@ Vitest uses the project's Astro config through Astro's `getViteConfig()` (`vites
 ## Languages and interface copy
 
 - The languages live in `src/i18n/constants.ts` (`LOCALES`, `DEFAULT_LOCALE`, `LANGUAGES`); `astro.config.mjs` reads them for Astro's i18n routing, so they are defined once.
-- Interface copy lives in `src/i18n/translations/`, one dictionary per language, following the Astro docs' i18n recipe. `en.ts` is the source of the keys; `nl.ts` and `pt.ts` repeat English until their copy is written. A test checks every language has the same keys.
+- Interface copy lives in `src/i18n/translations/`, one dictionary per language, following the Astro docs' i18n recipe. `en.ts` is the source of the keys; `nl.ts` holds the Dutch copy (informal, with "je") and `pt.ts` the European Portuguese, the written standard in Guinea-Bissau. Every new key goes into all three in the same change: the `Translations` type fails the build when one is missing. Phrases that languages build differently are whole keys, not pieces (`weekly.tuesday` is "Elke dinsdag" and "Todas as terças-feiras"). The trilingual openers (WELCOME · WELKOM · BO TXIGA and the language list's heading) stay the same in every language.
 - A component reads its language with `getLocale(Astro.currentLocale)` and its copy with `getTranslations(locale)` (`src/i18n/helpers.ts`).
 - Page addresses come from `ROUTE` in `src/site/constants.ts` and Astro's `getRelativeLocaleUrl`. `getPageLinks` and `getLanguageLinks` (`src/site/helpers.ts`) prepare links with the current page marked; a language link goes to the same page in that language.
 

@@ -32,7 +32,7 @@ AMIR-GB is a Dutch association (vereniging) for migrants and the Guinea-Bissau c
 - **The design system files are generated.** Never edit `src/styles/design-system/*`. Changes go to the design system artifact first, then are copied here (README, "Design system files").
 - **Light and dark** follow the system setting; `data-theme="light"` or `"dark"` on `<html>` overrides either way. Check both.
 - **Languages.** Dutch is the default at the root, then English at `/en/`, then Portuguese at `/pt/`, through Astro's built-in i18n. Keep the default locale unprefixed: EmDash's admin breaks with `prefixDefaultLocale`.
-- **English copy while developing.** All design and placeholder copy is English for now; Dutch is the launch language.
+- **Copy in three languages.** Every piece of interface copy is written in Dutch, English and Portuguese (`src/i18n/translations/`); Dutch is the launch language. Add a new key to all three in the same change.
 - **Missing facts** get visible placeholders such as [NUMBER], never invented facts.
 - **SBBI, not ANBI.** The association is SBBI. Nothing may present it as ANBI.
 - **Static by default.** A page renders per request only when it shows CMS content, with `export const prerender = false` in that page. Never switch the whole site to `output: "server"`, and never put navigation, page copy or settings in the CMS.
