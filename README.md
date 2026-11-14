@@ -146,12 +146,21 @@ The site deploys to the **Jose Digiweb** Cloudflare account, pinned by `account_
 
 Both are in the EU jurisdiction, so the content and media stay inside the EU. A jurisdiction is set when a resource is created and cannot change afterwards.
 
-To deploy:
+### Continuous integration and deploys
 
-```bash
-pnpm exec wrangler login
-pnpm exec wrangler secret put EMDASH_ENCRYPTION_KEY
-pnpm run deploy
-```
+- **Checks:** GitHub Actions runs `pnpm verify` on every pull request and on every push to `main` (`.github/workflows/verify.yml`). `pnpm/setup` installs the pnpm and Node.js versions pinned in `devEngines`, so CI uses the same versions as everyone's machine.
+- **Deploys:** Cloudflare Workers Builds is connected to the GitHub repository and deploys `main` on every push. Nobody deploys by hand. Its settings, under the Worker's **Settings** > **Builds**:
 
-EmDash runs its migrations on the first request. See EmDash's [Cloudflare guide](https://docs.emdashcms.com/deployment/cloudflare/).
+  | Setting        | Value                                                                                                               |
+  | -------------- | ------------------------------------------------------------------------------------------------------------------- |
+  | Git repository | `jose-digiweb/amir-gb`, production branch `main`                                                                    |
+  | Build command  | `pnpm run build`                                                                                                    |
+  | Deploy command | `pnpm exec wrangler deploy`                                                                                         |
+  | Build variable | `NODE_VERSION` = the Node.js version in `devEngines` (Workers Builds reads pnpm's version from `devEngines` itself) |
+  | Preview builds | Off: the Worker uses Durable Objects, which Worker Previews do not cover yet                                        |
+
+- **Variables and secrets:** `SITE_URL` (the site's public address) is a variable on the Worker in the dashboard, and `keep_vars` in `wrangler.jsonc` keeps it through every deploy. Secrets (`EMDASH_ENCRYPTION_KEY`, later the Stripe keys) are set once with `pnpm exec wrangler secret put <NAME>` and are never part of a deploy.
+
+A manual deploy (`pnpm run deploy`, after `pnpm exec wrangler login`) is only for an emergency when Workers Builds is down.
+
+EmDash runs its migrations on the first request after a deploy. See EmDash's [Cloudflare guide](https://docs.emdashcms.com/deployment/cloudflare/).

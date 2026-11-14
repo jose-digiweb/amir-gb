@@ -1,0 +1,29 @@
+# Runs the site's full check on every pull request and on main. Deploys are not done here:
+# Cloudflare Workers Builds deploys main once it is pushed (see README, "Deploy").
+name: Verify
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+# A newer push to the same branch or pull request cancels the run still going
+concurrency:
+  group: verify-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: pnpm verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      # pnpm and Node.js come from devEngines in package.json; this also runs pnpm install
+      - uses: pnpm/setup@v3
+        with:
+          cache: true
+      - run: pnpm verify
