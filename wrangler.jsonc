@@ -11,6 +11,8 @@
   "main": "./src/worker.ts",
   "compatibility_date": "2026-11-03",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  // Variables set in the Cloudflare dashboard (SITE_URL) survive deploys that do not list them.
+  "keep_vars": true,
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS",
