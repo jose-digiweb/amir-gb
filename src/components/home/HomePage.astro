@@ -15,6 +15,7 @@ import WovenDefs from "./WovenDefs.astro";
 
 // Types
 import type { HomeContent } from "../../lib/content/types";
+import type { SupportState } from "../../lib/donate/types";
 
 /**
  * The {@link Props} type
@@ -23,10 +24,12 @@ import type { HomeContent } from "../../lib/content/types";
 type Props = {
   /** Everything the page shows from EmDash, read by the page route before rendering starts. */
   content: HomeContent;
+  /** What Support AMIR-GB shows: the form, or the result of a gift, read by the page route. */
+  support: SupportState;
 };
 
 // Read the content and the page's copy
-const { content } = Astro.props;
+const { content, support } = Astro.props;
 const t = getTranslations(getLocale(Astro.currentLocale));
 const hasStories = content.stories.length > 0;
 ---
@@ -41,5 +44,5 @@ const hasStories = content.stories.length > 0;
   <TogetherSection />
   <WhatsOnSection events={content.events} activities={content.activities} />
   {hasStories ? <LifeSection stories={content.stories} /> : null}
-  <SupportSection />
+  <SupportSection support={support} />
 </SiteLayout>

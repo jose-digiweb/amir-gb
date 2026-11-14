@@ -1,0 +1,31 @@
+---
+// Dependencies
+import { CircleAlert } from "@lucide/astro";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { GIFT_RETURN } from "../../../lib/donate/constants";
+import { ROUTE } from "../../../site/constants";
+import { RETURN_TONE } from "./constants";
+
+// Components
+import Button from "../../ui/Button.astro";
+import ReturnCard from "./ReturnCard.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the GiftFailed component, shown when a donor came back from a payment that did not complete
+ */
+type Props = Record<string, never>;
+
+// The way back to the form on the page's home
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const tryAgainHref = `${getRelativeLocaleUrl(locale, ROUTE.HOME)}${GIFT_RETURN.HASH}`;
+---
+
+<ReturnCard tone={RETURN_TONE.DANGER} title={t["gift.failedTitle"]} text={t["gift.failedText"]}>
+  <CircleAlert slot="mark" />
+  <Button href={tryAgainHref} block>
+    {t["gift.tryAgain"]}
+  </Button>
+</ReturnCard>

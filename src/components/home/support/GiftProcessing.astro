@@ -1,0 +1,36 @@
+---
+// Dependencies
+import { Check } from "@lucide/astro";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { fillAmount, formatAmount } from "../../../lib/donate/helpers";
+import { RETURN_TONE } from "./constants";
+
+// Components
+import GiftShareLink from "./GiftShareLink.astro";
+import ReturnCard from "./ReturnCard.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the GiftProcessing component, the thank you for a gift the bank still has to confirm, as SEPA Direct Debit takes a few days
+ */
+type Props = {
+  /** The gift in cents. */
+  amountCents: number;
+};
+
+// Write the sentence with the amount in the page's language
+const { amountCents } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const text = fillAmount(t["gift.processingText"], formatAmount(locale, amountCents));
+---
+
+<ReturnCard
+  tone={RETURN_TONE.SUCCESS}
+  opener={t["gift.thanksOpener"]}
+  title={t["gift.thanksTitle"]}
+  text={text}
+>
+  <Check slot="mark" />
+  <GiftShareLink />
+</ReturnCard>

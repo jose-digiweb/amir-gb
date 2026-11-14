@@ -41,7 +41,7 @@ const Element = href ? "a" : "button";
   href={href}
   type={href ? undefined : "button"}
   class:list={[
-    "inline-flex shrink-0 touch-manipulation items-center justify-center gap-2 rounded-pill px-6 type-button whitespace-nowrap transition-[background-color,scale] duration-fast ease-standard select-none active:scale-97 [&_svg]:size-icon-md",
+    "inline-flex shrink-0 touch-manipulation items-center justify-center gap-2 rounded-pill px-6 type-button whitespace-nowrap transition-[background-color,scale] duration-fast ease-standard select-none active:scale-97 [&_svg]:size-icon-md [&_svg]:shrink-0",
     {
       "h-control-lg": size === BUTTON_SIZE.LARGE,
       "h-control": size === BUTTON_SIZE.COMPACT,

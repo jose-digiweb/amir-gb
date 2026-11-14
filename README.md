@@ -106,11 +106,45 @@ Sections, top to bottom, each in its own folder under `src/components/home/`:
 - **Stronger together** (`together/`): the story, the motto chips, the members label and the cloth of photo strips and two pinti strips, sewn with stitches. The strips are the board's own drawings (`ClothStripNavy.astro`, `ClothStripGold.astro`), coloured with design system tokens.
 - **What's on** (`events/`): the next events from EmDash. Four or more fill the band (a sideways rail on phone and tablet, four cards on desktop). With fewer, weekly activities fill the places left: two or three event cards, one featured event across two places, or a calm message when nothing is announced. On desktop the band uses only the columns it fills, so a featured event or the message with no weekly activities beside it spans the whole band (`planWhatsOn` in `src/lib/content/helpers.ts`). An event without a photo shows the woven pinti panel.
 - **Life at AMIR** (`stories/`): the newest Story posts. Four or more make a photo wall whose columns always end on one line (two columns on phone, three on tablet, four on desktop, each wall used only when there are enough stories to fill it); two or three sit side by side; one shows with its title and a few words. With none, the section is left out.
-- **Support AMIR-GB** (`support/`): the donation form's static markup, which sends visitors to the Donate page until the payment flow is built, and the bank transfer bar. Its Copy button copies the account number without spaces and shows "Copied. Paste it in your banking app." with a green check for three seconds (`src/lib/donate/helpers.ts`); a browser that refuses the clipboard leaves the bar as it was. The account number is a placeholder in its real Rabobank shape (`NL00 RABO 0000 0000 00`) until AMIR sends it. Amounts follow the page's language: €25 in English, € 25 in Dutch, 25 € in Portuguese. The section overlaps the footer, which adds the overlap to its own top padding. When Life at AMIR is left out, Support keeps its own distance from the navy band.
+- **Support AMIR-GB** (`support/`): the donation form and the bank transfer bar. The form is the site's one Vue island (`DonateForm.vue`, loaded when it comes into view); the donation flow is described under [Donations](#donations). The bank bar's Copy button copies the account number without spaces and shows "Copied. Paste it in your banking app." with a green check for three seconds (`src/lib/donate/helpers.ts`); a browser that refuses the clipboard leaves the bar as it was. The account number is a placeholder in its real Rabobank shape (`NL00 RABO 0000 0000 00`) until AMIR sends it. Amounts follow the page's language: €25 in English, € 25 in Dutch, 25 € in Portuguese. The section overlaps the footer, which adds the overlap to its own top padding. When Life at AMIR is left out, Support keeps its own distance from the navy band.
 
 Languages: lists in English and Portuguese also show items that exist only in Dutch, one per translation group, each with a small NL mark (`DutchOnlyMark.astro`, read out as "Only in Dutch"). The queries are in `src/lib/content/queries.ts`; dates show in Dutch time, in British English and European Portuguese formats.
 
 Placeholders in the page until AMIR sends them: the account number, the weekly activities and their places, every event except the General meeting, and the photos (example photos from the design canvas, with their credits in the design's notes).
+
+## Donations
+
+One-off and monthly gifts go through Stripe Checkout, Stripe's own payment page. The site keeps no record of gifts: Stripe's Dashboard is the record, and Stripe's own emails send receipts and tell donors about failed monthly payments. There is no webhook.
+
+**The flow.**
+
+1. The form in Support AMIR-GB (`src/components/home/support/DonateForm.vue`, its state in `useDonateForm.ts`) posts how often, the preset or typed amount and the page's language to the `donate` Astro Action (`src/actions/donate.ts`). It works without JavaScript too: the home page route reads the action's result and redirects to Stripe.
+2. The action checks the input (`src/lib/donate/schema.ts`): a typed amount may use a comma or a dot for cents and dots or commas between thousands; a gift is €1 to €10,000. An amount outside that comes back as an error under the field ("The smallest gift is €1.", or the bank transfer for more than €10,000). With JavaScript the form checks the same rule before it posts.
+3. It creates a Checkout Session (`src/lib/donate/checkout.ts`, `stripe.ts`) with the official `stripe` SDK on fetch: a payment for a one-off gift (Stripe's button says Donate), a subscription for a monthly one. The line item is the amount on one product, `amir_gb_gift` ("Gift aan AMIR-GB"), which exists once in each Stripe account. Checkout shows the payment methods the Stripe Dashboard turns on; the code names none. It opens in the page's language.
+4. Stripe sends the donor back to the same page's Support section: `?gift=<session id>#support` after paying, `?gift=stopped&frequency=…&amount=…#support` when they stop.
+
+**What Support shows on the way back** (`src/lib/donate/support.ts`). The home route reads the session from Stripe and the card takes the form's place, with the bank transfer bar under it:
+
+| Return                                                           | Shows                                                                |
+| ---------------------------------------------------------------- | -------------------------------------------------------------------- |
+| Session complete and paid, one-off                               | Thank you, the amount, Tell a friend on WhatsApp                     |
+| Session complete and paid, monthly                               | The same, plus Stop or change your monthly gift                      |
+| Session complete but unpaid (SEPA Direct Debit takes a few days) | Thank you, the gift is on its way                                    |
+| Stopped                                                          | Payment stopped, a button that repeats the choice, Change the amount |
+| A session that did not complete, or one Stripe does not know     | The payment did not go through, Try again                            |
+
+A bank's refusal shows on Stripe's own page, which lets the donor try again, so the failed card is rare. A page that shows a return or a failed try is sent with `Cache-Control: private, no-store` and never reaches the edge cache, so no donor sees another's gift. When Stripe does not answer, the form says the payment could not start and points at the bank transfer; the Worker's logs say why.
+
+**Stopping or changing a monthly gift.** Stripe's customer portal, through its login page (`STRIPE_PORTAL_URL`): the donor types their email and gets a link. It is linked from the monthly thank you and from the footer's small print. The portal stops a gift and changes the payment method; it cannot change an amount, so a new amount means stopping and starting again.
+
+**Stripe setup, once per account** (sandbox done 2026-11-14 in "AMIR-GB · sandbox"; repeat in AMIR's live account):
+
+- the product: `stripe products create --id amir_gb_gift --name "Gift aan AMIR-GB"`;
+- a customer portal configuration with cancel, payment method update, invoice history and the login page on; its login page address goes in `STRIPE_PORTAL_URL`;
+- in the Dashboard, email receipts for successful payments, so "A confirmation is on its way to your email" is true;
+- a restricted key with Checkout Sessions write and read for `STRIPE_SECRET_KEY`.
+
+To try it locally, use the sandbox key in `.dev.vars`, pay with iDEAL's test bank, and stop at Checkout with its back link.
 
 ## Design system files
 
@@ -128,12 +162,12 @@ To refresh them after the design system changes:
 
 Variables are typed in `astro.config.mjs` (`env.schema`) and read through `astro:env`. Locally they come from `.dev.vars`. On Cloudflare, secrets are set with `pnpm exec wrangler secret put <NAME>` and public values go in `vars` in `wrangler.jsonc`. No real key is ever committed.
 
-| Variable                | Kind   | Purpose                                                                                                                   |
-| ----------------------- | ------ | ------------------------------------------------------------------------------------------------------------------------- |
-| `SITE_URL`              | public | The site's public origin. EmDash uses it for passkeys, redirects and the sitemap.                                         |
-| `STRIPE_SECRET_KEY`     | secret | Stripe Checkout. Needed once donations are built.                                                                         |
-| `STRIPE_WEBHOOK_SECRET` | secret | Verifies Stripe webhooks. Needed once donations are built.                                                                |
-| `EMDASH_ENCRYPTION_KEY` | secret | Encrypts plugin settings saved as secrets. Generate with `pnpm exec emdash secrets generate`; back the production key up. |
+| Variable                | Kind    | Purpose                                                                                                                                                   |
+| ----------------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `SITE_URL`              | public  | The site's public origin. EmDash uses it for passkeys, redirects and the sitemap.                                                                         |
+| `STRIPE_SECRET_KEY`     | secret  | Creates and reads Stripe Checkout Sessions for donations. A restricted key (`rk_`) with Checkout Sessions write and read.                                 |
+| `STRIPE_PORTAL_URL`     | runtime | The login page of Stripe's customer portal, where monthly donors stop or change a gift. Not a secret; read at runtime so each Stripe account has its own. |
+| `EMDASH_ENCRYPTION_KEY` | secret  | Encrypts plugin settings saved as secrets. Generate with `pnpm exec emdash secrets generate`; back the production key up.                                 |
 
 ## Deploy
 
@@ -159,7 +193,7 @@ Both are in the EU jurisdiction, so the content and media stay inside the EU. A 
   | Build variable | `NODE_VERSION` = the Node.js version in `devEngines` (Workers Builds reads pnpm's version from `devEngines` itself) |
   | Preview builds | Off: the Worker uses Durable Objects, which Worker Previews do not cover yet                                        |
 
-- **Variables and secrets:** `SITE_URL` (the site's public address) is a variable on the Worker in the dashboard, and `keep_vars` in `wrangler.jsonc` keeps it through every deploy. Secrets (`EMDASH_ENCRYPTION_KEY`, later the Stripe keys) are set once with `pnpm exec wrangler secret put <NAME>` and are never part of a deploy.
+- **Variables and secrets:** `SITE_URL` (the site's public address) is a variable on the Worker in the dashboard, and `keep_vars` in `wrangler.jsonc` keeps it through every deploy. Secrets (`EMDASH_ENCRYPTION_KEY`, `STRIPE_SECRET_KEY`) are set once with `pnpm exec wrangler secret put <NAME>` and are never part of a deploy. `STRIPE_PORTAL_URL` is a plain variable on the Worker, like `SITE_URL`.
 
 A manual deploy (`pnpm run deploy`, after `pnpm exec wrangler login`) is only for an emergency when Workers Builds is down.
 

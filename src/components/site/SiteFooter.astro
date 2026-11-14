@@ -1,6 +1,7 @@
 ---
 // Dependencies
 import { MessageCircle, Phone } from "@lucide/astro";
+import { STRIPE_PORTAL_URL } from "astro:env/server";
 import { getRelativeLocaleUrl } from "astro:i18n";
 import { getLocale, getTranslations } from "../../i18n/helpers";
 import { CONTACT, FOOTER_NAV, LEGAL, ROUTE } from "../../site/constants";
@@ -16,7 +17,7 @@ import SocialLinks from "./SocialLinks.astro";
 
 /**
  * The {@link Props} type
- * @description The props of the SiteFooter component: talk to us, the bridge line, the links and the small print
+ * @description The props of the SiteFooter component: talk to us, the bridge line, the links, and the small print with the way to stop or change a monthly gift
  */
 type Props = Record<string, never>;
 
@@ -114,21 +115,31 @@ const bridgeStyle = `background-image: url(${bridgeLine.src})`;
       {" · "}
       <span class="whitespace-nowrap">{LEGAL.RSIN}</span>
     </p>
-    <ul aria-label={t["language.label"]} class="flex gap-4 self-end">
-      {languages.map((language) => (
-        <li>
-          <a
-            href={language.href}
-            lang={language.locale}
-            hreflang={language.locale}
-            aria-current={language.isCurrent ? "true" : undefined}
-            class="inline-flex min-h-tap items-center aria-[current=true]:font-bold aria-[current=true]:text-on-brand aria-[current=true]:underline"
-          >
-            {language.code}
-          </a>
-        </li>
-      ))}
-    </ul>
+    <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
+      {STRIPE_PORTAL_URL ? (
+        <a
+          href={STRIPE_PORTAL_URL}
+          class="inline-flex min-h-tap items-center underline underline-offset-3"
+        >
+          {t["footer.manageGift"]}
+        </a>
+      ) : null}
+      <ul aria-label={t["language.label"]} class="ml-auto flex gap-4">
+        {languages.map((language) => (
+          <li>
+            <a
+              href={language.href}
+              lang={language.locale}
+              hreflang={language.locale}
+              aria-current={language.isCurrent ? "true" : undefined}
+              class="inline-flex min-h-tap items-center aria-[current=true]:font-bold aria-[current=true]:text-on-brand aria-[current=true]:underline"
+            >
+              {language.code}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
   </div>
 </footer>
 

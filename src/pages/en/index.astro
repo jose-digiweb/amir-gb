@@ -1,18 +1,35 @@
 ---
 // Dependencies
+import { actions } from "astro:actions";
 import { getLocale } from "../../i18n/helpers";
 import { cacheHomePage } from "../../lib/content/helpers";
 import { getHomeContent } from "../../lib/content/queries";
+import { getSupportState, isPrivateState, keepPagePrivate } from "../../lib/donate/support";
 
 // Components
 import HomePage from "../../components/home/HomePage.astro";
 
-// The home page shows CMS content, so it renders per request
+// The home page shows CMS content and takes gifts, so it renders per request
 export const prerender = false;
 
-// Read the content and set the edge cache here, before rendering starts, so the response headers carry it
-const content = await getHomeContent(getLocale(Astro.currentLocale), new Date());
-cacheHomePage(Astro.cache, content.cacheHints);
+// A posted gift without JavaScript goes straight to Stripe's payment page
+const donation = Astro.getActionResult(actions.donate);
+if (donation?.data) {
+  return Astro.redirect(donation.data.url, 303);
+}
+
+// Read the content and what Support shows: the form, a failed try, or a return from Stripe
+const [content, support] = await Promise.all([
+  getHomeContent(getLocale(Astro.currentLocale), new Date()),
+  getSupportState(Astro.url, donation?.error),
+]);
+
+// A page with one donor's gift is never cached; any other is cached at the edge, set before rendering starts
+if (isPrivateState(support)) {
+  keepPagePrivate(Astro.response.headers);
+} else {
+  cacheHomePage(Astro.cache, content.cacheHints);
+}
 ---
 
-<HomePage content={content} />
+<HomePage content={content} support={support} />
