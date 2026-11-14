@@ -13,7 +13,8 @@ describe("ThemeList", () => {
     expect(html.match(/name="theme-list"/g)).toHaveLength(3);
     expect(html).toMatch(/value="auto" checked/);
     expect(html.match(/data-theme-input/g)).toHaveLength(3);
-    expect(html).toContain("Appearance: Automatic");
+    // Without a language from routing the component falls back to Dutch, the default
+    expect(html).toContain("Weergave: Automatisch");
   });
 });
 

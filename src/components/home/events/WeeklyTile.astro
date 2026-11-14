@@ -24,7 +24,7 @@ type Props = {
 // Read the activity and write its day and times in the page's language
 const { activity, href } = Astro.props;
 const t = getTranslations(getLocale(Astro.currentLocale));
-const day = `${t["weekly.every"]} ${t[`weekday.${activity.weekday}`]}`;
+const day = t[`weekly.${activity.weekday}`];
 const times = `${activity.startTime} ${t["weekly.until"]} ${activity.endTime}`;
 ---
 
