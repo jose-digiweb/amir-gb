@@ -50,8 +50,8 @@ const isWall = layout === STORY_LAYOUT.WALL;
     class="life-blob absolute top-0 -right-30 -z-10 mt-6 h-65 w-75 bg-bg-alt tablet:mt-10 tablet:h-95 tablet:w-110 desktop:mt-15 desktop:h-130 desktop:w-155"
   ></span>
   <Opener label={t["stories.opener"]} />
-  <div class="flex items-end justify-between gap-4 pb-2 tablet:pb-3 desktop:pb-6">
-    <h2 id="life-title" class="type-section-title whitespace-nowrap text-text-heading">
+  <div class="flex flex-wrap items-end justify-between gap-x-4 gap-y-2 pb-2 tablet:pb-3 desktop:pb-6">
+    <h2 id="life-title" class="type-section-title text-balance text-text-heading">
       {t["stories.title"]}
     </h2>
     <a
