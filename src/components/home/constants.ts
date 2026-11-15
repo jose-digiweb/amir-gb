@@ -16,28 +16,6 @@ export const HELP_SERVICES = [
 ] as const;
 
 /**
- * The {@link VALUE} constant
- * @description AMIR-GB's values, as the motto chips and the opening show them
- */
-export const VALUE = {
-  SOLIDARITY: "solidarity",
-  WELCOME: "welcome",
-  UNITY: "unity",
-  DIGNITY: "dignity",
-} as const;
-
-/**
- * The {@link VALUE_LABEL} constant
- * @description The translation key of each value's name
- */
-export const VALUE_LABEL = {
-  [VALUE.SOLIDARITY]: "values.solidarity",
-  [VALUE.WELCOME]: "values.welcome",
-  [VALUE.UNITY]: "values.unity",
-  [VALUE.DIGNITY]: "values.dignity",
-} as const;
-
-/**
  * The {@link HELP_SERVICE_LABEL} constant
  * @description The translation key of each help service's name
  */

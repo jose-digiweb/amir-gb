@@ -1,0 +1,27 @@
+---
+/**
+ * The {@link Props} type
+ * @description The props of the AimItem component, one of AMIR-GB's aims with its number, name and sentence
+ */
+type Props = {
+  /** The aim's number as the list shows it, such as 01. */
+  number: string;
+  /** The aim's name. */
+  title: string;
+  /** One sentence about it. */
+  text: string;
+};
+
+// Read the aim
+const { number, title, text } = Astro.props;
+---
+
+<li class="flex gap-4 border-t border-border py-5">
+  <span aria-hidden="true" class="w-11 shrink-0 type-h2 font-extrabold text-text-accent">
+    {number}
+  </span>
+  <span class="flex flex-col gap-1">
+    <span class="type-h3 text-balance text-text-heading">{title}</span>
+    <span class="type-body text-pretty text-text">{text}</span>
+  </span>
+</li>

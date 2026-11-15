@@ -73,6 +73,8 @@ export const LEGAL = {
   POSTCODE_CITY: "4827 LJ Breda",
   KVK: "KvK 42120588",
   RSIN: "RSIN 869821118",
+  KVK_NUMBER: "42120588",
+  RSIN_NUMBER: "869821118",
 } as const;
 
 /**
@@ -90,3 +92,25 @@ export const SOCIAL_LINKS = [
   { name: siTiktok.title, href: PENDING_LINK, path: siTiktok.path },
   { name: siInstagram.title, href: PENDING_LINK, path: siInstagram.path },
 ] as const;
+
+/**
+ * The {@link VALUE} constant
+ * @description AMIR-GB's motto, as the motto chips and the home opening show it
+ */
+export const VALUE = {
+  SOLIDARITY: "solidarity",
+  WELCOME: "welcome",
+  UNITY: "unity",
+  DIGNITY: "dignity",
+} as const;
+
+/**
+ * The {@link VALUE_LABEL} constant
+ * @description The translation key of each value's name
+ */
+export const VALUE_LABEL = {
+  [VALUE.SOLIDARITY]: "values.solidarity",
+  [VALUE.WELCOME]: "values.welcome",
+  [VALUE.UNITY]: "values.unity",
+  [VALUE.DIGNITY]: "values.dignity",
+} as const;

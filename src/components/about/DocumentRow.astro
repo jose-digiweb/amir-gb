@@ -1,0 +1,52 @@
+---
+// Dependencies
+import { Download, FileText } from "@lucide/astro";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { DOCUMENT_LANG } from "./constants";
+
+/**
+ * The {@link Props} type
+ * @description The props of the DocumentRow component, one of AMIR-GB's documents as a PDF to open
+ */
+type Props = {
+  /** The document's title in the page's language. */
+  title: string;
+  /** Its Dutch name, shown on pages in other languages. */
+  dutchName?: string;
+  /** Where the PDF is. */
+  href: string;
+  /** The PDF has not come from AMIR yet, so the row shows a placeholder and links nowhere. */
+  isPending: boolean;
+};
+
+// Read the document and the words for its file; a pending PDF has no address yet
+const { title, dutchName, href, isPending } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+const isReady = !isPending;
+const fileHref = isReady ? href : undefined;
+---
+
+<li>
+  <a
+    href={fileHref}
+    class:list={[
+      "flex min-h-16 touch-manipulation items-center gap-4 rounded-lg border border-border bg-surface px-4 py-2 text-text-heading transition-colors duration-fast select-none",
+      { "hover:border-border-strong": isReady },
+    ]}
+  >
+    <FileText class="size-icon-md shrink-0" />
+    <span class="flex flex-1 flex-col">
+      <span class="type-h4 text-balance">{title}</span>
+      <span class="flex flex-wrap items-center gap-x-1 type-small text-text-muted">
+        {dutchName ? <span lang={DOCUMENT_LANG}>{dutchName} ·</span> : null}
+        {isPending ? (
+          <span class="rounded-sm bg-warning-bg px-1 text-warning">
+            {t["about.documentPending"]}
+          </span>
+        ) : null}
+        {isReady ? <span>{t["about.documentPdf"]}</span> : null}
+      </span>
+    </span>
+    <Download class="size-icon-md shrink-0" />
+  </a>
+</li>

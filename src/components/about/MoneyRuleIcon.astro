@@ -1,0 +1,27 @@
+---
+// Dependencies
+import { BuildingComplex, FileText, Heart, Users } from "@lucide/astro";
+import { MONEY_RULE } from "./constants";
+
+// Types
+import type { MoneyRuleName } from "./types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the MoneyRuleIcon component, the Lucide pictogram of one money rule
+ */
+type Props = {
+  /** The rule to draw. */
+  rule: MoneyRuleName;
+  /** Size classes from the caller. */
+  class?: string;
+};
+
+// Read the rule and the size
+const { rule, class: className } = Astro.props;
+---
+
+{rule === MONEY_RULE.SIGNATURES ? <Users class={className} /> : null}
+{rule === MONEY_RULE.ACCOUNT ? <BuildingComplex class={className} /> : null}
+{rule === MONEY_RULE.REPORTS ? <FileText class={className} /> : null}
+{rule === MONEY_RULE.UNPAID ? <Heart class={className} /> : null}

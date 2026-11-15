@@ -1,0 +1,57 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { BOARD } from "./constants";
+import { getInitials } from "./helpers";
+
+// Components
+import DotPatch from "../ui/DotPatch.astro";
+import Opener from "../ui/Opener.astro";
+import WovenShade from "../ui/WovenShade.astro";
+import BoardCard from "./BoardCard.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the BoardSection component: who leads AMIR-GB, the three unpaid board members
+ */
+type Props = Record<string, never>;
+
+// Write each member's role and tasks in the page's language, with their initials for the portrait
+const t = getTranslations(getLocale(Astro.currentLocale));
+const members = BOARD.map((member) => ({
+  name: member.name,
+  initials: getInitials(member.name),
+  role: t[member.role],
+  tasks: t[member.tasks],
+}));
+---
+
+<section
+  aria-labelledby="board-title"
+  class="relative isolate -mt-8 overflow-hidden rounded-t-xl bg-bg px-margin pt-12 pb-16 tablet:-mt-10 tablet:px-margin-md tablet:pt-16 tablet:pb-24 desktop:-mt-14 desktop:px-margin-lg desktop:pt-24 desktop:pb-32"
+>
+  <WovenShade />
+  <DotPatch id="about-board" class="-right-5 bottom-15 h-40 w-55" />
+  <div class="mx-auto max-w-page">
+    <div class="flex flex-col gap-2 tablet:gap-3">
+      <Opener label={t["about.boardOpener"]} />
+      <h2 id="board-title" class="type-section-title text-balance text-text-heading">
+        {t["about.boardTitle"]}
+      </h2>
+      <p class="mt-2 max-w-measure type-body text-pretty text-text desktop:type-lead">
+        {t["about.boardText"]}
+      </p>
+    </div>
+    <ul class="mt-6 grid gap-3 tablet:mt-10 tablet:grid-cols-3 tablet:gap-5">
+      {members.map((member) => (
+        <BoardCard
+          name={member.name}
+          initials={member.initials}
+          role={member.role}
+          tasks={member.tasks}
+          photoToCome={t["about.photoToCome"]}
+        />
+      ))}
+    </ul>
+  </div>
+</section>

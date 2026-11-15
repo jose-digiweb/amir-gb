@@ -1,5 +1,6 @@
 // Types
 import type { Locale, TranslationKey } from "../i18n/types";
+import type { VALUE } from "./constants";
 
 /**
  * The {@link NavLink} type
@@ -41,3 +42,9 @@ export type LanguageLink = {
   href: string;
   isCurrent: boolean;
 };
+
+/**
+ * The {@link Value} type
+ * @description One of the {@link VALUE} values
+ */
+export type Value = (typeof VALUE)[keyof typeof VALUE];

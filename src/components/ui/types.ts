@@ -2,6 +2,7 @@
 import type {
   BUTTON_SIZE,
   BUTTON_TONE,
+  DECOR_TONE,
   ICON_BUTTON_TONE,
   OPENER_TONE,
   WOVEN_SHADE_TONE,
@@ -36,3 +37,9 @@ export type IconButtonTone = (typeof ICON_BUTTON_TONE)[keyof typeof ICON_BUTTON_
  * @description One of the {@link WOVEN_SHADE_TONE} values
  */
 export type WovenShadeTone = (typeof WOVEN_SHADE_TONE)[keyof typeof WOVEN_SHADE_TONE];
+
+/**
+ * The {@link DecorTone} type
+ * @description One of the {@link DECOR_TONE} values
+ */
+export type DecorTone = (typeof DECOR_TONE)[keyof typeof DECOR_TONE];

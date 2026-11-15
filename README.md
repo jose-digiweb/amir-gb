@@ -54,6 +54,7 @@ Vitest uses the project's Astro config through Astro's `getViteConfig()` (`vites
 Every page renders through `src/layouts/SiteLayout.astro`: the document shell (`BaseLayout.astro`), the header, the page and the footer.
 
 - **Header** (`src/components/site/SiteHeader.astro`): a blurred bar on phone and tablet; on desktop a paper sheet that lifts into a floating island over the first 64px of scrolling, with a CSS scroll-driven animation. Browsers without scroll-driven animations, and visitors who ask for reduced motion, keep the sheet.
+  - **Over a navy opening** (About us): a page passes `headerOverBrand` to `SiteLayout`, and on phone and tablet the bar is see-through at the top of the page, with the reverse logo and on-brand controls; it turns into the blurred bar once the page scrolls. The header renders with `data-over-brand`, and `followBrandBand` (`src/lib/header/helpers.ts`) drops it on scroll and puts it back at the top. The `over-brand` variant in `global.css` styles the logo, the language button and the menu button from that attribute, only below desktop and only while scripts run, so without scripts the bar stays solid; the menu and the language list keep their own look.
 - **Language list** (`LanguageList.astro`, tablet and desktop): a native popover under the language button, placed with CSS anchor positioning and at a fixed place under the header where anchors are missing.
 - **Menu** (`SiteMenu.astro`, phone and tablet): a modal `<dialog>` opened and closed by invoker commands (`command`, `commandfor`) and dismissed by a tap outside (`closedby="any"`). `src/lib/dom/helpers.ts` adds both by script in browsers that lack them. Full screen on phone, a sheet from the right on tablet; motion uses the design system's durations and its 30ms stagger.
 - **Appearance** (`src/components/theme/`): Automatic follows the device and is the default; Light and Dark override it and are remembered on this device in `localStorage` (no cookie). On desktop a round button before the language button opens a card (`ThemeList.astro`, a native popover like the language list); in the phone and tablet menu it is a three-way toggle (`ThemeToggle.astro`). Both are native radio groups.
@@ -64,7 +65,7 @@ Every page renders through `src/layouts/SiteLayout.astro`: the document shell (`
   - On phone the menu leaves out the social links (they stay in the footer), so both toggles, Donate and WhatsApp fit one screen.
 - **Footer** (`SiteFooter.astro`): talk to us, the bridge line, the page links, social links, the legal line and the language links.
 - **Error pages**: `src/pages/404.astro` (prerendered) and `src/pages/500.astro` (rendered per request, so Try again reloads the failed address). Both show the members lattice (`ErrorLattice.astro`), drawn by `src/lib/woven/helpers.ts` from the pano di pinti cell grid the design uses.
-- **Shared primitives** (`src/components/ui/`): `Button`, `IconButton`, `Opener` (the logo's star over a label) and `StarMark`.
+- **Shared primitives** (`src/components/ui/`): `Button`, `IconButton`, `Opener` (the logo's star over a label), `StarMark`, `WovenShade` (the woven corner of a section), and the scattered decorations `DecorBead` (one woven bead, plain or ringed, on a light section or on navy) and `DotPatch` (a faint patch of dots that fades out). The motto chips (`src/components/site/MottoChips.astro`) show on the home page and on About us; the motto itself is `VALUE` in `src/site/constants.ts`.
 - **Icons**: Lucide (`@lucide/astro`, `@lucide/vue`). The one exception is the social networks' logos, from Simple Icons (`simple-icons`), as the design system records. Simple Icons has no LinkedIn mark, so LinkedIn is not shown yet.
 - **Brand files**: the short horizontal logo (colour and reverse) and the white and gold bridge line, copied unchanged from the brand kit into `src/assets/brand/`. The logo swaps with the theme through the `theme-dark` variant in `global.css`, which follows the same rules as the tokens.
 
@@ -125,6 +126,8 @@ Languages: lists in English and Portuguese also show items that exist only in Du
 
 Placeholders in the page until AMIR sends them: the account number, the weekly activities and their places, every event except the General meeting, and the photos (example photos from the design canvas, with their credits in the design's notes).
 
+<<<<<<< HEAD
+
 ## Get help page
 
 `src/pages/get-help.astro`, `en/get-help.astro` and `pt/get-help.astro` render `src/components/get-help/GetHelpPage.astro`. Nothing on it comes from the CMS, so it is built once like any static page. Sections, top to bottom:
@@ -135,7 +138,25 @@ Placeholders in the page until AMIR sends them: the account number, the weekly a
 
 The footer overlaps the page's last section: a section marked `data-footer-overlaps` pulls the footer up by the sections' own overlap (`SiteFooter.astro`).
 
-The help services (`HELP_SERVICE` in `src/lib/help/`, with Youth and sport added) and their pictograms (`src/components/help/HelpServiceIcon.astro`) are shared by the home page and this page, and so are the woven beads (`src/components/ui/WovenDefs.astro`). Work and CV is called Work and housing on this page, as AMIR's own area joins work, housing and starting a business; the home tile keeps its label until jose decides. The photos are examples from the design canvas.
+The help services (`HELP_SERVICE` in `src/lib/help/`, with Youth and sport added) and their pictograms (`src/components/help/HelpServiceIcon.astro`) are shared by the home page and this page. Its scattered beads and dot patches are the shared `DecorBead` and `DotPatch` in `src/components/ui/`, which About us uses too. Work and CV is called Work and housing on this page, as AMIR's own area joins work, housing and starting a business; the home tile keeps its label until jose decides. The photos are examples from the design canvas.
+=======
+
+## About us
+
+`src/pages/about.astro`, `en/about.astro` and `pt/about.astro` render `src/components/about/AboutPage.astro`. The page has no CMS content, so it is prerendered. Everything on it comes from AMIR's fact sheet; the copy is under `about.*` in the three dictionaries, and the facts that are the same in every language (board names, document names, dates) are in `src/components/about/constants.ts`.
+
+Sections, top to bottom, each in `src/components/about/`:
+
+- **Opening** (`AboutOpening.astro`): We are AMIR-GB on navy, the story of the name and the motto chips, beside the wax print dancers in an organic shape and, from tablet up, the festival in a circle. The header sits see-through over it on phone and tablet (see [Site shell](#site-shell)).
+- **What we are for** (`PurposeSection.astro`): the mission and the vision on two white cards, then the seven aims numbered 01 to 07, in two columns on desktop.
+- **Our values** (`ValuesSection.astro`): four tinted tiles with a Lucide pictogram, two by two on phone and tablet, four across on desktop. Solidarity carries its Kriol word, Djumbai, marked `lang="pov"`.
+- **Our first months** (`TimelineSection.astro`): the dates joined by the gold stitched thread, down the side on phone and tablet and across on desktop. A date that has happened is a filled gold dot; one still coming is a gold ring marked "coming up". The page is built once, so the build day sets each state (`getMilestoneViews`), and a small script re-checks against today in Dutch time when the page loads (`refreshMilestones` in `src/lib/timeline/helpers.ts`): the general meeting of 21 November turns done on the 22nd without a rebuild. A date known only by its month (the end of the founding phase, March 2027) is done once that month has ended.
+- **The board** (`BoardSection.astro`): the three board members with their role (in Dutch, and in the page's language before it on English and Portuguese pages), name and tasks. Until their photos come, each has a pinti disc with their initials and "Photo to come" (`PortraitPlaceholder.astro`), which looks the same in light and dark, as a photo does.
+- **How we handle money** (`MoneySection.astro`): the four rules, the documents and the legal and tax status. The documents link to PDFs; until AMIR sends them they point at `#` and show a visible [PDF TO COME] placeholder. The yearly report and accounts rest, greyed, with "After our first year". The status card says AMIR-GB is a vereniging and an SBBI, not an ANBI, with its KvK and RSIN numbers from `LEGAL` in `src/site/constants.ts`.
+
+Placeholders until AMIR sends them: the three PDFs, the board photos, and the two opening photos (example photos from the design canvas; the festival is Keti Koti 2023 in Rotterdam from Wikimedia Commons, CC BY-SA 4.0, which needs a visible credit if it stays).
+
+> > > > > > > 8f9933d (feat(about): build the About us page)
 
 ## Donations
 

@@ -1,0 +1,62 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { AIMS, PURPOSE_CARDS } from "./constants";
+import { getAimNumber } from "./helpers";
+
+// Components
+import DotPatch from "../ui/DotPatch.astro";
+import Opener from "../ui/Opener.astro";
+import WovenShade from "../ui/WovenShade.astro";
+import AimItem from "./AimItem.astro";
+import PurposeCard from "./PurposeCard.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the PurposeSection component: the mission and the vision on two cards, then the seven numbered aims
+ */
+type Props = Record<string, never>;
+
+// Write the cards and the numbered aims in the page's language
+const t = getTranslations(getLocale(Astro.currentLocale));
+const cards = PURPOSE_CARDS.map((card) => ({
+  opener: t[card.opener],
+  title: t[card.title],
+  text: t[card.text],
+}));
+const aims = AIMS.map((aim, index) => ({
+  number: getAimNumber(index),
+  title: t[aim.title],
+  text: t[aim.text],
+}));
+---
+
+<section
+  aria-labelledby="purpose-title"
+  class="relative isolate -mt-8 overflow-hidden rounded-t-xl bg-bg-alt px-margin pt-12 pb-16 tablet:-mt-10 tablet:px-margin-md tablet:pt-16 tablet:pb-24 desktop:-mt-14 desktop:px-margin-lg desktop:pt-24 desktop:pb-32"
+>
+  <WovenShade />
+  <DotPatch id="about-purpose" class="top-10 right-5 h-42 w-60" />
+  <div class="mx-auto max-w-page">
+    <div class="flex flex-col gap-2 tablet:gap-3">
+      <Opener label={t["about.purposeOpener"]} />
+      <h2 id="purpose-title" class="type-section-title text-balance text-text-heading">
+        {t["about.purposeTitle"]}
+      </h2>
+    </div>
+    <div class="mt-6 grid gap-3 tablet:mt-10 tablet:grid-cols-2 tablet:gap-5">
+      {cards.map((card) => (
+        <PurposeCard opener={card.opener} title={card.title} text={card.text} />
+      ))}
+    </div>
+    <div class="mt-12 flex flex-col gap-2 tablet:mt-16 tablet:gap-3 desktop:mt-20">
+      <Opener label={t["about.aimsOpener"]} />
+      <h3 class="type-h1 text-balance text-text-heading">{t["about.aimsTitle"]}</h3>
+    </div>
+    <ol role="list" class="mt-4 grid desktop:grid-cols-2 desktop:gap-x-16">
+      {aims.map((aim) => (
+        <AimItem number={aim.number} title={aim.title} text={aim.text} />
+      ))}
+    </ol>
+  </div>
+</section>

@@ -17,6 +17,16 @@
   }
 }
 
+/* The header over a page's navy opening, on phone and tablet, while it is at the top of the page.
+   Only with scripts on, since a script turns it solid; its menu and language list keep their own look. */
+@custom-variant over-brand {
+  @media (scripting: enabled) and (width < --theme(--breakpoint-desktop)) {
+    &:where([data-over-brand] *):not(:where(dialog *, [popover] *)) {
+      @slot;
+    }
+  }
+}
+
 /* The visitor's appearance choice, for showing what is picked: none set is Automatic. */
 @custom-variant choice-auto (&:where(:root:not([data-theme]) *));
 @custom-variant choice-light (&:where([data-theme="light"] *));

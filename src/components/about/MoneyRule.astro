@@ -1,0 +1,33 @@
+---
+// Components
+import MoneyRuleIcon from "./MoneyRuleIcon.astro";
+
+// Types
+import type { MoneyRuleName } from "./types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the MoneyRule component, one rule of how AMIR-GB handles money, with its pictogram
+ */
+type Props = {
+  /** The rule, which picks its pictogram. */
+  rule: MoneyRuleName;
+  /** The rule's name. */
+  title: string;
+  /** One sentence about it. */
+  text: string;
+};
+
+// Read the rule
+const { rule, title, text } = Astro.props;
+---
+
+<li class="flex gap-4">
+  <span class="grid size-12 shrink-0 place-items-center rounded-full bg-surface text-text-heading">
+    <MoneyRuleIcon rule={rule} class="size-icon-md" />
+  </span>
+  <span class="flex flex-col gap-1">
+    <span class="type-h4 text-balance text-text-heading">{title}</span>
+    <span class="type-body-sm text-pretty text-text">{text}</span>
+  </span>
+</li>
