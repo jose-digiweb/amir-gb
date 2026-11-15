@@ -42,7 +42,7 @@ const joinHref = getRelativeLocaleUrl(locale, ROUTE.JOIN);
   <Constellation
     layout={DESKTOP_CONSTELLATION}
     id="opening-desktop"
-    class="opening-desktop absolute right-0 -z-10 hidden h-full w-auto desktop:block"
+    class="absolute top-1/2 right-0 -z-10 hidden h-auto max-h-full w-auto -translate-y-1/2 desktop:block"
   />
 
   <div class="flex flex-col gap-6 px-margin pb-12 tablet:w-xl tablet:pt-36 tablet:pb-24 tablet:pl-margin-md desktop:absolute desktop:top-1/2 desktop:left-margin-lg desktop:w-xl desktop:-translate-y-1/2 desktop:gap-8 desktop:p-0">
@@ -73,11 +73,5 @@ const joinHref = getRelativeLocaleUrl(locale, ROUTE.JOIN);
     @variant desktop {
       height: calc(100svh - var(--space-8));
     }
-  }
-
-  .opening-desktop {
-    top: 50%;
-    translate: 0 -50%;
-    max-height: 100%;
   }
 </style>
