@@ -1,0 +1,49 @@
+---
+// Dependencies
+import { CalendarPlus, MessageCircle } from "@lucide/astro";
+import { INTL_LOCALE } from "../../../i18n/constants";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { getEventWhen } from "../../../lib/content/helpers";
+import {
+  getCalendarFileHref,
+  getShareText,
+  getWhatsAppShareHref,
+} from "../../../lib/events/helpers";
+import { BUTTON_TONE } from "../../ui/constants";
+
+// Components
+import Button from "../../ui/Button.astro";
+
+// Types
+import type { EventDetail } from "../../../lib/events/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the OpenEventActions component, an upcoming event's Add to calendar and Share on WhatsApp
+ */
+type Props = {
+  /** The event. */
+  event: EventDetail;
+};
+
+// Read the event and prepare the calendar file and the WhatsApp message in the page's language
+const { event } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const when = getEventWhen(event.startsAt, event.endsAt, INTL_LOCALE[locale], t["weekly.until"]);
+const url = new URL(event.href, Astro.url).href;
+const shareHref = getWhatsAppShareHref(
+  getShareText(t["eventsPage.shareText"], event.title, when, url),
+);
+---
+
+<div class="flex flex-col gap-2.5">
+  <Button href={getCalendarFileHref(event.href)} block>
+    <CalendarPlus aria-hidden="true" />
+    {t["eventsPage.addToCalendar"]}
+  </Button>
+  <Button href={shareHref} target="_blank" rel="noopener" tone={BUTTON_TONE.OUTLINE} block>
+    <MessageCircle aria-hidden="true" />
+    {t["eventsPage.share"]}
+  </Button>
+</div>

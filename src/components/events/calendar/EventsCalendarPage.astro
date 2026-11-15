@@ -1,0 +1,56 @@
+---
+// Dependencies
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { EVENTS_PARAM, EVENTS_VIEW } from "../../../lib/events/constants";
+import { buildEventsHref, getTypeChips } from "../../../lib/events/helpers";
+import { ROUTE } from "../../../site/constants";
+
+// Components
+import SiteLayout from "../../../layouts/SiteLayout.astro";
+import WovenDefs from "../../ui/WovenDefs.astro";
+import EventsOpening from "../EventsOpening.astro";
+import WeeklyAndPastSection from "../WeeklyAndPastSection.astro";
+import CalendarSection from "./CalendarSection.astro";
+
+// Types
+import type { EventsCalendarContent, EventType } from "../../../lib/events/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the EventsCalendarPage component, What's on as a month calendar in the page's language
+ */
+type Props = {
+  /** What the calendar shows. */
+  content: EventsCalendarContent;
+  /** The type filter, if any. */
+  type?: EventType;
+};
+
+// Read the content and link the views, the chips and the archive in the page's language
+const { content, type } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const listPath = getRelativeLocaleUrl(locale, ROUTE.EVENTS);
+const calendarPath = getRelativeLocaleUrl(locale, ROUTE.EVENTS_CALENDAR);
+---
+
+<SiteLayout
+  title={t["eventsPage.calendarTitle"]}
+  description={t["eventsPage.description"]}
+  headerOverBrand
+>
+  <WovenDefs />
+  <EventsOpening
+    view={EVENTS_VIEW.CALENDAR}
+    listHref={buildEventsHref(listPath, { [EVENTS_PARAM.TYPE]: type })}
+    calendarHref={buildEventsHref(calendarPath, { [EVENTS_PARAM.TYPE]: type })}
+    chips={getTypeChips(calendarPath, type, { [EVENTS_PARAM.MONTH]: content.month.key })}
+  />
+  <CalendarSection content={content} />
+  <WeeklyAndPastSection
+    activities={content.activities}
+    past={content.past}
+    archiveHref={getRelativeLocaleUrl(locale, ROUTE.EVENTS_ARCHIVE)}
+  />
+</SiteLayout>

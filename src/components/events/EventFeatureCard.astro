@@ -1,0 +1,107 @@
+---
+// Dependencies
+import { CalendarPlus, Clock, MapPin, MessageCircle } from "@lucide/astro";
+import { INTL_LOCALE } from "../../i18n/constants";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { getEventWhen } from "../../lib/content/helpers";
+import {
+  getCalendarFileHref,
+  getEventWhere,
+  getShareText,
+  getWhatsAppShareHref,
+} from "../../lib/events/helpers";
+import { BUTTON_SIZE } from "../ui/constants";
+
+// Components
+import DutchOnlyMark from "../site/DutchOnlyMark.astro";
+import EventDate from "../home/events/EventDate.astro";
+import EventCover from "./EventCover.astro";
+import Button from "../ui/Button.astro";
+import EventTypeChip from "./EventTypeChip.astro";
+
+// Types
+import type { EventItem } from "../../lib/events/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the EventFeatureCard component, one event large: photo, date, kind, when and where, Add to calendar and Share on WhatsApp
+ */
+type Props = {
+  /** The event. */
+  event: EventItem;
+};
+
+// Read the event and write when, where and the WhatsApp message in the page's language
+const { event } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const when = getEventWhen(event.startsAt, event.endsAt, INTL_LOCALE[locale], t["weekly.until"]);
+const where = getEventWhere(event, t["events.online"], t["events.and"]);
+const url = new URL(event.href, Astro.url).href;
+const shareHref = getWhatsAppShareHref(
+  getShareText(t["eventsPage.shareText"], event.title, when, url),
+);
+---
+
+<article class="@container overflow-hidden rounded-lg bg-surface shadow-md">
+  <div class="grid grid-cols-1 @2xl:grid-cols-2 @5xl:grid-cols-12">
+    <a
+      href={event.href}
+      tabindex="-1"
+      aria-hidden="true"
+      class="relative isolate block h-54 overflow-hidden bg-surface-brand @2xl:h-auto @2xl:min-h-72 @5xl:col-span-7 @5xl:min-h-100"
+    >
+      <EventCover
+        image={event.image}
+        sizes="(min-width: 1180px) 740px, (min-width: 700px) 380px, 100vw"
+      />
+      <EventDate startsAt={event.startsAt} class="absolute top-4 left-4 @5xl:top-5 @5xl:left-5" />
+      <EventTypeChip type={event.type} onPhoto class="absolute top-4 right-4 @2xl:hidden" />
+    </a>
+    <div class="flex flex-col justify-center gap-3 p-5 @2xl:p-6 @5xl:col-span-5 @5xl:gap-4 @5xl:p-10">
+      <span class="hidden @2xl:flex">
+        <EventTypeChip type={event.type} />
+      </span>
+      <h2 class="type-h3 text-balance text-text-heading @2xl:type-h2 @5xl:type-h1 @5xl:font-extrabold">
+        <a href={event.href} class="hover:underline hover:underline-offset-4">
+          {event.title}
+        </a>
+        {event.isDutchOnly ? <DutchOnlyMark /> : null}
+      </h2>
+      <ul class="flex flex-col gap-1.5 type-body-sm text-text-muted">
+        <li class="flex items-start gap-2">
+          <Clock aria-hidden="true" class="mt-0.5 size-4.5 shrink-0" />
+          {when}
+        </li>
+        {where ? (
+          <li class="flex items-start gap-2">
+            <MapPin aria-hidden="true" class="mt-0.5 size-4.5 shrink-0" />
+            {where}
+          </li>
+        ) : null}
+      </ul>
+      {event.summary ? (
+        <p class="hidden type-body-sm text-pretty text-text @5xl:block">{event.summary}</p>
+      ) : null}
+      <div class="mt-1 flex flex-wrap gap-2 @5xl:mt-2">
+        <Button
+          href={getCalendarFileHref(event.href)}
+          size={BUTTON_SIZE.COMPACT}
+          class="min-w-0 flex-1 @2xl:flex-none @5xl:h-control-lg"
+        >
+          <CalendarPlus aria-hidden="true" />
+          {t["eventsPage.addToCalendar"]}
+        </Button>
+        <a
+          href={shareHref}
+          target="_blank"
+          rel="noopener"
+          aria-label={t["eventsPage.share"]}
+          class="grid size-tap shrink-0 touch-manipulation place-items-center rounded-pill border-2 border-border text-text-heading transition-[background-color,scale] duration-fast ease-standard select-none hover:bg-hover-quiet active:scale-97 active:bg-pressed-quiet @5xl:size-control-lg"
+        >
+          <MessageCircle aria-hidden="true" class="size-icon-md" />
+        </a>
+      </div>
+    </div>
+  </div>
+</article>

@@ -1,0 +1,54 @@
+---
+// Dependencies
+import { Repeat } from "@lucide/astro";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { TILE_COLOUR } from "../../lib/content/constants";
+
+// Components
+import DutchOnlyMark from "../site/DutchOnlyMark.astro";
+
+// Types
+import type { WeeklyActivity } from "../../lib/content/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the WeeklyActivityTile component, a weekly activity on the events page as a tinted tile with its day and times
+ */
+type Props = {
+  /** The weekly activity. */
+  activity: WeeklyActivity;
+};
+
+// Read the activity and write its day and times in the page's language
+const { activity } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+const day = t[`weekly.${activity.weekday}`];
+const times = `${activity.startTime} ${t["weekly.until"]} ${activity.endTime}`;
+---
+
+<li
+  class:list={[
+    "flex min-h-40 flex-col justify-between gap-3 rounded-lg p-4 text-text-heading tablet:p-5 desktop:min-h-42",
+    {
+      "bg-tint-gold": activity.tileColour === TILE_COLOUR.GOLD,
+      "bg-tint-forest": activity.tileColour === TILE_COLOUR.FOREST,
+      "bg-tint-brick": activity.tileColour === TILE_COLOUR.BRICK,
+      "bg-tint-navy": activity.tileColour === TILE_COLOUR.NAVY,
+    },
+  ]}
+>
+  <span class="grid size-12 shrink-0 place-items-center rounded-full bg-tile-icon tablet:size-16">
+    <Repeat class="size-icon-md" />
+  </span>
+  <span class="flex flex-col gap-1">
+    <span class="type-h4 text-balance tablet:type-h3">
+      {activity.name}
+      {activity.isDutchOnly ? <DutchOnlyMark /> : null}
+    </span>
+    <span class="type-small font-semibold opacity-85">
+      {day}
+      <br />
+      {times}
+    </span>
+  </span>
+</li>

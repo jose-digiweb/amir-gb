@@ -1,0 +1,28 @@
+---
+// Components
+import EventDate from "../../home/events/EventDate.astro";
+import EventCover from "../EventCover.astro";
+
+// Types
+import type { EventDetail } from "../../../lib/events/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the EventMedia component, the event's photo or woven panel with its date badge
+ */
+type Props = {
+  /** The event. */
+  event: EventDetail;
+};
+
+// Read the event
+const { event } = Astro.props;
+---
+
+<div class="relative isolate h-46 overflow-hidden rounded-lg bg-surface-brand tablet:h-84 desktop:h-100">
+  <EventCover
+    image={event.image}
+    sizes="(min-width: 1180px) 820px, (min-width: 700px) 754px, 100vw"
+  />
+  <EventDate startsAt={event.startsAt} class="absolute top-4 left-4 tablet:top-5 tablet:left-5" />
+</div>

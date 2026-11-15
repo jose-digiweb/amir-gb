@@ -1,0 +1,37 @@
+---
+// Dependencies
+import { CalendarPlus, ExternalLink } from "@lucide/astro";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { getCalendarFileHref } from "../../../lib/events/helpers";
+import { BUTTON_TONE } from "../../ui/constants";
+
+// Components
+import Button from "../../ui/Button.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the SignUpActions component, an event that asks people to sign up: Sign up to come leads, Add to calendar steps back
+ */
+type Props = {
+  /** The event's sign-up form. */
+  registrationLink: string;
+  /** The event page's address. */
+  href: string;
+};
+
+// Read the links and the copy
+const { registrationLink, href } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+---
+
+<div class="flex flex-col gap-2.5">
+  <Button href={registrationLink} target="_blank" rel="noopener" block>
+    <ExternalLink aria-hidden="true" />
+    {t["event.signUp"]}
+  </Button>
+  <p class="text-center type-small text-text-muted">{t["event.signUpNote"]}</p>
+  <Button href={getCalendarFileHref(href)} tone={BUTTON_TONE.OUTLINE} block>
+    <CalendarPlus aria-hidden="true" />
+    {t["eventsPage.addToCalendar"]}
+  </Button>
+</div>

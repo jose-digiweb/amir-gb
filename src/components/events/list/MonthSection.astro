@@ -1,0 +1,50 @@
+---
+// Dependencies
+import { INTL_LOCALE } from "../../../i18n/constants";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { getCountLabel } from "../../../lib/events/helpers";
+
+// Components
+import MonthEventCard from "./MonthEventCard.astro";
+
+// Types
+import type { MonthGroup } from "../../../lib/events/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the MonthSection component, one month of the list: its heading and count, then its events
+ */
+type Props = {
+  /** The month and its events. */
+  group: MonthGroup;
+};
+
+// Read the month and count its events in the page's language
+const { group } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const count = getCountLabel(
+  group.events.length,
+  INTL_LOCALE[locale],
+  t["eventsPage.countOne"],
+  t["eventsPage.countOther"],
+);
+const titleId = `month-${group.key}`;
+---
+
+<section
+  aria-labelledby={titleId}
+  class="flex flex-col gap-4 border-t border-border pt-5 tablet:gap-5 tablet:pt-6 desktop:grid desktop:grid-cols-12 desktop:gap-8 desktop:pt-8"
+>
+  <div class="flex items-baseline justify-between gap-4 desktop:col-span-3 desktop:flex-col desktop:justify-start desktop:gap-1.5">
+    <h2 id={titleId} class="type-h3 text-text-heading tablet:type-h2 desktop:type-h1">
+      {group.title}
+    </h2>
+    <span class="shrink-0 type-small text-text-muted desktop:type-body-sm">{count}</span>
+  </div>
+  <ul class="flex flex-col gap-4 tablet:grid tablet:grid-cols-2 tablet:gap-4 desktop:col-span-9 desktop:gap-5">
+    {group.events.map((event) => (
+      <MonthEventCard event={event} />
+    ))}
+  </ul>
+</section>

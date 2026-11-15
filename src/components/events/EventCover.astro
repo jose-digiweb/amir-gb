@@ -1,0 +1,34 @@
+---
+// Dependencies
+import { Image } from "emdash/ui";
+import pintiPanel from "../../assets/woven/pinti-panel.svg";
+
+// Types
+import type { MediaImage } from "../../lib/content/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the EventCover component, an event's photo filling its frame, or the woven pinti panel when it has none
+ */
+type Props = {
+  /** The event's image, if it has one. */
+  image?: MediaImage;
+  /** The widths the photo is shown at, for the browser to pick a file. */
+  sizes: string;
+};
+
+// Read the image and how wide it shows
+const { image, sizes } = Astro.props;
+---
+
+{image ? (
+  <Image
+    image={image}
+    alt=""
+    sizes={sizes}
+    loading="lazy"
+    class="absolute inset-0 size-full object-cover"
+  />
+) : (
+  <img src={pintiPanel.src} alt="" loading="lazy" class="absolute inset-0 size-full object-cover" />
+)}

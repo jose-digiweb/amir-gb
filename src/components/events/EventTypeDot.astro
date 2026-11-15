@@ -1,0 +1,35 @@
+---
+// Dependencies
+import { EVENT_TYPE } from "../../lib/events/constants";
+
+// Types
+import type { EventType } from "../../lib/events/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the EventTypeDot component, the small coloured dot that marks a kind of event
+ */
+type Props = {
+  /** The kind of event. */
+  type: EventType;
+  /** Size classes from the caller. */
+  class?: string;
+};
+
+// Read the kind and the dot's size
+const { type, class: className } = Astro.props;
+---
+
+<i
+  aria-hidden="true"
+  class:list={[
+    "inline-block shrink-0 rounded-full",
+    {
+      "bg-info": type === EVENT_TYPE.YOUTH,
+      "bg-success": type === EVENT_TYPE.HELP,
+      "bg-danger": type === EVENT_TYPE.CULTURE,
+      "bg-accent": type === EVENT_TYPE.COMMUNITY,
+    },
+    className,
+  ]}
+></i>

@@ -1,0 +1,62 @@
+---
+// Dependencies
+import { INTL_LOCALE } from "../../../i18n/constants";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { getEventTimes, getEventWhere, getShortWeekday } from "../../../lib/events/helpers";
+
+// Components
+import DutchOnlyMark from "../../site/DutchOnlyMark.astro";
+import EventDate from "../../home/events/EventDate.astro";
+import EventCover from "../EventCover.astro";
+import EventTypeChip from "../EventTypeChip.astro";
+
+// Types
+import type { EventItem } from "../../../lib/events/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the MonthEventCard component, an event in its month: a row on phone, a photo card on tablet, a wide card on desktop
+ */
+type Props = {
+  /** The event. */
+  event: EventItem;
+};
+
+// Read the event and write its day, times and place in the page's language
+const { event } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const intl = INTL_LOCALE[locale];
+const day = getShortWeekday(event.startsAt, intl);
+const times = getEventTimes(event, intl, t["weekly.until"], t["eventsPage.from"]);
+const where = getEventWhere(event, t["events.online"], t["events.and"]);
+const meta = [`${day} ${times}`, where].filter(Boolean).join(" · ");
+---
+
+<li>
+  <a
+    href={event.href}
+    class="group grid touch-manipulation grid-cols-[--spacing(23)_minmax(0,1fr)] items-center gap-4 select-none tablet:h-full tablet:grid-cols-1 tablet:content-start tablet:gap-0 tablet:overflow-hidden tablet:rounded-lg tablet:border tablet:border-border tablet:bg-surface tablet:shadow-sm tablet:transition-[translate] tablet:duration-fast tablet:ease-standard tablet:hover:-translate-y-1 desktop:grid-cols-[--spacing(50)_minmax(0,1fr)] desktop:items-stretch"
+  >
+    <span class="relative block size-23 tablet:h-42 tablet:w-auto desktop:h-full desktop:min-h-42">
+      <span class="absolute inset-0 isolate overflow-hidden rounded-lg bg-surface-sunken tablet:rounded-none">
+        <EventCover
+          image={event.image}
+          sizes="(min-width: 1180px) 200px, (min-width: 700px) 50vw, 92px"
+        />
+      </span>
+      <EventDate
+        startsAt={event.startsAt}
+        class="absolute -top-1.5 -left-1.5 origin-top-left scale-75 ring-3 ring-bg tablet:top-3 tablet:left-3 tablet:scale-100 tablet:ring-0"
+      />
+    </span>
+    <span class="flex min-w-0 flex-col gap-1.5 tablet:gap-2.5 tablet:p-5">
+      <EventTypeChip type={event.type} />
+      <span class="type-h3 text-balance text-text-heading group-hover:underline group-hover:underline-offset-4">
+        {event.title}
+        {event.isDutchOnly ? <DutchOnlyMark /> : null}
+      </span>
+      <span class="type-small text-text-muted">{meta}</span>
+    </span>
+  </a>
+</li>

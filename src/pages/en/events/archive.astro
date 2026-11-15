@@ -1,0 +1,36 @@
+---
+// Dependencies
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { getLocale } from "../../../i18n/helpers";
+import { cacheContentPage } from "../../../lib/content/helpers";
+import { EVENTS_PARAM } from "../../../lib/events/constants";
+import { parseYear } from "../../../lib/events/helpers";
+import { getArchiveContent } from "../../../lib/events/queries";
+import { ROUTE } from "../../../site/constants";
+
+// Components
+import ArchivePage from "../../../components/events/archive/ArchivePage.astro";
+import NotFoundPage from "../../404.astro";
+
+// The archive shows CMS content, so it renders per request
+export const prerender = false;
+
+// Read the year in the address and the archive
+const locale = getLocale(Astro.currentLocale);
+const content = await getArchiveContent(
+  locale,
+  new Date(),
+  parseYear(Astro.url.searchParams.get(EVENTS_PARAM.YEAR)),
+  getRelativeLocaleUrl(locale, ROUTE.EVENTS_ARCHIVE),
+);
+const { year } = content;
+
+// An archive without past events answers not found; one with them is cached at the edge before rendering starts
+if (year) {
+  cacheContentPage(Astro.cache, content.cacheHints);
+} else {
+  Astro.response.status = 404;
+}
+---
+
+{year ? <ArchivePage content={content} year={year} /> : <NotFoundPage />}

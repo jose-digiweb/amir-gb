@@ -1,0 +1,38 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../i18n/helpers";
+
+// Components
+import EventTypeDot from "./EventTypeDot.astro";
+
+// Types
+import type { EventType } from "../../lib/events/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the EventTypeChip component, a small pill with an event's kind: white on a photo, sand on a card
+ */
+type Props = {
+  /** The kind of event. */
+  type: EventType;
+  /** The chip sits on a photo, so it is white rather than sand. */
+  onPhoto?: boolean;
+  /** Placement classes from the caller. */
+  class?: string;
+};
+
+// Read the kind and name it in the page's language
+const { type, onPhoto = false, class: className } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+---
+
+<span
+  class:list={[
+    "inline-flex items-center gap-1.5 self-start rounded-pill px-3 py-1 type-tag whitespace-nowrap text-text-heading",
+    { "bg-surface": onPhoto, "bg-bg-alt": !onPhoto },
+    className,
+  ]}
+>
+  <EventTypeDot type={type} class="size-2" />
+  {t[`eventType.${type}`]}
+</span>

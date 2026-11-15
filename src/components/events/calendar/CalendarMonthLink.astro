@@ -1,0 +1,28 @@
+---
+/**
+ * The {@link Props} type
+ * @description The props of the CalendarMonthLink component, a round ringed link to the month before or after
+ */
+type Props = {
+  /** The other month's address. */
+  href: string;
+  /** Where it goes, read out by screen readers. */
+  label: string;
+  /** Layout classes from the caller. */
+  class?: string;
+};
+
+// Read the link
+const { href, label, class: className } = Astro.props;
+---
+
+<a
+  href={href}
+  aria-label={label}
+  class:list={[
+    "grid size-tap shrink-0 touch-manipulation place-items-center rounded-pill border-2 border-border text-text-heading transition-[background-color,scale] duration-fast ease-standard select-none hover:bg-hover-quiet active:scale-97 active:bg-pressed-quiet [&_svg]:size-icon-md",
+    className,
+  ]}
+>
+  <slot />
+</a>

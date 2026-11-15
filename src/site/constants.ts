@@ -9,6 +9,8 @@ export const ROUTE = {
   HOME: "/",
   GET_HELP: "/get-help/",
   EVENTS: "/events/",
+  EVENTS_CALENDAR: "/events/calendar/",
+  EVENTS_ARCHIVE: "/events/archive/",
   NEWS: "/news/",
   ABOUT: "/about/",
   JOIN: "/join/",

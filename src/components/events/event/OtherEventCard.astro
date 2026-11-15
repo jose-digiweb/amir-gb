@@ -1,0 +1,69 @@
+---
+// Dependencies
+import { INTL_LOCALE } from "../../../i18n/constants";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import {
+  getEventTimes,
+  getEventWhere,
+  getShortDate,
+  getShortWeekday,
+} from "../../../lib/events/helpers";
+
+// Components
+import DutchOnlyMark from "../../site/DutchOnlyMark.astro";
+import EventDate from "../../home/events/EventDate.astro";
+import EventCover from "../EventCover.astro";
+import EventTypeChip from "../EventTypeChip.astro";
+
+// Types
+import type { EventItem } from "../../../lib/events/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the OtherEventCard component, another upcoming event under an event page: a compact row on phone, a photo card from tablet up
+ */
+type Props = {
+  /** The event. */
+  event: EventItem;
+};
+
+// Read the event and write its day, times and place in the page's language
+const { event } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const intl = INTL_LOCALE[locale];
+const times = getEventTimes(event, intl, t["weekly.until"], t["eventsPage.from"]);
+const where = getEventWhere(event, t["events.online"], t["events.and"]);
+const phoneMeta = `${getShortDate(event.startsAt, intl)} · ${times}`;
+const meta = [`${getShortWeekday(event.startsAt, intl)} ${times}`, where]
+  .filter(Boolean)
+  .join(" · ");
+---
+
+<li class="border-t border-border first:border-t-0 tablet:border-t-0 tablet:nth-3:hidden desktop:nth-3:block">
+  <a
+    href={event.href}
+    class="group grid touch-manipulation grid-cols-[--spacing(14)_minmax(0,1fr)] items-center gap-3.5 py-3 select-none tablet:h-full tablet:grid-cols-1 tablet:content-start tablet:gap-0 tablet:overflow-hidden tablet:rounded-lg tablet:border tablet:border-border tablet:bg-surface tablet:py-0 tablet:shadow-sm tablet:transition-[translate] tablet:duration-fast tablet:ease-standard tablet:hover:-translate-y-1"
+  >
+    <span class="relative isolate block size-14 overflow-hidden rounded-md bg-surface-sunken tablet:h-42 tablet:w-auto tablet:rounded-none">
+      <EventCover
+        image={event.image}
+        sizes="(min-width: 1180px) 400px, (min-width: 700px) 50vw, 56px"
+      />
+      <span class="absolute top-3 left-3 hidden tablet:block">
+        <EventDate startsAt={event.startsAt} />
+      </span>
+    </span>
+    <span class="flex min-w-0 flex-col gap-1 tablet:gap-2.5 tablet:p-5">
+      <span class="hidden tablet:flex">
+        <EventTypeChip type={event.type} />
+      </span>
+      <span class="type-small font-semibold text-text-muted tablet:hidden">{phoneMeta}</span>
+      <span class="type-h4 text-text-heading group-hover:underline group-hover:underline-offset-4 tablet:type-h3">
+        {event.title}
+        {event.isDutchOnly ? <DutchOnlyMark /> : null}
+      </span>
+      <span class="hidden type-small text-text-muted tablet:block">{meta}</span>
+    </span>
+  </a>
+</li>

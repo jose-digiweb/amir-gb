@@ -2,6 +2,7 @@
 import { getRelativeLocaleUrl } from "astro:i18n";
 import { LANGUAGES, LOCALES } from "../i18n/constants";
 import { getPagePath, getTranslations } from "../i18n/helpers";
+import { ROUTE } from "./constants";
 
 // Types
 import type { Locale } from "../i18n/types";
@@ -27,8 +28,24 @@ export function getPageLinks(
   return links.map((link) => ({
     label: t[link.label],
     href: getRelativeLocaleUrl(locale, link.route),
-    isCurrent: pagePath === link.route,
+    isCurrent: isWithinPage(pagePath, link.route),
   }));
+}
+
+/**
+ * The {@link isWithinPage} helper
+ * @description Whether a path is a page or one of its own pages, such as the calendar or an event under Events
+ * @param {string} pagePath - The current page's path in the default language
+ * @param {string} route - The link's path in the default language
+ * @returns {boolean} True when the path is the page or lies under it
+ */
+function isWithinPage(pagePath: string, route: string): boolean {
+  // The home page is current only on itself, since every path lies under it
+  if (route === ROUTE.HOME) {
+    return pagePath === route;
+  }
+  // Any other page is current on itself and on the pages under it
+  return pagePath.startsWith(route);
 }
 
 /**

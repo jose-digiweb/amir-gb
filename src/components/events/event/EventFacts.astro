@@ -1,0 +1,113 @@
+---
+// Dependencies
+import { CalendarDays, ExternalLink, Globe, MapPin, Video } from "@lucide/astro";
+import { INTL_LOCALE } from "../../../i18n/constants";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { EVENT_PHASE } from "../../../lib/events/constants";
+import {
+  getEventTimes,
+  getLongDate,
+  getMapsHref,
+  getPlaceLines,
+  getPlaceQuery,
+  isOnlineOnly,
+} from "../../../lib/events/helpers";
+
+// Components
+import EndedEventActions from "./EndedEventActions.astro";
+import FactRow from "./FactRow.astro";
+import OnlineLink from "./OnlineLink.astro";
+import OpenEventActions from "./OpenEventActions.astro";
+import SignUpActions from "./SignUpActions.astro";
+
+// Types
+import type { EventDetail, EventPhase } from "../../../lib/events/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the EventFacts component, the white card with when, where, online and languages, and the event's actions
+ */
+type Props = {
+  /** The event. */
+  event: EventDetail;
+  /** Whether it is still to come or has ended. */
+  phase: EventPhase;
+  /** The story with photos of the day, once it has ended. */
+  storyHref?: string;
+  /** The moment the page renders. */
+  now: Date;
+  /** Layout classes from the caller. */
+  class?: string;
+};
+
+// Read the event and write its facts in the page's language
+const { event, phase, storyHref, now, class: className } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const intl = INTL_LOCALE[locale];
+const date = getLongDate(event.startsAt, intl);
+const times = getEventTimes(event, intl, t["weekly.until"], t["eventsPage.from"]);
+const place = getPlaceQuery(event);
+const onlineOnly = isOnlineOnly(event);
+const placeLines = getPlaceLines(event);
+const isUpcoming = phase === EVENT_PHASE.UPCOMING;
+const signUpLink = isUpcoming ? event.registrationLink : undefined;
+const isOpen = isUpcoming && !signUpLink;
+const languages = new Intl.ListFormat(intl, { type: "conjunction" }).format(
+  event.languages.map((language) => t[`eventLanguage.${language}`]),
+);
+---
+
+<div
+  class:list={[
+    "flex flex-col gap-5 rounded-lg border border-border bg-surface p-5 shadow-md tablet:p-6",
+    className,
+  ]}
+>
+  <ul class="flex flex-col">
+    <FactRow label={t["event.when"]}>
+      <CalendarDays slot="icon" aria-hidden="true" />
+      <span>{date}</span>
+      <span>{times}</span>
+    </FactRow>
+    {place ? (
+      <FactRow label={t["event.where"]}>
+        <MapPin slot="icon" aria-hidden="true" />
+        {placeLines.map((line) => (
+          <span>{line}</span>
+        ))}
+        <a
+          href={getMapsHref(place)}
+          target="_blank"
+          rel="noopener"
+          class="mt-1 inline-flex items-center gap-1.5 self-start type-button-sm text-link underline underline-offset-4"
+        >
+          {t["event.openMaps"]}
+          <ExternalLink aria-hidden="true" class="size-4" />
+        </a>
+      </FactRow>
+    ) : null}
+    {event.onlineLink ? (
+      <FactRow label={t["event.online"]}>
+        <Video slot="icon" aria-hidden="true" />
+        <span class="text-pretty">{onlineOnly ? t["event.onlineOnly"] : t["event.onlineToo"]}</span>
+        {isUpcoming ? (
+          <OnlineLink href={event.onlineLink} startsAt={event.startsAt} now={now} />
+        ) : null}
+      </FactRow>
+    ) : null}
+    <FactRow label={t["event.languages"]}>
+      <Globe slot="icon" aria-hidden="true" />
+      {languages ? (
+        <span>{languages}</span>
+      ) : (
+        <span class="self-start rounded-sm bg-warning-bg px-1.5 text-warning">
+          {t["event.languagesMissing"]}
+        </span>
+      )}
+    </FactRow>
+  </ul>
+  {signUpLink ? <SignUpActions registrationLink={signUpLink} href={event.href} /> : null}
+  {isOpen ? <OpenEventActions event={event} /> : null}
+  {isUpcoming ? null : <EndedEventActions storyHref={storyHref} />}
+</div>

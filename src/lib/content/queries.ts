@@ -47,7 +47,7 @@ import type {
  * @param {CollectionFilter} filter - The filter both languages share
  * @returns {Promise<ContentRead<Localised<Entry<C>>>>} One entry per translation group, with the cache hints
  */
-async function readLocalised<C extends keyof EmDashCollections>(
+export async function readLocalised<C extends keyof EmDashCollections>(
   collection: C,
   locale: Locale,
   filter: CollectionFilter,

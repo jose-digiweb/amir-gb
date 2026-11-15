@@ -1,0 +1,46 @@
+---
+// Dependencies
+import { INTL_LOCALE } from "../../../i18n/constants";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { getDayHeading } from "../../../lib/events/helpers";
+
+// Components
+import DecorBead from "../../ui/DecorBead.astro";
+import Opener from "../../ui/Opener.astro";
+import EventFeatureCard from "../EventFeatureCard.astro";
+
+// Types
+import type { CalendarDay } from "../../../lib/events/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the CalendarDayPanel component, the picked day: its events as cards, or a short line when nothing is planned
+ */
+type Props = {
+  /** The picked day. */
+  day: CalendarDay;
+};
+
+// Read the day and name it in the page's language
+const { day } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const heading = getDayHeading(new Date(`${day.key}T12:00:00Z`), INTL_LOCALE[locale]);
+const hasEvents = day.events.length > 0;
+---
+
+<div class="relative flex flex-col gap-3">
+  <DecorBead ringed class="top-1 right-12 size-3 desktop:hidden" />
+  <Opener label={heading} />
+  {hasEvents ? (
+    <ul class="flex flex-col gap-4 tablet:max-w-md desktop:max-w-none">
+      {day.events.map((event) => (
+        <li>
+          <EventFeatureCard event={event} />
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <p class="type-body-sm text-text-muted">{t["calendar.dayNothing"]}</p>
+  )}
+</div>

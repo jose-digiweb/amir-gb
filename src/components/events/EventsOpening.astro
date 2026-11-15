@@ -1,0 +1,103 @@
+---
+// Dependencies
+import { Picture } from "astro:assets";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { DECOR_TONE, OPENER_TONE, WOVEN_SHADE_TONE } from "../ui/constants";
+import dancers from "../../assets/photos/wax-print-dancers.jpg";
+
+// Components
+import DecorBead from "../ui/DecorBead.astro";
+import DotPatch from "../ui/DotPatch.astro";
+import Opener from "../ui/Opener.astro";
+import WovenShade from "../ui/WovenShade.astro";
+import TypeFilterChip from "./TypeFilterChip.astro";
+import ViewSwitch from "./ViewSwitch.astro";
+
+// Types
+import type { EventsView, TypeChip } from "../../lib/events/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the EventsOpening component: What's on on navy, beside the dancers, with the List and Calendar switch and the type chips
+ */
+type Props = {
+  /** The view the page shows. */
+  view: EventsView;
+  /** The list's address, with the filter. */
+  listHref: string;
+  /** The calendar's address, with the filter. */
+  calendarHref: string;
+  /** The filter chips, All first. */
+  chips: TypeChip[];
+};
+
+// Read the view, its links and the copy
+const { view, listHref, calendarHref, chips } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+---
+
+<section
+  aria-labelledby="events-title"
+  class="relative isolate -mt-16 overflow-hidden bg-surface-brand pt-28 pb-20 text-on-brand tablet:pt-36 tablet:pb-24 desktop:-mt-20 desktop:pt-42 desktop:pb-32"
+>
+  <WovenShade tone={WOVEN_SHADE_TONE.ON_BRAND} />
+  <div class="events-blob absolute top-21 -right-16 -z-10 h-49 w-46 overflow-hidden bg-surface-inverse tablet:top-24 tablet:-right-14 tablet:h-72 tablet:w-70 desktop:top-25 desktop:right-15 desktop:h-102 desktop:w-100">
+    <Picture
+      src={dancers}
+      alt={t["eventsPage.photoAlt"]}
+      widths={[184, 368, 400, 800]}
+      sizes="(min-width: 1180px) 400px, (min-width: 700px) 280px, 184px"
+      priority
+      class="size-full object-cover object-[30%_30%]"
+    />
+  </div>
+  <DecorBead
+    ringed
+    tone={DECOR_TONE.ON_BRAND}
+    class="top-59 right-32 size-10 tablet:top-22 tablet:right-80 tablet:size-9 desktop:top-37 desktop:right-130 desktop:size-11"
+  />
+  <DecorBead
+    tone={DECOR_TONE.ON_BRAND}
+    class="top-72 right-8 size-5 desktop:top-126 desktop:right-9 desktop:size-7"
+  />
+  <DotPatch
+    id="events-dots"
+    tone={DECOR_TONE.ON_BRAND}
+    class="hidden tablet:top-40 tablet:right-56 tablet:block tablet:h-36 tablet:w-52 desktop:top-75 desktop:right-120 desktop:h-45 desktop:w-65"
+  />
+
+  <div class="flex flex-col gap-2 px-margin tablet:px-margin-md desktop:gap-4 desktop:px-margin-lg">
+    <Opener label={t["events.opener"]} tone={OPENER_TONE.ON_BRAND} />
+    <h1 id="events-title" class="type-hero">
+      {t["eventsPage.title"]}
+    </h1>
+    <p class="mt-1 max-w-56 type-body-sm text-pretty text-on-brand-muted tablet:max-w-sm desktop:max-w-md desktop:type-lead">
+      {t["eventsPage.intro"]}
+    </p>
+  </div>
+  <div class="mt-6 flex flex-col gap-4 tablet:mt-8 desktop:mt-10 desktop:flex-row desktop:items-center desktop:gap-6 desktop:px-margin-lg">
+    <div class="px-margin tablet:px-margin-md desktop:px-0">
+      <ViewSwitch view={view} listHref={listHref} calendarHref={calendarHref} />
+    </div>
+    <ul
+      aria-label={t["eventsPage.filterLabel"]}
+      class="type-chips flex gap-2 overflow-x-auto px-margin py-1 tablet:flex-wrap tablet:px-margin-md desktop:px-0"
+    >
+      {chips.map((chip) => (
+        <TypeFilterChip chip={chip} />
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  @reference "../../styles/global.css";
+
+  .events-blob {
+    border-radius: 58% 42% 46% 54% / 48% 56% 44% 52%;
+  }
+
+  .type-chips {
+    scrollbar-width: none;
+  }
+</style>

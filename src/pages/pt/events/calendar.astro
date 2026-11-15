@@ -1,0 +1,35 @@
+---
+// Dependencies
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { getLocale } from "../../../i18n/helpers";
+import { cacheContentPage } from "../../../lib/content/helpers";
+import { EVENTS_PARAM } from "../../../lib/events/constants";
+import { getDayKey, parseDay, parseEventType, parseMonth } from "../../../lib/events/helpers";
+import { getEventsCalendarContent } from "../../../lib/events/queries";
+import { ROUTE } from "../../../site/constants";
+
+// Components
+import EventsCalendarPage from "../../../components/events/calendar/EventsCalendarPage.astro";
+
+// The calendar shows CMS content, so it renders per request
+export const prerender = false;
+
+// Read the filter, the picked day and the month it belongs to, today's month by default
+const locale = getLocale(Astro.currentLocale);
+const now = new Date();
+const { searchParams } = Astro.url;
+const type = parseEventType(searchParams.get(EVENTS_PARAM.TYPE));
+const picked = parseDay(searchParams.get(EVENTS_PARAM.DAY));
+const month = parseMonth(searchParams.get(EVENTS_PARAM.MONTH), picked ?? getDayKey(now));
+
+// Read the content, then cache the page at the edge before rendering starts
+const content = await getEventsCalendarContent(locale, now, {
+  month,
+  picked,
+  type,
+  path: getRelativeLocaleUrl(locale, ROUTE.EVENTS_CALENDAR),
+});
+cacheContentPage(Astro.cache, content.cacheHints);
+---
+
+<EventsCalendarPage content={content} type={type} />
