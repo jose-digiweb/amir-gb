@@ -46,6 +46,10 @@
   "exports": {
     "EmDashRoom": { "type": "durable-object", "storage": "sqlite" },
   },
+  // Contact and sign-up forms: Cloudflare Email Service sends each one to AMIR's inbox, and only there.
+  // Sending needs a domain onboarded to Email Service; the sender address is CONTACT_FROM_ADDRESS.
+  // Locally, `astro dev` logs the email instead of sending it.
+  "send_email": [{ "name": "FORM_INBOX", "destination_address": "amirgbnederland@gmail.com" }],
   // Scheduled publishing and EmDash maintenance.
   "triggers": { "crons": ["* * * * *"] },
 }

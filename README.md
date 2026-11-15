@@ -54,7 +54,7 @@ Vitest uses the project's Astro config through Astro's `getViteConfig()` (`vites
 Every page renders through `src/layouts/SiteLayout.astro`: the document shell (`BaseLayout.astro`), the header, the page and the footer.
 
 - **Header** (`src/components/site/SiteHeader.astro`): a blurred bar on phone and tablet; on desktop a paper sheet that lifts into a floating island over the first 64px of scrolling, with a CSS scroll-driven animation. Browsers without scroll-driven animations, and visitors who ask for reduced motion, keep the sheet.
-  - **Over a navy opening** (About us): a page passes `headerOverBrand` to `SiteLayout`, and on phone and tablet the bar is see-through at the top of the page, with the reverse logo and on-brand controls; it turns into the blurred bar once the page scrolls. The header renders with `data-over-brand`, and `followBrandBand` (`src/lib/header/helpers.ts`) drops it on scroll and puts it back at the top. The `over-brand` variant in `global.css` styles the logo, the language button and the menu button from that attribute, only below desktop and only while scripts run, so without scripts the bar stays solid; the menu and the language list keep their own look.
+  - **Over a navy opening** (About us, Contact): a page passes `headerOverBrand` to `SiteLayout`, and on phone and tablet the bar is see-through at the top of the page, with the reverse logo and on-brand controls; it turns into the blurred bar once the page scrolls. The header renders with `data-over-brand`, and `followBrandBand` (`src/lib/header/helpers.ts`) drops it on scroll and puts it back at the top. The `over-brand` variant in `global.css` styles the logo, the language button and the menu button from that attribute, only below desktop and only while scripts run, so without scripts the bar stays solid; the menu and the language list keep their own look.
 - **Language list** (`LanguageList.astro`, tablet and desktop): a native popover under the language button, placed with CSS anchor positioning and at a fixed place under the header where anchors are missing.
 - **Menu** (`SiteMenu.astro`, phone and tablet): a modal `<dialog>` opened and closed by invoker commands (`command`, `commandfor`) and dismissed by a tap outside (`closedby="any"`). `src/lib/dom/helpers.ts` adds both by script in browsers that lack them. Full screen on phone, a sheet from the right on tablet; motion uses the design system's durations and its 30ms stagger.
 - **Appearance** (`src/components/theme/`): Automatic follows the device and is the default; Light and Dark override it and are remembered on this device in `localStorage` (no cookie). On desktop a round button before the language button opens a card (`ThemeList.astro`, a native popover like the language list); in the phone and tablet menu it is a three-way toggle (`ThemeToggle.astro`). Both are native radio groups.
@@ -126,8 +126,6 @@ Languages: lists in English and Portuguese also show items that exist only in Du
 
 Placeholders in the page until AMIR sends them: the account number, the weekly activities and their places, every event except the General meeting, and the photos (example photos from the design canvas, with their credits in the design's notes).
 
-<<<<<<< HEAD
-
 ## Get help page
 
 `src/pages/get-help.astro`, `en/get-help.astro` and `pt/get-help.astro` render `src/components/get-help/GetHelpPage.astro`. Nothing on it comes from the CMS, so it is built once like any static page. Sections, top to bottom:
@@ -139,7 +137,6 @@ Placeholders in the page until AMIR sends them: the account number, the weekly a
 The footer overlaps the page's last section: a section marked `data-footer-overlaps` pulls the footer up by the sections' own overlap (`SiteFooter.astro`).
 
 The help services (`HELP_SERVICE` in `src/lib/help/`, with Youth and sport added) and their pictograms (`src/components/help/HelpServiceIcon.astro`) are shared by the home page and this page. Its scattered beads and dot patches are the shared `DecorBead` and `DotPatch` in `src/components/ui/`, which About us uses too. Work and CV is called Work and housing on this page, as AMIR's own area joins work, housing and starting a business; the home tile keeps its label until jose decides. The photos are examples from the design canvas.
-=======
 
 ## About us
 
@@ -156,7 +153,18 @@ Sections, top to bottom, each in `src/components/about/`:
 
 Placeholders until AMIR sends them: the three PDFs, the board photos, and the two opening photos (example photos from the design canvas; the festival is Keti Koti 2023 in Rotterdam from Wikimedia Commons, CC BY-SA 4.0, which needs a visible credit if it stays).
 
-> > > > > > > 8f9933d (feat(about): build the About us page)
+## Contact page
+
+`src/pages/contact.astro`, `en/contact.astro` and `pt/contact.astro` render `src/components/contact/ContactPage.astro`. The page is built once like any static page; only the message form talks to the server.
+
+- **Opening** (`ContactOpening.astro`): Contact on navy, beside a laughing woman in an organic shape.
+- **Reach us your way** (`ReachSection.astro`): WhatsApp first and largest (`WhatsAppCard.astro`). From tablet up it carries a QR code for people on a computer, drawn from the real `wa.me` link when the page is built (`src/lib/contact/qr.ts`, the `qrcode` package), navy on white in both themes, so no script or image service is involved. Then Call us and Email (cards from tablet up, tappable rows with Telegram on phone) and the opening hours (`OpeningHoursCard.astro`). Once the page knows the time, a small script shows Open now or Closed now with when that changes and makes today's row bold, in the Netherlands' time whatever the visitor's clock (`getOpeningStatus` in `src/lib/contact/helpers.ts`, tested). Telegram opens `t.me` with AMIR's number.
+- **Send us a message** (`MessageSection.astro`, `ContactForm.vue`, loaded when it comes into view, state in `useContactForm.ts`): name, email or phone, the language to answer in (starting on the page's language), an optional topic, the message and a consent tick that links the privacy page. Errors show only after Send, under each field, with a summary at the top that names them (`Intl.ListFormat` joins the names in the page's language). Sending rests the fields; Sent takes the form's place with the name, language and address the visitor gave; Did not send keeps everything typed and offers Try again and WhatsApp. A hidden field catches robots, which are told it worked and nothing is sent. The form posts with `method="post"`, so nothing typed ever lands in an address; it needs JavaScript to send.
+- **Our address** (`AddressSection.astro`): the Breda address with Open in maps, a woven card with a gold pin in place of an embedded map (no map service, no tracking cookies), the social profiles as named pills and the registration numbers.
+
+**Where messages go.** The `contact` Astro Action (`src/actions/contact.ts`) checks the message again with the same rules (`src/lib/contact/schema.ts`), refuses posts from other sites, and emails it to AMIR's inbox through Cloudflare Email Service (`src/lib/contact/mail.ts`): the `FORM_INBOX` send binding in `wrangler.jsonc` can only send to `amirgbnederland@gmail.com`. The email is in Dutch for AMIR's volunteers, with the visitor as the reply-to address when they gave an email. Nothing is stored on the site. Sending needs AMIR's own domain onboarded to Email Service and `CONTACT_FROM_ADDRESS` set to an address on it; until then the action logs why and the form shows Did not send with WhatsApp. Locally, `astro dev` simulates the binding and writes each email to `.wrangler/tmp/email/`.
+
+The footer leaves out its own Questions? Talk to us on this page (`data-hides-footer-talk`) and overlaps the last section (`data-footer-overlaps`). The footer's small print now links the privacy page on every page.
 
 ## Donations
 
@@ -216,6 +224,7 @@ Variables are typed in `astro.config.mjs` (`env.schema`) and read through `astro
 | `STRIPE_SECRET_KEY`     | secret  | Creates and reads Stripe Checkout Sessions for donations. A restricted key (`rk_`) with Checkout Sessions write and read.                                 |
 | `STRIPE_PORTAL_URL`     | runtime | The login page of Stripe's customer portal, where monthly donors stop or change a gift. Not a secret; read at runtime so each Stripe account has its own. |
 | `EMDASH_ENCRYPTION_KEY` | secret  | Encrypts plugin settings saved as secrets. Generate with `pnpm exec emdash secrets generate`; back the production key up.                                 |
+| `CONTACT_FROM_ADDRESS`  | runtime | The address the contact form sends from, on AMIR's own domain onboarded to Cloudflare Email Service. Without it the form says the message did not send.   |
 
 ## Deploy
 

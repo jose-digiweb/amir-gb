@@ -17,7 +17,7 @@ import SocialLinks from "./SocialLinks.astro";
 
 /**
  * The {@link Props} type
- * @description The props of the SiteFooter component: talk to us, the bridge line, the links, and the small print with the way to stop or change a monthly gift
+ * @description The props of the SiteFooter component: talk to us, the bridge line, the links, and the small print with the way to stop or change a monthly gift and the privacy page
  */
 type Props = Record<string, never>;
 
@@ -27,12 +27,14 @@ const t = getTranslations(locale);
 const links = getPageLinks(FOOTER_NAV, locale, Astro.url.pathname);
 const languages = getLanguageLinks(locale, Astro.url.pathname);
 const donateHref = getRelativeLocaleUrl(locale, ROUTE.DONATE);
+const privacyHref = getRelativeLocaleUrl(locale, ROUTE.PRIVACY);
 const bridgeStyle = `background-image: url(${bridgeLine.src})`;
 ---
 
 <footer class="site-footer flex flex-col gap-8 overflow-hidden rounded-t-xl bg-surface-inverse px-margin pt-12 pb-8 text-on-brand tablet:px-margin-md tablet:pt-16 desktop:gap-12 desktop:px-margin-lg desktop:pt-20 desktop:pb-10">
   <section
     aria-labelledby="footer-talk"
+    data-footer-talk
     class="grid items-end gap-6 desktop:grid-cols-[3fr_2fr] desktop:gap-16"
   >
     <div class="flex flex-col gap-3">
@@ -116,14 +118,22 @@ const bridgeStyle = `background-image: url(${bridgeLine.src})`;
       <span class="whitespace-nowrap">{LEGAL.RSIN}</span>
     </p>
     <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
-      {STRIPE_PORTAL_URL ? (
+      <div class="flex flex-wrap gap-x-4">
+        {STRIPE_PORTAL_URL ? (
+          <a
+            href={STRIPE_PORTAL_URL}
+            class="inline-flex min-h-tap items-center underline underline-offset-3"
+          >
+            {t["footer.manageGift"]}
+          </a>
+        ) : null}
         <a
-          href={STRIPE_PORTAL_URL}
+          href={privacyHref}
           class="inline-flex min-h-tap items-center underline underline-offset-3"
         >
-          {t["footer.manageGift"]}
+          {t["footer.privacy"]}
         </a>
-      ) : null}
+      </div>
       <ul aria-label={t["language.label"]} class="ml-auto flex gap-4">
         {languages.map((language) => (
           <li>
@@ -157,6 +167,23 @@ const bridgeStyle = `background-image: url(${bridgeLine.src})`;
 
     @variant desktop {
       margin-top: calc((var(--space-12) + var(--space-2)) * -1);
+    }
+  }
+
+  /* A page that is all about talking to us (Contact) leaves out the footer's own talk to us */
+  :global(main:has([data-hides-footer-talk])) + .site-footer {
+    padding-top: var(--space-12);
+
+    @variant tablet {
+      padding-top: calc(var(--space-10) + var(--space-4));
+    }
+
+    @variant desktop {
+      padding-top: calc(var(--space-16) + var(--space-2));
+    }
+
+    & [data-footer-talk] {
+      display: none;
     }
   }
 

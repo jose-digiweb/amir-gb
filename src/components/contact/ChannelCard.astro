@@ -1,0 +1,47 @@
+---
+// Dependencies
+import { BUTTON_SIZE, BUTTON_TONE } from "../ui/constants";
+
+// Components
+import Button from "../ui/Button.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the ChannelCard component, one way to reach AMIR-GB as a card on tablet and desktop: its name, its number or address, and a button that opens it
+ */
+type Props = {
+  /** The channel's name. */
+  title: string;
+  /** The number or address. */
+  value: string;
+  /** What the button says. */
+  action: string;
+  /** What the button opens. */
+  href: string;
+  /** Layout classes from the caller. */
+  class?: string;
+};
+
+// Read the channel
+const { title, value, action, href, class: className } = Astro.props;
+---
+
+<article
+  class:list={[
+    "flex flex-col gap-4 rounded-lg bg-surface p-6 text-text-heading shadow-sm inset-ring inset-ring-border",
+    className,
+  ]}
+>
+  <div class="flex items-center gap-4">
+    <span class="grid size-13 shrink-0 place-items-center rounded-full bg-bg-alt [&_svg]:size-icon-md">
+      <slot name="icon" />
+    </span>
+    <h3 class="type-h3">{title}</h3>
+  </div>
+  <p class="type-h4 wrap-anywhere text-text-heading">{value}</p>
+  <div class="mt-auto">
+    <Button href={href} tone={BUTTON_TONE.OUTLINE} size={BUTTON_SIZE.COMPACT} class="px-5">
+      {action}
+    </Button>
+  </div>
+</article>

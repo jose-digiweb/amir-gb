@@ -149,12 +149,6 @@ export const STRIPE_LOG = {
 } as const;
 
 /**
- * The {@link ORIGIN_HEADER} constant
- * @description The request header that names the site a form was posted from
- */
-export const ORIGIN_HEADER = "origin";
-
-/**
  * The {@link PRIVATE_PAGE} constant
  * @description The cache header for a page that shows one donor's gift, so no cache keeps it
  */

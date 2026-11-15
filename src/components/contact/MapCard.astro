@@ -1,0 +1,58 @@
+---
+// Dependencies
+import { MapPin } from "@lucide/astro";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { NESTED_LOZENGE_VIEW_BOX } from "../../lib/woven/constants";
+import { getNestedLozengePath } from "../../lib/woven/helpers";
+import { MUD_WEAVE } from "./constants";
+
+/**
+ * The {@link Props} type
+ * @description The props of the MapCard component, a woven card with a gold pin on Breda in place of a map, so the page loads nothing from a map service
+ */
+type Props = Record<string, never>;
+
+// Prepare the city's name and the faint lozenge
+const t = getTranslations(getLocale(Astro.currentLocale));
+const figurePath = getNestedLozengePath();
+---
+
+<div
+  aria-hidden="true"
+  class="relative isolate h-60 overflow-hidden rounded-lg bg-tint-navy tablet:h-80 desktop:h-110"
+>
+  <svg class="absolute inset-0 -z-10 size-full fill-motif-band opacity-90">
+    <defs>
+      <pattern
+        id="contact-mud-weave"
+        width={MUD_WEAVE.WIDTH}
+        height={MUD_WEAVE.HEIGHT}
+        patternUnits="userSpaceOnUse"
+      >
+        {MUD_WEAVE.THREADS.map((thread) => (
+          <rect
+            x={thread.x}
+            y={thread.y}
+            width={MUD_WEAVE.THREAD_WIDTH}
+            height={MUD_WEAVE.THREAD_HEIGHT}
+          />
+        ))}
+      </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill="url(#contact-mud-weave)"></rect>
+  </svg>
+  <svg
+    viewBox={NESTED_LOZENGE_VIEW_BOX}
+    class="absolute top-1/2 left-1/2 -z-10 size-72 -translate-1/2 fill-decor-strong desktop:size-96"
+  >
+    <path d={figurePath}></path>
+  </svg>
+  <div class="absolute top-[46%] left-1/2 flex -translate-x-1/2 -translate-y-full flex-col items-center gap-1.5">
+    <span class="inline-flex h-8.5 items-center rounded-pill bg-surface px-3.5 type-button-sm font-extrabold text-text-heading shadow-md">
+      {t["contactPage.mapCity"]}
+    </span>
+    <span class="grid size-13 -rotate-45 place-items-center rounded-full rounded-bl-none bg-accent text-on-accent-fill shadow-md">
+      <MapPin class="size-icon-md rotate-45" />
+    </span>
+  </div>
+</div>

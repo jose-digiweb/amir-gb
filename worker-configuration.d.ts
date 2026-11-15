@@ -4,6 +4,7 @@
 interface __BaseEnv_Env {
 	MEDIA: R2Bucket;
 	DB: D1Database;
+	FORM_INBOX: SendEmail;
 	ASSETS: Fetcher;
 	EMDASH_ROOMS: DurableObjectNamespace<import("./src/worker").EmDashRoom>;
 }

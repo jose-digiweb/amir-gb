@@ -1,0 +1,73 @@
+---
+// Dependencies
+import { Mail, Phone, Send } from "@lucide/astro";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { CONTACT } from "../../site/constants";
+
+// Components
+import Opener from "../ui/Opener.astro";
+import WovenShade from "../ui/WovenShade.astro";
+import ChannelCard from "./ChannelCard.astro";
+import ChannelRow from "./ChannelRow.astro";
+import OpeningHoursCard from "./OpeningHoursCard.astro";
+import WhatsAppCard from "./WhatsAppCard.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the ReachSection component: every way to reach AMIR-GB, WhatsApp first and largest, then calling, email and the opening hours
+ */
+type Props = Record<string, never>;
+
+// Prepare the copy
+const t = getTranslations(getLocale(Astro.currentLocale));
+---
+
+<section
+  aria-labelledby="reach-title"
+  class="relative isolate -mt-8 overflow-hidden rounded-t-xl bg-bg px-margin pt-11 pb-18 tablet:-mt-10 tablet:px-margin-md tablet:pt-16 tablet:pb-24 desktop:-mt-14 desktop:px-margin-lg desktop:pt-24 desktop:pb-36"
+>
+  <WovenShade />
+  <div class="flex flex-col gap-2.5">
+    <Opener label={t["contactPage.reachOpener"]} />
+    <h2 id="reach-title" class="type-section-title text-balance text-text-heading">
+      {t["contactPage.reachTitle"]}
+    </h2>
+  </div>
+  <div class="mt-6 flex flex-col gap-3 tablet:mt-10 tablet:grid tablet:grid-cols-2 tablet:gap-4 desktop:mt-11 desktop:grid-cols-24 desktop:gap-5">
+    <WhatsAppCard class="tablet:row-span-2 desktop:col-span-10" />
+    <div class="flex flex-col gap-3 tablet:hidden">
+      <ChannelRow label={t["contact.call"]} value={CONTACT.PHONE} href={CONTACT.PHONE_HREF}>
+        <Phone slot="icon" />
+      </ChannelRow>
+      <ChannelRow label={t["contactPage.email"]} value={CONTACT.EMAIL} href={CONTACT.EMAIL_HREF}>
+        <Mail slot="icon" />
+      </ChannelRow>
+      <ChannelRow
+        label={t["contactPage.telegram"]}
+        value={CONTACT.PHONE}
+        href={CONTACT.TELEGRAM_HREF}
+      >
+        <Send slot="icon" />
+      </ChannelRow>
+    </div>
+    <ChannelCard
+      title={t["contact.call"]}
+      value={CONTACT.PHONE}
+      action={t["contactPage.callButton"]}
+      href={CONTACT.PHONE_HREF}
+      class="hidden tablet:flex desktop:col-span-7"
+    >
+      <Phone slot="icon" />
+    </ChannelCard>
+    <ChannelCard
+      title={t["contactPage.email"]}
+      value={CONTACT.EMAIL}
+      action={t["contactPage.emailButton"]}
+      href={CONTACT.EMAIL_HREF}
+      class="hidden tablet:flex desktop:col-span-7"
+    >
+      <Mail slot="icon" />
+    </ChannelCard>
+    <OpeningHoursCard class="tablet:col-span-2 desktop:col-span-14" />
+  </div>
+</section>
