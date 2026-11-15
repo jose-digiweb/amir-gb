@@ -49,4 +49,4 @@ Vind je dat we slecht met je gegevens omgaan? Dan kun je een klacht indienen bij
 
 ## Vragen
 
-Mail naar [amirgbnederland@gmail.com](mailto:amirgbnederland@gmail.com) of app [+31 6 15 18 87 45](https://wa.me/31615188745), in het Nederlands, Portugees, Engels of Kriol.
+Mail naar [amirgbnederland@gmail.com](mailto:amirgbnederland@gmail.com) of app [+31 6 15 18 87 45](https://wa.me/31615188745), in het Nederlands, Engels, Kriolu of Portugees.

@@ -1,6 +1,6 @@
 ---
 // Dependencies
-import { ExternalLink, MessageCircle } from "@lucide/astro";
+import { MessageCircle } from "@lucide/astro";
 import { getLocale, getTranslations } from "../../i18n/helpers";
 import { CONTACT } from "../../site/constants";
 
@@ -49,17 +49,8 @@ const t = getTranslations(getLocale(Astro.currentLocale));
       <p class="type-body-sm text-pretty text-text">{t["contactPage.qrText"]}</p>
     </div>
   </div>
-  <div class="mt-auto flex flex-col gap-1.5">
-    <Button href={CONTACT.WHATSAPP_HREF} block>
-      <MessageCircle />
-      {t["contactPage.openWhatsapp"]}
-    </Button>
-    <a
-      href={CONTACT.TELEGRAM_HREF}
-      class="hidden min-h-tap items-center gap-2 self-center type-button-sm text-link tablet:inline-flex"
-    >
-      <span class="underline decoration-2 underline-offset-4">{t["contactPage.alsoTelegram"]}</span>
-      <ExternalLink class="size-icon-sm" />
-    </a>
-  </div>
+  <Button href={CONTACT.WHATSAPP_HREF} block class="mt-auto">
+    <MessageCircle />
+    {t["contactPage.openWhatsapp"]}
+  </Button>
 </article>

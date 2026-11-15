@@ -66,9 +66,9 @@ export const TABLET_CONSTELLATION = {
     { service: HELP_SERVICE.LETTERS, tint: TILE_COLOUR.GOLD, x: 336, y: 503, size: 100 },
   ],
   pills: [
-    { value: VALUE.SOLIDARITY, x: 700, y: 300 },
-    { value: VALUE.UNITY, x: 732, y: 962 },
-    { value: VALUE.DIGNITY, x: 220, y: 704 },
+    { value: VALUE.SOLIDARITY, x: 722, y: 452 },
+    { value: VALUE.UNITY, x: 578, y: 964 },
+    { value: VALUE.DIGNITY, x: 318, y: 664 },
   ],
   lozenges: [
     { x: 491, y: 227, size: 18, isRinged: true },
@@ -107,9 +107,9 @@ export const DESKTOP_CONSTELLATION = {
     { service: HELP_SERVICE.HEALTH, tint: TILE_COLOUR.GOLD, x: 738, y: 473, size: 104 },
   ],
   pills: [
-    { value: VALUE.SOLIDARITY, x: 972, y: 136 },
-    { value: VALUE.UNITY, x: 817, y: 718 },
-    { value: VALUE.DIGNITY, x: 1290, y: 277 },
+    { value: VALUE.SOLIDARITY, x: 995, y: 285 },
+    { value: VALUE.UNITY, x: 909, y: 601 },
+    { value: VALUE.DIGNITY, x: 1208, y: 340 },
   ],
   lozenges: [
     { x: 725, y: 389, size: 22, isRinged: false },

@@ -1,4 +1,13 @@
 /**
+ * The {@link CHIP_SIZE} constant
+ * @description The two sizes of a sewn value label: regular, and small where the boards draw it smaller (phone and the tight tablet spots)
+ */
+export const CHIP_SIZE = {
+  REGULAR: "regular",
+  SMALL: "small",
+} as const;
+
+/**
  * The {@link CHIP_BOX} constant
  * @description The box a starred chip is centred in, wide enough for the longest label in any language
  */

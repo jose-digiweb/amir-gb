@@ -1,10 +1,10 @@
 ---
 // Dependencies
 import { getLocale, getTranslations } from "../../i18n/helpers";
-import { BUBBLE_BOX, BUBBLE_TAIL, WELCOME_COPY } from "./constants";
+import { BUBBLE_BOX, BUBBLE_SIZE, BUBBLE_TAIL, WELCOME_COPY } from "./constants";
 
 // Types
-import type { WelcomeBubbleSpot } from "./types";
+import type { BubbleSize, WelcomeBubbleSpot } from "./types";
 
 /**
  * The {@link Props} type
@@ -13,10 +13,13 @@ import type { WelcomeBubbleSpot } from "./types";
 type Props = {
   /** The bubble's language, centre and tail. */
   bubble: WelcomeBubbleSpot;
+  /** Regular, or compact for the phone's column of four. */
+  size: BubbleSize;
 };
 
 // Read the bubble, centre its box on its point and find its words
-const { bubble } = Astro.props;
+const { bubble, size } = Astro.props;
+const isCompact = size === BUBBLE_SIZE.COMPACT;
 const t = getTranslations(getLocale(Astro.currentLocale));
 const copy = WELCOME_COPY[bubble.language];
 const x = bubble.x - BUBBLE_BOX.WIDTH / 2;
@@ -28,7 +31,8 @@ const y = bubble.y - BUBBLE_BOX.HEIGHT / 2;
     <p
       lang={bubble.language}
       class:list={[
-        "flex flex-col gap-1.5 rounded-lg bg-surface px-5 py-4 whitespace-nowrap text-text-heading shadow-md ring-5 ring-bg-alt",
+        "flex flex-col bg-surface whitespace-nowrap text-text-heading shadow-md ring-5 ring-bg-alt",
+        { "gap-1.5 rounded-lg px-5 py-4": !isCompact, "gap-1 rounded-md px-4 py-2.5": isCompact },
         {
           "rounded-tl-sm": bubble.tail === BUBBLE_TAIL.TOP_LEFT,
           "rounded-tr-sm": bubble.tail === BUBBLE_TAIL.TOP_RIGHT,
@@ -37,7 +41,14 @@ const y = bubble.y - BUBBLE_BOX.HEIGHT / 2;
         },
       ]}
     >
-      <span class="type-h3 font-extrabold">{t[copy.GREETING]}</span>
+      <span
+        class:list={[
+          "font-extrabold",
+          { "type-h3": !isCompact, "type-h4 leading-none": isCompact },
+        ]}
+      >
+        {t[copy.GREETING]}
+      </span>
       <span class="type-tag text-text-muted">{t[copy.LANGUAGE]}</span>
     </p>
   </div>

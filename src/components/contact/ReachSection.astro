@@ -1,6 +1,6 @@
 ---
 // Dependencies
-import { Mail, Phone, Send } from "@lucide/astro";
+import { Mail, Phone } from "@lucide/astro";
 import { getLocale, getTranslations } from "../../i18n/helpers";
 import { CONTACT } from "../../site/constants";
 
@@ -41,13 +41,6 @@ const t = getTranslations(getLocale(Astro.currentLocale));
       </ChannelRow>
       <ChannelRow label={t["contactPage.email"]} value={CONTACT.EMAIL} href={CONTACT.EMAIL_HREF}>
         <Mail slot="icon" />
-      </ChannelRow>
-      <ChannelRow
-        label={t["contactPage.telegram"]}
-        value={CONTACT.PHONE}
-        href={CONTACT.TELEGRAM_HREF}
-      >
-        <Send slot="icon" />
       </ChannelRow>
     </div>
     <ChannelCard

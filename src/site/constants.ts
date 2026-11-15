@@ -63,7 +63,6 @@ export const CONTACT = {
   PHONE: "+31 6 15 18 87 45",
   PHONE_HREF: "tel:+31615188745",
   WHATSAPP_HREF: "https://wa.me/31615188745",
-  TELEGRAM_HREF: "https://t.me/+31615188745",
   EMAIL: "amirgbnederland@gmail.com",
   EMAIL_HREF: "mailto:amirgbnederland@gmail.com",
 } as const;
@@ -139,8 +138,8 @@ export const ANSWER_LANGUAGE = {
 export const ANSWER_LANGUAGES = [
   ANSWER_LANGUAGE.NL,
   ANSWER_LANGUAGE.EN,
-  ANSWER_LANGUAGE.PT,
   ANSWER_LANGUAGE.KRIOL,
+  ANSWER_LANGUAGE.PT,
 ] as const;
 
 /**

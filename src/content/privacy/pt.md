@@ -49,4 +49,4 @@ Se achar que tratamos mal os seus dados, pode apresentar queixa à autoridade ne
 
 ## Perguntas
 
-Envie um email para [amirgbnederland@gmail.com](mailto:amirgbnederland@gmail.com) ou uma mensagem no WhatsApp para [+31 6 15 18 87 45](https://wa.me/31615188745), em neerlandês, português, inglês ou Kriol.
+Envie um email para [amirgbnederland@gmail.com](mailto:amirgbnederland@gmail.com) ou uma mensagem no WhatsApp para [+31 6 15 18 87 45](https://wa.me/31615188745), em neerlandês, inglês, kriolu ou português.

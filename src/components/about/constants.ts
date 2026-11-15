@@ -1,15 +1,13 @@
 // Dependencies
 import { TILE_COLOUR } from "../../lib/content/constants";
-import { MILESTONE_PRECISION } from "../../lib/timeline/constants";
 import { PENDING_LINK, VALUE } from "../../site/constants";
 
 // Types
-import type { AboutDrawingLayout } from "./types";
 import type {
   AboutDocument,
+  AboutDrawingLayout,
   Aim,
   BoardMember,
-  Milestone,
   MoneyRule,
   PurposeCard,
   ValueTile,
@@ -57,7 +55,7 @@ export const ABOUT_VALUE = {
 
 /**
  * The {@link VALUE_TILES} constant
- * @description The values in order, each with its tint and the keys of its name, its Kriol word if it has one, and its sentence
+ * @description The values in order, each with its tint and the keys of its name, its Kriolu word if it has one, and its sentence
  */
 export const VALUE_TILES = [
   {
@@ -89,27 +87,9 @@ export const VALUE_TILES = [
 
 /**
  * The {@link KRIOL_LANG} constant
- * @description The language tag of Guinea-Bissau Kriol (Upper Guinea Creole), for words written in it
+ * @description The language tag of Kriolu, Guinea-Bissau Creole, for words written in it
  */
 export const KRIOL_LANG = "pov";
-
-/**
- * The {@link MILESTONES} constant
- * @description AMIR-GB's first months from its fact sheet, in order: each date, how exactly it is known, and the key of what happened
- */
-export const MILESTONES = [
-  { date: "2026-07-20", precision: MILESTONE_PRECISION.DAY, text: "about.milestoneFounded" },
-  { date: "2026-07-22", precision: MILESTONE_PRECISION.DAY, text: "about.milestoneRegistered" },
-  { date: "2026-08-03", precision: MILESTONE_PRECISION.DAY, text: "about.milestoneUnpaid" },
-  { date: "2026-11-21", precision: MILESTONE_PRECISION.DAY, text: "about.milestoneMeeting" },
-  { date: "2027-03-01", precision: MILESTONE_PRECISION.MONTH, text: "about.milestoneFoundingEnd" },
-] as const satisfies readonly Milestone[];
-
-/**
- * The {@link MILESTONE_NOON} constant
- * @description The time of day a milestone's date is read at, so the time zone never moves it to another day
- */
-export const MILESTONE_NOON = "T12:00:00Z";
 
 /**
  * The {@link BOARD} constant
@@ -170,15 +150,6 @@ export const DOCUMENT_LANG = "nl";
 export const TAX_PLACEHOLDER = {
   KVK: "{kvk}",
   RSIN: "{rsin}",
-} as const;
-
-/**
- * The {@link TIMELINE_THREAD} constant
- * @description The gold stitched thread between the milestones: its dash and gap, and its width, in SVG units
- */
-export const TIMELINE_THREAD = {
-  DASH: "8 8",
-  WIDTH: 3,
 } as const;
 
 /**

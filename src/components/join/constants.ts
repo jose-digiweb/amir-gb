@@ -1,6 +1,7 @@
 // Dependencies
 import { TILE_COLOUR } from "../../lib/content/constants";
 import { JOIN_ERROR, JOIN_MODE } from "../../lib/join/constants";
+import { CHIP_SIZE } from "../opening/constants";
 
 // Types
 import type { JoinDrawingLayout } from "./types";
@@ -158,10 +159,10 @@ export const JOIN_DRAWINGS = {
     photo: { centreX: 300, centreY: 196, size: 160 },
     seats: { radius: 132, size: 50, places: [5, 6, 7, 8, 9, 10], open: 7 },
     inner: null,
-    chip: { x: 108, y: 318, thread: null },
+    chip: { x: 108, y: 318, size: CHIP_SIZE.SMALL, thread: null },
     sparkles: [
       { x: 22, y: 102, size: 16, isRinged: true },
-      { x: 33, y: 323, size: 14, isRinged: false },
+      { x: 18, y: 344, size: 14, isRinged: false },
     ],
   },
   TABLET: {
@@ -170,7 +171,7 @@ export const JOIN_DRAWINGS = {
     photo: { centreX: 560, centreY: 660, size: 190 },
     seats: { radius: 185, size: 62, places: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], open: 8 },
     inner: "M560 529 A131 131 0 1 1 560 791 A131 131 0 1 1 560 529",
-    chip: { x: 300, y: 856, thread: "M392 788 Q388 822 350 842" },
+    chip: { x: 300, y: 856, size: CHIP_SIZE.REGULAR, thread: "M392 788 Q388 822 350 842" },
     sparkles: [
       { x: 291, y: 511, size: 18, isRinged: true },
       { x: 791, y: 461, size: 18, isRinged: false },
@@ -183,7 +184,7 @@ export const JOIN_DRAWINGS = {
     photo: { centreX: 1050, centreY: 450, size: 220 },
     seats: { radius: 215, size: 72, places: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], open: 8 },
     inner: "M1050 297 A153 153 0 1 1 1050 603 A153 153 0 1 1 1050 297",
-    chip: { x: 754, y: 678, thread: "M854 598 Q850 638 804 662" },
+    chip: { x: 754, y: 678, size: CHIP_SIZE.REGULAR, thread: "M854 598 Q850 638 804 662" },
     sparkles: [
       { x: 709, y: 209, size: 22, isRinged: true },
       { x: 1381, y: 161, size: 18, isRinged: false },
