@@ -24,19 +24,26 @@ const t = getTranslations(locale);
 const homeHref = getRelativeLocaleUrl(locale, ROUTE.HOME);
 ---
 
-<a href={homeHref} aria-label={t["site.home"]} class="flex h-10 shrink-0 items-center">
+<a
+  href={homeHref}
+  aria-label={t["site.home"]}
+  class="flex h-10 shrink-0 items-center over-brand:focus-visible:outline-focus-on-brand"
+>
   <img
     src={logoColour.src}
     width={logoColour.width}
     height={logoColour.height}
     alt=""
-    class:list={["h-full w-auto", { hidden: reverse, "theme-dark:hidden": !reverse }]}
+    class:list={[
+      "h-full w-auto",
+      { hidden: reverse, "theme-dark:hidden over-brand:hidden": !reverse },
+    ]}
   />
   <img
     src={logoReverse.src}
     width={logoReverse.width}
     height={logoReverse.height}
     alt=""
-    class:list={["h-full w-auto", { "hidden theme-dark:block": !reverse }]}
+    class:list={["h-full w-auto", { "hidden theme-dark:block over-brand:block": !reverse }]}
   />
 </a>

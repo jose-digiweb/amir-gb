@@ -1,6 +1,9 @@
 ---
 // Dependencies
-import { DOT_PATCH } from "./constants";
+import { DECOR_TONE, DOT_PATCH } from "./constants";
+
+// Types
+import type { DecorTone } from "./types";
 
 /**
  * The {@link Props} type
@@ -9,12 +12,15 @@ import { DOT_PATCH } from "./constants";
 type Props = {
   /** A prefix for the drawing's own ids, unique on the page. */
   id: string;
+  /** The ground it sits on: a light section, or the navy band. */
+  tone?: DecorTone;
   /** Place and size classes from the caller. */
   class?: string;
 };
 
 // Name the patch's pattern, fade and mask, and centre the dot in its cell
-const { id, class: className } = Astro.props;
+const { id, tone = DECOR_TONE.LIGHT, class: className } = Astro.props;
+const isOnBrand = tone === DECOR_TONE.ON_BRAND;
 const patternId = `${id}-dots`;
 const fadeId = `${id}-fade`;
 const maskId = `${id}-mask`;
@@ -29,7 +35,12 @@ const centre = DOT_PATCH.STEP / 2;
       height={DOT_PATCH.STEP}
       patternUnits="userSpaceOnUse"
     >
-      <circle cx={centre} cy={centre} r={DOT_PATCH.RADIUS} class="fill-decor-strong"></circle>
+      <circle
+        cx={centre}
+        cy={centre}
+        r={DOT_PATCH.RADIUS}
+        class:list={{ "fill-decor-strong": !isOnBrand, "fill-motif-band-on-brand": isOnBrand }}
+      ></circle>
     </pattern>
     <radialGradient id={fadeId}>
       <stop offset={DOT_PATCH.FADE_FROM}></stop>

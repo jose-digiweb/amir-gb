@@ -4,7 +4,6 @@ import { getLocale, getTranslations } from "../../i18n/helpers";
 
 // Components
 import SiteLayout from "../../layouts/SiteLayout.astro";
-import WovenDefs from "../ui/WovenDefs.astro";
 import HelpAreasSection from "./HelpAreasSection.astro";
 import HelpOpening from "./HelpOpening.astro";
 import HowItWorksSection from "./HowItWorksSection.astro";
@@ -20,7 +19,6 @@ const t = getTranslations(getLocale(Astro.currentLocale));
 ---
 
 <SiteLayout title={t["getHelp.title"]} description={t["getHelp.description"]}>
-  <WovenDefs />
   <HelpOpening />
   <HowItWorksSection />
   <HelpAreasSection />

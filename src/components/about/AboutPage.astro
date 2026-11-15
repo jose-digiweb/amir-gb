@@ -1,0 +1,31 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../i18n/helpers";
+
+// Components
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import AboutOpening from "./AboutOpening.astro";
+import BoardSection from "./BoardSection.astro";
+import MoneySection from "./MoneySection.astro";
+import PurposeSection from "./PurposeSection.astro";
+import TimelineSection from "./TimelineSection.astro";
+import ValuesSection from "./ValuesSection.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the AboutPage component, the About us page in the page's language
+ */
+type Props = Record<string, never>;
+
+// Read the page's title and summary
+const t = getTranslations(getLocale(Astro.currentLocale));
+---
+
+<SiteLayout title={t["about.title"]} description={t["about.description"]} headerOverBrand>
+  <AboutOpening />
+  <PurposeSection />
+  <ValuesSection />
+  <TimelineSection />
+  <BoardSection />
+  <MoneySection />
+</SiteLayout>

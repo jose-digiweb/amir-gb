@@ -7,10 +7,10 @@ import { ROUTE } from "../../../site/constants";
 
 // Components
 import Button from "../../ui/Button.astro";
+import MottoChips from "../../site/MottoChips.astro";
 import Opener from "../../ui/Opener.astro";
 import WovenShade from "../../ui/WovenShade.astro";
 import Cloth from "./Cloth.astro";
-import MottoChips from "./MottoChips.astro";
 
 /**
  * The {@link Props} type
@@ -42,7 +42,7 @@ const joinHref = getRelativeLocaleUrl(locale, ROUTE.JOIN);
         {t["together.text"]}
       </p>
       <div class="mt-5 desktop:mt-7">
-        <MottoChips />
+        <MottoChips class="tablet:flex tablet:flex-wrap" />
       </div>
       <div class="mt-8 hidden tablet:flex desktop:mt-10">
         <Button href={joinHref}>

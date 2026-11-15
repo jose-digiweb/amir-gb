@@ -1,0 +1,27 @@
+---
+// Dependencies
+import { EighthNotes, Flag, HandHeart, Users } from "@lucide/astro";
+import { ABOUT_VALUE } from "./constants";
+
+// Types
+import type { AboutValue } from "./types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the ValueIcon component, the Lucide pictogram of one of AMIR-GB's values
+ */
+type Props = {
+  /** The value to draw. */
+  value: AboutValue;
+  /** Size classes from the caller. */
+  class?: string;
+};
+
+// Read the value and the size
+const { value, class: className } = Astro.props;
+---
+
+{value === ABOUT_VALUE.SOLIDARITY ? <Users class={className} /> : null}
+{value === ABOUT_VALUE.LEADERSHIP ? <Flag class={className} /> : null}
+{value === ABOUT_VALUE.INCLUSION ? <HandHeart class={className} /> : null}
+{value === ABOUT_VALUE.PRIDE ? <EighthNotes class={className} /> : null}

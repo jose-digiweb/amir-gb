@@ -1,0 +1,23 @@
+---
+// Dependencies
+import { Clock, FileText } from "@lucide/astro";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+
+/**
+ * The {@link Props} type
+ * @description The props of the YearlyReportRow component, the yearly report and accounts, resting until AMIR's first year is done
+ */
+type Props = Record<string, never>;
+
+// Read the row's words
+const t = getTranslations(getLocale(Astro.currentLocale));
+---
+
+<li class="flex min-h-16 items-center gap-4 rounded-lg bg-surface-sunken px-4 py-2 text-disabled-text">
+  <FileText class="size-icon-md shrink-0" />
+  <span class="flex flex-1 flex-col">
+    <span class="type-h4 text-balance">{t["about.docYearly"]}</span>
+    <span class="type-small">{t["about.docYearlyWhen"]}</span>
+  </span>
+  <Clock class="size-icon-md shrink-0" />
+</li>

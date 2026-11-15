@@ -1,0 +1,28 @@
+---
+// Components
+import DecorBead from "../ui/DecorBead.astro";
+import Opener from "../ui/Opener.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the PurposeCard component, the mission or the vision on a white card with a gold bead in its corner
+ */
+type Props = {
+  /** The small label over the title, already in capitals. */
+  opener: string;
+  /** The card's title. */
+  title: string;
+  /** What the mission or vision says. */
+  text: string;
+};
+
+// Read the card's words
+const { opener, title, text } = Astro.props;
+---
+
+<article class="relative isolate flex flex-col gap-3 overflow-hidden rounded-xl bg-surface p-6 tablet:p-8 desktop:p-10">
+  <DecorBead ringed class="top-7 right-7 size-5.5 tablet:top-8 tablet:right-8" />
+  <Opener label={opener} />
+  <h3 class="type-h2 text-balance text-text-heading">{title}</h3>
+  <p class="type-body text-pretty text-text">{text}</p>
+</article>

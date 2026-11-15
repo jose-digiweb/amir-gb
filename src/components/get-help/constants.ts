@@ -1,7 +1,6 @@
 // Dependencies
 import { TILE_COLOUR } from "../../lib/content/constants";
 import { HELP_SERVICE } from "../../lib/help/constants";
-import { BEAD } from "../../lib/woven/constants";
 
 // Types
 import type { HelpArea, HowStep } from "./types";
@@ -107,20 +106,4 @@ export const HELP_AREA_ITEM = {
 export const STEP_THREAD = {
   DASH: "8 8",
   WIDTH: 3,
-} as const;
-
-/**
- * The {@link DECOR_BEAD_VIEW_BOX} constant
- * @description The drawing box of one woven bead, as the page's shared bead defs draw it
- */
-export const DECOR_BEAD_VIEW_BOX = `0 0 ${BEAD.UNITS} ${BEAD.UNITS}`;
-
-/**
- * The {@link DOT_PATCH} constant
- * @description The faint dot patch behind the opening and the help areas: the dot's radius and the grid step, in SVG units
- */
-export const DOT_PATCH = {
-  RADIUS: 1.6,
-  STEP: 14,
-  FADE_FROM: 0.3,
 } as const;

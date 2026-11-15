@@ -17,16 +17,24 @@ import SiteMenu from "./SiteMenu.astro";
  * The {@link Props} type
  * @description The props of the SiteHeader component: a blurred bar on phone and tablet, a paper sheet that lifts into an island on desktop
  */
-type Props = Record<string, never>;
+type Props = {
+  /** The page opens on the navy band: see-through over it on phone and tablet until the page scrolls. */
+  overBrand?: boolean;
+};
 
-// Link Donate in the page's language
+// Read the page's opening ground and link Donate in the page's language
+const { overBrand = false } = Astro.props;
 const locale = getLocale(Astro.currentLocale);
 const t = getTranslations(locale);
 const donateHref = getRelativeLocaleUrl(locale, ROUTE.DONATE);
 ---
 
-<header class="sticky top-0 z-header pt-[env(safe-area-inset-top)] desktop:box-content desktop:h-20">
-  <div class="site-header-bar flex h-16 items-center justify-between gap-3 border-b border-border bg-surface/72 pr-2 pl-margin backdrop-blur-lg backdrop-saturate-150 tablet:pr-6 tablet:pl-margin-md desktop:absolute desktop:inset-x-0 desktop:h-20 desktop:gap-6 desktop:rounded-b-xl desktop:border-b-0 desktop:bg-bg desktop:px-margin-lg desktop:backdrop-blur-none">
+<header
+  data-brand-band={overBrand ? "" : undefined}
+  data-over-brand={overBrand ? "" : undefined}
+  class="sticky top-0 z-header pt-[env(safe-area-inset-top)] desktop:box-content desktop:h-20"
+>
+  <div class="site-header-bar flex h-16 items-center justify-between gap-3 border-b border-border bg-surface/72 pr-2 pl-margin backdrop-blur-lg backdrop-saturate-150 transition-[background-color,border-color] duration-base ease-standard tablet:pr-6 tablet:pl-margin-md desktop:absolute desktop:inset-x-0 desktop:h-20 desktop:gap-6 desktop:rounded-b-xl desktop:border-b-0 desktop:bg-bg desktop:px-margin-lg desktop:backdrop-blur-none over-brand:border-transparent over-brand:bg-transparent over-brand:backdrop-blur-none over-brand:backdrop-saturate-100">
     <SiteLogo />
     <div class="hidden desktop:block">
       <HeaderNav />
@@ -38,7 +46,11 @@ const donateHref = getRelativeLocaleUrl(locale, ROUTE.DONATE);
       <div class="hidden tablet:block">
         <LanguageList />
       </div>
-      <Button href={donateHref} size={BUTTON_SIZE.COMPACT} class="px-4 tablet:px-6">
+      <Button
+        href={donateHref}
+        size={BUTTON_SIZE.COMPACT}
+        class="px-4 tablet:px-6 over-brand:focus-visible:outline-focus-on-brand"
+      >
         {t["nav.donate"]}
       </Button>
       <SiteMenu />
@@ -48,10 +60,14 @@ const donateHref = getRelativeLocaleUrl(locale, ROUTE.DONATE);
 
 <script>
   // Dependencies
+  import { followBrandBand } from "../../lib/header/helpers";
   import { enableThemeChoice } from "../../lib/theme/helpers";
 
   // The header's appearance controls, in the card and in the menu, apply and remember a pick
   enableThemeChoice();
+
+  // Over a navy opening, the header stays see-through until the page scrolls
+  followBrandBand();
 </script>
 
 <style>

@@ -1,0 +1,76 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { LOCALE } from "../../i18n/constants";
+import { PENDING_LINK } from "../../site/constants";
+import { DOCUMENTS, MONEY_RULES } from "./constants";
+
+// Components
+import Opener from "../ui/Opener.astro";
+import WovenShade from "../ui/WovenShade.astro";
+import DocumentRow from "./DocumentRow.astro";
+import MoneyRule from "./MoneyRule.astro";
+import TaxStatusCard from "./TaxStatusCard.astro";
+import YearlyReportRow from "./YearlyReportRow.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the MoneySection component: how AMIR-GB handles money, its documents and its legal and tax status
+ */
+type Props = Record<string, never>;
+
+// Write the rules and the documents in the page's language; outside Dutch, a document also shows its Dutch name
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const rules = MONEY_RULES.map((rule) => ({
+  rule: rule.rule,
+  title: t[rule.title],
+  text: t[rule.text],
+}));
+const showDutchName = locale !== LOCALE.NL;
+const documents = DOCUMENTS.map((item) => ({
+  title: t[item.title],
+  dutchName: showDutchName ? item.dutchName : undefined,
+  href: item.href,
+  isPending: item.href === PENDING_LINK,
+}));
+---
+
+<section
+  aria-labelledby="money-title"
+  class="relative isolate -mt-8 overflow-hidden rounded-t-xl bg-bg-alt px-margin pt-12 pb-16 tablet:-mt-10 tablet:px-margin-md tablet:pt-16 tablet:pb-24 desktop:-mt-14 desktop:px-margin-lg desktop:pt-24 desktop:pb-32"
+>
+  <WovenShade />
+  <div class="mx-auto max-w-page">
+    <div class="flex flex-col gap-2 tablet:gap-3">
+      <Opener label={t["about.moneyOpener"]} />
+      <h2 id="money-title" class="type-section-title text-balance text-text-heading">
+        {t["about.moneyTitle"]}
+      </h2>
+    </div>
+    <div class="mt-6 flex flex-col gap-8 tablet:mt-10 tablet:gap-10 desktop:grid desktop:grid-cols-11 desktop:items-start desktop:gap-20">
+      <ul class="flex flex-col gap-5 tablet:grid tablet:grid-cols-2 tablet:gap-x-8 tablet:gap-y-8 desktop:col-span-6 desktop:gap-x-10">
+        {rules.map((rule) => (
+          <MoneyRule rule={rule.rule} title={rule.title} text={rule.text} />
+        ))}
+      </ul>
+      <div class="flex flex-col gap-5 tablet:grid tablet:grid-cols-2 tablet:items-start tablet:gap-6 desktop:col-span-5 desktop:flex">
+        <div class="flex flex-col gap-3">
+          <Opener label={t["about.documentsOpener"]} />
+          <ul class="flex flex-col gap-2">
+            {documents.map((item) => (
+              <DocumentRow
+                title={item.title}
+                dutchName={item.dutchName}
+                href={item.href}
+                isPending={item.isPending}
+              />
+            ))}
+            <YearlyReportRow />
+          </ul>
+        </div>
+        <TaxStatusCard />
+      </div>
+    </div>
+  </div>
+</section>
