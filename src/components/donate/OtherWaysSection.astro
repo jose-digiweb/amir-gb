@@ -3,10 +3,10 @@
 import { getLocale, getTranslations } from "../../i18n/helpers";
 
 // Components
+import DotPatch from "../ui/DotPatch.astro";
 import Opener from "../ui/Opener.astro";
 import WovenShade from "../ui/WovenShade.astro";
 import BankTransferCard from "./BankTransferCard.astro";
-import DotPatch from "./DotPatch.astro";
 import MonthlyGiftCard from "./MonthlyGiftCard.astro";
 import TaxCard from "./TaxCard.astro";
 
@@ -22,11 +22,11 @@ const t = getTranslations(getLocale(Astro.currentLocale));
 
 <section
   aria-labelledby="other-ways-title"
-  data-under-footer
+  data-footer-overlaps
   class="relative isolate -mt-10 overflow-hidden rounded-t-xl bg-bg-alt px-margin pt-12 pb-24 text-text tablet:-mt-12 tablet:px-margin-md tablet:pt-16 tablet:pb-28 desktop:-mt-14 desktop:px-margin-lg desktop:pt-24 desktop:pb-36"
 >
   <WovenShade />
-  <DotPatch id="other-ways-dots" class="bottom-20 -left-5 h-40 w-56" />
+  <DotPatch id="other-ways" class="bottom-20 -left-5 h-40 w-56" />
   <div class="mx-auto flex w-full max-w-page flex-col gap-6 tablet:gap-10">
     <div class="flex flex-col gap-3">
       <Opener label={t["donatePage.waysOpener"]} />

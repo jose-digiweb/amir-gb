@@ -156,7 +156,7 @@ const bridgeStyle = `background-image: url(${bridgeLine.src})`;
 <style>
   @reference "../../styles/global.css";
 
-  /* A page whose last section the footer overlaps (Get help) pulls the footer up by the sections' overlap */
+  /* A page whose last section the footer overlaps (Get help, Donate) pulls the footer up by the sections' overlap */
   :global(main:has([data-footer-overlaps])) + .site-footer {
     position: relative;
     margin-top: calc(var(--space-8) * -1);
@@ -197,20 +197,6 @@ const bridgeStyle = `background-image: url(${bridgeLine.src})`;
 
     @variant desktop {
       padding-top: calc(var(--space-20) + var(--space-32) + var(--space-6));
-    }
-  }
-
-  /* A section that slides under the footer (the Donate page's last) has the footer pulled up over it, as the sections stack */
-  :global(main:has([data-under-footer])) + .site-footer {
-    position: relative;
-    margin-top: calc(var(--space-10) * -1);
-
-    @variant tablet {
-      margin-top: calc(var(--space-12) * -1);
-    }
-
-    @variant desktop {
-      margin-top: calc((var(--space-6) + var(--space-8)) * -1);
     }
   }
 </style>

@@ -6,9 +6,9 @@ import { getNestedLozengePath } from "../../lib/woven/helpers";
 // Components
 import DonationWidget from "../support/DonationWidget.astro";
 import JoinedHandsRing from "../support/JoinedHandsRing.astro";
+import DotPatch from "../ui/DotPatch.astro";
 import Opener from "../ui/Opener.astro";
 import WovenShade from "../ui/WovenShade.astro";
-import DotPatch from "./DotPatch.astro";
 
 // Types
 import type { SupportState } from "../../lib/donate/types";
@@ -41,7 +41,7 @@ const lozengePath = getNestedLozengePath();
     <path d={lozengePath}></path>
   </svg>
   <DotPatch
-    id="donate-opening-dots"
+    id="donate-opening"
     class="hidden desktop:top-176 desktop:left-10 desktop:block desktop:h-56 desktop:w-76"
   />
   <div class="mx-auto grid w-full max-w-page gap-y-3 tablet:grid-cols-[minmax(0,1fr)_--spacing(95)] tablet:items-start tablet:gap-x-8 tablet:gap-y-6 desktop:grid-cols-[minmax(0,1fr)_--spacing(115)] desktop:gap-x-20 desktop:gap-y-4">
