@@ -17,7 +17,11 @@ export const PHONE_CONSTELLATION = {
   photoSize: 150,
   ring: { radius: 106, count: 20, size: 14 },
   threads: {
-    path: "M190.6 194.8 Q173.2 167.4 176.9 146.6 M204.2 259.0 Q173.8 247.1 164.4 228.1 M253.0 302.9 Q221.6 311.0 203.0 301.2",
+    paths: [
+      "M190.6 194.8 Q173.2 167.4 176.9 146.6",
+      "M204.2 259.0 Q173.8 247.1 164.4 228.1",
+      "M253.0 302.9 Q221.6 311.0 203.0 301.2",
+    ],
     width: 1.5,
     dash: "4 4",
   },
@@ -48,7 +52,14 @@ export const TABLET_CONSTELLATION = {
   photoSize: 200,
   ring: { radius: 140, count: 24, size: 20 },
   threads: {
-    path: "M521.1 536.1 Q531.1 503.5 547.5 492.5 M660.2 550.7 Q693.3 543.1 711.0 551.8 M717.2 678.7 Q740.3 703.6 741.6 723.3 M634.9 791.9 Q624.9 824.5 608.5 835.5 M495.8 777.3 Q462.7 784.9 445.0 776.2 M438.8 649.3 Q415.7 624.4 414.4 604.7",
+    paths: [
+      "M521.1 536.1 Q531.1 503.5 547.5 492.5",
+      "M660.2 550.7 Q693.3 543.1 711.0 551.8",
+      "M717.2 678.7 Q740.3 703.6 741.6 723.3",
+      "M634.9 791.9 Q624.9 824.5 608.5 835.5",
+      "M495.8 777.3 Q462.7 784.9 445.0 776.2",
+      "M438.8 649.3 Q415.7 624.4 414.4 604.7",
+    ],
     width: 1.5,
     dash: "5 5",
   },
@@ -86,7 +97,14 @@ export const DESKTOP_CONSTELLATION = {
   photoSize: 190,
   ring: { radius: 140, count: 24, size: 22 },
   threads: {
-    path: "M941.0 371.0 Q920.6 318.5 868.1 298.1 M1070.9 333.5 Q1092.9 303.7 1085.9 267.4 M1179.9 463.5 Q1241.7 487.4 1301.1 458.0 M1154.4 550.7 Q1183.7 599.5 1239.4 610.8 M1059.5 608.6 Q1041.8 671.3 1076.1 726.6 M903.3 500.1 Q875.4 494.5 852.5 511.2",
+    paths: [
+      "M941.0 371.0 Q920.6 318.5 868.1 298.1",
+      "M1070.9 333.5 Q1092.9 303.7 1085.9 267.4",
+      "M1179.9 463.5 Q1241.7 487.4 1301.1 458.0",
+      "M1154.4 550.7 Q1183.7 599.5 1239.4 610.8",
+      "M1059.5 608.6 Q1041.8 671.3 1076.1 726.6",
+      "M903.3 500.1 Q875.4 494.5 852.5 511.2",
+    ],
     width: 1.75,
     dash: "6 6",
   },
@@ -127,4 +145,12 @@ export const DESKTOP_CROP_X = 560;
 export const PILL_BOX = {
   WIDTH: 280,
   HEIGHT: 56,
+} as const;
+
+/**
+ * The {@link STITCH_REVEAL} constant
+ * @description How each gold thread sews itself in: its mask's stroke is this many times the thread's width, so the round caps are covered
+ */
+export const STITCH_REVEAL = {
+  WIDTH_SCALE: 4,
 } as const;
