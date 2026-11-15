@@ -1,13 +1,14 @@
 <script setup lang="ts">
 // Dependencies
 import { MessageCircle, RotateCw, WifiOff } from "@lucide/vue";
-import { CONTACT_FORM_ID } from "./constants";
 
 /**
  * The {@link Props} type
- * @description The props of the ContactFailed component, the notice above the form when a message did not send, with the text still there
+ * @description The props of the FormFailed component, the notice above a form that did not send, with everything typed still there
  */
 type Props = {
+  /** The id the form moves focus to when it did not send. */
+  id: string;
   /** That it did not send. */
   title: string;
   /** That nothing is lost, and what to do. */
@@ -27,7 +28,7 @@ const emit = defineEmits<{ retry: [] }>();
 
 <template>
   <div
-    :id="CONTACT_FORM_ID.FAILED"
+    :id="props.id"
     tabindex="-1"
     role="alert"
     class="flex flex-col gap-3 rounded-md bg-danger-bg p-4 text-text-heading"

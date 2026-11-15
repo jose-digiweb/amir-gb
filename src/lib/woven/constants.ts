@@ -52,6 +52,37 @@ export const LATTICE_PIECE = {
 } as const;
 
 /**
+ * The {@link OPEN_PLACE} constant
+ * @description The open place in the join page's members lattice: how many cells each arm of its plus reaches from the centre
+ */
+export const OPEN_PLACE = {
+  PLUS_ARM: 2,
+} as const;
+
+/**
+ * The {@link MEMBERS_LATTICE} constant
+ * @description The join page's small members lattice in SVG units: its box, and where each piece and the open place sit
+ */
+export const MEMBERS_LATTICE = {
+  WIDTH: 228,
+  HEIGHT: 152,
+  PIECE_SIZE: 38,
+  OPEN_SIZE: 49,
+  OPEN: { x: 51, y: 51 },
+  SOLID: [
+    { x: 95, y: 19 },
+    { x: 133, y: 57 },
+    { x: 19, y: 95 },
+    { x: 171, y: 95 },
+  ],
+  RINGED: [
+    { x: 19, y: 19 },
+    { x: 171, y: 19 },
+    { x: 95, y: 95 },
+  ],
+} as const;
+
+/**
  * The {@link BEAD} constant
  * @description A bead is one woven member piece, 9 cells of 3 units, scaled to the size it is drawn at
  */

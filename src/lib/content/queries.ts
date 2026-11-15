@@ -3,19 +3,30 @@ import { getRelativeLocaleUrl } from "astro:i18n";
 import { getEmDashCollection } from "emdash";
 import { DEFAULT_LOCALE } from "../../i18n/constants";
 import { ROUTE } from "../../site/constants";
-import { COLLECTION, DAY_MS, FIELD, HOME_LIMIT, POST_TYPE, SORT } from "./constants";
+import {
+  COLLECTION,
+  DAY_MS,
+  EVENT_TYPE,
+  FIELD,
+  HOME_LIMIT,
+  MEETING_READ,
+  POST_TYPE,
+  SORT,
+} from "./constants";
 import {
   compareWeekly,
   getWeeklyTint,
   isStripActive,
   mergeWithDutch,
   toClockTime,
+  toOptionalDate,
 } from "./helpers";
 
 // Types
 import type { CacheHint, CollectionFilter, ContentEntry, EmDashCollections } from "emdash";
 import type { Locale } from "../../i18n/types";
 import type {
+  GeneralMeeting,
   HomeAnnouncement,
   HomeContent,
   HomeEvent,
@@ -109,6 +120,43 @@ export async function getUpcomingEvents(locale: Locale, now: Date): Promise<Read
   const upcoming = events.filter((event) => event.startsAt >= now);
   upcoming.sort((a, b) => a.startsAt.getTime() - b.startsAt.getTime());
   return { items: upcoming.slice(0, HOME_LIMIT.EVENTS), cacheHints };
+}
+
+/**
+ * The {@link getGeneralMeeting} helper
+ * @description Reads the next general meeting: the soonest upcoming community event marked as one
+ * @param {Locale} locale - The page's language
+ * @param {Date} now - The moment the page renders
+ * @returns {Promise<Read<GeneralMeeting>>} The meeting, or none when no meeting is planned
+ */
+export async function getGeneralMeeting(locale: Locale, now: Date): Promise<Read<GeneralMeeting>> {
+  const { items, cacheHints } = await readLocalised(COLLECTION.EVENTS, locale, {
+    status: "published",
+    where: {
+      [FIELD.TYPE]: EVENT_TYPE.COMMUNITY,
+      [FIELD.STARTS_AT]: { gte: new Date(now.getTime() - DAY_MS).toISOString() },
+    },
+    orderBy: { [FIELD.STARTS_AT]: SORT.ASC },
+    limit: MEETING_READ,
+  });
+
+  // Keep the marked meetings still to start, soonest first across both languages
+  const meetings = items
+    .filter(({ entry }) => entry.data.general_meeting)
+    .map(({ entry, isDutchOnly }) => ({
+      id: entry.data.id,
+      href: getRelativeLocaleUrl(locale, `${ROUTE.EVENTS}${entry.data.slug ?? ""}/`),
+      title: entry.data.title,
+      startsAt: new Date(entry.data.starts_at),
+      endsAt: toOptionalDate(entry.data.ends_at),
+      place: entry.data.address ?? entry.data.place_name,
+      isOnline: Boolean(entry.data.online_link),
+      image: entry.data.image,
+      isDutchOnly,
+    }))
+    .filter((meeting) => meeting.startsAt >= now);
+  meetings.sort((a, b) => a.startsAt.getTime() - b.startsAt.getTime());
+  return { items: meetings.slice(0, 1), cacheHints };
 }
 
 /**

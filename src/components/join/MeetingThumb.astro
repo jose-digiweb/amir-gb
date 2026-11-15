@@ -1,0 +1,38 @@
+---
+// Dependencies
+import { Image } from "emdash/ui";
+import { INTL_LOCALE } from "../../i18n/constants";
+import { getLocale } from "../../i18n/helpers";
+import { getEventDay } from "../../lib/content/helpers";
+import pintiPanel from "../../assets/woven/pinti-panel.svg";
+
+// Types
+import type { MediaImage } from "../../lib/content/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the MeetingThumb component, the general meeting's small photo, or the woven pinti panel, with its date badge
+ */
+type Props = {
+  /** The meeting's image, if it has one. */
+  image?: MediaImage;
+  /** When the meeting starts. */
+  startsAt: Date;
+};
+
+// Read the meeting and write its day and month in the page's language
+const { image, startsAt } = Astro.props;
+const { day, month } = getEventDay(startsAt, INTL_LOCALE[getLocale(Astro.currentLocale)]);
+---
+
+<span class="relative block size-24 shrink-0 overflow-hidden rounded-lg bg-brand-navy">
+  {image ? (
+    <Image image={image} alt="" sizes="96px" loading="lazy" class="size-full object-cover" />
+  ) : (
+    <img src={pintiPanel.src} alt="" loading="lazy" class="size-full object-cover" />
+  )}
+  <span class="absolute top-1.5 left-1.5 flex h-12 w-11 flex-col items-center justify-center rounded-md bg-on-brand text-surface-brand shadow-sm">
+    <b class="type-h4 font-extrabold">{day}</b>
+    <span class="type-tag uppercase">{month}</span>
+  </span>
+</span>

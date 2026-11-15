@@ -1,0 +1,60 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { BEAD, LOZENGE } from "../../lib/woven/constants";
+import { getWovenPath } from "../../lib/woven/helpers";
+import { JOIN_PLACEHOLDER } from "../../lib/join/constants";
+import { MEMBER_CARD_BEADS } from "./constants";
+import logoReverse from "../../assets/brand/amir-gb_horizontal-short_reverse.svg";
+
+/**
+ * The {@link Props} type
+ * @description The props of the MemberCard component, an AMIR-GB member card drawn as an object, navy in both themes
+ */
+type Props = {
+  /** Place and size classes from the caller. */
+  class?: string;
+};
+
+// Prepare the copy, this year, and the strip of woven pieces along the card's edge
+const { class: className } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+const since = t["joinPage.cardSince"].replace(JOIN_PLACEHOLDER.YEAR, `${new Date().getFullYear()}`);
+const viewBox = `0 0 ${BEAD.UNITS} ${MEMBER_CARD_BEADS.HEIGHT}`;
+const plainPath = getWovenPath(LOZENGE.PIECE_RADIUS, () => true);
+const ringPath = getWovenPath(
+  LOZENGE.PIECE_RADIUS,
+  (distance) => distance >= LOZENGE.PIECE_RING_FROM,
+);
+const eyePath = getWovenPath(LOZENGE.PIECE_RADIUS, (distance) => distance <= LOZENGE.PIECE_EYE_TO);
+const plain = MEMBER_CARD_BEADS.PLAIN.map((y) => `translate(0 ${y})`);
+const ringed = MEMBER_CARD_BEADS.RINGED.map((y) => `translate(0 ${y})`);
+---
+
+<div
+  role="img"
+  aria-label={t["joinPage.cardLabel"]}
+  class:list={[
+    "relative isolate flex aspect-8/5 w-76 flex-col justify-between overflow-hidden rounded-lg bg-brand-navy p-6 text-brand-white shadow-lg desktop:w-84",
+    className,
+  ]}
+>
+  <span aria-hidden="true" class="absolute inset-y-0 right-0 -z-10 w-15 bg-brand-deep-navy"></span>
+  <svg aria-hidden="true" viewBox={viewBox} class="absolute top-2.5 right-4 -z-10 w-7">
+    {plain.map((transform) => (
+      <path d={plainPath} transform={transform} class="fill-motif-band-on-brand"></path>
+    ))}
+    {ringed.map((transform) => (
+      <g transform={transform}>
+        <path d={ringPath} class="fill-on-brand-accent"></path>
+        <path d={eyePath} class="fill-brand-navy"></path>
+      </g>
+    ))}
+  </svg>
+  <img src={logoReverse.src} alt="" class="h-8 w-auto self-start" />
+  <span class="flex flex-col gap-1">
+    <span class="type-tag text-on-brand-accent">{t["joinPage.cardMember"]}</span>
+    <span class="type-h3 font-extrabold">{t["joinPage.cardName"]}</span>
+    <span class="type-small text-on-brand-muted">{since}</span>
+  </span>
+</div>

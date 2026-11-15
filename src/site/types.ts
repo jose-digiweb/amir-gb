@@ -1,6 +1,6 @@
 // Types
 import type { Locale, TranslationKey } from "../i18n/types";
-import type { VALUE } from "./constants";
+import type { ANSWER_LANGUAGE, VALUE } from "./constants";
 
 /**
  * The {@link NavLink} type
@@ -48,3 +48,9 @@ export type LanguageLink = {
  * @description One of the {@link VALUE} values
  */
 export type Value = (typeof VALUE)[keyof typeof VALUE];
+
+/**
+ * The {@link AnswerLanguage} type
+ * @description One of the {@link ANSWER_LANGUAGE} values
+ */
+export type AnswerLanguage = (typeof ANSWER_LANGUAGE)[keyof typeof ANSWER_LANGUAGE];

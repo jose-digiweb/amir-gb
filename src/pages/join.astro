@@ -1,0 +1,18 @@
+---
+// Dependencies
+import { getLocale } from "../i18n/helpers";
+import { cacheContentPage } from "../lib/content/helpers";
+import { getGeneralMeeting } from "../lib/content/queries";
+
+// Components
+import JoinPage from "../components/join/JoinPage.astro";
+
+// The join page shows the next general meeting from the CMS, so it renders per request
+export const prerender = false;
+
+// Read the meeting, and cache the page at the edge, set before rendering starts
+const meeting = await getGeneralMeeting(getLocale(Astro.currentLocale), new Date());
+cacheContentPage(Astro.cache, meeting.cacheHints);
+---
+
+<JoinPage meeting={meeting.items[0]} />

@@ -118,3 +118,47 @@ export const VALUE_LABEL = {
   [VALUE.UNITY]: "values.unity",
   [VALUE.DIGNITY]: "values.dignity",
 } as const;
+
+/**
+ * The {@link ANSWER_LANGUAGE} constant
+ * @description The languages AMIR-GB can answer in
+ */
+export const ANSWER_LANGUAGE = {
+  NL: "nl",
+  EN: "en",
+  PT: "pt",
+  KRIOL: "kriol",
+} as const;
+
+/**
+ * The {@link ANSWER_LANGUAGES} constant
+ * @description The answer languages in the order the forms show them
+ */
+export const ANSWER_LANGUAGES = [
+  ANSWER_LANGUAGE.NL,
+  ANSWER_LANGUAGE.EN,
+  ANSWER_LANGUAGE.PT,
+  ANSWER_LANGUAGE.KRIOL,
+] as const;
+
+/**
+ * The {@link ANSWER_LANGUAGE_LABEL} constant
+ * @description The translation key of each answer language's name, in that language
+ */
+export const ANSWER_LANGUAGE_LABEL = {
+  [ANSWER_LANGUAGE.NL]: "answerLanguage.nl",
+  [ANSWER_LANGUAGE.EN]: "answerLanguage.en",
+  [ANSWER_LANGUAGE.PT]: "answerLanguage.pt",
+  [ANSWER_LANGUAGE.KRIOL]: "answerLanguage.kriol",
+} as const;
+
+/**
+ * The {@link ANSWER_LANGUAGE_IN_SENTENCE} constant
+ * @description The translation key of each answer language as a sentence names it ("in Portuguese")
+ */
+export const ANSWER_LANGUAGE_IN_SENTENCE = {
+  [ANSWER_LANGUAGE.NL]: "answerLanguageInSentence.nl",
+  [ANSWER_LANGUAGE.EN]: "answerLanguageInSentence.en",
+  [ANSWER_LANGUAGE.PT]: "answerLanguageInSentence.pt",
+  [ANSWER_LANGUAGE.KRIOL]: "answerLanguageInSentence.kriol",
+} as const;

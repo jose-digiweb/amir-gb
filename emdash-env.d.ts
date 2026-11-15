@@ -11,6 +11,7 @@ export interface Event {
   status: string;
   title: string;
   type: "jeugd" | "hulp" | "cultuur" | "gemeenschap";
+  general_meeting?: boolean;
   starts_at: string;
   ends_at?: string;
   place_name?: string;

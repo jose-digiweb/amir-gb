@@ -1,3 +1,6 @@
+// Dependencies
+import { FORM_TRAP_FIELD } from "../forms/constants";
+
 /**
  * The {@link CONTACT_FIELD} constant
  * @description The names of the message form's fields, as the form posts them; `website` is a trap field people never see
@@ -9,30 +12,8 @@ export const CONTACT_FIELD = {
   TOPIC: "topic",
   MESSAGE: "message",
   CONSENT: "consent",
-  TRAP: "website",
+  TRAP: FORM_TRAP_FIELD,
 } as const;
-
-/**
- * The {@link ANSWER_LANGUAGE} constant
- * @description The languages AMIR-GB can answer in
- */
-export const ANSWER_LANGUAGE = {
-  NL: "nl",
-  EN: "en",
-  PT: "pt",
-  KRIOL: "kriol",
-} as const;
-
-/**
- * The {@link ANSWER_LANGUAGES} constant
- * @description The answer languages in the order the form shows them
- */
-export const ANSWER_LANGUAGES = [
-  ANSWER_LANGUAGE.NL,
-  ANSWER_LANGUAGE.EN,
-  ANSWER_LANGUAGE.PT,
-  ANSWER_LANGUAGE.KRIOL,
-] as const;
 
 /**
  * The {@link CONTACT_TOPIC} constant
@@ -84,21 +65,13 @@ export const CONTACT_LIMIT = {
 
 /**
  * The {@link REACH_PATTERN} constant
- * @description How the form tells an email address from a phone number and checks each
+ * @description How the form tells an email address from a phone number and checks a phone number
  */
 export const REACH_PATTERN = {
   AT: "@",
-  EMAIL: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
   PHONE: /^[+\d\s().-]+$/,
   DIGIT: /\d/g,
-  LINE_BREAKS: /[\r\n]+/g,
 } as const;
-
-/**
- * The {@link CONSENT_VALUE} constant
- * @description What a ticked checkbox posts
- */
-export const CONSENT_VALUE = "on";
 
 /**
  * The {@link OPENING_HOURS} constant
@@ -139,24 +112,6 @@ export const QR_CODE = {
 } as const;
 
 /**
- * The {@link CONTACT_MAIL_ERROR} constant
- * @description Why a message could not be sent
- */
-export const CONTACT_MAIL_ERROR = {
-  NOT_SET_UP: "not-set-up",
-  SEND_FAILED: "send-failed",
-} as const;
-
-/**
- * The {@link CONTACT_MAIL_LOG} constant
- * @description The Worker log lines for a message that did not send
- */
-export const CONTACT_MAIL_LOG = {
-  NOT_SET_UP: "[contact] CONTACT_FROM_ADDRESS is not set; the message was not sent",
-  SEND_FAILED: "[contact] Email Service did not send the message",
-} as const;
-
-/**
  * The {@link CONTACT_PLACEHOLDER} constant
  * @description The marks in the contact page's copy that a time, a day, a name, a language or an address replaces
  */
@@ -166,28 +121,6 @@ export const CONTACT_PLACEHOLDER = {
   NAME: "{name}",
   LANGUAGE: "{language}",
   REACH: "{reach}",
-} as const;
-
-/**
- * The {@link ANSWER_LANGUAGE_LABEL} constant
- * @description The translation key of each answer language's name
- */
-export const ANSWER_LANGUAGE_LABEL = {
-  [ANSWER_LANGUAGE.NL]: "contactPage.language.nl",
-  [ANSWER_LANGUAGE.EN]: "contactPage.language.en",
-  [ANSWER_LANGUAGE.PT]: "contactPage.language.pt",
-  [ANSWER_LANGUAGE.KRIOL]: "contactPage.language.kriol",
-} as const;
-
-/**
- * The {@link ANSWER_LANGUAGE_IN_SENTENCE} constant
- * @description The translation key of each answer language as a sentence names it ("in Portuguese")
- */
-export const ANSWER_LANGUAGE_IN_SENTENCE = {
-  [ANSWER_LANGUAGE.NL]: "contactPage.languageInSentence.nl",
-  [ANSWER_LANGUAGE.EN]: "contactPage.languageInSentence.en",
-  [ANSWER_LANGUAGE.PT]: "contactPage.languageInSentence.pt",
-  [ANSWER_LANGUAGE.KRIOL]: "contactPage.languageInSentence.kriol",
 } as const;
 
 /**
@@ -201,12 +134,6 @@ export const CONTACT_TOPIC_LABEL = {
   [CONTACT_TOPIC.PARTNERSHIP]: "contactPage.topic.partnership",
   [CONTACT_TOPIC.OTHER]: "contactPage.topic.other",
 } as const;
-
-/**
- * The {@link CONTACT_MAIL_LINE_BREAK} constant
- * @description What joins the lines of the email AMIR-GB receives
- */
-export const CONTACT_MAIL_LINE_BREAK = "\n";
 
 /**
  * The {@link CONTACT_CHECKED_FIELDS} constant

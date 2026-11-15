@@ -1,23 +1,12 @@
 // Types
-import type {
-  ANSWER_LANGUAGE,
-  CONTACT_ERROR,
-  CONTACT_FIELD,
-  CONTACT_MAIL_ERROR,
-  CONTACT_TOPIC,
-} from "./constants";
+import type { AnswerLanguage } from "../../site/types";
+import type { CONTACT_ERROR, CONTACT_FIELD, CONTACT_TOPIC } from "./constants";
 
 /**
  * The {@link ContactField} type
  * @description One of the {@link CONTACT_FIELD} values
  */
 export type ContactField = (typeof CONTACT_FIELD)[keyof typeof CONTACT_FIELD];
-
-/**
- * The {@link AnswerLanguage} type
- * @description One of the {@link ANSWER_LANGUAGE} values
- */
-export type AnswerLanguage = (typeof ANSWER_LANGUAGE)[keyof typeof ANSWER_LANGUAGE];
 
 /**
  * The {@link ContactTopic} type
@@ -30,12 +19,6 @@ export type ContactTopic = (typeof CONTACT_TOPIC)[keyof typeof CONTACT_TOPIC];
  * @description One of the {@link CONTACT_ERROR} values
  */
 export type ContactError = (typeof CONTACT_ERROR)[keyof typeof CONTACT_ERROR];
-
-/**
- * The {@link ContactMailError} type
- * @description One of the {@link CONTACT_MAIL_ERROR} values
- */
-export type ContactMailError = (typeof CONTACT_MAIL_ERROR)[keyof typeof CONTACT_MAIL_ERROR];
 
 /**
  * The {@link ContactValues} type

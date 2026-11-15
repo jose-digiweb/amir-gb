@@ -6,11 +6,14 @@ import { CONTACT_FORM_ID, CONTACT_FORM_STATE } from "./constants";
 import { useContactForm } from "./useContactForm";
 
 // Components
-import ChoiceChip from "./ChoiceChip.vue";
-import ContactFailed from "./ContactFailed.vue";
+import ChoiceChip from "../forms/ChoiceChip.vue";
+import ConsentField from "../forms/ConsentField.vue";
+import FormFailed from "../forms/FormFailed.vue";
+import FormSummary from "../forms/FormSummary.vue";
+import TextArea from "../forms/TextArea.vue";
+import TextField from "../forms/TextField.vue";
+import TrapField from "../forms/TrapField.vue";
 import ContactSent from "./ContactSent.vue";
-import ContactSummary from "./ContactSummary.vue";
-import FieldError from "./FieldError.vue";
 
 // Types
 import type { Locale } from "../../i18n/types";
@@ -71,9 +74,15 @@ const {
     class="flex flex-col gap-5 desktop:gap-6"
     @submit="onSubmit"
   >
-    <ContactSummary v-if="errorFields.length > 0" :title="summaryTitle" :text="summaryText" />
-    <ContactFailed
+    <FormSummary
+      v-if="errorFields.length > 0"
+      :id="CONTACT_FORM_ID.SUMMARY"
+      :title="summaryTitle"
+      :text="summaryText"
+    />
+    <FormFailed
       v-if="state === CONTACT_FORM_STATE.FAILED"
+      :id="CONTACT_FORM_ID.FAILED"
       :title="props.copy.failedTitle"
       :text="props.copy.failedText"
       :try-again="props.copy.tryAgain"
@@ -86,51 +95,27 @@ const {
       class="flex flex-col gap-5 transition-opacity duration-base disabled:opacity-60 desktop:gap-6"
     >
       <div class="flex flex-col gap-5 desktop:grid desktop:grid-cols-2 desktop:gap-4">
-        <div class="flex flex-col gap-2">
-          <label :for="CONTACT_FORM_ID.NAME" class="type-field-label text-text-heading">
-            {{ props.copy.nameLabel }}
-          </label>
-          <input
-            :id="CONTACT_FORM_ID.NAME"
-            v-model="name"
-            type="text"
-            :name="CONTACT_FIELD.NAME"
-            autocomplete="name"
-            :maxlength="CONTACT_LIMIT.NAME"
-            :placeholder="props.copy.namePlaceholder"
-            :aria-invalid="errors.name ? 'true' : undefined"
-            :aria-describedby="errors.name ? `${CONTACT_FORM_ID.NAME}-error` : undefined"
-            class="h-control-lg rounded-md bg-surface px-4 type-body text-text inset-ring inset-ring-border-control placeholder:text-text-muted aria-invalid:inset-ring-2 aria-invalid:inset-ring-danger"
-          />
-          <FieldError
-            v-if="errors.name"
-            :id="`${CONTACT_FORM_ID.NAME}-error`"
-            :text="errorText(errors.name)"
-          />
-        </div>
-        <div class="flex flex-col gap-2">
-          <label :for="CONTACT_FORM_ID.REACH" class="type-field-label text-text-heading">
-            {{ props.copy.reachLabel }}
-          </label>
-          <input
-            :id="CONTACT_FORM_ID.REACH"
-            v-model="reach"
-            type="text"
-            :name="CONTACT_FIELD.REACH"
-            autocomplete="email"
-            inputmode="email"
-            :maxlength="CONTACT_LIMIT.REACH"
-            :placeholder="props.copy.reachPlaceholder"
-            :aria-invalid="errors.reach ? 'true' : undefined"
-            :aria-describedby="errors.reach ? `${CONTACT_FORM_ID.REACH}-error` : undefined"
-            class="h-control-lg rounded-md bg-surface px-4 type-body text-text inset-ring inset-ring-border-control placeholder:text-text-muted aria-invalid:inset-ring-2 aria-invalid:inset-ring-danger"
-          />
-          <FieldError
-            v-if="errors.reach"
-            :id="`${CONTACT_FORM_ID.REACH}-error`"
-            :text="errorText(errors.reach)"
-          />
-        </div>
+        <TextField
+          :id="CONTACT_FORM_ID.NAME"
+          v-model="name"
+          :name="CONTACT_FIELD.NAME"
+          :label="props.copy.nameLabel"
+          autocomplete="name"
+          :maxlength="CONTACT_LIMIT.NAME"
+          :placeholder="props.copy.namePlaceholder"
+          :error="errorText(errors.name)"
+        />
+        <TextField
+          :id="CONTACT_FORM_ID.REACH"
+          v-model="reach"
+          :name="CONTACT_FIELD.REACH"
+          :label="props.copy.reachLabel"
+          autocomplete="email"
+          inputmode="email"
+          :maxlength="CONTACT_LIMIT.REACH"
+          :placeholder="props.copy.reachPlaceholder"
+          :error="errorText(errors.reach)"
+        />
       </div>
 
       <fieldset class="flex flex-col gap-2.5">
@@ -165,65 +150,27 @@ const {
         </div>
       </fieldset>
 
-      <div class="flex flex-col gap-2">
-        <label :for="CONTACT_FORM_ID.MESSAGE" class="type-field-label text-text-heading">
-          {{ props.copy.messageLabel }}
-        </label>
-        <textarea
-          :id="CONTACT_FORM_ID.MESSAGE"
-          v-model="message"
-          :name="CONTACT_FIELD.MESSAGE"
-          rows="5"
-          :maxlength="CONTACT_LIMIT.MESSAGE"
-          :placeholder="props.copy.messagePlaceholder"
-          :aria-invalid="errors.message ? 'true' : undefined"
-          :aria-describedby="errors.message ? `${CONTACT_FORM_ID.MESSAGE}-error` : undefined"
-          class="min-h-36 resize-y rounded-md bg-surface px-4 py-3 type-body text-text inset-ring inset-ring-border-control placeholder:text-text-muted aria-invalid:inset-ring-2 aria-invalid:inset-ring-danger"
-        ></textarea>
-        <FieldError
-          v-if="errors.message"
-          :id="`${CONTACT_FORM_ID.MESSAGE}-error`"
-          :text="errorText(errors.message)"
-        />
-      </div>
-
-      <input
-        v-model="trap"
-        type="text"
-        :name="CONTACT_FIELD.TRAP"
-        tabindex="-1"
-        autocomplete="off"
-        aria-hidden="true"
-        class="hidden"
+      <TextArea
+        :id="CONTACT_FORM_ID.MESSAGE"
+        v-model="message"
+        :name="CONTACT_FIELD.MESSAGE"
+        :label="props.copy.messageLabel"
+        :maxlength="CONTACT_LIMIT.MESSAGE"
+        :placeholder="props.copy.messagePlaceholder"
+        :error="errorText(errors.message)"
       />
 
-      <div class="flex flex-col gap-2">
-        <div class="flex items-start gap-3">
-          <input
-            :id="CONTACT_FORM_ID.CONSENT"
-            v-model="consent"
-            type="checkbox"
-            :name="CONTACT_FIELD.CONSENT"
-            :aria-invalid="errors.consent ? 'true' : undefined"
-            :aria-describedby="errors.consent ? `${CONTACT_FORM_ID.CONSENT}-error` : undefined"
-            class="mt-0.5 size-6 shrink-0 cursor-pointer rounded-sm accent-text-heading"
-          />
-          <label :for="CONTACT_FORM_ID.CONSENT" class="type-body-sm text-text">
-            {{ props.copy.consent }}
-            <a
-              :href="props.links.privacy"
-              class="font-semibold text-link underline underline-offset-3"
-            >
-              {{ props.copy.privacy }}
-            </a>
-          </label>
-        </div>
-        <FieldError
-          v-if="errors.consent"
-          :id="`${CONTACT_FORM_ID.CONSENT}-error`"
-          :text="errorText(errors.consent)"
-        />
-      </div>
+      <TrapField v-model="trap" />
+
+      <ConsentField
+        :id="CONTACT_FORM_ID.CONSENT"
+        v-model="consent"
+        :name="CONTACT_FIELD.CONSENT"
+        :text="props.copy.consent"
+        :link-label="props.copy.privacy"
+        :href="props.links.privacy"
+        :error="errorText(errors.consent)"
+      />
     </fieldset>
 
     <button

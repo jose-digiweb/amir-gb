@@ -70,6 +70,22 @@ export type HomeEvent = {
 };
 
 /**
+ * The {@link GeneralMeeting} type
+ * @description The next general meeting as the join page's strip shows it
+ */
+export type GeneralMeeting = {
+  id: string;
+  href: string;
+  title: string;
+  startsAt: Date;
+  endsAt?: Date;
+  place?: string;
+  isOnline: boolean;
+  image?: MediaImage;
+  isDutchOnly: boolean;
+};
+
+/**
  * The {@link WeeklyActivity} type
  * @description A weekly activity as its tile shows it
  */

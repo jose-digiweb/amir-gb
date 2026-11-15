@@ -1,7 +1,7 @@
 // Dependencies
 import {
   CLOCK_TIME,
-  HOME_CACHE,
+  CONTENT_CACHE,
   SITE_TIME_ZONE,
   WEEKDAYS,
   WEEKLY_TINTS,
@@ -231,13 +231,13 @@ function capitalise(text: string): string {
 }
 
 /**
- * The {@link cacheHomePage} helper
- * @description Caches the home page at the edge for a while and tags it so publishing in EmDash purges it
+ * The {@link cacheContentPage} helper
+ * @description Caches a page that shows CMS content at the edge for a while and tags it so publishing in EmDash purges it
  * @param {AstroGlobal["cache"]} cache - The page route's cache, set before rendering starts so the headers carry it
- * @param {CacheHint[]} hints - The cache hints from the home page's queries
+ * @param {CacheHint[]} hints - The cache hints from the page's queries
  * @returns {void}
  */
-export function cacheHomePage(
+export function cacheContentPage(
   cache: Pick<AstroGlobal["cache"], "enabled" | "set">,
   hints: CacheHint[],
 ): void {
@@ -247,8 +247,24 @@ export function cacheHomePage(
   }
 
   // Keep the page for a while, then tag it with everything it read
-  cache.set({ maxAge: HOME_CACHE.MAX_AGE, swr: HOME_CACHE.STALE_WHILE_REVALIDATE });
+  cache.set({ maxAge: CONTENT_CACHE.MAX_AGE, swr: CONTENT_CACHE.STALE_WHILE_REVALIDATE });
   for (const hint of hints) {
     cache.set(hint);
   }
+}
+
+/**
+ * The {@link toOptionalDate} helper
+ * @description Reads a date field that an editor may leave empty
+ * @param {string | undefined} value - The stored date, if any
+ * @returns {Date | undefined} The date, or undefined when the field is empty
+ */
+export function toOptionalDate(value: string | undefined): Date | undefined {
+  // An empty field has no date
+  if (!value) {
+    return undefined;
+  }
+
+  // A stored date is read as one
+  return new Date(value);
 }

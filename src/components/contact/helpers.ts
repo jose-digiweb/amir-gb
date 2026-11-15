@@ -1,14 +1,12 @@
 // Dependencies
 import { getTranslations } from "../../i18n/helpers";
+import { CONTACT_ERROR, CONTACT_TOPIC_LABEL, CONTACT_TOPICS } from "../../lib/contact/constants";
 import {
   ANSWER_LANGUAGE,
   ANSWER_LANGUAGE_IN_SENTENCE,
   ANSWER_LANGUAGE_LABEL,
   ANSWER_LANGUAGES,
-  CONTACT_ERROR,
-  CONTACT_TOPIC_LABEL,
-  CONTACT_TOPICS,
-} from "../../lib/contact/constants";
+} from "../../site/constants";
 import { CONTACT_ERROR_LABEL, CONTACT_SUMMARY_TITLE } from "./constants";
 
 // Types

@@ -1,5 +1,5 @@
 // Dependencies
-import { BEAD, LATTICE, LATTICE_PIECE, LOZENGE, WEAVE } from "./constants";
+import { BEAD, LATTICE, LATTICE_PIECE, LOZENGE, OPEN_PLACE, WEAVE } from "./constants";
 
 // Types
 import type { BeadRing, LatticeLayout, LatticePiece, PlacedPiece, RingSpec } from "./types";
@@ -8,10 +8,13 @@ import type { BeadRing, LatticeLayout, LatticePiece, PlacedPiece, RingSpec } fro
  * The {@link getWovenPath} helper
  * @description Draws the cells of a woven diamond as threads, keeping the cells a test accepts
  * @param {number} radius - Cells from the centre to the tip
- * @param {(distance: number) => boolean} isFilled - Whether a cell at this distance from the centre is woven
+ * @param {(distance: number, row: number, column: number) => boolean} isFilled - Whether a cell is woven, from its distance to the centre and its row and column counted from the centre
  * @returns {string} An SVG path of one thread per woven cell
  */
-export function getWovenPath(radius: number, isFilled: (distance: number) => boolean): string {
+export function getWovenPath(
+  radius: number,
+  isFilled: (distance: number, row: number, column: number) => boolean,
+): string {
   const size = radius * 2 + 1;
   const threads: string[] = [];
 
@@ -20,7 +23,7 @@ export function getWovenPath(radius: number, isFilled: (distance: number) => boo
     for (let column = 0; column < size; column += 1) {
       // A cell is woven when it lies inside the diamond and the test accepts its distance
       const distance = Math.abs(row - radius) + Math.abs(column - radius);
-      if (distance <= radius && isFilled(distance)) {
+      if (distance <= radius && isFilled(distance, row - radius, column - radius)) {
         const x = column * WEAVE.CELL;
         const y = row * WEAVE.CELL + WEAVE.GAP;
         threads.push(`M${x} ${y}h${WEAVE.CELL}v${WEAVE.THREAD}h-${WEAVE.CELL}z`);
@@ -43,6 +46,26 @@ export function getNestedLozengePath(): string {
     (distance) =>
       (LOZENGE.NESTED_RADIUS - distance) % LOZENGE.NESTED_RING_STEP < LOZENGE.NESTED_RING_WIDTH,
   );
+}
+
+/**
+ * The {@link getOpenPlacePath} helper
+ * @description The open place in the members lattice: a member piece's outline with a plus inside, waiting for someone
+ * @returns {string} The SVG path, in a member piece's square of 9 cells
+ */
+export function getOpenPlacePath(): string {
+  return getWovenPath(LOZENGE.PIECE_RADIUS, (distance, row, column) => {
+    // The outline is the piece's outer ring
+    if (distance === LOZENGE.PIECE_RADIUS) {
+      return true;
+    }
+
+    // The plus is the centre row and column, short of the ring
+    return (
+      (row === 0 && Math.abs(column) <= OPEN_PLACE.PLUS_ARM) ||
+      (column === 0 && Math.abs(row) <= OPEN_PLACE.PLUS_ARM)
+    );
+  });
 }
 
 /**

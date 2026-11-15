@@ -1,0 +1,54 @@
+---
+// Dependencies
+import { ArrowRight } from "@lucide/astro";
+import { INTL_LOCALE } from "../../i18n/constants";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { getEventWhen } from "../../lib/content/helpers";
+import { OPENER_TONE } from "../ui/constants";
+
+// Components
+import DutchOnlyMark from "../site/DutchOnlyMark.astro";
+import Opener from "../ui/Opener.astro";
+import MeetingThumb from "./MeetingThumb.astro";
+
+// Types
+import type { GeneralMeeting } from "../../lib/content/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the MeetingStrip component, the next general meeting as a navy strip that opens its event page
+ */
+type Props = {
+  /** The meeting. */
+  meeting: GeneralMeeting;
+};
+
+// Read the meeting and write when and where in the page's language
+const { meeting } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const when = getEventWhen(meeting.startsAt, meeting.endsAt, INTL_LOCALE[locale], t["weekly.until"]);
+const where = [meeting.place, meeting.isOnline ? t["events.online"] : undefined]
+  .filter(Boolean)
+  .join(` ${t["events.and"]} `);
+const meta = [when, where].filter(Boolean).join(" · ");
+---
+
+<a
+  href={meeting.href}
+  class="group flex touch-manipulation flex-col items-start gap-4 rounded-lg bg-surface-brand p-5 text-on-brand transition-[translate,scale] duration-fast ease-standard select-none hover:-translate-y-1 focus-visible:outline-focus-on-brand active:scale-98 tablet:flex-row tablet:items-center tablet:gap-6 tablet:p-6"
+>
+  <MeetingThumb image={meeting.image} startsAt={meeting.startsAt} />
+  <div class="flex flex-1 flex-col gap-1.5">
+    <Opener label={t["joinPage.meetingOpener"]} tone={OPENER_TONE.ON_BRAND} />
+    <p class="type-h3 text-balance">
+      {meeting.title}
+      {meeting.isDutchOnly ? <DutchOnlyMark /> : null}
+    </p>
+    <p class="type-body-sm text-pretty text-on-brand-muted">{meta}</p>
+  </div>
+  <span class="inline-flex h-control shrink-0 items-center gap-2 rounded-pill bg-surface px-5 type-button-sm text-text-heading transition-colors duration-fast group-hover:bg-selected [&_svg]:size-icon-sm">
+    {t["joinPage.meetingAction"]}
+    <ArrowRight />
+  </span>
+</a>

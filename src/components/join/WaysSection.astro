@@ -1,0 +1,57 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { getWayCards } from "./helpers";
+
+// Components
+import DecorBead from "../ui/DecorBead.astro";
+import Opener from "../ui/Opener.astro";
+import WovenShade from "../ui/WovenShade.astro";
+import MeetingStrip from "./MeetingStrip.astro";
+import WayCard from "./WayCard.astro";
+
+// Types
+import type { GeneralMeeting } from "../../lib/content/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the WaysSection component: How you can take part, four ways on paper, and the next general meeting when one is planned
+ */
+type Props = {
+  /** The next general meeting, when one is planned. */
+  meeting?: GeneralMeeting;
+};
+
+// Read the meeting and prepare the copy and the four ways
+const { meeting } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const cards = getWayCards(locale);
+---
+
+<section
+  aria-labelledby="ways-title"
+  class="relative isolate -mt-8 overflow-hidden rounded-t-xl bg-bg px-margin pt-12 pb-20 tablet:-mt-10 tablet:px-margin-md tablet:pt-16 tablet:pb-24 desktop:-mt-14 desktop:px-margin-lg desktop:pt-24 desktop:pb-36"
+>
+  <WovenShade />
+  <DecorBead ringed class="top-14 right-24 hidden size-7 desktop:block" />
+
+  <div class="flex flex-col gap-2.5">
+    <Opener label={t["joinPage.waysOpener"]} />
+    <h2 id="ways-title" class="type-section-title text-balance text-text-heading">
+      {t["joinPage.waysTitle"]}
+    </h2>
+  </div>
+  <ul class="mt-6 grid grid-cols-1 gap-3 tablet:grid-cols-2 tablet:gap-5 desktop:mt-10 desktop:grid-cols-4">
+    {cards.map((card) => (
+      <li>
+        <WayCard card={card} />
+      </li>
+    ))}
+  </ul>
+  {meeting ? (
+    <div class="mt-4 desktop:mt-5">
+      <MeetingStrip meeting={meeting} />
+    </div>
+  ) : null}
+</section>

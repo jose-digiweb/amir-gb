@@ -1,0 +1,24 @@
+---
+// Types
+import type { FeeSentence } from "./types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the WayText component, a way card's sentence with the fee marked as a fact still to come
+ */
+type Props = {
+  /** The sentence, cut where the fee goes. */
+  sentence: FeeSentence;
+};
+
+// Read the sentence
+const { sentence } = Astro.props;
+---
+
+<p class="flex-1 type-body text-pretty text-text">
+  {sentence.before}
+  {sentence.fee ? (
+    <mark class="rounded-sm bg-warning-bg px-1 text-warning">{sentence.fee}</mark>
+  ) : null}
+  {sentence.after}
+</p>
