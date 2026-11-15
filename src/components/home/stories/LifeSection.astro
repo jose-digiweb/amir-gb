@@ -11,6 +11,7 @@ import { getStoryLayout } from "./helpers";
 // Components
 import Button from "../../ui/Button.astro";
 import Opener from "../../ui/Opener.astro";
+import OpenerDots from "../OpenerDots.astro";
 import WovenShade from "../../ui/WovenShade.astro";
 import OneStory from "./OneStory.astro";
 import StoryTile from "./StoryTile.astro";
@@ -49,7 +50,10 @@ const isWall = layout === STORY_LAYOUT.WALL;
     aria-hidden="true"
     class="life-blob absolute top-0 -right-30 -z-10 mt-6 h-65 w-75 bg-bg-alt tablet:mt-10 tablet:h-95 tablet:w-110 desktop:mt-15 desktop:h-130 desktop:w-155"
   ></span>
-  <Opener label={t["stories.opener"]} />
+  <div class="relative">
+    <OpenerDots id="opener-dots-life" />
+    <Opener label={t["stories.opener"]} />
+  </div>
   <div class="flex flex-wrap items-end justify-between gap-x-4 gap-y-2 pb-2 tablet:pb-3 desktop:pb-6">
     <h2 id="life-title" class="type-section-title text-balance text-text-heading">
       {t["stories.title"]}

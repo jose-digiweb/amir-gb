@@ -1,0 +1,38 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { VALUE_LABEL } from "../../../site/constants";
+
+// Components
+import BeadRing from "../../opening/BeadRing.astro";
+import OpeningDrawing from "../../opening/OpeningDrawing.astro";
+import Sparkles from "../../opening/Sparkles.astro";
+import StarChip from "../../opening/StarChip.astro";
+
+// Types
+import type { SupportCrownLayout } from "./types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the SupportCrown component, the bead ring rising over the donation widget as an arc with a value chip on it, on phone
+ */
+type Props = {
+  /** The phone's drawing. */
+  layout: SupportCrownLayout;
+  /** A prefix for the drawing's own ids, unique on the page. */
+  id: string;
+  /** Size and placement classes from the caller. */
+  class?: string;
+};
+
+// Read the drawing and name its value chip in the page's language
+const { layout, id, class: className } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+const chipLabel = t[VALUE_LABEL[layout.chip.value]];
+---
+
+<OpeningDrawing frame={layout.frame} dots={layout.dots} id={id} class={className}>
+  <BeadRing ring={layout.ring} />
+  <StarChip x={layout.chip.x} y={layout.chip.y} label={chipLabel} />
+  <Sparkles sparkles={layout.sparkles} />
+</OpeningDrawing>

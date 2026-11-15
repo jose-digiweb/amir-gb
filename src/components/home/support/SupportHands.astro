@@ -1,0 +1,49 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { VALUE_LABEL } from "../../../site/constants";
+
+// Components
+import BeadRing from "../../opening/BeadRing.astro";
+import OpeningDrawing from "../../opening/OpeningDrawing.astro";
+import Sparkles from "../../opening/Sparkles.astro";
+import StarChip from "../../opening/StarChip.astro";
+import StitchedThread from "../../opening/StitchedThread.astro";
+import SupportPhoto from "./SupportPhoto.astro";
+
+// Types
+import type { SupportHandsLayout } from "./types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the SupportHands component, the joined hands in their bead ring with a stitched thread into the donation widget, on tablet and desktop
+ */
+type Props = {
+  /** The screen size's drawing. */
+  layout: SupportHandsLayout;
+  /** A prefix for the drawing's own ids, unique on the page. */
+  id: string;
+  /** Size and placement classes from the caller. */
+  class?: string;
+};
+
+// Read the drawing and name its value chip in the page's language
+const { layout, id, class: className } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+const chipLabel = t[VALUE_LABEL[layout.chip.value]];
+const threadId = `${id}-thread`;
+---
+
+<OpeningDrawing frame={layout.frame} dots={layout.dots} id={id} class={className}>
+  <StitchedThread
+    path={layout.thread.path}
+    stitch={layout.thread.stitch}
+    frame={layout.frame}
+    id={threadId}
+    order={0}
+  />
+  <BeadRing ring={layout.ring} />
+  <SupportPhoto disc={layout.photo} />
+  <StarChip x={layout.chip.x} y={layout.chip.y} label={chipLabel} />
+  <Sparkles sparkles={layout.sparkles} />
+</OpeningDrawing>

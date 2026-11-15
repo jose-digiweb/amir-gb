@@ -9,6 +9,7 @@ import { ROUTE } from "../../../site/constants";
 import Button from "../../ui/Button.astro";
 import MottoChips from "../../site/MottoChips.astro";
 import Opener from "../../ui/Opener.astro";
+import OpenerDots from "../OpenerDots.astro";
 import WovenShade from "../../ui/WovenShade.astro";
 import Cloth from "./Cloth.astro";
 
@@ -30,7 +31,8 @@ const joinHref = getRelativeLocaleUrl(locale, ROUTE.JOIN);
 >
   <WovenShade />
   <div class="flex flex-col tablet:flex-row tablet:items-center tablet:justify-between tablet:gap-6 desktop:gap-12">
-    <div class="flex flex-col tablet:w-81 desktop:w-132 desktop:shrink-0">
+    <div class="relative flex flex-col tablet:w-81 desktop:w-132 desktop:shrink-0">
+      <OpenerDots id="opener-dots-together" />
       <Opener label={t["together.opener"]} />
       <h2 id="together-title" class="mt-2 type-section-title text-text-heading desktop:mt-3">
         <span class="whitespace-nowrap tablet:block desktop:inline">

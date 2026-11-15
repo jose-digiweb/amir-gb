@@ -1,19 +1,22 @@
 ---
 // Dependencies
 import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { DESKTOP_SUPPORT_HANDS, PHONE_SUPPORT_CROWN, TABLET_SUPPORT_HANDS } from "./constants";
 
 // Components
 import DonationWidget from "../../support/DonationWidget.astro";
-import JoinedHandsRing from "../../support/JoinedHandsRing.astro";
 import Opener from "../../ui/Opener.astro";
 import WovenShade from "../../ui/WovenShade.astro";
+import OpenerDots from "../OpenerDots.astro";
+import SupportCrown from "./SupportCrown.astro";
+import SupportHands from "./SupportHands.astro";
 
 // Types
 import type { SupportState } from "../../../lib/donate/types";
 
 /**
  * The {@link Props} type
- * @description The props of the SupportSection component: Support AMIR-GB, people first, then one calm donation form, or the result of a gift in its place
+ * @description The props of the SupportSection component: Support AMIR-GB, the words and the joined hands as one group beside one calm donation form, or the result of a gift in its place
  */
 type Props = {
   /** The form, or the result of a return from Stripe, read by the page route. */
@@ -29,34 +32,43 @@ const t = getTranslations(getLocale(Astro.currentLocale));
   id="support"
   aria-labelledby="support-title"
   data-overlaps-footer
-  class="support relative isolate z-10 mx-3 overflow-hidden rounded-xl bg-bg-alt px-4 pt-9 pb-24 text-text tablet:mx-6 tablet:grid tablet:grid-cols-2 tablet:items-start tablet:gap-8 tablet:px-margin-md tablet:pt-13 desktop:mx-margin-lg desktop:px-margin-lg desktop:pt-26"
+  class="support relative isolate z-10 mx-3 overflow-hidden rounded-xl bg-bg-alt text-text tablet:mx-6 desktop:mx-margin-lg"
 >
   <WovenShade />
-  <span
-    aria-hidden="true"
-    class="absolute top-50 -left-15 -z-10 size-120 rounded-full bg-bg opacity-90 tablet:top-6 tablet:-right-15 tablet:left-auto desktop:top-10 desktop:size-160"
-  ></span>
-  <JoinedHandsRing
-    sizes="(min-width: 1180px) 520px, 312px"
-    class="absolute top-84 -left-16 -z-10 hidden size-91 tablet:block desktop:top-88 desktop:-left-22 desktop:size-150"
-  />
-  <div class="relative flex flex-col px-2 tablet:px-0">
-    <Opener label={t["support.opener"]} />
-    <h2
-      id="support-title"
-      class="mt-2.5 type-section-title text-text-heading tablet:mt-4 desktop:mt-5"
-    >
-      <span class="whitespace-nowrap tablet:block desktop:inline">{t["support.titleStart"]}</span>{" "}
-      <span class="whitespace-nowrap">{t["support.titleEnd"]}</span>
-    </h2>
-    <p class="mt-2.5 type-body text-pretty tablet:mt-3.5 desktop:mt-4.5 desktop:max-w-120 desktop:type-lead">
-      {t["support.text"]}
-    </p>
+  <div class="support-group mx-auto flex flex-col px-4 pt-9 pb-24 tablet:grid tablet:max-w-196.5 tablet:items-start tablet:gap-x-4 tablet:px-margin-md tablet:pt-13 tablet:pb-10 desktop:max-w-324 desktop:gap-x-24 desktop:px-margin-lg desktop:pt-26">
+    <div class="relative flex min-w-0 flex-col px-2 tablet:col-start-1 tablet:row-start-1 tablet:px-0 desktop:max-w-130">
+      <OpenerDots id="opener-dots-support" />
+      <Opener label={t["support.opener"]} />
+      <h2
+        id="support-title"
+        class="mt-2.5 type-section-title text-text-heading tablet:mt-4 desktop:mt-5"
+      >
+        <span class="whitespace-nowrap tablet:block desktop:inline">{t["support.titleStart"]}</span>{" "}
+        <span class="whitespace-nowrap">{t["support.titleEnd"]}</span>
+      </h2>
+      <p class="mt-2.5 type-body text-pretty tablet:mt-3.5 desktop:mt-4.5 desktop:max-w-110 desktop:type-lead">
+        {t["support.text"]}
+      </p>
+    </div>
+    <SupportHands
+      layout={TABLET_SUPPORT_HANDS}
+      id="support-tablet"
+      class="support-tablet relative -z-10 hidden h-auto justify-self-end tablet:col-start-1 tablet:row-start-2 tablet:block desktop:hidden"
+    />
+    <SupportHands
+      layout={DESKTOP_SUPPORT_HANDS}
+      id="support-desktop"
+      class="support-desktop relative -z-10 hidden h-auto justify-self-end desktop:col-start-1 desktop:row-start-2 desktop:block"
+    />
+    <div class="relative mt-19 tablet:col-start-2 tablet:row-span-2 tablet:row-start-1 tablet:mt-3 desktop:mt-9">
+      <SupportCrown
+        layout={PHONE_SUPPORT_CROWN}
+        id="support-phone"
+        class="absolute -top-32.5 left-1/2 -z-10 -translate-x-1/2 tablet:hidden"
+      />
+      <DonationWidget support={support} />
+    </div>
   </div>
-  <DonationWidget
-    support={support}
-    class="relative mt-6 tablet:mt-3 desktop:mt-6 desktop:w-115 desktop:justify-self-end"
-  />
 </section>
 
 <style>
@@ -79,13 +91,38 @@ const t = getTranslations(getLocale(Astro.currentLocale));
     margin-bottom: calc(var(--space-24) * -1);
 
     @variant tablet {
-      min-height: calc(var(--space-32) * 5 + var(--space-10));
+      min-height: calc(var(--space-32) * 5 + var(--space-20));
       margin-bottom: calc(var(--space-24) * -1 - var(--space-4));
     }
 
     @variant desktop {
-      min-height: calc(var(--space-32) * 6 + var(--space-12));
+      min-height: calc(var(--space-32) * 6 + var(--space-16) + var(--space-2));
       margin-bottom: calc(var(--space-32) * -1 - var(--space-6));
     }
+  }
+
+  /* The words take the left column with the drawing under them, the widget the right; the board's 330 and 360 on tablet */
+  .support-group {
+    @variant tablet {
+      grid-template-columns: minmax(0, 11fr) minmax(0, 12fr);
+      grid-template-rows: auto 1fr;
+    }
+
+    @variant desktop {
+      container-type: inline-size;
+      grid-template-columns: minmax(0, 1fr) calc(var(--spacing) * 115);
+    }
+  }
+
+  /* The tablet drawing spans the words column and the gap, so its thread reaches the widget */
+  .support :global(.support-tablet) {
+    width: calc(100% + var(--space-4));
+    margin-right: calc(var(--space-4) * -1);
+  }
+
+  /* The desktop drawing hangs from the widget's left edge across the gap, which keeps its thread clear of the words, and narrows below 1440 */
+  .support :global(.support-desktop) {
+    width: min(calc(var(--spacing) * 151), 53.2cqw);
+    margin-right: calc(var(--space-24) * -1);
   }
 </style>
