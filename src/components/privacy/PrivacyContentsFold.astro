@@ -1,0 +1,39 @@
+---
+// Dependencies
+import { ChevronDown } from "@lucide/astro";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+
+// Components
+import PrivacyContentsLinks from "./PrivacyContentsLinks.astro";
+
+// Types
+import type { ContentsLink } from "./types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the PrivacyContentsFold component, On this page as a closed fold-out above the text on phone and tablet
+ */
+type Props = {
+  /** Each section's anchor and heading, in order. */
+  links: ContentsLink[];
+};
+
+// Read the sections and the copy
+const { links } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+---
+
+<nav
+  aria-label={t["privacy.contents"]}
+  class="rounded-lg border border-border bg-surface desktop:hidden"
+>
+  <details class="group">
+    <summary class="flex min-h-14 cursor-pointer touch-manipulation list-none items-center justify-between gap-3 rounded-lg px-5 type-button text-text-heading select-none [&::-webkit-details-marker]:hidden">
+      {t["privacy.contents"]}
+      <ChevronDown class="size-5 shrink-0 transition-transform duration-base group-open:rotate-180" />
+    </summary>
+    <div class="border-t border-border px-5 py-2">
+      <PrivacyContentsLinks links={links} />
+    </div>
+  </details>
+</nav>

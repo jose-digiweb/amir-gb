@@ -1,0 +1,35 @@
+---
+/**
+ * The {@link Props} type
+ * @description The props of the PrivacyText component, the privacy text from its Markdown file at reading width, in the design system's type, with a hairline between sections
+ */
+type Props = Record<never, never>;
+---
+
+<div class="privacy-text flex max-w-180 min-w-0 flex-col gap-4">
+  <slot />
+</div>
+
+<style>
+  @reference "../../styles/global.css";
+
+  .privacy-text :global(h2) {
+    @apply scroll-mt-6 type-h2 text-balance text-text-heading;
+  }
+
+  .privacy-text :global(h2:not(:first-child)) {
+    @apply mt-5 border-t border-border pt-8;
+  }
+
+  .privacy-text :global(p) {
+    @apply max-w-measure type-body text-pretty text-text;
+  }
+
+  .privacy-text :global(strong) {
+    @apply font-semibold text-text-heading;
+  }
+
+  .privacy-text :global(a) {
+    @apply text-link underline underline-offset-4 hover:decoration-2;
+  }
+</style>

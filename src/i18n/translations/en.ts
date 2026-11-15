@@ -447,4 +447,24 @@ export const en = {
   "donatePage.taxText":
     "AMIR-GB is an SBBI, not an ANBI. We plan to apply, but for now gifts to us are not tax-deductible.",
   "donatePage.taxLink": "How we handle money",
+  "privacy.title": "Privacy at AMIR-GB",
+  "privacy.description":
+    "How AMIR-GB uses your details: only to help you, never sold, and no tracking on this website.",
+  "privacy.opener": "YOUR DATA",
+  "privacy.heading": "Privacy",
+  "privacy.summary":
+    "In short: we only use your details to help you, we never sell them, and this website does not follow you around.",
+  "privacy.updated": "Last updated",
+  "privacy.datePending": "[DATE]",
+  "privacy.promiseHelpTitle": "Only to help you",
+  "privacy.promiseHelpText":
+    "We use your details to answer you, to welcome members and to keep in touch. Nothing else.",
+  "privacy.promiseNeverSoldTitle": "Never sold, never shared",
+  "privacy.promiseNeverSoldText":
+    "We do not sell your details and do not give them to others, unless the law asks us to.",
+  "privacy.promiseNoTrackingTitle": "No tracking",
+  "privacy.promiseNoTrackingText":
+    "This website sets no tracking or advertising cookies, so there is no cookie banner.",
+  "privacy.contents": "On this page",
+  "privacy.contentsOpener": "ON THIS PAGE",
 };

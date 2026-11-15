@@ -1,0 +1,30 @@
+---
+// Types
+import type { ContentsLink } from "./types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the PrivacyContentsLinks component, the privacy text's sections as anchor links with a gold diamond, for both versions of On this page
+ */
+type Props = {
+  /** Each section's anchor and heading, in order. */
+  links: ContentsLink[];
+};
+
+// Read the sections
+const { links } = Astro.props;
+---
+
+<ul class="flex flex-col">
+  {links.map(({ slug, text }) => (
+    <li>
+      <a
+        href={`#${slug}`}
+        class="flex min-h-tap items-center gap-3 type-button text-text-heading underline-offset-4 hover:underline"
+      >
+        <span aria-hidden="true" class="size-1.5 shrink-0 rotate-45 bg-accent"></span>
+        {text}
+      </a>
+    </li>
+  ))}
+</ul>

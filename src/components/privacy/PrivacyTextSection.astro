@@ -1,0 +1,42 @@
+---
+// Dependencies
+import { render } from "astro:content";
+import { getContentsLinks } from "./helpers";
+
+// Components
+import WovenShade from "../ui/WovenShade.astro";
+import PrivacyContents from "./PrivacyContents.astro";
+import PrivacyContentsFold from "./PrivacyContentsFold.astro";
+import PrivacyText from "./PrivacyText.astro";
+
+// Types
+import type { CollectionEntry } from "astro:content";
+
+/**
+ * The {@link Props} type
+ * @description The props of the PrivacyTextSection component: the paper sheet over the opening with On this page and the full text
+ */
+type Props = {
+  /** The privacy text in the page's language. */
+  entry: CollectionEntry<"privacy">;
+};
+
+// Render the text and list its sections for On this page
+const { entry } = Astro.props;
+const { Content, headings } = await render(entry);
+const links = getContentsLinks(headings);
+---
+
+<div
+  data-footer-overlaps
+  class="relative isolate -mt-8 overflow-hidden rounded-t-xl bg-bg px-margin pt-12 pb-20 tablet:-mt-10 tablet:px-margin-md tablet:pt-16 tablet:pb-24 desktop:-mt-14 desktop:px-margin-lg desktop:pt-24 desktop:pb-32"
+>
+  <WovenShade />
+  <div class="mx-auto flex max-w-page flex-col gap-8 desktop:grid desktop:grid-cols-[--spacing(75)_minmax(0,1fr)] desktop:items-start desktop:gap-20">
+    <PrivacyContentsFold links={links} />
+    <PrivacyContents links={links} />
+    <PrivacyText>
+      <Content />
+    </PrivacyText>
+  </div>
+</div>

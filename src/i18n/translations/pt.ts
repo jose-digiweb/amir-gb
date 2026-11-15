@@ -453,4 +453,24 @@ export const pt: Translations = {
   "donatePage.taxText":
     "A AMIR-GB é uma SBBI, não uma ANBI. Planeamos candidatar-nos, mas por agora os donativos não são dedutíveis nos impostos.",
   "donatePage.taxLink": "Como gerimos o dinheiro",
+  "privacy.title": "Privacidade na AMIR-GB",
+  "privacy.description":
+    "Como a AMIR-GB usa os seus dados: só para o ajudar, nunca vendidos, e sem rastreio neste site.",
+  "privacy.opener": "OS SEUS DADOS",
+  "privacy.heading": "Privacidade",
+  "privacy.summary":
+    "Em resumo: só usamos os seus dados para o ajudar, nunca os vendemos, e este site não o segue para lado nenhum.",
+  "privacy.updated": "Última atualização",
+  "privacy.datePending": "[DATA]",
+  "privacy.promiseHelpTitle": "Só para o ajudar",
+  "privacy.promiseHelpText":
+    "Usamos os seus dados para lhe responder, receber novos membros e manter o contacto. Mais nada.",
+  "privacy.promiseNeverSoldTitle": "Nunca vendidos, nunca partilhados",
+  "privacy.promiseNeverSoldText":
+    "Não vendemos os seus dados nem os damos a outros, a não ser que a lei o exija.",
+  "privacy.promiseNoTrackingTitle": "Sem rastreio",
+  "privacy.promiseNoTrackingText":
+    "Este site não usa cookies de rastreio nem de publicidade, por isso não há aviso de cookies.",
+  "privacy.contents": "Nesta página",
+  "privacy.contentsOpener": "NESTA PÁGINA",
 };

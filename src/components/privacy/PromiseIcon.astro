@@ -1,0 +1,26 @@
+---
+// Dependencies
+import { EyeOff, Lock, ShieldCheck } from "@lucide/astro";
+import { PRIVACY_PROMISE } from "./constants";
+
+// Types
+import type { PrivacyPromise } from "./types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the PromiseIcon component, the Lucide icon of one privacy promise
+ */
+type Props = {
+  /** The promise to draw. */
+  promise: PrivacyPromise;
+  /** Size classes from the caller. */
+  class?: string;
+};
+
+// Read the promise and the size
+const { promise, class: className } = Astro.props;
+---
+
+{promise === PRIVACY_PROMISE.HELP ? <ShieldCheck class={className} /> : null}
+{promise === PRIVACY_PROMISE.NEVER_SOLD ? <Lock class={className} /> : null}
+{promise === PRIVACY_PROMISE.NO_TRACKING ? <EyeOff class={className} /> : null}
