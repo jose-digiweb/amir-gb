@@ -2,7 +2,7 @@
 // Dependencies
 import { INTL_LOCALE } from "../../../i18n/constants";
 import { getLocale, getTranslations } from "../../../i18n/helpers";
-import { getEventWhen } from "../../../lib/content/helpers";
+import { getEventMeta } from "../../../lib/content/helpers";
 
 // Components
 import DutchOnlyMark from "../../site/DutchOnlyMark.astro";
@@ -27,11 +27,7 @@ type Props = {
 const { event, class: className } = Astro.props;
 const locale = getLocale(Astro.currentLocale);
 const t = getTranslations(locale);
-const when = getEventWhen(event.startsAt, event.endsAt, INTL_LOCALE[locale], t["weekly.until"]);
-const where = [event.placeName, event.isOnline ? t["events.online"] : undefined]
-  .filter(Boolean)
-  .join(` ${t["events.and"]} `);
-const meta = [when, where].filter(Boolean).join(" · ");
+const meta = getEventMeta(event, INTL_LOCALE[locale], t);
 ---
 
 <a

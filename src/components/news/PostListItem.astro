@@ -1,0 +1,64 @@
+---
+// Dependencies
+import { INTL_LOCALE, LOCALE } from "../../i18n/constants";
+import { getLocale } from "../../i18n/helpers";
+import { getPostDay } from "../../lib/news/helpers";
+
+// Components
+import DutchOnlyMark from "../site/DutchOnlyMark.astro";
+import PostPhoto from "./PostPhoto.astro";
+import PostTypeTag from "./PostTypeTag.astro";
+
+// Types
+import type { NewsPost } from "../../lib/news/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the PostListItem component, one post in a list: a row with a small photo on phone, a card with a few words from tablet up
+ */
+type Props = {
+  /** The post. */
+  post: NewsPost;
+  /** Visibility classes from the caller. */
+  class?: string;
+};
+
+// Read the post and write its day in the page's language
+const { post, class: className } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const day = getPostDay(post.publishedAt, INTL_LOCALE[locale], new Date());
+---
+
+<li
+  data-post-id={post.id}
+  class:list={[
+    "border-b border-border py-3.5 last:border-b-0 tablet:border-b-0 tablet:py-0",
+    className,
+  ]}
+>
+  <a
+    href={post.href}
+    class="group grid touch-manipulation grid-cols-[--spacing(23)_minmax(0,1fr)] items-center gap-3.5 text-text-heading select-none tablet:flex tablet:flex-col tablet:items-stretch tablet:gap-3.5"
+  >
+    <span class="relative block size-23 overflow-hidden rounded-lg bg-surface-sunken transition-[translate] duration-fast ease-standard tablet:h-50 tablet:w-auto tablet:group-hover:-translate-y-1 desktop:h-55">
+      <PostPhoto
+        image={post.image}
+        type={post.type}
+        sizes="(min-width: 1180px) 400px, (min-width: 700px) 50vw, 92px"
+      />
+    </span>
+    <span class="flex min-w-0 flex-col gap-1.5 tablet:gap-3.5">
+      <span class="flex flex-wrap items-center gap-2 tablet:gap-3">
+        <PostTypeTag type={post.type} class="bg-bg-alt tablet:bg-surface" />
+        <span class="type-small text-text-muted tablet:type-body-sm">{day}</span>
+      </span>
+      <span class="type-h4 text-balance hyphens-auto group-hover:underline group-hover:decoration-2 group-hover:underline-offset-4 tablet:type-h3">
+        <span lang={post.isDutchOnly ? LOCALE.NL : undefined}>{post.title}</span>
+        {post.isDutchOnly ? <DutchOnlyMark /> : null}
+      </span>
+      {post.excerpt ? (
+        <span class="hidden type-body-sm text-pretty text-text tablet:block">{post.excerpt}</span>
+      ) : null}
+    </span>
+  </a>
+</li>

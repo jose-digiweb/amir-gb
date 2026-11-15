@@ -1,0 +1,32 @@
+---
+// Dependencies
+import { getLocale } from "../../i18n/helpers";
+import { cacheContentPage } from "../../lib/content/helpers";
+import { getNewsQuery, readNewsFilter, readNewsPage } from "../../lib/news/helpers";
+import { getNewsList } from "../../lib/news/queries";
+
+// Components
+import NewsPage from "../../components/news/NewsPage.astro";
+
+// The list shows CMS content, so it renders per request
+export const prerender = false;
+
+// Read the posts for the filter and the number of pages in the address
+const params = Astro.url.searchParams;
+const list = await getNewsList(
+  getLocale(Astro.currentLocale),
+  readNewsFilter(params),
+  readNewsPage(params),
+);
+
+// Any other query string moves to the one for what the page shows, so each list is cached once
+const query = getNewsQuery(list.filter, list.page);
+if (Astro.url.search !== query) {
+  return Astro.redirect(`${Astro.url.pathname}${query}`, 301);
+}
+
+// Cache the page at the edge, set before rendering starts
+cacheContentPage(Astro.cache, list.cacheHints);
+---
+
+<NewsPage list={list} />

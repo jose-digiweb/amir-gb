@@ -9,6 +9,14 @@ export const COLLECTION = {
 } as const;
 
 /**
+ * The {@link CONTENT_STATUS} constant
+ * @description The state of an entry the site shows: only what is published
+ */
+export const CONTENT_STATUS = {
+  PUBLISHED: "published",
+} as const;
+
+/**
  * The {@link POST_TYPE} constant
  * @description The kinds of News post: a board announcement, news, or a story for Life at AMIR
  */

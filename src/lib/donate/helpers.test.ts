@@ -11,7 +11,6 @@ import {
   getGiftFormHref,
   getReturnUrls,
   getSessionState,
-  getWhatsAppShareHref,
   parseAmount,
   readGiftReturn,
 } from "./helpers";
@@ -195,14 +194,6 @@ describe("getReturnUrls", () => {
 describe("getGiftFormHref", () => {
   it("points at the form on the same page, without the return", () => {
     expect(getGiftFormHref("/en/donate/")).toBe("/en/donate/#support");
-  });
-});
-
-describe("getWhatsAppShareHref", () => {
-  it("opens WhatsApp with the message and the address", () => {
-    const href = new URL(getWhatsAppShareHref("Give too:", PAGE));
-    expect(href.origin).toBe("https://wa.me");
-    expect(href.searchParams.get("text")).toBe(`Give too: ${PAGE}`);
   });
 });
 

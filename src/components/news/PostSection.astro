@@ -1,0 +1,72 @@
+---
+// Dependencies
+import { LOCALE } from "../../i18n/constants";
+
+// Components
+import RichText from "../content/RichText.astro";
+import DecorBead from "../ui/DecorBead.astro";
+import DotPatch from "../ui/DotPatch.astro";
+import WovenShade from "../ui/WovenShade.astro";
+import BoardSignature from "./BoardSignature.astro";
+import PostEventLink from "./PostEventLink.astro";
+import PostGallery from "./PostGallery.astro";
+import PostHeader from "./PostHeader.astro";
+import PostPhoto from "./PostPhoto.astro";
+import PostShare from "./PostShare.astro";
+
+// Types
+import type { NewsArticle } from "../../lib/news/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the PostSection component, the post itself: its header, photo, text at reading width, event, signature, photos from the day and Share
+ */
+type Props = {
+  /** Everything the post shows. */
+  article: NewsArticle;
+  /** Nothing follows it, so the footer overlaps it. */
+  isLast: boolean;
+};
+
+// Read the post and what it carries
+const { article, isLast } = Astro.props;
+const { post, content, event, boardNames, gallery } = article;
+const lang = post.isDutchOnly ? LOCALE.NL : undefined;
+const hasGallery = gallery.length > 0;
+const hasPhoto = Boolean(post.image);
+---
+
+<section
+  data-footer-overlaps={isLast ? "" : undefined}
+  class="relative isolate -mt-16 overflow-hidden bg-bg px-margin pt-24 pb-20 text-text-heading tablet:px-margin-md tablet:pt-28 tablet:pb-32 desktop:-mt-20 desktop:px-margin-lg desktop:pt-36 desktop:pb-32"
+>
+  <WovenShade />
+  <DecorBead ringed class="top-25 right-6 size-7 tablet:top-34 tablet:right-32 desktop:right-36" />
+  <DotPatch id="news-post" class="top-35 -left-5 h-35 w-50" />
+
+  <article class="mx-auto max-w-page">
+    <PostHeader post={post} />
+    <div
+      class:list={[
+        "relative mt-7 overflow-hidden rounded-lg bg-surface-sunken tablet:mt-10 desktop:mt-12",
+        { "h-65 tablet:h-110 desktop:h-150": hasPhoto, "h-45 tablet:h-60 desktop:h-72": !hasPhoto },
+      ]}
+    >
+      <PostPhoto
+        image={post.image}
+        type={post.type}
+        sizes="(min-width: 1280px) 1280px, 100vw"
+        priority
+      />
+    </div>
+    <div lang={lang} class="mx-auto mt-7 max-w-160 tablet:mt-12 desktop:max-w-180">
+      <div class="flex max-w-measure flex-col gap-6">
+        <RichText value={content} />
+        {event ? <PostEventLink event={event} /> : null}
+        {boardNames ? <BoardSignature names={boardNames} /> : null}
+      </div>
+    </div>
+    {hasGallery ? <PostGallery images={gallery} /> : null}
+    <PostShare title={post.title} />
+  </article>
+</section>

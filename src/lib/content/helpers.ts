@@ -11,6 +11,7 @@ import {
 
 // Types
 import type { AstroGlobal } from "astro";
+import type { Translations } from "../../i18n/types";
 import type { CacheHint } from "emdash";
 import type {
   EventDay,
@@ -218,6 +219,34 @@ export function getEventWhen(
 
   // With an end both times show
   return `${capitalise(day)} · ${time.format(start)} ${until} ${time.format(end)}`;
+}
+
+/**
+ * The {@link getEventMeta} helper
+ * @description An event's when and where in one line, in the page's language and in Dutch time
+ * @param {Pick<HomeEvent, "startsAt" | "endsAt" | "placeName" | "isOnline">} event - The event
+ * @param {string} locale - The page's date locale
+ * @param {Translations} t - The page's copy
+ * @returns {string} For example "Saturday 21 November · 14:30 to 18:00 · Rotterdam and online"
+ */
+export function getEventMeta(
+  event: Pick<HomeEvent, "startsAt" | "endsAt" | "placeName" | "isOnline">,
+  locale: string,
+  t: Translations,
+): string {
+  const when = getEventWhen(event.startsAt, event.endsAt, locale, t["weekly.until"]);
+  const places: string[] = [];
+
+  // The place, then online when it can be joined there
+  if (event.placeName) {
+    places.push(event.placeName);
+  }
+  if (event.isOnline) {
+    places.push(t["events.online"]);
+  }
+
+  // Join when and where, leaving out what is unknown
+  return [when, places.join(` ${t["events.and"]} `)].filter(Boolean).join(" · ");
 }
 
 /**

@@ -1,0 +1,56 @@
+---
+// Dependencies
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { POST_TYPE_COPY, POST_TYPES } from "../../lib/news/constants";
+import { getNewsQuery } from "../../lib/news/helpers";
+import { ROUTE } from "../../site/constants";
+
+// Components
+import NewsFilterChip from "./NewsFilterChip.astro";
+
+// Types
+import type { NewsFilter as Filter } from "../../lib/news/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the NewsFilter component, the chips that show every post or one type: one line that scrolls sideways on phone
+ */
+type Props = {
+  /** The type the list shows, or null for every post. */
+  filter: Filter;
+};
+
+// Read the filter and prepare a chip for every post and one for each type
+const { filter } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const base = getRelativeLocaleUrl(locale, ROUTE.NEWS);
+const types = POST_TYPES.map((type) => ({
+  type,
+  label: t[POST_TYPE_COPY[type].filter],
+  href: `${base}${getNewsQuery(type, 1)}`,
+  isCurrent: filter === type,
+}));
+---
+
+<nav
+  aria-label={t["news.filterLabel"]}
+  class="-mx-margin mt-3 [scrollbar-width:none] overflow-x-auto overscroll-x-contain px-margin tablet:mx-0 tablet:overflow-visible tablet:px-0"
+>
+  <ul class="flex w-max gap-2 py-1 tablet:w-auto tablet:flex-wrap">
+    <li class="flex">
+      <NewsFilterChip label={t["news.filterAll"]} href={base} isCurrent={filter === null} />
+    </li>
+    {types.map((chip) => (
+      <li class="flex">
+        <NewsFilterChip
+          label={chip.label}
+          href={chip.href}
+          isCurrent={chip.isCurrent}
+          type={chip.type}
+        />
+      </li>
+    ))}
+  </ul>
+</nav>

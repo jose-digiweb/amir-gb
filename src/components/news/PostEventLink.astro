@@ -1,0 +1,62 @@
+---
+// Dependencies
+import { ChevronRight } from "@lucide/astro";
+import { Image } from "emdash/ui";
+import { INTL_LOCALE } from "../../i18n/constants";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { getEventDay, getEventMeta } from "../../lib/content/helpers";
+import pintiPanel from "../../assets/woven/pinti-panel.svg";
+
+// Types
+import type { NewsEvent } from "../../lib/news/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the PostEventLink component, the card under an announcement that links to the event it is about
+ */
+type Props = {
+  /** The event. */
+  event: NewsEvent;
+};
+
+// Read the event and write its day, when and where in the page's language
+const { event } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const { day, month } = getEventDay(event.startsAt, INTL_LOCALE[locale]);
+const meta = getEventMeta(event, INTL_LOCALE[locale], t);
+---
+
+<a
+  href={event.href}
+  class="group flex touch-manipulation items-center gap-3.5 rounded-lg bg-surface p-3.5 text-text-heading inset-ring inset-ring-border transition-[background-color,scale] duration-fast ease-standard select-none hover:bg-hover-quiet active:scale-99"
+>
+  <span class="relative size-18 shrink-0 overflow-hidden rounded-md bg-surface-sunken">
+    {event.image ? (
+      <Image
+        image={event.image}
+        alt=""
+        sizes="72px"
+        class="absolute inset-0 size-full object-cover"
+      />
+    ) : (
+      <img
+        src={pintiPanel.src}
+        alt=""
+        loading="lazy"
+        class="absolute inset-0 size-full object-cover"
+      />
+    )}
+    <span class="absolute top-1 left-1 flex h-10 w-9 flex-col items-center justify-center rounded-sm bg-on-brand text-surface-brand shadow-sm">
+      <b class="type-h4 leading-none font-extrabold">{day}</b>
+      <span class="type-tag uppercase">{month}</span>
+    </span>
+  </span>
+  <span class="flex min-w-0 flex-1 flex-col gap-0.5">
+    <span class="type-h4 text-pretty group-hover:underline group-hover:decoration-2 group-hover:underline-offset-4">
+      {event.title}
+    </span>
+    <span class="type-body-sm text-text-muted">{meta}</span>
+  </span>
+  <ChevronRight class="size-icon-md shrink-0" />
+</a>

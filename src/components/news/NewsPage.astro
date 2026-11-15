@@ -1,0 +1,60 @@
+---
+// Dependencies
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { NEWS_LIST_STATE } from "../../lib/news/constants";
+import { getNewsQuery } from "../../lib/news/helpers";
+import { ROUTE } from "../../site/constants";
+
+// Components
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import NewsListSection from "./NewsListSection.astro";
+import NewsOpening from "./NewsOpening.astro";
+
+// Types
+import type { NewsList } from "../../lib/news/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the NewsPage component, the News list in the page's language
+ */
+type Props = {
+  /** What the list shows, read by the page route before rendering starts. */
+  list: NewsList;
+};
+
+// Read the list, its copy and the address of the next page while older posts remain
+const { list } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const base = getRelativeLocaleUrl(locale, ROUTE.NEWS);
+const isEnd = !list.hasMore && list.page > 1;
+let nextHref: string | undefined;
+if (list.hasMore) {
+  nextHref = `${base}${getNewsQuery(list.filter, list.page + 1)}`;
+}
+---
+
+<SiteLayout title={t["news.title"]} description={t["news.description"]}>
+  <NewsOpening
+    filter={list.filter}
+    hasPosts={list.state !== NEWS_LIST_STATE.EMPTY}
+    pinned={list.pinned}
+  />
+  <NewsListSection
+    state={list.state}
+    filter={list.filter}
+    featured={list.featured}
+    posts={list.posts}
+    nextHref={nextHref}
+    isEnd={isEnd}
+  />
+</SiteLayout>
+
+<script>
+  // Dependencies
+  import { enableOlderPosts } from "../../lib/news/helpers";
+
+  // Show older posts adds the next posts in place
+  enableOlderPosts();
+</script>

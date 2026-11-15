@@ -1,0 +1,51 @@
+---
+// Dependencies
+import { Image } from "emdash/ui";
+import pintiPanel from "../../assets/woven/pinti-panel.svg";
+
+// Components
+import PostTypeIcon from "./PostTypeIcon.astro";
+
+// Types
+import type { MediaImage, PostType } from "../../lib/content/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the PostPhoto component, a post's photo, or the woven pinti panel with its type's pictogram when it has none
+ */
+type Props = {
+  /** The post's photo, if it has one. */
+  image?: MediaImage;
+  /** The post's type, whose pictogram sits on the panel: a megaphone for an announcement. */
+  type: PostType;
+  /** The widths the photo is shown at, for the browser to pick a file. */
+  sizes: string;
+  /** The photo is the page's largest paint, so it loads first. */
+  priority?: boolean;
+};
+
+// Read the photo and how it loads
+const { image, type, sizes, priority = false } = Astro.props;
+---
+
+{image ? (
+  <Image
+    image={image}
+    alt=""
+    sizes={sizes}
+    priority={priority}
+    class="absolute inset-0 size-full object-cover"
+  />
+) : (
+  <span class="@container absolute inset-0 grid place-items-center">
+    <img
+      src={pintiPanel.src}
+      alt=""
+      loading="lazy"
+      class="absolute inset-0 size-full object-cover"
+    />
+    <span class="relative grid size-10 place-items-center rounded-full bg-on-brand text-surface-brand shadow-md @min-[10rem]:size-16">
+      <PostTypeIcon type={type} class="size-5 @min-[10rem]:size-8" />
+    </span>
+  </span>
+)}

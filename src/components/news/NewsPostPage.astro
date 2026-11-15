@@ -1,0 +1,34 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { fillPostTitle } from "../../lib/news/helpers";
+
+// Components
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import MoreNewsSection from "./MoreNewsSection.astro";
+import PostSection from "./PostSection.astro";
+
+// Types
+import type { NewsArticle } from "../../lib/news/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the NewsPostPage component, one News post in the page's language, or in Dutch when it has no translation
+ */
+type Props = {
+  /** Everything the page shows, read by the page route before rendering starts. */
+  article: NewsArticle;
+};
+
+// Read the article and its page title and summary
+const { article } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+const title = fillPostTitle(t["news.postTitle"], article.post.title);
+const description = article.post.excerpt ?? t["news.description"];
+const hasMore = article.more.length > 0;
+---
+
+<SiteLayout title={title} description={description}>
+  <PostSection article={article} isLast={!hasMore} />
+  {hasMore ? <MoreNewsSection posts={article.more} /> : null}
+</SiteLayout>

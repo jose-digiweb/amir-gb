@@ -1,0 +1,30 @@
+---
+// Dependencies
+import { Globe } from "@lucide/astro";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { POST_TYPE_COPY } from "../../lib/news/constants";
+
+// Types
+import type { PostType } from "../../lib/content/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the DutchOnlyNote component, the note above a post that exists only in Dutch, read on a page in another language
+ */
+type Props = {
+  /** The post's type, so the note names it. */
+  type: PostType;
+};
+
+// Read the type and the note's copy
+const { type } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+---
+
+<div role="note" class="flex gap-3 rounded-lg bg-info-bg px-4 py-3.5 text-text-heading">
+  <Globe class="mt-0.5 size-icon-md shrink-0" />
+  <p class="flex flex-col gap-0.5 type-body-sm">
+    <b class="font-heading font-bold">{t[POST_TYPE_COPY[type].dutchOnly]}</b>
+    <span class="text-text">{t["news.dutchOnlyText"]}</span>
+  </p>
+</div>

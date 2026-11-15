@@ -1,0 +1,62 @@
+---
+// Dependencies
+import { ArrowRight } from "@lucide/astro";
+import { INTL_LOCALE, LOCALE } from "../../i18n/constants";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { getPostDay } from "../../lib/news/helpers";
+
+// Components
+import DutchOnlyMark from "../site/DutchOnlyMark.astro";
+import PostPhoto from "./PostPhoto.astro";
+import PostTypeTag from "./PostTypeTag.astro";
+
+// Types
+import type { NewsPost } from "../../lib/news/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the FeaturedPostCard component, the newest post as a big card: photo, type, date, title and a few words
+ */
+type Props = {
+  /** The newest post. */
+  post: NewsPost;
+};
+
+// Read the post and write its day in the page's language
+const { post } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const day = getPostDay(post.publishedAt, INTL_LOCALE[locale], new Date());
+---
+
+<a
+  href={post.href}
+  class="group grid touch-manipulation overflow-hidden rounded-lg bg-surface text-text-heading inset-ring inset-ring-border transition-[translate,scale] duration-fast ease-standard select-none hover:-translate-y-1 active:scale-99 tablet:grid-cols-2 desktop:grid-cols-[7fr_5fr]"
+>
+  <span class="relative block h-50 overflow-hidden bg-surface-sunken tablet:h-auto tablet:min-h-80 desktop:min-h-105">
+    <PostPhoto
+      image={post.image}
+      type={post.type}
+      sizes="(min-width: 1180px) 700px, (min-width: 700px) 50vw, 100vw"
+    />
+  </span>
+  <span class="flex flex-col gap-3 p-5 tablet:justify-center tablet:gap-4 tablet:p-8 desktop:p-12">
+    <span class="flex flex-wrap items-center gap-3">
+      <PostTypeTag type={post.type} class="bg-bg-alt" />
+      <span class="type-body-sm text-text-muted">{day}</span>
+    </span>
+    <span class="type-h2 text-balance hyphens-auto desktop:type-h1 desktop:font-extrabold">
+      <span lang={post.isDutchOnly ? LOCALE.NL : undefined}>{post.title}</span>
+      {post.isDutchOnly ? <DutchOnlyMark /> : null}
+    </span>
+    {post.excerpt ? (
+      <span class="type-body text-pretty text-text desktop:type-lead">{post.excerpt}</span>
+    ) : null}
+    <span class="mt-1 inline-flex items-center gap-2 type-button tablet:h-control tablet:self-start tablet:rounded-pill tablet:border-2 tablet:border-border-strong tablet:px-5 tablet:type-button-sm tablet:group-hover:bg-hover-quiet">
+      <span class="underline decoration-2 underline-offset-4 tablet:no-underline">
+        {t["news.readMore"]}
+      </span>
+      <ArrowRight class="size-5" />
+    </span>
+  </span>
+</a>
