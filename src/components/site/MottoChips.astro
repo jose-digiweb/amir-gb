@@ -8,10 +8,10 @@ import StarMark from "../ui/StarMark.astro";
 
 /**
  * The {@link Props} type
- * @description The props of the MottoChips component, AMIR-GB's motto as starred chips, two by two on a phone
+ * @description The props of the MottoChips component, AMIR-GB's motto sewn on as dashed gold labels, two by two at every size so no label is left alone on a row; labels, never controls
  */
 type Props = {
-  /** How the chips lay out from tablet up, from the caller. */
+  /** Where the motto shows, from the caller. */
   class?: string;
 };
 
@@ -19,13 +19,31 @@ type Props = {
 const { class: className } = Astro.props;
 const t = getTranslations(getLocale(Astro.currentLocale));
 const values = Object.values(VALUE).map((value) => ({ value, label: t[VALUE_LABEL[value]] }));
+
+// Pair the values into the two rows they keep on a phone
+const half = values.length / 2;
+const rows = [values.slice(0, half), values.slice(half)];
 ---
 
-<ul aria-label={t["values.label"]} class:list={["grid grid-cols-2 gap-2", className]}>
-  {values.map((item) => (
-    <li class="flex min-h-chip items-center gap-2 rounded-pill bg-surface py-2 pr-4 pl-3 type-button-sm text-balance text-text-heading tablet:whitespace-nowrap">
-      <StarMark class="size-4 text-accent" />
-      {item.label}
-    </li>
+<div
+  role="list"
+  aria-label={t["values.label"]}
+  class:list={[
+    "flex flex-col items-start gap-2 desktop:grid desktop:grid-cols-[repeat(2,max-content)] desktop:justify-items-start",
+    className,
+  ]}
+>
+  {rows.map((row) => (
+    <div class="flex max-w-full flex-wrap items-center gap-2 desktop:contents">
+      {row.map((item) => (
+        <span
+          role="listitem"
+          class="flex min-h-chip max-w-max grow basis-[min-content] items-center gap-2 rounded-pill border-(length:--border-width-stitch) border-dashed border-stitch py-2 pr-3.5 pl-3 type-sewn-label text-balance text-text-heading uppercase select-none desktop:whitespace-nowrap"
+        >
+          <StarMark class="size-icon-xs shrink-0 text-accent" />
+          {item.label}
+        </span>
+      ))}
+    </div>
   ))}
-</ul>
+</div>
