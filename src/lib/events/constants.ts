@@ -1,13 +1,5 @@
-/**
- * The {@link EVENT_TYPE} constant
- * @description The kinds of event, stored in Dutch as EmDash's select shows them to editors
- */
-export const EVENT_TYPE = {
-  YOUTH: "jeugd",
-  HELP: "hulp",
-  CULTURE: "cultuur",
-  COMMUNITY: "gemeenschap",
-} as const;
+// Dependencies
+import { EVENT_TYPE } from "../content/constants";
 
 /**
  * The {@link EVENT_TYPES} constant

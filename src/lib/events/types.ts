@@ -1,19 +1,26 @@
 // Types
 import type { CacheHint, PortableTextBlock } from "emdash";
 import type { MediaImage, WeeklyActivity } from "../content/types";
-import type {
-  EVENT_LANGUAGES,
-  EVENT_PHASE,
-  EVENT_TYPE,
-  EVENTS_PARAM,
-  EVENTS_VIEW,
-} from "./constants";
+import type { EVENT_STATUS, EVENT_TYPE, FOR_WHOM } from "../content/constants";
+import type { EVENT_LANGUAGES, EVENT_PHASE, EVENTS_PARAM, EVENTS_VIEW } from "./constants";
 
 /**
  * The {@link EventType} type
  * @description One of the {@link EVENT_TYPE} values
  */
 export type EventType = (typeof EVENT_TYPE)[keyof typeof EVENT_TYPE];
+
+/**
+ * The {@link EventStatus} type
+ * @description One of the {@link EVENT_STATUS} values
+ */
+export type EventStatus = (typeof EVENT_STATUS)[keyof typeof EVENT_STATUS];
+
+/**
+ * The {@link ForWhom} type
+ * @description One of the {@link FOR_WHOM} values
+ */
+export type ForWhom = (typeof FOR_WHOM)[keyof typeof FOR_WHOM];
 
 /**
  * The {@link EventLanguage} type
@@ -50,6 +57,7 @@ export type EventItem = {
   href: string;
   title: string;
   type: EventType;
+  status: EventStatus;
   startsAt: Date;
   endsAt?: Date;
   dayKey: string;
@@ -65,6 +73,8 @@ export type EventItem = {
  * @description An event as its own page shows it
  */
 export type EventDetail = EventItem & {
+  originalStartsAt?: Date;
+  forWhom: ForWhom;
   address?: string;
   onlineLink?: string;
   registrationLink?: string;

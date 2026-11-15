@@ -1,0 +1,22 @@
+---
+// Dependencies
+import { CircleX } from "@lucide/astro";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+
+/**
+ * The {@link Props} type
+ * @description The props of the CancelledNote component, the note at the top of an event that does not go ahead
+ */
+type Props = Record<string, never>;
+
+// Read the copy
+const t = getTranslations(getLocale(Astro.currentLocale));
+---
+
+<div role="note" class="flex gap-3 rounded-lg bg-danger-bg px-4 py-3.5 text-text-heading">
+  <CircleX aria-hidden="true" class="mt-0.5 size-5.5 shrink-0 text-danger" />
+  <p class="flex flex-col gap-0.5 type-body-sm">
+    <b class="font-heading">{t["event.cancelledTitle"]}</b>
+    <span class="text-pretty text-text">{t["event.cancelledText"]}</span>
+  </p>
+</div>

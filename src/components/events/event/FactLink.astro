@@ -1,0 +1,20 @@
+---
+// Types
+import type { HTMLAttributes } from "astro/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the FactLink component, the small underlined link under a fact, such as Open in maps or Join online
+ */
+type Props = Omit<HTMLAttributes<"a">, "class">;
+
+// Pass the link's address and attributes to the element
+const props = Astro.props;
+---
+
+<a
+  {...props}
+  class="mt-1 inline-flex items-center gap-1.5 self-start type-button-sm text-link underline underline-offset-4 [&_svg]:size-4 [&[hidden]]:hidden"
+>
+  <slot />
+</a>
