@@ -12,7 +12,7 @@ import type { EventsView } from "../../lib/events/types";
 
 /**
  * The {@link Props} type
- * @description The props of the ViewSwitch component, the List and Calendar switch on the navy band; each half is a link that keeps the type filter
+ * @description The props of the ViewSwitch component, the List and Calendar switch on sand: a sunken track with the picked side raised; each half is a link that keeps the type filter
  */
 type Props = {
   /** The view the page shows. */
@@ -30,7 +30,7 @@ const t = getTranslations(getLocale(Astro.currentLocale));
 
 <nav
   aria-label={t["eventsPage.viewLabel"]}
-  class="grid w-62 shrink-0 grid-cols-2 rounded-pill bg-surface-inverse p-1 tablet:w-65"
+  class="grid w-62 shrink-0 grid-cols-2 rounded-pill bg-surface-sunken p-1 tablet:w-65"
 >
   <ViewSwitchLink href={listHref} isCurrent={view === EVENTS_VIEW.LIST}>
     <List aria-hidden="true" />

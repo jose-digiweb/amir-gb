@@ -28,7 +28,7 @@ const label = chip.type ? t[`eventType.${chip.type}`] : t["eventsPage.all"];
     href={chip.href}
     aria-current={chip.isCurrent ? "true" : undefined}
     class:list={[
-      "inline-flex h-chip touch-manipulation items-center gap-2 rounded-pill px-4 type-button-sm whitespace-nowrap transition-[background-color,scale] duration-base ease-standard select-none focus-visible:outline-focus-on-brand active:scale-97",
+      "inline-flex h-chip touch-manipulation items-center gap-2 rounded-pill px-4 type-button-sm whitespace-nowrap transition-[background-color,scale] duration-base ease-standard select-none active:scale-97",
       {
         "bg-accent text-on-accent-fill hover:bg-accent-hover": chip.isCurrent,
         "bg-surface-raised text-text-heading hover:bg-selected": !chip.isCurrent,

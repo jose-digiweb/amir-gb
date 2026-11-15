@@ -8,7 +8,6 @@ import {
   getLastPage,
   getMorePosts,
   getNewsQuery,
-  getPinnedPhotos,
   getPostDay,
   planNewsList,
   readNewsFilter,
@@ -103,22 +102,6 @@ describe("planNewsList", () => {
     const plan = planNewsList(mixed, POST_TYPE.NEWS, 1);
     expect(plan.featured?.id).toBe("a");
     expect(plan.posts.map((item) => item.id)).toEqual(["c"]);
-  });
-});
-
-describe("getPinnedPhotos", () => {
-  it("pins story photos that the page does not show, even on another post", () => {
-    const all = [
-      post("shown", POST_TYPE.STORY, "x"),
-      post("same-photo", POST_TYPE.STORY, "x"),
-      post("news", POST_TYPE.NEWS, "n"),
-      post("no-photo", POST_TYPE.STORY),
-      post("a", POST_TYPE.STORY, "a"),
-      post("b", POST_TYPE.STORY, "b"),
-      post("c", POST_TYPE.STORY, "c"),
-      post("d", POST_TYPE.STORY, "d"),
-    ];
-    expect(getPinnedPhotos(all, [all[0]]).map((photo) => photo.id)).toEqual(["a", "b", "c"]);
   });
 });
 

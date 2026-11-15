@@ -1,7 +1,9 @@
 // Types
 import type { TileColour } from "../../../lib/content/types";
 import type { HelpService } from "../../../lib/help/types";
-import type { Value } from "../../../site/types";
+import type { RingSpec } from "../../../lib/woven/types";
+import type { ValueChip } from "../../../site/types";
+import type { Disc, DotField, DrawingFrame, Sparkle, Stitch } from "../../opening/types";
 
 /**
  * The {@link ConstellationDisc} type
@@ -16,41 +18,17 @@ export type ConstellationDisc = {
 };
 
 /**
- * The {@link ConstellationPill} type
- * @description A value's pill, placed by its centre, in drawing units
- */
-export type ConstellationPill = {
-  value: Value;
-  x: number;
-  y: number;
-};
-
-/**
- * The {@link ConstellationLozenge} type
- * @description A small woven lozenge scattered round the constellation
- */
-export type ConstellationLozenge = {
-  x: number;
-  y: number;
-  size: number;
-  isRinged: boolean;
-};
-
-/**
  * The {@link ConstellationLayout} type
  * @description One screen size's woven constellation: the joined hands in a ring of beads, the services and values round it
  */
 export type ConstellationLayout = {
-  width: number;
-  height: number;
-  centreX: number;
-  centreY: number;
-  photoSize: number;
-  ring: { radius: number; count: number; size: number };
-  threads: { paths: readonly string[]; width: number; dash: string };
-  dots: { centreX: number; centreY: number; radius: number; step: number };
+  frame: DrawingFrame;
+  ring: RingSpec;
+  photo: Disc;
+  threads: { paths: readonly string[]; stitch: Stitch };
+  dots: DotField;
   discs: ConstellationDisc[];
-  pills: ConstellationPill[];
-  lozenges: ConstellationLozenge[];
+  pills: ValueChip[];
+  lozenges: Sparkle[];
   hasLabels: boolean;
 };

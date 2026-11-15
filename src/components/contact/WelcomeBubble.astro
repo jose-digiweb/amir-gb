@@ -1,0 +1,44 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { BUBBLE_BOX, BUBBLE_TAIL, WELCOME_COPY } from "./constants";
+
+// Types
+import type { WelcomeBubbleSpot } from "./types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the WelcomeBubble component, one speech bubble in the opening saying welcome in its language, its tail towards the logo
+ */
+type Props = {
+  /** The bubble's language, centre and tail. */
+  bubble: WelcomeBubbleSpot;
+};
+
+// Read the bubble, centre its box on its point and find its words
+const { bubble } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+const copy = WELCOME_COPY[bubble.language];
+const x = bubble.x - BUBBLE_BOX.WIDTH / 2;
+const y = bubble.y - BUBBLE_BOX.HEIGHT / 2;
+---
+
+<foreignObject x={x} y={y} width={BUBBLE_BOX.WIDTH} height={BUBBLE_BOX.HEIGHT} overflow="visible">
+  <div class="flex size-full items-center justify-center">
+    <p
+      lang={bubble.language}
+      class:list={[
+        "flex flex-col gap-1.5 rounded-lg bg-surface px-5 py-4 whitespace-nowrap text-text-heading shadow-md ring-5 ring-bg-alt",
+        {
+          "rounded-tl-sm": bubble.tail === BUBBLE_TAIL.TOP_LEFT,
+          "rounded-tr-sm": bubble.tail === BUBBLE_TAIL.TOP_RIGHT,
+          "rounded-br-sm": bubble.tail === BUBBLE_TAIL.BOTTOM_RIGHT,
+          "rounded-bl-sm": bubble.tail === BUBBLE_TAIL.BOTTOM_LEFT,
+        },
+      ]}
+    >
+      <span class="type-h3 font-extrabold">{t[copy.GREETING]}</span>
+      <span class="type-tag text-text-muted">{t[copy.LANGUAGE]}</span>
+    </p>
+  </div>
+</foreignObject>

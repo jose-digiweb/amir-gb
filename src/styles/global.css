@@ -17,16 +17,6 @@
   }
 }
 
-/* The header over a page's navy opening, on phone and tablet, while it is at the top of the page.
-   Only with scripts on, since a script turns it solid; its menu and language list keep their own look. */
-@custom-variant over-brand {
-  @media (scripting: enabled) and (width < --theme(--breakpoint-desktop)) {
-    &:where([data-over-brand] *):not(:where(dialog *, [popover] *)) {
-      @slot;
-    }
-  }
-}
-
 /* The visitor's appearance choice, for showing what is picked: none set is Automatic. */
 @custom-variant choice-auto (&:where(:root:not([data-theme]) *));
 @custom-variant choice-light (&:where([data-theme="light"] *));
@@ -58,4 +48,28 @@
   [data-theme-switching] *::after {
     transition: none !important;
   }
+}
+
+/* An opening's words column on desktop: the 80px margin and 560px of words. Its drawing reads the same
+   width, so the two cannot drift apart. */
+@layer base {
+  :root {
+    --opening-words: calc(var(--spacing) * 160);
+  }
+}
+
+@utility opening-words {
+  width: var(--opening-words);
+}
+
+/* An opening's drawing on desktop: right-aligned and centred on the opening's height, at most its
+   880px board crop wide, and narrower on smaller screens so it starts 40px inside the words column,
+   where only the column's padding is. */
+@utility opening-aside {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  translate: 0 -50%;
+  width: min(calc(var(--spacing) * 220), 100% - var(--opening-words) + calc(var(--spacing) * 10));
+  height: auto;
 }

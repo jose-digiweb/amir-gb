@@ -1,0 +1,27 @@
+---
+// Dependencies
+import { BookOpen, Camera, Megaphone, Newspaper } from "@lucide/astro";
+import { NOTICE } from "./constants";
+
+// Types
+import type { Notice } from "./types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the NoticeIcon component, the Lucide pictogram of one kind of post on the opening's cards
+ */
+type Props = {
+  /** The kind of post. */
+  notice: Notice;
+  /** Size classes from the caller. */
+  class?: string;
+};
+
+// Read the kind and the size
+const { notice, class: className } = Astro.props;
+---
+
+{notice === NOTICE.ANNOUNCEMENTS ? <Megaphone class={className} /> : null}
+{notice === NOTICE.NEWS ? <Newspaper class={className} /> : null}
+{notice === NOTICE.STORIES ? <BookOpen class={className} /> : null}
+{notice === NOTICE.PHOTOS ? <Camera class={className} /> : null}

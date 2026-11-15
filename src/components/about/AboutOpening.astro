@@ -1,21 +1,16 @@
 ---
 // Dependencies
-import { Picture } from "astro:assets";
 import { getLocale, getTranslations } from "../../i18n/helpers";
-import { DECOR_TONE, OPENER_TONE, WOVEN_SHADE_TONE } from "../ui/constants";
-import festival from "../../assets/photos/festival-crowd.jpg";
-import dancers from "../../assets/photos/wax-print-dancers.jpg";
+import { ABOUT_DRAWINGS } from "./constants";
 
 // Components
 import MottoChips from "../site/MottoChips.astro";
-import DecorBead from "../ui/DecorBead.astro";
-import DotPatch from "../ui/DotPatch.astro";
 import Opener from "../ui/Opener.astro";
-import WovenShade from "../ui/WovenShade.astro";
+import AboutDrawing from "./AboutDrawing.astro";
 
 /**
  * The {@link Props} type
- * @description The props of the AboutOpening component: We are AMIR-GB on navy, the story of the name and the motto, beside the dancers and the festival
+ * @description The props of the AboutOpening component: We are AMIR-GB on sand and the story of the name, beside the logo under its arcs with the motto
  */
 type Props = Record<string, never>;
 
@@ -25,69 +20,39 @@ const t = getTranslations(getLocale(Astro.currentLocale));
 
 <section
   aria-labelledby="about-title"
-  class="relative isolate -mt-16 overflow-hidden bg-surface-brand px-margin pt-28 pb-24 text-on-brand tablet:px-margin-md tablet:pt-36 tablet:pb-32 desktop:-mt-20 desktop:min-h-188 desktop:px-margin-lg desktop:pt-44 desktop:pb-32"
+  class="relative isolate -mt-16 overflow-hidden bg-bg-alt text-text-heading desktop:-mt-20 desktop:flex desktop:min-h-220 desktop:items-center desktop:pt-20 desktop:pb-14"
 >
-  <WovenShade tone={WOVEN_SHADE_TONE.ON_BRAND} />
-  <DecorBead tone={DECOR_TONE.ON_BRAND} class="top-23 left-5 size-4.5 tablet:hidden" />
-  <div class="absolute top-20 -right-14 -z-10 h-50 w-48 tablet:top-24 tablet:-right-15 tablet:h-88 tablet:w-85 desktop:top-28 desktop:right-16 desktop:aspect-square desktop:h-auto desktop:w-1/3 desktop:max-w-120">
-    <div class="opening-blob size-full overflow-hidden bg-border">
-      <Picture
-        src={dancers}
-        alt={t["about.dancersAlt"]}
-        widths={[192, 340, 480, 680, 960]}
-        sizes="(min-width: 1180px) 33vw, (min-width: 700px) 340px, 192px"
-        priority
-        class="size-full object-cover object-[70%_30%]"
-      />
-    </div>
-    <div class="absolute top-9/10 -left-1/5 hidden aspect-square w-2/5 overflow-hidden rounded-full bg-border ring-6 ring-surface-brand tablet:block desktop:top-7/10 desktop:ring-8">
-      <Picture
-        src={festival}
-        alt={t["about.festivalAlt"]}
-        widths={[136, 200, 272, 400]}
-        sizes="(min-width: 1180px) 13vw, 136px"
-        class="size-full object-cover"
-      />
-    </div>
-    <DecorBead ringed tone={DECOR_TONE.ON_BRAND} class="top-40 -left-14 size-7 tablet:hidden" />
-    <DecorBead
-      ringed
-      tone={DECOR_TONE.ON_BRAND}
-      class="top-4 -left-26 hidden size-9 tablet:block desktop:hidden"
-    />
-    <DecorBead
-      ringed
-      tone={DECOR_TONE.ON_BRAND}
-      class="top-10 -left-16 hidden size-11 desktop:block"
-    />
-    <DecorBead tone={DECOR_TONE.ON_BRAND} class="top-9/10 -right-1 hidden size-7 desktop:block" />
-    <DotPatch
-      id="about-opening"
-      tone={DECOR_TONE.ON_BRAND}
-      class="hidden tablet:top-28 tablet:-left-44 tablet:block tablet:h-35 tablet:w-50 desktop:top-56 desktop:-left-65 desktop:h-50 desktop:w-70"
-    />
-  </div>
+  <AboutDrawing
+    layout={ABOUT_DRAWINGS.PHONE}
+    id="about-phone"
+    class="pointer-events-none h-auto w-full tablet:hidden"
+  />
 
-  <div class="mx-auto max-w-page">
-    <div class="flex flex-col gap-3 tablet:w-108 tablet:gap-4 desktop:w-160 desktop:gap-5">
-      <Opener label={t["about.opener"]} tone={OPENER_TONE.ON_BRAND} />
+  <div class="relative flex flex-col gap-6 px-margin pb-20 tablet:w-130 tablet:px-margin-md tablet:pt-34 tablet:pb-0 desktop:opening-words desktop:gap-8 desktop:pt-0 desktop:pr-0 desktop:pl-margin-lg">
+    <div class="flex flex-col gap-3 tablet:gap-4">
+      <Opener label={t["about.opener"]} />
       <h1 id="about-title" class="type-hero">
         <span class="block">{t["about.titleStart"]}</span>
         <span class="block">{t["site.name"]}</span>
       </h1>
-      <p class="mt-16 type-body text-pretty text-on-brand-muted tablet:mt-0 desktop:max-w-xl desktop:type-lead">
-        {t["about.storyStart"]} <b class="font-semibold text-on-brand">{t["about.storyName"]}</b>{" "}
-        {t["about.storyEnd"]}
-      </p>
-      <MottoChips class="mt-1 tablet:w-fit desktop:flex desktop:flex-wrap" />
     </div>
+    <p class="type-body text-pretty text-text desktop:max-w-lg desktop:type-lead">
+      {t["about.storyStart"]} <b class="font-semibold text-text-heading">{t["about.storyName"]}</b>{" "}
+      {t["about.storyEnd"]}
+    </p>
+    <MottoChips class="tablet:hidden" />
   </div>
+
+  <div class="mx-auto hidden max-w-208.5 tablet:block desktop:hidden">
+    <AboutDrawing
+      layout={ABOUT_DRAWINGS.TABLET}
+      id="about-tablet"
+      class="pointer-events-none h-auto w-full"
+    />
+  </div>
+  <AboutDrawing
+    layout={ABOUT_DRAWINGS.DESKTOP}
+    id="about-desktop"
+    class="pointer-events-none opening-aside hidden desktop:block"
+  />
 </section>
-
-<style>
-  @reference "../../styles/global.css";
-
-  .opening-blob {
-    border-radius: 58% 42% 46% 54% / 48% 56% 44% 52%;
-  }
-</style>

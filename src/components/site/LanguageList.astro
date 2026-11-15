@@ -21,7 +21,7 @@ const languages = getLanguageLinks(locale, Astro.url.pathname);
   type="button"
   popovertarget="language-list"
   aria-label={t["language.button"]}
-  class="language-button group flex min-h-tap touch-manipulation items-center gap-1 rounded-pill px-3 type-button text-text-heading transition-colors duration-fast select-none hover:bg-hover-quiet active:bg-pressed-quiet over-brand:text-on-brand over-brand:hover:bg-hover-quiet-on-brand over-brand:focus-visible:outline-focus-on-brand over-brand:active:bg-pressed-quiet-on-brand [&:has(+:popover-open)]:bg-pressed-quiet over-brand:[&:has(+:popover-open)]:bg-pressed-quiet-on-brand"
+  class="language-button group flex min-h-tap touch-manipulation items-center gap-1 rounded-pill px-3 type-button text-text-heading transition-colors duration-fast select-none hover:bg-hover-quiet active:bg-pressed-quiet [&:has(+:popover-open)]:bg-pressed-quiet"
 >
   <span>{LANGUAGES[locale].code}</span>
   <ChevronDown class="size-icon-sm transition-transform duration-fast group-[&:has(+:popover-open)]:rotate-180" />

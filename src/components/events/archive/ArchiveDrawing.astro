@@ -1,0 +1,85 @@
+---
+// Dependencies
+import { INTL_LOCALE } from "../../../i18n/constants";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { EVENT_TYPE_TINT } from "../../../lib/events/constants";
+import { getValueChips } from "../../../site/helpers";
+import { KNOT_STITCH } from "./constants";
+import { getTimelineDrawing } from "./helpers";
+
+// Components
+import BeadRing from "../../opening/BeadRing.astro";
+import CentreDisc from "../../opening/CentreDisc.astro";
+import CentreLogo from "../../opening/CentreLogo.astro";
+import DrawingLabel from "../../opening/DrawingLabel.astro";
+import OpeningDrawing from "../../opening/OpeningDrawing.astro";
+import Sparkles from "../../opening/Sparkles.astro";
+import StarChip from "../../opening/StarChip.astro";
+import StitchedThread from "../../opening/StitchedThread.astro";
+import TintDisc from "../../opening/TintDisc.astro";
+import EventTypeIcon from "../EventTypeIcon.astro";
+
+// Types
+import type { TimelineMonth } from "../../../lib/events/types";
+import type { ArchiveDrawingLayout } from "./types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the ArchiveDrawing component, the opening's drawing: a stitched timeline from the logo through the recent months, the past events hanging off it as knots in their tints
+ */
+type Props = {
+  /** The screen size's drawing. */
+  layout: ArchiveDrawingLayout;
+  /** The recent months with their past events, oldest first. */
+  months: TimelineMonth[];
+  /** A prefix for the drawing's own ids, unique on the page. */
+  id: string;
+  /** Size and placement classes from the caller. */
+  class?: string;
+};
+
+// Read the drawing, lay the months on the timeline and tint each knot by its kind
+const { layout, months, id, class: className } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const timeline = getTimelineDrawing(months, layout, INTL_LOCALE[locale]);
+const knots = timeline.knots.map((knot) => ({ ...knot, tint: EVENT_TYPE_TINT[knot.type] }));
+const chips = getValueChips(layout.chips, t);
+---
+
+<OpeningDrawing frame={layout.frame} dots={layout.dots} id={id} class={className}>
+  <Sparkles sparkles={layout.sparkles} />
+  <StitchedThread
+    path={timeline.path}
+    stitch={layout.line.stitch}
+    frame={layout.frame}
+    id={`${id}-line`}
+    order={0}
+  />
+  {knots.map((knot, index) => (
+    <StitchedThread
+      path={knot.thread}
+      stitch={KNOT_STITCH}
+      frame={layout.frame}
+      id={`${id}-knot-${index}`}
+      order={index + 1}
+    />
+  ))}
+  <Sparkles sparkles={timeline.beads} />
+  <BeadRing ring={layout.ring} />
+  <CentreDisc disc={layout.disc}>
+    <CentreLogo />
+  </CentreDisc>
+  {layout.founded ? <DrawingLabel at={layout.founded} label={t["archive.founded"]} /> : null}
+  {timeline.months.map((mark) => (
+    <DrawingLabel at={mark} label={mark.label} />
+  ))}
+  {knots.map((knot) => (
+    <TintDisc x={knot.x} y={knot.y} size={layout.knot.size} tint={knot.tint}>
+      <EventTypeIcon type={knot.type} />
+    </TintDisc>
+  ))}
+  {chips.map((chip) => (
+    <StarChip x={chip.x} y={chip.y} label={chip.label} />
+  ))}
+</OpeningDrawing>

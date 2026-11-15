@@ -11,20 +11,16 @@ import type { ConstellationLayout } from "./types";
  * @description The phone's constellation from the Main board, in its 390 wide drawing: three icon discs, no values
  */
 export const PHONE_CONSTELLATION = {
-  width: 390,
-  height: 372,
-  centreX: 296,
-  centreY: 206,
-  photoSize: 150,
-  ring: { radius: 106, count: 20, size: 14 },
+  frame: { width: 390, height: 372, cropX: 0, cropY: 0 },
+  ring: { centreX: 296, centreY: 206, radius: 106, count: 20, size: 14 },
+  photo: { centreX: 296, centreY: 206, size: 150 },
   threads: {
     paths: [
       "M190.6 194.8 Q173.2 167.4 176.9 146.6",
       "M204.2 259.0 Q173.8 247.1 164.4 228.1",
       "M253.0 302.9 Q221.6 311.0 203.0 301.2",
     ],
-    width: 1.5,
-    dash: "4 4",
+    stitch: { width: 1.5, dash: "4 4" },
   },
   dots: { centreX: 296, centreY: 326, radius: 430, step: 40 },
   discs: [
@@ -46,12 +42,9 @@ export const PHONE_CONSTELLATION = {
  * @description The tablet's constellation from the V1-Tablet board, in its 834 wide drawing
  */
 export const TABLET_CONSTELLATION = {
-  width: 834,
-  height: 1112,
-  centreX: 578,
-  centreY: 664,
-  photoSize: 200,
-  ring: { radius: 140, count: 24, size: 20 },
+  frame: { width: 834, height: 1112, cropX: 0, cropY: 0 },
+  ring: { centreX: 578, centreY: 664, radius: 140, count: 24, size: 20 },
+  photo: { centreX: 578, centreY: 664, size: 200 },
   threads: {
     paths: [
       "M521.1 536.1 Q531.1 503.5 547.5 492.5",
@@ -61,8 +54,7 @@ export const TABLET_CONSTELLATION = {
       "M495.8 777.3 Q462.7 784.9 445.0 776.2",
       "M438.8 649.3 Q415.7 624.4 414.4 604.7",
     ],
-    width: 1.5,
-    dash: "5 5",
+    stitch: { width: 1.5, dash: "5 5" },
   },
   dots: { centreX: 578, centreY: 604, radius: 600, step: 40 },
   discs: [
@@ -88,15 +80,12 @@ export const TABLET_CONSTELLATION = {
 
 /**
  * The {@link DESKTOP_CONSTELLATION} constant
- * @description The desktop's constellation from the V1-Desktop board, cut to the part right of the words
+ * @description The desktop's constellation from the V1-Desktop board, cut to the part right of the words, which start at 560
  */
 export const DESKTOP_CONSTELLATION = {
-  width: 1440,
-  height: 920,
-  centreX: 1040,
-  centreY: 470,
-  photoSize: 190,
-  ring: { radius: 140, count: 24, size: 22 },
+  frame: { width: 1440, height: 920, cropX: 560, cropY: 0 },
+  ring: { centreX: 1040, centreY: 470, radius: 140, count: 24, size: 22 },
+  photo: { centreX: 1040, centreY: 470, size: 190 },
   threads: {
     paths: [
       "M941.0 371.0 Q920.6 318.5 868.1 298.1",
@@ -106,8 +95,7 @@ export const DESKTOP_CONSTELLATION = {
       "M1059.5 608.6 Q1041.8 671.3 1076.1 726.6",
       "M903.3 500.1 Q875.4 494.5 852.5 511.2",
     ],
-    width: 1.75,
-    dash: "6 6",
+    stitch: { width: 1.75, dash: "6 6" },
   },
   dots: { centreX: 1040, centreY: 470, radius: 620, step: 48 },
   discs: [
@@ -134,33 +122,8 @@ export const DESKTOP_CONSTELLATION = {
 } as const satisfies ConstellationLayout;
 
 /**
- * The {@link DESKTOP_CROP_X} constant
- * @description Where the desktop drawing starts: everything left of it belongs to the words
+ * The {@link CONSTELLATION_PHOTO_SIZES} constant
+ * @description The joined hands' sizes, shared by all three drawings so the page fetches one photo; the breakpoints repeat --breakpoint-desktop and --breakpoint-tablet
  */
-export const DESKTOP_CROP_X = 560;
-
-/**
- * The {@link CONSTELLATION_PHOTO} constant
- * @description The joined hands' widths and sizes, shared by all three drawings so the page fetches one photo; the breakpoints repeat --breakpoint-desktop and --breakpoint-tablet
- */
-export const CONSTELLATION_PHOTO = {
-  WIDTHS: [200, 300, 400, 480, 600],
-  SIZES: "(min-width: 1180px) 190px, (min-width: 700px) 17.9vh, 38.4vw",
-} as const;
-
-/**
- * The {@link PILL_BOX} constant
- * @description The box a value pill is centred in, wide enough for the longest value in any language
- */
-export const PILL_BOX = {
-  WIDTH: 280,
-  HEIGHT: 56,
-} as const;
-
-/**
- * The {@link STITCH_REVEAL} constant
- * @description How each gold thread sews itself in: its mask's stroke is this many times the thread's width, so the round caps are covered
- */
-export const STITCH_REVEAL = {
-  WIDTH_SCALE: 4,
-} as const;
+export const CONSTELLATION_PHOTO_SIZES =
+  "(min-width: 1180px) 190px, (min-width: 700px) 17.9vh, 38.4vw";

@@ -1,5 +1,5 @@
 // Dependencies
-import { POST_TYPE, SITE_TIME_ZONE } from "../content/constants";
+import { SITE_TIME_ZONE } from "../content/constants";
 import {
   COPY_LINK,
   NEWS_COUNT,
@@ -127,59 +127,23 @@ export function compareNewest(a: NewsPost, b: NewsPost): number {
 }
 
 /**
- * The {@link getPinnedPhotos} helper
- * @description The photos of the newest stories that the list does not show, for the opening's prints
- * @param {NewsPost[]} posts - Every post, newest first
- * @param {NewsPost[]} shown - The posts on the page
- * @returns {MediaImage[]} Up to three photos
- */
-export function getPinnedPhotos(posts: NewsPost[], shown: NewsPost[]): MediaImage[] {
-  const shownIds = new Set(shown.map((post) => post.id));
-  const shownPhotos = new Set(shown.map((post) => post.image?.id));
-  const photos: MediaImage[] = [];
-
-  // A print is a story's photo that appears nowhere else on the page, not even on another post
-  for (const post of posts) {
-    const image = post.image;
-    if (
-      post.type === POST_TYPE.STORY &&
-      image &&
-      !shownIds.has(post.id) &&
-      !shownPhotos.has(image.id) &&
-      !photos.some((photo) => photo.id === image.id)
-    ) {
-      photos.push(image);
-    }
-  }
-
-  // Pin the newest few
-  return photos.slice(0, NEWS_COUNT.PINNED);
-}
-
-/**
  * The {@link planNewsList} helper
  * @description Decides what the list page shows for a filter and a number of pages
  * @param {NewsPost[]} posts - Every post, newest first
  * @param {NewsFilter} filter - The type the list is filtered to, or null
  * @param {number} page - How many pages the address asks for
- * @returns {NewsListPlan} The state, the newest post, the rest, the prints and whether older posts remain
+ * @returns {NewsListPlan} The state, the newest post, the rest and whether older posts remain
  */
 export function planNewsList(posts: NewsPost[], filter: NewsFilter, page: number): NewsListPlan {
   // Before the first post there is only the message
   if (posts.length === 0) {
-    return { state: NEWS_LIST_STATE.EMPTY, posts: [], pinned: [], page: 1, hasMore: false };
+    return { state: NEWS_LIST_STATE.EMPTY, posts: [], page: 1, hasMore: false };
   }
 
-  // A type with no posts shows its own message, under the prints
+  // A type with no posts shows its own message
   const matching = posts.filter((post) => !filter || post.type === filter);
   if (matching.length === 0) {
-    return {
-      state: NEWS_LIST_STATE.EMPTY_TYPE,
-      posts: [],
-      pinned: getPinnedPhotos(posts, []),
-      page: 1,
-      hasMore: false,
-    };
+    return { state: NEWS_LIST_STATE.EMPTY_TYPE, posts: [], page: 1, hasMore: false };
   }
 
   // Show up to the page asked for, never past the last one
@@ -190,7 +154,6 @@ export function planNewsList(posts: NewsPost[], filter: NewsFilter, page: number
     state: NEWS_LIST_STATE.POSTS,
     featured,
     posts: rest,
-    pinned: getPinnedPhotos(posts, shown),
     page: shownPage,
     hasMore: matching.length > shown.length,
   };

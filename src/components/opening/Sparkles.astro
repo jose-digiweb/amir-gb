@@ -1,0 +1,29 @@
+---
+// Dependencies
+import { BEAD } from "../../lib/woven/constants";
+import { WOVEN_DEFS } from "../ui/constants";
+
+// Types
+import type { Sparkle } from "./types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the Sparkles component, woven beads placed one by one round a drawing
+ */
+type Props = {
+  /** Each bead's corner, size and kind. */
+  sparkles: readonly Sparkle[];
+};
+
+// Read the beads and work out each one's bead and transform
+const { sparkles } = Astro.props;
+const placed = sparkles.map((sparkle) => ({
+  key: `${sparkle.x}-${sparkle.y}`,
+  href: `#${sparkle.isRinged ? WOVEN_DEFS.RINGED : WOVEN_DEFS.SOLID}`,
+  transform: `translate(${sparkle.x} ${sparkle.y}) scale(${sparkle.size / BEAD.UNITS})`,
+}));
+---
+
+{placed.map((sparkle) => (
+  <use href={sparkle.href} transform={sparkle.transform} />
+))}

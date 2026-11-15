@@ -1,0 +1,27 @@
+---
+// Dependencies
+import { Picture } from "astro:assets";
+import { JOINED_HANDS_WIDTHS } from "./constants";
+import joinedHands from "../../assets/photos/joined-hands.jpg";
+
+/**
+ * The {@link Props} type
+ * @description The props of the JoinedHands component, the joined hands filling a centre disc, fetched first and once per page
+ */
+type Props = {
+  /** The page's one sizes value, the same for every copy so the browser fetches one photo. */
+  sizes: string;
+};
+
+// Read the sizes the page gives every copy
+const { sizes } = Astro.props;
+---
+
+<Picture
+  src={joinedHands}
+  alt=""
+  widths={[...JOINED_HANDS_WIDTHS]}
+  sizes={sizes}
+  priority
+  class="size-full object-cover"
+/>

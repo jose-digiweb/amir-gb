@@ -1,0 +1,48 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../i18n/helpers";
+
+// Components
+import TypeFilterChip from "./TypeFilterChip.astro";
+import ViewSwitch from "./ViewSwitch.astro";
+
+// Types
+import type { EventsView, TypeChip } from "../../lib/events/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the EventsViewControls component, the List and Calendar switch with the type chips under it
+ */
+type Props = {
+  /** The view the page shows. */
+  view: EventsView;
+  /** The list's address, with the filter. */
+  listHref: string;
+  /** The calendar's address, with the filter. */
+  calendarHref: string;
+  /** The filter chips, All first. */
+  chips: TypeChip[];
+};
+
+// Read the view, its links and the copy
+const { view, listHref, calendarHref, chips } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+---
+
+<div class="flex flex-col gap-4">
+  <ViewSwitch view={view} listHref={listHref} calendarHref={calendarHref} />
+  <ul
+    aria-label={t["eventsPage.filterLabel"]}
+    class="type-chips -mr-margin flex gap-2 overflow-x-auto py-1 pr-margin tablet:mr-0 tablet:flex-wrap tablet:pr-0"
+  >
+    {chips.map((chip) => (
+      <TypeFilterChip chip={chip} />
+    ))}
+  </ul>
+</div>
+
+<style>
+  .type-chips {
+    scrollbar-width: none;
+  }
+</style>

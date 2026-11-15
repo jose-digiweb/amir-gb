@@ -8,6 +8,7 @@ import { ROUTE } from "../../site/constants";
 
 // Components
 import SiteLayout from "../../layouts/SiteLayout.astro";
+import WovenDefs from "../ui/WovenDefs.astro";
 import NewsListSection from "./NewsListSection.astro";
 import NewsOpening from "./NewsOpening.astro";
 
@@ -36,11 +37,8 @@ if (list.hasMore) {
 ---
 
 <SiteLayout title={t["news.title"]} description={t["news.description"]}>
-  <NewsOpening
-    filter={list.filter}
-    hasPosts={list.state !== NEWS_LIST_STATE.EMPTY}
-    pinned={list.pinned}
-  />
+  <WovenDefs />
+  <NewsOpening filter={list.filter} hasPosts={list.state !== NEWS_LIST_STATE.EMPTY} />
   <NewsListSection
     state={list.state}
     filter={list.filter}

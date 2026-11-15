@@ -1,0 +1,47 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { TILE_COLOUR } from "../../lib/content/constants";
+import { NOTICE_LABEL } from "./constants";
+
+// Components
+import NoticeIcon from "./NoticeIcon.astro";
+
+// Types
+import type { NoticeCard } from "./types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the NoticeCardTile component, one kind of post as a tinted card hanging tilted from the opening's line
+ */
+type Props = {
+  /** The card's kind, tint, corner, size and tilt. */
+  card: NoticeCard;
+  /** Whether the card names its kind under the pictogram. */
+  hasLabel: boolean;
+};
+
+// Read the card, name its kind in the page's language and tilt it from its top
+const { card, hasLabel } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+const label = t[NOTICE_LABEL[card.notice]];
+const tilt = `rotate: ${card.turn}deg`;
+---
+
+<foreignObject x={card.x} y={card.y} width={card.width} height={card.height} overflow="visible">
+  <div
+    style={tilt}
+    class:list={[
+      "flex size-full origin-top flex-col items-center justify-center gap-2 rounded-lg pt-1.5 text-center text-text-heading shadow-md ring-5 ring-bg-alt",
+      {
+        "bg-tint-gold": card.tint === TILE_COLOUR.GOLD,
+        "bg-tint-forest": card.tint === TILE_COLOUR.FOREST,
+        "bg-tint-brick": card.tint === TILE_COLOUR.BRICK,
+        "bg-tint-navy": card.tint === TILE_COLOUR.NAVY,
+      },
+    ]}
+  >
+    <NoticeIcon notice={card.notice} class="size-icon-md shrink-0" />
+    {hasLabel ? <span class="type-button-sm">{label}</span> : null}
+  </div>
+</foreignObject>

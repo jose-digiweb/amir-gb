@@ -9,6 +9,7 @@ export {
   getEventTimes,
   getLongDate,
   getMonthKey,
+  getMonthMark,
   getMonthName,
   getMovedFromDate,
   getShortDate,
@@ -36,3 +37,4 @@ export {
   shiftMonth,
   toMonthKey,
 } from "./params";
+export { buildTimeline } from "./timeline";

@@ -28,13 +28,23 @@ import {
   JOIN_MODE_ID,
   JOIN_SUMMARY_TITLE,
   JOIN_WAY,
+  SEAT_CIRCLE,
+  SEAT_TINTS,
   WORD_JOINER,
 } from "./constants";
 
 // Types
 import type { Locale, TranslationKey, Translations } from "../../i18n/types";
 import type { JoinMode } from "../../lib/join/types";
-import type { FeeSentence, JoinFormCopy, JoinStepCopy, WayCardData } from "./types";
+import type { Disc } from "../opening/types";
+import type {
+  FeeSentence,
+  JoinFormCopy,
+  JoinStepCopy,
+  Seat,
+  SeatCircle,
+  WayCardData,
+} from "./types";
 
 /**
  * The {@link splitAtFee} helper
@@ -219,4 +229,27 @@ export function getWayCards(locale: Locale): WayCardData[] {
       isMain: false,
     },
   ];
+}
+
+/**
+ * The {@link getSeats} helper
+ * @description Places the seats this screen draws round the joined hands, tinted in turn from the top, with the open one marked
+ * @param {Disc} photo - The centre the seats sit round
+ * @param {SeatCircle} circle - The circle's radius, the seats' size, the places drawn and the open one
+ * @returns {Seat[]} Each seat with its centre and tint
+ */
+export function getSeats(photo: Disc, circle: SeatCircle): Seat[] {
+  const step = 360 / SEAT_CIRCLE.COUNT;
+
+  // Each place at its turn round the circle, in its tint
+  return circle.places.map((place) => {
+    const angle = ((SEAT_CIRCLE.START_TURN + step * place) * Math.PI) / 180;
+    return {
+      key: `${place}`,
+      x: Math.round(photo.centreX + circle.radius * Math.cos(angle)),
+      y: Math.round(photo.centreY + circle.radius * Math.sin(angle)),
+      tint: SEAT_TINTS[place % SEAT_TINTS.length] ?? TILE_COLOUR.GOLD,
+      isOpen: place === circle.open,
+    };
+  });
 }

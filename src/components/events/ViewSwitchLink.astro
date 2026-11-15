@@ -1,7 +1,7 @@
 ---
 /**
  * The {@link Props} type
- * @description The props of the ViewSwitchLink component, one half of the List and Calendar switch: white when it is the view shown
+ * @description The props of the ViewSwitchLink component, one half of the List and Calendar switch: raised when it is the view shown
  */
 type Props = {
   /** Where the view is. */
@@ -18,11 +18,10 @@ const { href, isCurrent } = Astro.props;
   href={href}
   aria-current={isCurrent ? "page" : undefined}
   class:list={[
-    "flex h-control touch-manipulation items-center justify-center gap-2 rounded-pill type-button transition-colors duration-base ease-standard select-none focus-visible:outline-focus-on-brand [&_svg]:size-4.5",
+    "flex h-control touch-manipulation items-center justify-center gap-2 rounded-pill type-button transition-colors duration-base ease-standard select-none [&_svg]:size-4.5",
     {
       "bg-surface-raised text-text-heading shadow-sm": isCurrent,
-      "text-on-brand-muted hover:bg-hover-quiet-on-brand active:bg-pressed-quiet-on-brand":
-        !isCurrent,
+      "text-text-heading hover:bg-hover-quiet active:bg-pressed-quiet": !isCurrent,
     },
   ]}
 >

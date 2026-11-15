@@ -1,83 +1,74 @@
 ---
 // Dependencies
 import { getLocale, getTranslations } from "../../i18n/helpers";
+import { NEWS_DRAWINGS } from "./constants";
 
 // Components
-import DecorBead from "../ui/DecorBead.astro";
-import DotPatch from "../ui/DotPatch.astro";
 import Opener from "../ui/Opener.astro";
-import WovenShade from "../ui/WovenShade.astro";
+import NewsDrawing from "./NewsDrawing.astro";
 import NewsFilter from "./NewsFilter.astro";
-import PinnedPrint from "./PinnedPrint.astro";
 
 // Types
-import type { MediaImage } from "../../lib/content/types";
 import type { NewsFilter as Filter } from "../../lib/news/types";
 
 /**
  * The {@link Props} type
- * @description The props of the NewsOpening component: News, one line and the filter, beside story photos pinned like prints from tablet up
+ * @description The props of the NewsOpening component: News on sand with one line and the filter, beside the logo holding a stitched line with the kinds of post pinned to it
  */
 type Props = {
   /** The type the list shows, or null for every post. */
   filter: Filter;
   /** Whether there are posts to filter. */
   hasPosts: boolean;
-  /** Up to three story photos the list does not show: two pinned on tablet, three on desktop. */
-  pinned: MediaImage[];
 };
 
 // Read the opening's content and copy
-const { filter, hasPosts, pinned } = Astro.props;
+const { filter, hasPosts } = Astro.props;
 const t = getTranslations(getLocale(Astro.currentLocale));
-const [first, second, third] = pinned;
 ---
 
 <section
   aria-labelledby="news-title"
-  class="relative isolate -mt-16 overflow-hidden bg-bg px-margin pt-28 pb-20 text-text-heading tablet:px-margin-md tablet:pt-34 tablet:pb-28 desktop:-mt-20 desktop:px-margin-lg desktop:pt-42 desktop:pb-28"
+  class="relative isolate -mt-16 overflow-hidden bg-bg-alt text-text-heading desktop:-mt-20 desktop:flex desktop:min-h-215 desktop:items-center desktop:pt-20 desktop:pb-14"
 >
-  <WovenShade />
-  <DecorBead ringed class="top-34 right-16 size-8 tablet:hidden" />
-  <DotPatch
-    id="news-opening"
-    class="top-28 right-5 h-30 w-40 tablet:right-15 tablet:h-45 tablet:w-65"
+  <NewsDrawing
+    layout={NEWS_DRAWINGS.PHONE}
+    id="news-phone"
+    class="pointer-events-none h-auto w-full tablet:hidden"
   />
-  <div
-    aria-hidden="true"
-    data-news-prints
-    class="absolute -z-10 hidden tablet:top-28 tablet:right-8 tablet:block tablet:aspect-3/2 tablet:w-3/8 desktop:top-28 desktop:right-18 desktop:aspect-2/1 desktop:w-5/12"
-  >
-    {first ? (
-      <PinnedPrint
-        image={first}
-        class="top-1/6 left-0 aspect-16/19 w-12/25 -rotate-6 desktop:top-1/8 desktop:aspect-23/27 desktop:w-3/8"
-      />
-    ) : null}
-    {second ? (
-      <PinnedPrint
-        image={second}
-        class="top-0 right-0 aspect-17/20 w-1/2 rotate-5 desktop:right-auto desktop:left-1/3 desktop:aspect-25/29 desktop:w-2/5 desktop:rotate-4"
-      />
-    ) : null}
-    {third ? (
-      <PinnedPrint
-        image={third}
-        class="top-1/4 right-0 hidden aspect-5/6 w-1/3 -rotate-3 desktop:block"
-      />
-    ) : null}
-  </div>
 
-  <div class="mx-auto max-w-page">
+  <div class="relative flex flex-col gap-6 px-margin pb-20 tablet:w-130 tablet:px-margin-md tablet:pt-34 tablet:pb-0 desktop:opening-words desktop:gap-8 desktop:pt-0 desktop:pr-0 desktop:pl-margin-lg">
     <div class="flex flex-col gap-3 tablet:gap-4">
       <Opener label={t["news.opener"]} />
       <h1 id="news-title" class="type-hero">
         {t["news.heading"]}
       </h1>
-      <p class="type-body text-pretty text-text tablet:max-w-sm desktop:max-w-xl desktop:type-lead">
-        {t["news.intro"]}
-      </p>
-      {hasPosts ? <NewsFilter filter={filter} /> : null}
     </div>
+    <p class="type-body text-pretty text-text desktop:max-w-lg desktop:type-lead">
+      {t["news.intro"]}
+    </p>
+    {hasPosts ? (
+      <div class="tablet:hidden desktop:block">
+        <NewsFilter filter={filter} />
+      </div>
+    ) : null}
   </div>
+
+  <div class="mx-auto hidden max-w-208.5 tablet:block desktop:hidden">
+    <NewsDrawing
+      layout={NEWS_DRAWINGS.TABLET}
+      id="news-tablet"
+      class="pointer-events-none h-auto w-full"
+    />
+  </div>
+  {hasPosts ? (
+    <div class="relative hidden px-margin-md pb-24 tablet:block desktop:hidden">
+      <NewsFilter filter={filter} />
+    </div>
+  ) : null}
+  <NewsDrawing
+    layout={NEWS_DRAWINGS.DESKTOP}
+    id="news-desktop"
+    class="pointer-events-none opening-aside hidden desktop:block"
+  />
 </section>

@@ -20,11 +20,7 @@ type Props = Record<string, never>;
 const t = getTranslations(getLocale(Astro.currentLocale));
 ---
 
-<SiteLayout
-  title={t["contactPage.title"]}
-  description={t["contactPage.description"]}
-  headerOverBrand
->
+<SiteLayout title={t["contactPage.title"]} description={t["contactPage.description"]}>
   <WovenDefs />
   <ContactOpening />
   <ReachSection />

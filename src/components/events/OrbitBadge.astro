@@ -1,0 +1,32 @@
+---
+// Components
+import EventTypeDot from "./EventTypeDot.astro";
+
+// Types
+import type { OrbitBadgeSpot } from "./types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the OrbitBadge component, one next event as a white date badge with its kind's dot on the opening's orbit
+ */
+type Props = {
+  /** The badge's place, day, month and kind. */
+  badge: OrbitBadgeSpot;
+  /** The badge's size, in drawing units. */
+  width: number;
+  height: number;
+};
+
+// Read the badge and place its box by the centre
+const { badge, width, height } = Astro.props;
+const x = badge.x - width / 2;
+const y = badge.y - height / 2;
+---
+
+<foreignObject x={x} y={y} width={width} height={height} overflow="visible">
+  <div class="flex size-full flex-col items-center justify-center gap-0.5 rounded-lg bg-surface text-text-heading shadow-md ring-5 ring-bg-alt">
+    <span class="type-h3 leading-none font-extrabold">{badge.day}</span>
+    <span class="type-tag text-text-muted uppercase">{badge.month}</span>
+    <EventTypeDot type={badge.type} class="mt-0.5 size-2" />
+  </div>
+</foreignObject>

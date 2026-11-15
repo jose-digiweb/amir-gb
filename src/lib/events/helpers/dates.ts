@@ -202,6 +202,21 @@ export function getMonthName(year: number, month: number, locale: string): strin
 }
 
 /**
+ * The {@link getMonthMark} helper
+ * @description A month's short name in capitals in the page's language, as the archive's timeline marks it
+ * @param {number} year - The year
+ * @param {number} month - The month, from 1
+ * @param {string} locale - The page's language
+ * @returns {string} For example "OKT" in Dutch, "OCT" in English
+ */
+export function getMonthMark(year: number, month: number, locale: string): string {
+  const name = new Intl.DateTimeFormat(locale, { month: "short", timeZone: "UTC" }).format(
+    new Date(Date.UTC(year, month - 1, 1)),
+  );
+  return name.replace(".", "").toLocaleUpperCase(locale);
+}
+
+/**
  * The {@link getMovedFromDate} helper
  * @description The date an event moved away from, written long, shown struck next to its new date
  * @param {Pick<EventDetail, "status" | "originalStartsAt">} event - The event's status and old start

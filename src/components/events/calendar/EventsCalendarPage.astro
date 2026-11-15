@@ -35,17 +35,14 @@ const listPath = getRelativeLocaleUrl(locale, ROUTE.EVENTS);
 const calendarPath = getRelativeLocaleUrl(locale, ROUTE.EVENTS_CALENDAR);
 ---
 
-<SiteLayout
-  title={t["eventsPage.calendarTitle"]}
-  description={t["eventsPage.description"]}
-  headerOverBrand
->
+<SiteLayout title={t["eventsPage.calendarTitle"]} description={t["eventsPage.description"]}>
   <WovenDefs />
   <EventsOpening
     view={EVENTS_VIEW.CALENDAR}
     listHref={buildEventsHref(listPath, { [EVENTS_PARAM.TYPE]: type })}
     calendarHref={buildEventsHref(calendarPath, { [EVENTS_PARAM.TYPE]: type })}
     chips={getTypeChips(calendarPath, type, { [EVENTS_PARAM.MONTH]: content.month.key })}
+    orbit={content.orbit}
   />
   <CalendarSection content={content} />
   <WeeklyAndPastSection

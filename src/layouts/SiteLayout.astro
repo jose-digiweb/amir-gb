@@ -13,19 +13,17 @@ type Props = {
   title: string;
   /** One-sentence summary for search results and link previews. */
   description: string;
-  /** The page opens on the navy band, so the header sits see-through over it on phone and tablet. */
-  headerOverBrand?: boolean;
 };
 
 // Pass the page's title and description to the document shell
-const { title, description, headerOverBrand = false } = Astro.props;
+const { title, description } = Astro.props;
 ---
 
 <BaseLayout title={title} description={description}>
   <slot name="head" slot="head" />
   <div class="flex min-h-svh flex-col">
     <slot name="announcement" />
-    <SiteHeader overBrand={headerOverBrand} />
+    <SiteHeader />
     <main class="flex-1">
       <slot />
     </main>

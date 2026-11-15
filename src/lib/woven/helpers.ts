@@ -1,5 +1,5 @@
 // Dependencies
-import { BEAD, LATTICE, LATTICE_PIECE, LOZENGE, OPEN_PLACE, WEAVE } from "./constants";
+import { BEAD, LATTICE, LATTICE_PIECE, LOZENGE, WEAVE } from "./constants";
 
 // Types
 import type { BeadRing, LatticeLayout, LatticePiece, PlacedPiece, RingSpec } from "./types";
@@ -46,26 +46,6 @@ export function getNestedLozengePath(): string {
     (distance) =>
       (LOZENGE.NESTED_RADIUS - distance) % LOZENGE.NESTED_RING_STEP < LOZENGE.NESTED_RING_WIDTH,
   );
-}
-
-/**
- * The {@link getOpenPlacePath} helper
- * @description The open place in the members lattice: a member piece's outline with a plus inside, waiting for someone
- * @returns {string} The SVG path, in a member piece's square of 9 cells
- */
-export function getOpenPlacePath(): string {
-  return getWovenPath(LOZENGE.PIECE_RADIUS, (distance, row, column) => {
-    // The outline is the piece's outer ring
-    if (distance === LOZENGE.PIECE_RADIUS) {
-      return true;
-    }
-
-    // The plus is the centre row and column, short of the ring
-    return (
-      (row === 0 && Math.abs(column) <= OPEN_PLACE.PLUS_ARM) ||
-      (column === 0 && Math.abs(row) <= OPEN_PLACE.PLUS_ARM)
-    );
-  });
 }
 
 /**
@@ -130,19 +110,58 @@ function getCentreTransform(centrePiece: LatticePiece, x: number, y: number): st
 
 /**
  * The {@link getBeadRing} helper
- * @description Strings beads round a circle, solid and ringed in turn, the first one at the top
+ * @description Strings beads round a circle, solid and ringed in turn, the first one at the top, leaving out the places asked for
  * @param {RingSpec} ring - The ring's centre, radius, bead count and bead size
+ * @param {readonly number[]} [gaps] - The places, counted from the top, that stay empty
  * @returns {BeadRing} Every bead with its transform, split by kind
  */
-export function getBeadRing(ring: RingSpec): BeadRing {
+export function getBeadRing(ring: RingSpec, gaps: readonly number[] = []): BeadRing {
+  const step = 360 / ring.count;
+  const places = Array.from({ length: ring.count }, (_, index) => index);
+
+  // The beads at every place that is not a gap
+  return placeBeads(
+    ring,
+    places.filter((index) => !gaps.includes(index)),
+    (index) => BEAD.START_TURN + step * index,
+  );
+}
+
+/**
+ * The {@link getBeadArc} helper
+ * @description Strings beads over the top half of a circle, from the left end to the right, solid and ringed in turn
+ * @param {RingSpec} arc - The arc's centre, radius, bead count and bead size
+ * @returns {BeadRing} Every bead with its transform, split by kind
+ */
+export function getBeadArc(arc: RingSpec): BeadRing {
+  const step = BEAD.ARC_TURN / (arc.count - 1);
+  const places = Array.from({ length: arc.count }, (_, index) => index);
+
+  // The beads from the left end of the arc over the top to the right end
+  return placeBeads(arc, places, (index) => BEAD.ARC_START_TURN + step * index);
+}
+
+/**
+ * The {@link placeBeads} helper
+ * @description Places beads on a circle at the given places, even places solid and odd ones ringed
+ * @param {RingSpec} ring - The circle's centre and radius, and the bead size
+ * @param {number[]} places - The places to fill, counted along the string
+ * @param {(index: number) => number} getTurn - The angle in degrees of a place
+ * @returns {BeadRing} Every bead with its transform, split by kind
+ */
+function placeBeads(
+  ring: RingSpec,
+  places: number[],
+  getTurn: (index: number) => number,
+): BeadRing {
   const solid: PlacedPiece[] = [];
   const ringed: PlacedPiece[] = [];
   const scale = ring.size / BEAD.UNITS;
   const half = ring.size / 2;
 
-  // Place each bead at its angle round the ring
-  for (let index = 0; index < ring.count; index += 1) {
-    const angle = ((BEAD.START_TURN + (360 / ring.count) * index) * Math.PI) / 180;
+  // Place each bead at its angle round the circle
+  for (const index of places) {
+    const angle = (getTurn(index) * Math.PI) / 180;
     const x = round(ring.centreX + ring.radius * Math.cos(angle) - half);
     const y = round(ring.centreY + ring.radius * Math.sin(angle) - half);
     const bead = { key: `${index}`, transform: `translate(${x} ${y}) scale(${round(scale)})` };
@@ -155,7 +174,7 @@ export function getBeadRing(ring: RingSpec): BeadRing {
     }
   }
 
-  // The ring, ready to render
+  // The beads, ready to render
   return { solid, ringed };
 }
 

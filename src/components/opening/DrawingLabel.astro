@@ -1,0 +1,27 @@
+---
+// Dependencies
+import { LABEL_BOX } from "./constants";
+
+// Types
+import type { Point } from "./types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the DrawingLabel component, a short muted label in small capitals centred on its point in a drawing
+ */
+type Props = {
+  /** The label's centre, in drawing units. */
+  at: Point;
+  /** What the label says. */
+  label: string;
+};
+
+// Read the label and centre its box on its point
+const { at, label } = Astro.props;
+const x = at.x - LABEL_BOX.WIDTH / 2;
+const y = at.y - LABEL_BOX.HEIGHT / 2;
+---
+
+<foreignObject x={x} y={y} width={LABEL_BOX.WIDTH} height={LABEL_BOX.HEIGHT}>
+  <p class="text-center type-tag text-text-muted">{label}</p>
+</foreignObject>

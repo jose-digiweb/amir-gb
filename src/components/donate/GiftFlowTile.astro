@@ -1,0 +1,45 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { TILE_COLOUR } from "../../lib/content/constants";
+import { GIFT_FLOW_LABEL } from "./constants";
+
+// Components
+import GiftUseIcon from "./GiftUseIcon.astro";
+
+// Types
+import type { GiftFlowTile } from "./types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the GiftFlowTile component, one thing gifts pay for as a tinted tile at the end of a thread in the opening
+ */
+type Props = {
+  /** The tile's use, tint, corner and size. */
+  tile: GiftFlowTile;
+  /** Whether the tile names its use under the pictogram. */
+  hasLabel: boolean;
+};
+
+// Read the tile and name its use in the page's language
+const { tile, hasLabel } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+const label = t[GIFT_FLOW_LABEL[tile.use]];
+---
+
+<foreignObject x={tile.x} y={tile.y} width={tile.width} height={tile.height} overflow="visible">
+  <div
+    class:list={[
+      "flex size-full flex-col items-center justify-center gap-2 rounded-lg p-2.5 text-center text-text-heading shadow-md ring-5 ring-bg-alt",
+      {
+        "bg-tint-gold": tile.tint === TILE_COLOUR.GOLD,
+        "bg-tint-forest": tile.tint === TILE_COLOUR.FOREST,
+        "bg-tint-brick": tile.tint === TILE_COLOUR.BRICK,
+        "bg-tint-navy": tile.tint === TILE_COLOUR.NAVY,
+      },
+    ]}
+  >
+    <GiftUseIcon use={tile.use} class="size-icon-md shrink-0" />
+    {hasLabel ? <span class="type-button-sm text-balance">{label}</span> : null}
+  </div>
+</foreignObject>
