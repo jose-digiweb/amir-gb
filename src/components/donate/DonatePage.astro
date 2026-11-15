@@ -1,0 +1,34 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../i18n/helpers";
+
+// Components
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import WovenDefs from "../ui/WovenDefs.astro";
+import DonateOpening from "./DonateOpening.astro";
+import GiftUsesSection from "./GiftUsesSection.astro";
+import OtherWaysSection from "./OtherWaysSection.astro";
+
+// Types
+import type { SupportState } from "../../lib/donate/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the DonatePage component, the Donate page in the page's language
+ */
+type Props = {
+  /** What the donation widget shows: the form, or the result of a gift, read by the page route. */
+  support: SupportState;
+};
+
+// Read the state and the page's copy
+const { support } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+---
+
+<SiteLayout title={t["donatePage.title"]} description={t["donatePage.description"]}>
+  <WovenDefs />
+  <DonateOpening support={support} />
+  <GiftUsesSection />
+  <OtherWaysSection />
+</SiteLayout>

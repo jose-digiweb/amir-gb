@@ -1,0 +1,26 @@
+---
+// Dependencies
+import { MessageCircle } from "@lucide/astro";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { getWhatsAppShareHref } from "../../lib/donate/helpers";
+import { BUTTON_TONE } from "../ui/constants";
+
+// Components
+import Button from "../ui/Button.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the GiftShareLink component, which opens WhatsApp with a short line and the address of the page the donor gave on, for a friend
+ */
+type Props = Record<string, never>;
+
+// Prepare the message and the address of this page, without the return
+const t = getTranslations(getLocale(Astro.currentLocale));
+const pageUrl = new URL(Astro.url.pathname, Astro.url.origin).href;
+const shareHref = getWhatsAppShareHref(t["gift.shareText"], pageUrl);
+---
+
+<Button href={shareHref} tone={BUTTON_TONE.OUTLINE} block target="_blank" rel="noopener">
+  <MessageCircle />
+  {t["gift.share"]}
+</Button>

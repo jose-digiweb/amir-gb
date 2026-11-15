@@ -57,7 +57,7 @@ export function getLanguageLinks(locale: Locale, pathname: string): LanguageLink
  * @param {string} path - A pathname
  * @returns {string} The same path with one trailing slash
  */
-function withTrailingSlash(path: string): string {
+export function withTrailingSlash(path: string): string {
   // A path that already ends in a slash stays as it is
   if (path.endsWith("/")) {
     return path;

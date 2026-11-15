@@ -1,14 +1,12 @@
 ---
 // Dependencies
 import { CircleAlert } from "@lucide/astro";
-import { getRelativeLocaleUrl } from "astro:i18n";
-import { getLocale, getTranslations } from "../../../i18n/helpers";
-import { GIFT_RETURN } from "../../../lib/donate/constants";
-import { ROUTE } from "../../../site/constants";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { getGiftFormHref } from "../../lib/donate/helpers";
 import { RETURN_TONE } from "./constants";
 
 // Components
-import Button from "../../ui/Button.astro";
+import Button from "../ui/Button.astro";
 import ReturnCard from "./ReturnCard.astro";
 
 /**
@@ -17,10 +15,9 @@ import ReturnCard from "./ReturnCard.astro";
  */
 type Props = Record<string, never>;
 
-// The way back to the form on the page's home
-const locale = getLocale(Astro.currentLocale);
-const t = getTranslations(locale);
-const tryAgainHref = `${getRelativeLocaleUrl(locale, ROUTE.HOME)}${GIFT_RETURN.HASH}`;
+// The way back to the form on this page
+const t = getTranslations(getLocale(Astro.currentLocale));
+const tryAgainHref = getGiftFormHref(Astro.url.pathname);
 ---
 
 <ReturnCard tone={RETURN_TONE.DANGER} title={t["gift.failedTitle"]} text={t["gift.failedText"]}>

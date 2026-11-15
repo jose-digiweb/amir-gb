@@ -1,0 +1,23 @@
+---
+/**
+ * The {@link Props} type
+ * @description The props of the CardLink component, the underlined link at the foot of a card in Other ways and questions, with its icon after the words
+ */
+type Props = {
+  /** Where it goes. */
+  href: string;
+  /** The link's words. */
+  label: string;
+};
+
+// Read the address and the words
+const { href, label } = Astro.props;
+---
+
+<a
+  href={href}
+  class="mt-auto inline-flex min-h-tap items-center gap-2 self-start type-button text-link [&_svg]:size-icon-md [&_svg]:shrink-0"
+>
+  <span class="underline decoration-2 underline-offset-4">{label}</span>
+  <slot />
+</a>

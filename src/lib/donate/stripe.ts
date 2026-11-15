@@ -29,7 +29,7 @@ function getStripe(): Stripe | undefined {
  * @description Creates the Checkout Session for a gift and returns the address of Stripe's payment page
  * @param {GiftChoice} choice - The donor's choice
  * @param {Locale} locale - The page's language
- * @param {string} pageUrl - The full address of the page's home, where Stripe sends the donor back
+ * @param {string} pageUrl - The full address of the page the gift was started from, where Stripe sends the donor back
  * @returns {Promise<string | undefined>} Stripe's payment page, or nothing when the session could not be made
  */
 export async function startCheckout(

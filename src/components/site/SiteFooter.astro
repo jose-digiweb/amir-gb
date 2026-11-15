@@ -156,7 +156,7 @@ const bridgeStyle = `background-image: url(${bridgeLine.src})`;
 <style>
   @reference "../../styles/global.css";
 
-  /* A page whose last section the footer overlaps (Get help) pulls the footer up by the sections' overlap */
+  /* A page whose last section the footer overlaps (Get help, Donate) pulls the footer up by the sections' overlap */
   :global(main:has([data-footer-overlaps])) + .site-footer {
     position: relative;
     margin-top: calc(var(--space-8) * -1);

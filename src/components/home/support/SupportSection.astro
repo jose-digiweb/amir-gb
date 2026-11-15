@@ -1,25 +1,12 @@
 ---
 // Dependencies
-import { actions } from "astro:actions";
-import { Picture } from "astro:assets";
 import { getLocale, getTranslations } from "../../../i18n/helpers";
-import { GIFT_RETURN, GIFT_STATE } from "../../../lib/donate/constants";
-import { getDonateFormCopy } from "../../../lib/donate/helpers";
-import { getBeadRing } from "../../../lib/woven/helpers";
-import { WOVEN_DEFS } from "../../ui/constants";
-import { SUPPORT_RING } from "./constants";
-import joinedHands from "../../../assets/photos/joined-hands.jpg";
 
 // Components
+import DonationWidget from "../../support/DonationWidget.astro";
+import JoinedHandsRing from "../../support/JoinedHandsRing.astro";
 import Opener from "../../ui/Opener.astro";
 import WovenShade from "../../ui/WovenShade.astro";
-import BankTransfer from "./BankTransfer.astro";
-import DonateForm from "./DonateForm.vue";
-import GiftFailed from "./GiftFailed.astro";
-import GiftProcessing from "./GiftProcessing.astro";
-import GiftStopped from "./GiftStopped.astro";
-import GiftThanks from "./GiftThanks.astro";
-import MonthlyGiftThanks from "./MonthlyGiftThanks.astro";
 
 // Types
 import type { SupportState } from "../../../lib/donate/types";
@@ -33,15 +20,9 @@ type Props = {
   support: SupportState;
 };
 
-// Prepare the copy, the form's copy and action, and the ring of beads round the photo
+// Read the state and the copy
 const { support } = Astro.props;
-const locale = getLocale(Astro.currentLocale);
-const t = getTranslations(locale);
-const formCopy = getDonateFormCopy(t);
-const formAction = `${actions.donate}${GIFT_RETURN.HASH}`;
-const ring = getBeadRing(SUPPORT_RING);
-const solidHref = `#${WOVEN_DEFS.SOLID}`;
-const ringedHref = `#${WOVEN_DEFS.RINGED}`;
+const t = getTranslations(getLocale(Astro.currentLocale));
 ---
 
 <section
@@ -55,37 +36,10 @@ const ringedHref = `#${WOVEN_DEFS.RINGED}`;
     aria-hidden="true"
     class="absolute top-50 -left-15 -z-10 size-120 rounded-full bg-bg opacity-90 tablet:top-6 tablet:-right-15 tablet:left-auto desktop:top-10 desktop:size-160"
   ></span>
-  <div
-    aria-hidden="true"
+  <JoinedHandsRing
+    sizes="(min-width: 1180px) 520px, 312px"
     class="absolute top-84 -left-16 -z-10 hidden size-91 tablet:block desktop:top-88 desktop:-left-22 desktop:size-150"
-  >
-    <svg viewBox={SUPPORT_RING.VIEW_BOX} class="absolute inset-0 size-full overflow-visible">
-      <circle
-        cx={SUPPORT_RING.centreX}
-        cy={SUPPORT_RING.centreY}
-        r={SUPPORT_RING.radius}
-        fill="none"
-        stroke-width="1.5"
-        vector-effect="non-scaling-stroke"
-        class="stroke-accent opacity-60"
-      ></circle>
-      {ring.solid.map((bead) => (
-        <use href={solidHref} transform={bead.transform} />
-      ))}
-      {ring.ringed.map((bead) => (
-        <use href={ringedHref} transform={bead.transform} />
-      ))}
-    </svg>
-    <div class="absolute inset-[7%] overflow-hidden rounded-full shadow-md">
-      <Picture
-        src={joinedHands}
-        alt=""
-        widths={[312, 520, 1040]}
-        sizes="(min-width: 1180px) 520px, 312px"
-        class="size-full object-cover"
-      />
-    </div>
-  </div>
+  />
   <div class="relative flex flex-col px-2 tablet:px-0">
     <Opener label={t["support.opener"]} />
     <h2
@@ -99,27 +53,10 @@ const ringedHref = `#${WOVEN_DEFS.RINGED}`;
       {t["support.text"]}
     </p>
   </div>
-  <div class="relative mt-6 flex flex-col gap-3.5 tablet:mt-3 desktop:mt-6 desktop:w-115 desktop:justify-self-end">
-    {support.state === GIFT_STATE.FORM ? (
-      <DonateForm
-        client:visible
-        locale={locale}
-        copy={formCopy}
-        action={formAction}
-        initialError={support.error}
-      />
-    ) : null}
-    {support.state === GIFT_STATE.PAID ? <GiftThanks amountCents={support.amountCents} /> : null}
-    {support.state === GIFT_STATE.PAID_MONTHLY ? (
-      <MonthlyGiftThanks amountCents={support.amountCents} />
-    ) : null}
-    {support.state === GIFT_STATE.PROCESSING ? (
-      <GiftProcessing amountCents={support.amountCents} />
-    ) : null}
-    {support.state === GIFT_STATE.STOPPED ? <GiftStopped choice={support.choice} /> : null}
-    {support.state === GIFT_STATE.FAILED ? <GiftFailed /> : null}
-    <BankTransfer />
-  </div>
+  <DonationWidget
+    support={support}
+    class="relative mt-6 tablet:mt-3 desktop:mt-6 desktop:w-115 desktop:justify-self-end"
+  />
 </section>
 
 <style>

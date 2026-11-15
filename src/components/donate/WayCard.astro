@@ -1,0 +1,41 @@
+---
+// Dependencies
+import { WAY_CARD_TONE } from "./constants";
+
+// Types
+import type { WayCardTone } from "./types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the WayCard component, the white card of Other ways and questions: a round icon, a title, and the card's own words and action below
+ */
+type Props = {
+  /** The card's title. */
+  title: string;
+  /** The ground of the round icon. */
+  tone?: WayCardTone;
+};
+
+// Read the title and the icon's ground, sand by default
+const { title, tone = WAY_CARD_TONE.SAND } = Astro.props;
+---
+
+<article class="flex h-full flex-col gap-4 rounded-lg border border-border bg-surface p-6 text-text">
+  <div class="flex items-center gap-4">
+    <span
+      class:list={[
+        "grid size-12 shrink-0 place-items-center rounded-full text-text-heading [&_svg]:size-icon-md",
+        {
+          "bg-bg-alt": tone === WAY_CARD_TONE.SAND,
+          "bg-info-bg": tone === WAY_CARD_TONE.INFO,
+        },
+      ]}
+    >
+      <slot name="icon" />
+    </span>
+    <h3 class="type-h3 text-balance text-text-heading">{title}</h3>
+  </div>
+  <div class="flex flex-1 flex-col gap-4">
+    <slot />
+  </div>
+</article>

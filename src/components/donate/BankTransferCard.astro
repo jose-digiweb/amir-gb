@@ -1,0 +1,55 @@
+---
+// Dependencies
+import { BuildingComplex, Check, Copy } from "@lucide/astro";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { BANK_TRANSFER } from "../../lib/donate/constants";
+import { BUTTON_SIZE, BUTTON_TONE } from "../ui/constants";
+
+// Components
+import Button from "../ui/Button.astro";
+import WayCard from "./WayCard.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the BankTransferCard component: the bank, the name, AMIR-GB's account number and a button that copies it, as the bank transfer bar does
+ */
+type Props = Record<string, never>;
+
+// Read the copy
+const t = getTranslations(getLocale(Astro.currentLocale));
+---
+
+<WayCard title={t["donatePage.bankTitle"]}>
+  <BuildingComplex slot="icon" />
+  <div data-copy-account={BANK_TRANSFER.IBAN} class="group flex flex-1 flex-col gap-4">
+    <p class="flex flex-col gap-1">
+      <span aria-live="polite" class="type-body-sm text-text-muted">
+        <span class="group-data-copied:hidden">{t["donatePage.bankLine"]}</span>
+        <span class="hidden group-data-copied:inline">{t["bank.copied"]}</span>
+      </span>
+      <span class="type-h4 tracking-wider whitespace-nowrap text-text-heading tabular-nums tablet:type-h3">
+        {BANK_TRANSFER.IBAN}
+      </span>
+    </p>
+    <Button
+      data-copy-account-button
+      aria-label={t["bank.copyLabel"]}
+      tone={BUTTON_TONE.OUTLINE}
+      size={BUTTON_SIZE.COMPACT}
+      class="mt-auto self-start"
+    >
+      <Copy class="group-data-copied:hidden" />
+      <Check class="hidden text-success group-data-copied:block" />
+      <span class="tablet:hidden">{t["bank.copy"]}</span>
+      <span class="hidden tablet:inline">{t["bank.copyLabel"]}</span>
+    </Button>
+  </div>
+</WayCard>
+
+<script>
+  // Dependencies
+  import { enableCopyAccount } from "../../lib/donate/helpers";
+
+  // The copy button copies the account number and shows it was copied
+  enableCopyAccount();
+</script>

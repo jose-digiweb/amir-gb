@@ -1,8 +1,8 @@
 ---
 // Dependencies
 import { Check, Copy } from "@lucide/astro";
-import { getLocale, getTranslations } from "../../../i18n/helpers";
-import { BANK_TRANSFER } from "../../../lib/donate/constants";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { BANK_TRANSFER } from "../../lib/donate/constants";
 
 /**
  * The {@link Props} type
@@ -35,7 +35,7 @@ const t = getTranslations(getLocale(Astro.currentLocale));
   >
     <Copy class="size-icon-sm group-data-copied:hidden" />
     <Check class="hidden size-icon-sm text-success group-data-copied:block" />
-    <span aria-hidden="true" class="hidden tablet:inline">
+    <span aria-hidden="true" class="hidden desktop:inline">
       {t["bank.copy"]}
     </span>
   </button>
@@ -43,7 +43,7 @@ const t = getTranslations(getLocale(Astro.currentLocale));
 
 <script>
   // Dependencies
-  import { enableCopyAccount } from "../../../lib/donate/helpers";
+  import { enableCopyAccount } from "../../lib/donate/helpers";
 
   // The copy button copies the account number and shows it was copied
   enableCopyAccount();
