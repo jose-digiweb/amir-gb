@@ -4,7 +4,7 @@ import { Picture } from "astro:assets";
 import { getBeadRing } from "../../../lib/woven/helpers";
 import { BEAD } from "../../../lib/woven/constants";
 import { WOVEN_DEFS } from "../constants";
-import { CONSTELLATION_PHOTO } from "./constants";
+import { CONSTELLATION_PHOTO, STITCH_REVEAL } from "./constants";
 import joinedHands from "../../../assets/photos/joined-hands.jpg";
 
 // Components
@@ -29,7 +29,7 @@ type Props = {
   class?: string;
 };
 
-// Read the drawing and work out every bead, lozenge and the dot field before rendering
+// Read the drawing and work out every bead, lozenge, thread and the dot field before rendering
 const { layout, id, cropX = 0, class: className } = Astro.props;
 const viewBox = `${cropX} 0 ${layout.width - cropX} ${layout.height}`;
 const ring = getBeadRing({
@@ -57,6 +57,13 @@ const dots = {
   y: layout.dots.centreY - layout.dots.radius,
   size: layout.dots.radius * 2,
 };
+const threads = layout.threads.paths.map((path, index) => ({
+  path,
+  maskId: `${id}-thread-${index}`,
+  mask: `url(#${id}-thread-${index})`,
+  cascade: `--thread: ${index}`,
+}));
+const revealWidth = layout.threads.width * STITCH_REVEAL.WIDTH_SCALE;
 const solidHref = `#${WOVEN_DEFS.SOLID}`;
 const ringedHref = `#${WOVEN_DEFS.RINGED}`;
 ---
@@ -95,6 +102,27 @@ const ringedHref = `#${WOVEN_DEFS.RINGED}`;
         fill={`url(#${dots.fadeId})`}
       ></rect>
     </mask>
+    {threads.map((thread) => (
+      <mask
+        id={thread.maskId}
+        mask-type="alpha"
+        maskUnits="userSpaceOnUse"
+        x="0"
+        y="0"
+        width={layout.width}
+        height={layout.height}
+      >
+        <path
+          d={thread.path}
+          pathLength="1"
+          fill="none"
+          stroke-width={revealWidth}
+          stroke-linecap="round"
+          style={thread.cascade}
+          class="constellation-stitch stroke-accent"
+        ></path>
+      </mask>
+    ))}
   </defs>
   <rect
     x={dots.x}
@@ -112,14 +140,17 @@ const ringedHref = `#${WOVEN_DEFS.RINGED}`;
     stroke-width="1.5"
     class="stroke-accent opacity-60"
   ></circle>
-  <path
-    d={layout.threads.path}
-    fill="none"
-    stroke-width={layout.threads.width}
-    stroke-linecap="round"
-    stroke-dasharray={layout.threads.dash}
-    class="stroke-accent opacity-80"
-  ></path>
+  {threads.map((thread) => (
+    <path
+      d={thread.path}
+      mask={thread.mask}
+      fill="none"
+      stroke-width={layout.threads.width}
+      stroke-linecap="round"
+      stroke-dasharray={layout.threads.dash}
+      class="stroke-accent opacity-80"
+    ></path>
+  ))}
   {ring.solid.map((bead) => (
     <use href={solidHref} transform={bead.transform} />
   ))}
@@ -159,5 +190,18 @@ const ringedHref = `#${WOVEN_DEFS.RINGED}`;
       0 0 0 calc(var(--space-2) + var(--border-width))
         color-mix(in srgb, var(--accent) 35%, transparent),
       var(--shadow-md);
+  }
+
+  @keyframes constellation-stitch-in {
+    from {
+      stroke-dashoffset: 1;
+    }
+  }
+
+  .constellation-stitch {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+    animation: constellation-stitch-in var(--duration-slow) var(--ease-standard) both;
+    animation-delay: calc(var(--stagger) * var(--thread));
   }
 </style>

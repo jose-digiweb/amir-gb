@@ -46,7 +46,7 @@ export type ConstellationLayout = {
   centreY: number;
   photoSize: number;
   ring: { radius: number; count: number; size: number };
-  threads: { path: string; width: number; dash: string };
+  threads: { paths: readonly string[]; width: number; dash: string };
   dots: { centreX: number; centreY: number; radius: number; step: number };
   discs: ConstellationDisc[];
   pills: ConstellationPill[];

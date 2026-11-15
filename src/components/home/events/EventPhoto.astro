@@ -27,15 +27,10 @@ const { image, sizes } = Astro.props;
     alt=""
     sizes={sizes}
     loading="lazy"
-    class="absolute inset-0 size-full object-cover transition-transform duration-base ease-standard group-hover:scale-103"
+    class="absolute inset-0 size-full object-cover"
   />
 ) : (
-  <img
-    src={pintiPanel.src}
-    alt=""
-    loading="lazy"
-    class="absolute inset-0 size-full object-cover transition-transform duration-base ease-standard group-hover:scale-103"
-  />
+  <img src={pintiPanel.src} alt="" loading="lazy" class="absolute inset-0 size-full object-cover" />
 )}
 <span aria-hidden="true" class="event-fade absolute inset-0"></span>
 

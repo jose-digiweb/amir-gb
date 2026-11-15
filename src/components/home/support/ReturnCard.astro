@@ -35,7 +35,7 @@ const { title, text, opener, tone } = Astro.props;
     class:list={[
       "grid size-16 place-items-center rounded-full [&_svg]:size-icon-lg",
       {
-        "bg-success-bg text-success": tone === RETURN_TONE.SUCCESS,
+        "success-mark bg-success-bg text-success": tone === RETURN_TONE.SUCCESS,
         "bg-surface-sunken text-text-heading": tone === RETURN_TONE.NEUTRAL,
         "bg-danger-bg text-danger": tone === RETURN_TONE.DANGER,
       },
@@ -50,3 +50,16 @@ const { title, text, opener, tone } = Astro.props;
   </div>
   <slot />
 </div>
+
+<style>
+  @keyframes success-mark-in {
+    from {
+      opacity: 0;
+      scale: 0.9;
+    }
+  }
+
+  .success-mark {
+    animation: success-mark-in var(--duration-slow) var(--ease-enter) both;
+  }
+</style>
