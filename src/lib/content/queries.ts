@@ -5,6 +5,7 @@ import { DEFAULT_LOCALE } from "../../i18n/constants";
 import { ROUTE } from "../../site/constants";
 import {
   COLLECTION,
+  CONTENT_STATUS,
   DAY_MS,
   EVENT_TYPE,
   FIELD,
@@ -23,9 +24,11 @@ import {
 } from "./helpers";
 
 // Types
-import type { CacheHint, CollectionFilter, ContentEntry, EmDashCollections } from "emdash";
+import type { CollectionFilter, EmDashCollections } from "emdash";
 import type { Locale } from "../../i18n/types";
 import type {
+  ContentRead,
+  Entry,
   GeneralMeeting,
   HomeAnnouncement,
   HomeContent,
@@ -37,35 +40,18 @@ import type {
 } from "./types";
 
 /**
- * The {@link Read} type
- * @description What a home query returns: its items and the cache hints that purge the page when they change
- */
-type Read<T> = {
-  items: T[];
-  cacheHints: CacheHint[];
-};
-
-/**
- * The {@link Entry} type
- * @description An entry of a collection with its language fields
- */
-type Entry<C extends keyof EmDashCollections> = ContentEntry<
-  EmDashCollections[C] & TranslationMeta
->;
-
-/**
  * The {@link readLocalised} helper
  * @description Reads a collection in the page's language and, outside Dutch, the Dutch entries without a translation
  * @param {C} collection - The collection to read
  * @param {Locale} locale - The page's language
  * @param {CollectionFilter} filter - The filter both languages share
- * @returns {Promise<Read<Localised<Entry<C>>>>} One entry per translation group, with the cache hints
+ * @returns {Promise<ContentRead<Localised<Entry<C>>>>} One entry per translation group, with the cache hints
  */
 async function readLocalised<C extends keyof EmDashCollections>(
   collection: C,
   locale: Locale,
   filter: CollectionFilter,
-): Promise<Read<Localised<Entry<C>>>> {
+): Promise<ContentRead<Localised<Entry<C>>>> {
   const local = await getEmDashCollection<C, EmDashCollections[C] & TranslationMeta>(collection, {
     ...filter,
     locale,
@@ -95,11 +81,14 @@ async function readLocalised<C extends keyof EmDashCollections>(
  * @description Reads the next events for What's on, soonest first
  * @param {Locale} locale - The page's language
  * @param {Date} now - The moment the page renders
- * @returns {Promise<Read<HomeEvent>>} Up to four upcoming events
+ * @returns {Promise<ContentRead<HomeEvent>>} Up to four upcoming events
  */
-export async function getUpcomingEvents(locale: Locale, now: Date): Promise<Read<HomeEvent>> {
+export async function getUpcomingEvents(
+  locale: Locale,
+  now: Date,
+): Promise<ContentRead<HomeEvent>> {
   const { items, cacheHints } = await readLocalised(COLLECTION.EVENTS, locale, {
-    status: "published",
+    status: CONTENT_STATUS.PUBLISHED,
     where: { [FIELD.STARTS_AT]: { gte: new Date(now.getTime() - DAY_MS).toISOString() } },
     orderBy: { [FIELD.STARTS_AT]: SORT.ASC },
     limit: HOME_LIMIT.EVENTS_READ,
@@ -127,11 +116,14 @@ export async function getUpcomingEvents(locale: Locale, now: Date): Promise<Read
  * @description Reads the next general meeting: the soonest upcoming community event marked as one
  * @param {Locale} locale - The page's language
  * @param {Date} now - The moment the page renders
- * @returns {Promise<Read<GeneralMeeting>>} The meeting, or none when no meeting is planned
+ * @returns {Promise<ContentRead<GeneralMeeting>>} The meeting, or none when no meeting is planned
  */
-export async function getGeneralMeeting(locale: Locale, now: Date): Promise<Read<GeneralMeeting>> {
+export async function getGeneralMeeting(
+  locale: Locale,
+  now: Date,
+): Promise<ContentRead<GeneralMeeting>> {
   const { items, cacheHints } = await readLocalised(COLLECTION.EVENTS, locale, {
-    status: "published",
+    status: CONTENT_STATUS.PUBLISHED,
     where: {
       [FIELD.TYPE]: EVENT_TYPE.COMMUNITY,
       [FIELD.STARTS_AT]: { gte: new Date(now.getTime() - DAY_MS).toISOString() },
@@ -163,11 +155,11 @@ export async function getGeneralMeeting(locale: Locale, now: Date): Promise<Read
  * The {@link getWeeklyActivities} helper
  * @description Reads the weekly activities, Monday first
  * @param {Locale} locale - The page's language
- * @returns {Promise<Read<WeeklyActivity>>} Every published weekly activity
+ * @returns {Promise<ContentRead<WeeklyActivity>>} Every published weekly activity
  */
-export async function getWeeklyActivities(locale: Locale): Promise<Read<WeeklyActivity>> {
+export async function getWeeklyActivities(locale: Locale): Promise<ContentRead<WeeklyActivity>> {
   const { items, cacheHints } = await readLocalised(COLLECTION.ACTIVITIES, locale, {
-    status: "published",
+    status: CONTENT_STATUS.PUBLISHED,
   });
 
   // Shape each activity for its tile, with its times as HH:MM, and order them through the week
@@ -193,11 +185,11 @@ export async function getWeeklyActivities(locale: Locale): Promise<Read<WeeklyAc
  * The {@link getRecentStories} helper
  * @description Reads the newest Story posts for Life at AMIR
  * @param {Locale} locale - The page's language
- * @returns {Promise<Read<HomeStory>>} Up to seven stories, newest first, each with a photo
+ * @returns {Promise<ContentRead<HomeStory>>} Up to seven stories, newest first, each with a photo
  */
-export async function getRecentStories(locale: Locale): Promise<Read<HomeStory>> {
+export async function getRecentStories(locale: Locale): Promise<ContentRead<HomeStory>> {
   const { items, cacheHints } = await readLocalised(COLLECTION.POSTS, locale, {
-    status: "published",
+    status: CONTENT_STATUS.PUBLISHED,
     where: { [FIELD.TYPE]: POST_TYPE.STORY },
     orderBy: { [FIELD.PUBLISHED_AT]: SORT.DESC },
     limit: HOME_LIMIT.STORIES_READ,
@@ -226,14 +218,14 @@ export async function getRecentStories(locale: Locale): Promise<Read<HomeStory>>
  * @description Reads the newest announcement marked for the strip that has not ended
  * @param {Locale} locale - The page's language
  * @param {Date} now - The moment the page renders
- * @returns {Promise<Read<HomeAnnouncement>>} The one announcement to show, or none
+ * @returns {Promise<ContentRead<HomeAnnouncement>>} The one announcement to show, or none
  */
 export async function getUrgentAnnouncement(
   locale: Locale,
   now: Date,
-): Promise<Read<HomeAnnouncement>> {
+): Promise<ContentRead<HomeAnnouncement>> {
   const { items, cacheHints } = await readLocalised(COLLECTION.POSTS, locale, {
-    status: "published",
+    status: CONTENT_STATUS.PUBLISHED,
     where: { [FIELD.TYPE]: POST_TYPE.ANNOUNCEMENT },
     orderBy: { [FIELD.PUBLISHED_AT]: SORT.DESC },
     limit: HOME_LIMIT.ANNOUNCEMENTS,

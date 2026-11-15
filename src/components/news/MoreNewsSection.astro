@@ -1,0 +1,60 @@
+---
+// Dependencies
+import { ArrowRight } from "@lucide/astro";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { ROUTE } from "../../site/constants";
+
+// Components
+import Opener from "../ui/Opener.astro";
+import WovenShade from "../ui/WovenShade.astro";
+import PostListItem from "./PostListItem.astro";
+
+// Types
+import type { NewsPost } from "../../lib/news/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the MoreNewsSection component, the sand sheet under a post with the newest other posts: three on phone and desktop, two on tablet
+ */
+type Props = {
+  /** The posts to read next. */
+  posts: NewsPost[];
+};
+
+// Read the posts and the section's copy
+const { posts } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+---
+
+<section
+  aria-labelledby="more-news-title"
+  data-footer-overlaps
+  class="relative isolate -mt-8 overflow-hidden rounded-t-xl bg-bg-alt px-margin pt-12 pb-20 tablet:-mt-10 tablet:px-margin-md tablet:pt-16 tablet:pb-24 desktop:-mt-14 desktop:px-margin-lg desktop:pt-24 desktop:pb-36"
+>
+  <WovenShade />
+
+  <div class="mx-auto max-w-page">
+    <div class="flex flex-wrap items-end justify-between gap-5">
+      <div class="flex flex-col gap-2.5">
+        <Opener label={t["news.moreOpener"]} />
+        <h2 id="more-news-title" class="type-section-title text-balance text-text-heading">
+          {t["news.moreTitle"]}
+        </h2>
+      </div>
+      <a
+        href={getRelativeLocaleUrl(locale, ROUTE.NEWS)}
+        class="hidden min-h-tap items-center gap-2 type-button text-link tablet:inline-flex"
+      >
+        <span class="underline decoration-2 underline-offset-4">{t["news.allNews"]}</span>
+        <ArrowRight class="size-5" />
+      </a>
+    </div>
+    <ul class="mt-4 rounded-lg bg-surface px-4 tablet:mt-8 tablet:grid tablet:grid-cols-2 tablet:gap-6 tablet:bg-transparent tablet:px-0 desktop:grid-cols-3 desktop:gap-x-6 desktop:gap-y-8">
+      {posts.map((post) => (
+        <PostListItem post={post} class="tablet:nth-3:hidden desktop:nth-3:block" />
+      ))}
+    </ul>
+  </div>
+</section>

@@ -1,0 +1,31 @@
+---
+// Dependencies
+import { getLocale } from "../../i18n/helpers";
+import { cacheContentPage } from "../../lib/content/helpers";
+import { NEWS_ARTICLE_READ } from "../../lib/news/constants";
+import { getNewsArticle } from "../../lib/news/queries";
+
+// Components
+import NewsPostPage from "../../components/news/NewsPostPage.astro";
+
+// A post is CMS content, so it renders per request
+export const prerender = false;
+
+// Read the post in the page's language, or in Dutch
+const read = await getNewsArticle(getLocale(Astro.currentLocale), Astro.params.slug ?? "");
+
+// No such post answers Not found, which shows the site's 404 page
+if (read.kind === NEWS_ARTICLE_READ.MISSING) {
+  return new Response(null, { status: 404 });
+}
+
+// An address from another language moves to the translation in this one
+if (read.kind === NEWS_ARTICLE_READ.MOVED) {
+  return Astro.redirect(read.href, 301);
+}
+
+// Cache the page at the edge, set before rendering starts
+cacheContentPage(Astro.cache, read.article.cacheHints);
+---
+
+<NewsPostPage article={read.article} />

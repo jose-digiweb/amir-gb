@@ -11,7 +11,6 @@ import {
   FREQUENCY,
   GIFT_RETURN,
   GIFT_STATE,
-  WHATSAPP_SHARE,
 } from "./constants";
 
 // Types
@@ -282,18 +281,6 @@ export function getReturnUrls(
  */
 export function getGiftFormHref(pathname: string): string {
   return `${pathname}${GIFT_RETURN.HASH}`;
-}
-
-/**
- * The {@link getWhatsAppShareHref} helper
- * @description A link that opens WhatsApp with a message and the page's address, for the donor to send to a friend
- * @param {string} text - The message in the page's language
- * @param {string} pageUrl - The address to share
- * @returns {string} The WhatsApp link
- */
-export function getWhatsAppShareHref(text: string, pageUrl: string): string {
-  const query = new URLSearchParams({ [WHATSAPP_SHARE.PARAM]: `${text} ${pageUrl}` });
-  return `${WHATSAPP_SHARE.URL}?${query.toString()}`;
 }
 
 /**

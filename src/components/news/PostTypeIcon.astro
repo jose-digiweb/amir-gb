@@ -1,0 +1,26 @@
+---
+// Dependencies
+import { Camera, Megaphone, Newspaper } from "@lucide/astro";
+import { POST_TYPE } from "../../lib/content/constants";
+
+// Types
+import type { PostType } from "../../lib/content/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the PostTypeIcon component, the pictogram of a post type: a megaphone, a newspaper or a camera
+ */
+type Props = {
+  /** The post type. */
+  type: PostType;
+  /** Size classes from the caller. */
+  class?: string;
+};
+
+// Read the type and the icon's size
+const { type, class: className } = Astro.props;
+---
+
+{type === POST_TYPE.ANNOUNCEMENT ? <Megaphone class={className} /> : null}
+{type === POST_TYPE.NEWS ? <Newspaper class={className} /> : null}
+{type === POST_TYPE.STORY ? <Camera class={className} /> : null}

@@ -1,0 +1,34 @@
+---
+// Dependencies
+import { POST_TYPE } from "../../lib/content/constants";
+
+// Types
+import type { PostType } from "../../lib/content/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the PostTypeDot component, the colour dot that marks a post's type everywhere it shows
+ */
+type Props = {
+  /** The post's type: an announcement is brick, news navy, a story forest. */
+  type: PostType;
+  /** Size classes from the caller. */
+  class?: string;
+};
+
+// Read the type and the dot's size
+const { type, class: className } = Astro.props;
+---
+
+<i
+  aria-hidden="true"
+  class:list={[
+    "shrink-0 rounded-full",
+    {
+      "bg-danger": type === POST_TYPE.ANNOUNCEMENT,
+      "bg-info": type === POST_TYPE.NEWS,
+      "bg-success": type === POST_TYPE.STORY,
+    },
+    className,
+  ]}
+></i>

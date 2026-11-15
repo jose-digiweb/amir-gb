@@ -1,9 +1,11 @@
 // Dependencies
 import { describe, expect, it } from "vitest";
+import { en } from "../../i18n/translations/en";
 import {
   cacheContentPage,
   compareWeekly,
   getEventDay,
+  getEventMeta,
   getEventWhen,
   getWeeklyTint,
   isStripActive,
@@ -143,6 +145,23 @@ describe("event dates", () => {
   it("writes the weekday, date and times in the page's language", () => {
     expect(getEventWhen(start, end, "en-GB", "to")).toBe("Saturday 21 November · 14:30 to 18:00");
     expect(getEventWhen(start, end, "nl-NL", "tot")).toBe("Zaterdag 21 november · 14:30 tot 18:00");
+  });
+});
+
+describe("getEventMeta", () => {
+  const startsAt = new Date("2026-11-21T13:30:00Z");
+  const endsAt = new Date("2026-11-21T17:00:00Z");
+
+  it("joins when, the place and online", () => {
+    expect(
+      getEventMeta({ startsAt, endsAt, placeName: "Rotterdam", isOnline: true }, "en-GB", en),
+    ).toBe("Saturday 21 November · 14:30 to 18:00 · Rotterdam and online");
+  });
+
+  it("leaves out where when it is unknown", () => {
+    expect(getEventMeta({ startsAt, isOnline: false }, "en-GB", en)).toBe(
+      "Saturday 21 November · 14:30",
+    );
   });
 });
 

@@ -1,0 +1,86 @@
+---
+// Dependencies
+import { Image } from "emdash/ui";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+
+// Components
+import Opener from "../ui/Opener.astro";
+
+// Types
+import type { MediaImage } from "../../lib/content/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the PostGallery component, the photos from the day: two columns that end on one line on phone, rows of two on tablet (a last odd photo only on desktop), one large and four small on desktop
+ */
+type Props = {
+  /** The photos, in the editor's order. */
+  images: MediaImage[];
+};
+
+// Read the photos and the opener's copy
+const { images } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+---
+
+<div class="mt-10 tablet:mt-16">
+  <Opener label={t["news.galleryOpener"]} />
+  <ul class="gallery mt-3.5 tablet:mt-4">
+    {images.map((image) => (
+      <li class="gallery-photo relative overflow-hidden rounded-lg bg-surface-sunken">
+        <Image
+          image={image}
+          sizes="(min-width: 1180px) 640px, 50vw"
+          class="absolute inset-0 size-full object-cover"
+        />
+      </li>
+    ))}
+  </ul>
+</div>
+
+<style>
+  @reference "../../styles/global.css";
+
+  .gallery {
+    @apply columns-2 gap-2.5 tablet:grid tablet:grid-cols-2 tablet:gap-4 desktop:auto-rows-50 desktop:grid-cols-4;
+  }
+
+  .gallery-photo {
+    @apply mb-2.5 h-40 break-inside-avoid tablet:mb-0 tablet:h-55 desktop:h-auto;
+  }
+
+  .gallery-photo:first-child,
+  .gallery-photo:last-child:nth-child(even),
+  .gallery-photo:nth-last-child(2):nth-child(even) {
+    @apply h-55 desktop:h-auto;
+  }
+
+  .gallery-photo:last-child:nth-child(odd):not(:first-child) {
+    @apply hidden desktop:block;
+  }
+
+  .gallery-photo:only-child {
+    column-span: all;
+  }
+
+  .gallery-photo:nth-child(-n + 2) {
+    @apply tablet:h-75 desktop:h-auto;
+  }
+
+  .gallery-photo:first-child {
+    @apply desktop:col-span-2 desktop:row-span-2;
+  }
+
+  .gallery-photo:only-child {
+    @apply tablet:col-span-2 desktop:col-span-4;
+  }
+
+  .gallery-photo:first-child:nth-last-child(2) ~ .gallery-photo {
+    @apply desktop:col-span-2 desktop:row-span-2;
+  }
+
+  .gallery-photo:first-child:nth-last-child(3) ~ .gallery-photo,
+  .gallery-photo:first-child:nth-last-child(4) ~ .gallery-photo:last-child {
+    @apply desktop:col-span-2;
+  }
+</style>

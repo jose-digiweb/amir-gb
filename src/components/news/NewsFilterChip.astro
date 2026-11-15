@@ -1,0 +1,40 @@
+---
+// Components
+import PostTypeDot from "./PostTypeDot.astro";
+
+// Types
+import type { PostType } from "../../lib/content/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the NewsFilterChip component, one chip of the News filter, marked when it is the list shown
+ */
+type Props = {
+  /** What the chip says. */
+  label: string;
+  /** The list it shows. */
+  href: string;
+  /** It is the list shown now. */
+  isCurrent: boolean;
+  /** The type it filters to, for its dot; All has none. */
+  type?: PostType;
+};
+
+// Read the chip
+const { label, href, isCurrent, type } = Astro.props;
+---
+
+<a
+  href={href}
+  aria-current={isCurrent ? "page" : undefined}
+  class:list={[
+    "inline-flex h-control shrink-0 touch-manipulation items-center gap-2 rounded-pill px-4 type-button-sm whitespace-nowrap transition-[background-color,scale] duration-base ease-standard select-none active:scale-97",
+    {
+      "bg-selected text-on-selected inset-ring-2 inset-ring-border-strong": isCurrent,
+      "bg-surface text-text-heading inset-ring inset-ring-border hover:bg-hover-quiet": !isCurrent,
+    },
+  ]}
+>
+  {type ? <PostTypeDot type={type} class="hidden size-2.5 tablet:block" /> : null}
+  {label}
+</a>

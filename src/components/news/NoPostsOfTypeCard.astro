@@ -1,0 +1,46 @@
+---
+// Dependencies
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { POST_TYPE_COPY } from "../../lib/news/constants";
+import { ROUTE } from "../../site/constants";
+import { BUTTON_SIZE, BUTTON_TONE } from "../ui/constants";
+
+// Components
+import Button from "../ui/Button.astro";
+import PostTypeIcon from "./PostTypeIcon.astro";
+
+// Types
+import type { PostType } from "../../lib/content/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the NoPostsOfTypeCard component, the calm message for a type with no posts, with the way back to every post
+ */
+type Props = {
+  /** The type the list is filtered to. */
+  type: PostType;
+};
+
+// Read the type and its copy
+const { type } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const copy = POST_TYPE_COPY[type];
+---
+
+<div class="flex flex-col items-start gap-3 rounded-lg bg-surface p-6 text-text-heading tablet:max-w-xl tablet:p-8">
+  <span class="grid size-14 place-items-center rounded-full bg-bg-alt">
+    <PostTypeIcon type={type} class="size-icon-md" />
+  </span>
+  <h2 class="type-h3 text-balance">{t[copy.noneTitle]}</h2>
+  <p class="type-body text-pretty text-text">{t[copy.noneText]}</p>
+  <Button
+    href={getRelativeLocaleUrl(locale, ROUTE.NEWS)}
+    tone={BUTTON_TONE.OUTLINE}
+    size={BUTTON_SIZE.COMPACT}
+    class="mt-1"
+  >
+    {t["news.showAll"]}
+  </Button>
+</div>

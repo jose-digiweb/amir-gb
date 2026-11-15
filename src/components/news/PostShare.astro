@@ -1,0 +1,62 @@
+---
+// Dependencies
+import { Check, Link, MessageCircle } from "@lucide/astro";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { getWhatsAppShareHref } from "../../lib/share/helpers";
+import { BUTTON_SIZE, BUTTON_TONE } from "../ui/constants";
+
+// Components
+import Button from "../ui/Button.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the PostShare component: share the post on WhatsApp, or copy its link
+ */
+type Props = {
+  /** The post's title, the message WhatsApp starts with. */
+  title: string;
+};
+
+// Read the title and prepare the WhatsApp message with the page's address
+const { title } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+const shareHref = getWhatsAppShareHref(title, Astro.url.href);
+---
+
+<div class="mx-auto mt-8 flex max-w-160 flex-wrap items-center gap-2.5 border-t border-border pt-6 tablet:mt-12 desktop:max-w-180">
+  <p class="basis-full type-button-sm text-text-heading tablet:mr-1 tablet:basis-auto">
+    {t["news.share"]}
+  </p>
+  <Button
+    href={shareHref}
+    tone={BUTTON_TONE.OUTLINE}
+    size={BUTTON_SIZE.COMPACT}
+    target="_blank"
+    rel="noopener"
+    class="flex-1 px-4 type-button-sm tablet:flex-none"
+  >
+    <MessageCircle />
+    {t["news.shareWhatsApp"]}
+  </Button>
+  <Button
+    data-copy-link
+    tone={BUTTON_TONE.OUTLINE}
+    size={BUTTON_SIZE.COMPACT}
+    class="group flex-1 px-4 type-button-sm tablet:flex-none"
+  >
+    <Link class="group-data-copied:hidden" />
+    <Check class="hidden text-success group-data-copied:block" />
+    <span aria-live="polite">
+      <span class="group-data-copied:hidden">{t["news.copyLink"]}</span>
+      <span class="hidden group-data-copied:inline">{t["news.copied"]}</span>
+    </span>
+  </Button>
+</div>
+
+<script>
+  // Dependencies
+  import { enableCopyLink } from "../../lib/news/helpers";
+
+  // Copy link copies the page's address and says so
+  enableCopyLink();
+</script>

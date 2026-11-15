@@ -105,13 +105,13 @@ The seed also carries example content, all marked [EXAMPLE] or with placeholders
 
 ### Rich text
 
-`src/components/content/RichText.astro` shows Portable Text from EmDash in the site's type and colours. It hands every block to EmDash's own `<PortableText>` (links stay sanitised, images responsive, quotes grouped) and changes two things: the editor's headings move one level down, Kop 1 to an `h2` and so on to `h6` (`RichTextHeading.astro`, `getRichTextHeadingLevel`), because the page's title is its only `h1`; and the text, lists, links, quotes, dividers and captions take the design system's tokens through a scoped style. The event page and the news page will both use it; until they exist, `RichText.test.ts` covers it.
+`src/components/content/RichText.astro` shows Portable Text from EmDash in the site's type and colours. It hands every block to EmDash's own `<PortableText>` (links stay sanitised, images responsive, quotes grouped) and changes two things: the editor's headings move one level down, Kop 1 to an `h2` and so on to `h6` (`RichTextHeading.astro`, `getRichTextHeadingLevel`), because the page's title is its only `h1`; and the text, lists, links, quotes, dividers and captions take the design system's tokens through a scoped style. The News post page uses it (see [News](#news)), the event page will too, and `RichText.test.ts` covers it.
 
 ## Home page
 
 `src/pages/index.astro`, `en/index.astro` and `pt/index.astro` read the page's content (`getHomeContent`) and render `src/components/home/HomePage.astro` with it. The page shows CMS content, so it renders per request (`export const prerender = false`) and is cached at Cloudflare's edge for ten minutes through Astro's route cache (`cacheCloudflare()` in `astro.config.mjs`, experimental). The cache hints EmDash returns tag the cached page, so publishing purges it. In development the cache is off.
 
-The cache is set in the page routes (`cacheContentPage` in `src/lib/content/helpers.ts`, used by the home page and the join page), never in a component: Astro sends the response headers before it renders components, so a cache rule set inside one never reaches Cloudflare. A live response shows `cf-cache-status: MISS` on the first request and `HIT` after it.
+The cache is set in the page routes (`cacheContentPage` in `src/lib/content/helpers.ts`, used by the home page, the join page and the News pages), never in a component: Astro sends the response headers before it renders components, so a cache rule set inside one never reaches Cloudflare. A live response shows `cf-cache-status: MISS` on the first request and `HIT` after it.
 
 Sections, top to bottom, each in its own folder under `src/components/home/`:
 
@@ -172,6 +172,26 @@ Placeholders until AMIR sends them: the three PDFs, the board photos, and the tw
 Verified locally: every state on a phone (errors, Sending, Sent as a member and as a volunteer, Did not send), the emails in `.wrangler/tmp/email/`, the action's refusals (another origin, the trap field, server-side errors), the not set up path for both forms, and the page at 360, 390, 834, 1180 and 1440 in light and dark, in NL, EN and PT.
 
 Placeholders until AMIR sends them: the fee (`[FEE]`, `[CONTRIBUTIE]`, `[QUOTA]`) and the family photo, an example photo from the design canvas (Unsplash, Osarugue Igbinoba).
+
+## News
+
+`src/pages/news/index.astro` and `news/[slug].astro`, with the same under `en/` and `pt/`, render the list (`src/components/news/NewsPage.astro`) and a post (`NewsPostPage.astro`). Both show CMS content, so they render per request and are cached at the edge with the hints they read, like the home page (`cacheContentPage`). The queries and the logic that decides what each page shows are in `src/lib/news/` (`queries.ts`, `helpers.ts`, tested in `helpers.test.ts`).
+
+**Reading posts.** Every published post is read once per request, a hundred at a time along EmDash's cursor, in the page's language and, on English and Portuguese pages, the Dutch posts with no translation (`mergeWithDutch`, marked NL as on the home page). They are ordered by `publishedAt` together. AMIR publishes a handful of posts a month, so one read serves the list, the filter, the prints and More from News, and the edge cache keeps it cheap. A failed read fails the page (the 500 page), so an empty list is never shown or cached by mistake.
+
+**The list** (`/news/`):
+
+- **Opening** (`NewsOpening.astro`): FROM AMIR-GB, News, one line and the filter. From tablet up, story photos are pinned at an angle like prints (two on tablet, three on desktop): the newest Story photos that are not on the page, compared by post and by photo, so no photo shows twice (`getPinnedPhotos`).
+- **Filter** (`NewsFilter.astro`): All, Announcements, News, Stories, each a plain link (`?type=aankondiging`, `nieuws` or `verhaal`, the values EmDash stores). The current chip is `selected` with the strong border, as the contact form's chips. On phone the chips stay on one line that scrolls sideways; from tablet up they wrap and carry the type's colour dot.
+- **List** (`NewsListSection.astro`): the newest post as a big card (`FeaturedPostCard.astro`), then six more (`PostListItem.astro`): rows with a small photo in one white card on phone, cards with a few words in two columns on tablet and three on desktop. A post without a photo shows the woven pinti panel with its type's pictogram in a white disc: a megaphone for an announcement (`PostPhoto.astro`). Every post wears its type as a tag with a dot: Announcement in brick (`danger`), News in navy (`info`), Story in forest (`success`).
+- **Show older posts** (`OlderPosts.astro`) links to `?page=2`, which shows six more, and so on. Any other query string (a page past the last, an unknown type, `?page=1`) moves with a 301 to the one for what the page shows, so each list is cached once. Without JavaScript the link opens that page. With it, `enableOlderPosts` fetches the page, adds the posts the list does not have yet, swaps the footer and the opening's prints, moves focus to the first new post and keeps the address, so a reload shows the same list. While it loads the button rests as Loading older posts with a spinner. After the last older page the footer says That is everything for now.
+- **Nothing to show**: a type with no posts shows its own message with Show all posts (`NoPostsOfTypeCard.astro`); before the first post the page shows Our first news is on its way with What's on and Instagram, and no filter (`NoPostsYetCard.astro`).
+
+**A post** (`/news/<slug>/`): back to News, the type and date, the title and the lead, the photo, the text at reading width (`RichText.astro`), then for an announcement the event it is about (`PostEventLink.astro`, from the `event` reference) and the board's signature with the first names from `board_names` (`BoardSignature.astro`). Then the photos from the day (`PostGallery.astro`: two columns that end on one line on phone, rows of two on tablet, one large and four small on desktop; rows without a photo and the post's own photo are skipped), Share (WhatsApp with the title and the address, and Copy link, which says Link copied for three seconds), and More from News on sand: the three newest other posts, two on tablet. A post that exists only in Dutch, read in English or Portuguese, shows in Dutch under a note that says so (`DutchOnlyNote.astro`), marked `lang="nl"` so it reads and hyphenates as Dutch. An address from another language (the language switch keeps the slug) moves with a 301 to the translation in the page's language when there is one. An unknown slug answers 404 with the site's 404 page.
+
+**Where the build follows the design system rather than the boards**: the current filter chip is `selected`, not a gold fill (gold never fills a control), and the chips are 48px high, the tap minimum. The type is the design system's scale: News is `type-hero`, a post title `type-h1` on phone and `type-display` from tablet, card titles `type-h2` to `type-h4`, the text `type-body`. The post's column is the boards' 640 and 720, with its running text kept within `measure`. Cards and photos have `radius-lg`, and the featured card a hairline instead of a shadow.
+
+The `getWhatsAppShareHref` helper moved to `src/lib/share/`, since Support and News both share on WhatsApp.
 
 ## Contact page
 

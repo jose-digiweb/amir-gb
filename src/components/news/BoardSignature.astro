@@ -1,0 +1,31 @@
+---
+// Dependencies
+import { Megaphone } from "@lucide/astro";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+
+/**
+ * The {@link Props} type
+ * @description The props of the BoardSignature component, the board's signature under an announcement, with its members' first names
+ */
+type Props = {
+  /** The board members' first names, as the editor wrote them. */
+  names: string;
+};
+
+// Read the names and the signature's copy
+const { names } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+---
+
+<p class="flex items-center gap-3 border-t border-border pt-5">
+  <span
+    aria-hidden="true"
+    class="grid size-11 shrink-0 place-items-center rounded-full bg-surface-brand text-on-brand"
+  >
+    <Megaphone class="size-5" />
+  </span>
+  <span class="flex flex-col">
+    <b class="type-button-sm text-text-heading">{t["news.board"]}</b>
+    <span class="type-body-sm text-text-muted">{names}</span>
+  </span>
+</p>

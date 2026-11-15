@@ -1,5 +1,5 @@
 // Types
-import type { CacheHint } from "emdash";
+import type { CacheHint, ContentEntry, EmDashCollections } from "emdash";
 import type { Post } from "../../../emdash-env";
 import type { POST_TYPE, TILE_COLOUR, WEEKDAYS, WHATS_ON_STATE } from "./constants";
 
@@ -160,3 +160,20 @@ export type HomeContent = {
   announcement?: HomeAnnouncement;
   cacheHints: CacheHint[];
 };
+
+/**
+ * The {@link ContentRead} type
+ * @description What a content query returns: its items and the cache hints that purge the page when they change
+ */
+export type ContentRead<T> = {
+  items: T[];
+  cacheHints: CacheHint[];
+};
+
+/**
+ * The {@link Entry} type
+ * @description An entry of a collection with its language fields
+ */
+export type Entry<C extends keyof EmDashCollections> = ContentEntry<
+  EmDashCollections[C] & TranslationMeta
+>;
