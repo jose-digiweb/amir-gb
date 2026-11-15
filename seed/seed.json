@@ -164,6 +164,40 @@
           "searchable": true
         },
         {
+          "slug": "gallery",
+          "label": "Foto's van de dag (mag leeg, staan onder de tekst)",
+          "type": "repeater",
+          "translatable": false,
+          "validation": {
+            "subFields": [
+              {
+                "slug": "image",
+                "label": "Foto",
+                "type": "image",
+                "required": true
+              }
+            ]
+          }
+        },
+        {
+          "slug": "board_names",
+          "label": "Ondertekend door (voornamen van het bestuur, bijvoorbeeld Fatu, Braima en Joana; alleen voor aankondigingen)",
+          "type": "string",
+          "translatable": false,
+          "validation": {
+            "maxLength": 80
+          }
+        },
+        {
+          "slug": "event",
+          "label": "Over welke activiteit (mag leeg; alleen voor aankondigingen)",
+          "type": "reference",
+          "translatable": false,
+          "validation": {
+            "targetCollection": "events"
+          }
+        },
+        {
           "slug": "urgent",
           "label": "Toon een balk bovenaan de homepage (alleen voor aankondigingen)",
           "type": "boolean",
@@ -698,6 +732,35 @@
                 }
               ]
             }
+          ],
+          "gallery": [
+            {
+              "image": {
+                "$media": {
+                  "file": "seed/media/community-dinner.jpg",
+                  "alt": "A family sharing a meal",
+                  "filename": "community-dinner.jpg"
+                }
+              }
+            },
+            {
+              "image": {
+                "$media": {
+                  "file": "seed/media/choir.jpg",
+                  "alt": "A choir singing",
+                  "filename": "choir.jpg"
+                }
+              }
+            },
+            {
+              "image": {
+                "$media": {
+                  "file": "seed/media/drop-in-help.jpg",
+                  "alt": "A volunteer helping at a table",
+                  "filename": "drop-in-help.jpg"
+                }
+              }
+            }
           ]
         }
       },
@@ -729,7 +792,36 @@
               "alt": "People celebrating in a street parade",
               "filename": "independence-day.jpg"
             }
-          }
+          },
+          "gallery": [
+            {
+              "image": {
+                "$media": {
+                  "file": "seed/media/community-dinner.jpg",
+                  "alt": "A family sharing a meal",
+                  "filename": "community-dinner.jpg"
+                }
+              }
+            },
+            {
+              "image": {
+                "$media": {
+                  "file": "seed/media/choir.jpg",
+                  "alt": "A choir singing",
+                  "filename": "choir.jpg"
+                }
+              }
+            },
+            {
+              "image": {
+                "$media": {
+                  "file": "seed/media/drop-in-help.jpg",
+                  "alt": "A volunteer helping at a table",
+                  "filename": "drop-in-help.jpg"
+                }
+              }
+            }
+          ]
         }
       },
       {
@@ -1084,7 +1176,9 @@
           "urgent": true,
           "urgent_until": "2026-11-21T18:00:00+01:00",
           "strip_text": "The General meeting on 21 November also runs online.",
-          "strip_link_label": "How to join"
+          "strip_link_label": "How to join",
+          "board_names": "[NAMES]",
+          "event": "$ref:general-meeting"
         }
       },
       {
@@ -1112,7 +1206,9 @@
           "strip_link_label": "How to join",
           "type": "aankondiging",
           "urgent": true,
-          "urgent_until": "2026-11-21T18:00:00+01:00"
+          "urgent_until": "2026-11-21T18:00:00+01:00",
+          "board_names": "[NAMES]",
+          "event": "$ref:general-meeting"
         }
       }
     ]
