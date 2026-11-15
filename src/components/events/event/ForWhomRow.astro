@@ -1,0 +1,45 @@
+---
+// Dependencies
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { ArrowRight, Users } from "@lucide/astro";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { FOR_WHOM } from "../../../lib/content/constants";
+import { ROUTE } from "../../../site/constants";
+
+// Components
+import FactLink from "./FactLink.astro";
+import FactRow from "./FactRow.astro";
+
+// Types
+import type { ForWhom } from "../../../lib/events/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the ForWhomRow component, the facts card's For whom: everyone, or members with the way to join while the event goes ahead
+ */
+type Props = {
+  /** Who the event is for. */
+  forWhom: ForWhom;
+  /** Show the way to join; a cancelled event does not need it. */
+  showJoin: boolean;
+};
+
+// Read who it is for and link Join in in the page's language
+const { forWhom, showJoin } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const isForMembers = forWhom === FOR_WHOM.MEMBERS;
+const label = isForMembers ? t["event.members"] : t["event.everyone"];
+const hasJoin = isForMembers && showJoin;
+---
+
+<FactRow label={t["event.forWhom"]}>
+  <Users slot="icon" aria-hidden="true" />
+  <span>{label}</span>
+  {hasJoin ? (
+    <FactLink href={getRelativeLocaleUrl(locale, ROUTE.JOIN)}>
+      {t["event.joinLink"]}
+      <ArrowRight aria-hidden="true" />
+    </FactLink>
+  ) : null}
+</FactRow>

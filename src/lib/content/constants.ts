@@ -94,6 +94,25 @@ export const EVENT_TYPE = {
 } as const;
 
 /**
+ * The {@link EVENT_STATUS} constant
+ * @description Whether an event goes ahead, moved to a new date or is cancelled, stored in Dutch as EmDash's select shows them to editors
+ */
+export const EVENT_STATUS = {
+  ON: "gaat door",
+  MOVED: "verplaatst",
+  CANCELLED: "afgelast",
+} as const;
+
+/**
+ * The {@link FOR_WHOM} constant
+ * @description Who an event is for, stored in Dutch as EmDash's select shows it to editors
+ */
+export const FOR_WHOM = {
+  EVERYONE: "iedereen",
+  MEMBERS: "leden",
+} as const;
+
+/**
  * The {@link MEETING_READ} constant
  * @description How many upcoming community events to read per language when looking for the next general meeting; EmDash cannot filter on a tick, so this reads well past any month of events
  */

@@ -1,9 +1,10 @@
 // Dependencies
 import { SITE_TIME_ZONE } from "../../content/constants";
+import { EVENT_STATUS } from "../../content/constants";
 import { EVENT_PHASE } from "../constants";
 
 // Types
-import type { EventItem, EventPhase } from "../types";
+import type { EventDetail, EventItem, EventPhase } from "../types";
 
 /**
  * The {@link DAY_KEY_FORMAT} constant
@@ -198,4 +199,23 @@ export function getMonthName(year: number, month: number, locale: string): strin
   return new Intl.DateTimeFormat(locale, { month: "long", timeZone: "UTC" }).format(
     new Date(Date.UTC(year, month - 1, 1)),
   );
+}
+
+/**
+ * The {@link getMovedFromDate} helper
+ * @description The date an event moved away from, written long, shown struck next to its new date
+ * @param {Pick<EventDetail, "status" | "originalStartsAt">} event - The event's status and old start
+ * @param {string} locale - The page's language
+ * @returns {string | undefined} The old date, or none when the event did not move or the editor left it empty
+ */
+export function getMovedFromDate(
+  event: Pick<EventDetail, "status" | "originalStartsAt">,
+  locale: string,
+): string | undefined {
+  // Only a moved event with its old date has one to strike
+  if (event.status !== EVENT_STATUS.MOVED || !event.originalStartsAt) {
+    return undefined;
+  }
+  // Write it as the new date is written
+  return getLongDate(event.originalStartsAt, locale);
 }

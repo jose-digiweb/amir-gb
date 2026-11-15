@@ -718,4 +718,15 @@ export const nl: Translations = {
   "archive.photos": "Foto’s",
   "eventsPage.photoAlt": "Vrouwen die dansen in jurken van waxprint",
   "event.aboutTitle": "Over deze activiteit",
+  "event.forWhom": "VOOR WIE",
+  "event.everyone": "Iedereen is welkom",
+  "event.members": "Leden van AMIR-GB",
+  "event.joinLink": "Nog geen lid? Word lid",
+  "event.onlineMembers": "Leden die zich hebben aangemeld krijgen de link van ons.",
+  "event.cancelledTitle": "Afgelast",
+  "event.cancelledText":
+    "Deze activiteit gaat niet door. Het spijt ons. Voor andere activiteiten verandert er niets.",
+  "event.movedTitle": "Nieuwe datum",
+  "event.movedText": "Deze activiteit is verplaatst naar {date}.",
+  "event.oldDate": "Oude datum",
 };

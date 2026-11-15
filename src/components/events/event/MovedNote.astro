@@ -1,0 +1,30 @@
+---
+// Dependencies
+import { CalendarClock } from "@lucide/astro";
+import { INTL_LOCALE } from "../../../i18n/constants";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { getLongDate } from "../../../lib/events/helpers";
+
+/**
+ * The {@link Props} type
+ * @description The props of the MovedNote component, the note at the top of an event that moved to a new date
+ */
+type Props = {
+  /** When the event now starts. */
+  startsAt: Date;
+};
+
+// Read the new date and write it in the page's language
+const { startsAt } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const text = t["event.movedText"].replace("{date}", getLongDate(startsAt, INTL_LOCALE[locale]));
+---
+
+<div role="note" class="flex gap-3 rounded-lg bg-warning-bg px-4 py-3.5 text-text-heading">
+  <CalendarClock aria-hidden="true" class="mt-0.5 size-5.5 shrink-0 text-warning" />
+  <p class="flex flex-col gap-0.5 type-body-sm">
+    <b class="font-heading">{t["event.movedTitle"]}</b>
+    <span class="text-pretty text-text">{text}</span>
+  </p>
+</div>

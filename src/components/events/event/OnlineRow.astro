@@ -1,0 +1,43 @@
+---
+// Dependencies
+import { Video } from "@lucide/astro";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { FOR_WHOM } from "../../../lib/content/constants";
+import { isOnlineOnly } from "../../../lib/events/helpers";
+
+// Components
+import FactRow from "./FactRow.astro";
+import OnlineLink from "./OnlineLink.astro";
+
+// Types
+import type { EventDetail } from "../../../lib/events/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the OnlineRow component, the facts card's Online: how to join online, with the link from an hour before for an open event; members get theirs from AMIR-GB
+ */
+type Props = {
+  /** The event. */
+  event: EventDetail;
+  /** The event's online link. */
+  href: string;
+  /** The event is still to come and goes ahead, so its link may show. */
+  isLive: boolean;
+  /** The moment the page renders. */
+  now: Date;
+};
+
+// Read the event and pick its line
+const { event, href, isLive, now } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+const isForMembers = event.forWhom === FOR_WHOM.MEMBERS;
+const openLine = isOnlineOnly(event) ? t["event.onlineOnly"] : t["event.onlineToo"];
+const line = isForMembers ? t["event.onlineMembers"] : openLine;
+const showLink = isLive && !isForMembers;
+---
+
+<FactRow label={t["event.online"]}>
+  <Video slot="icon" aria-hidden="true" />
+  <span class="text-pretty">{line}</span>
+  {showLink ? <OnlineLink href={href} startsAt={event.startsAt} now={now} /> : null}
+</FactRow>

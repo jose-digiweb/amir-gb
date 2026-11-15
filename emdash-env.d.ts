@@ -11,14 +11,17 @@ export interface Event {
   status: string;
   title: string;
   type: "jeugd" | "hulp" | "cultuur" | "gemeenschap";
+  event_status: "gaat door" | "verplaatst" | "afgelast";
   general_meeting?: boolean;
   starts_at: string;
   ends_at?: string;
+  original_starts_at?: string;
   place_name?: string;
   address?: string;
   online_link?: string;
   registration_link?: string;
   languages?: ("nederlands" | "engels" | "portugees" | "kriol")[];
+  for_whom: "iedereen" | "leden";
   image?: { id: string; src?: string; alt?: string; caption?: string; width?: number; height?: number; filename?: string; mimeType?: string; blurhash?: string; dominantColor?: string; focalX?: number; focalY?: number; provider?: string; previewUrl?: string; meta?: Record<string, unknown>; darkVariant?: { id: string; src?: string; alt?: string; caption?: string; width?: number; height?: number; filename?: string; mimeType?: string; blurhash?: string; dominantColor?: string; focalX?: number; focalY?: number; provider?: string; previewUrl?: string; meta?: Record<string, unknown> } };
   summary?: string;
   content?: PortableTextBlock[];

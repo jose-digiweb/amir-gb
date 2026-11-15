@@ -3,6 +3,7 @@
 import { Video } from "@lucide/astro";
 import { getLocale, getTranslations } from "../../../i18n/helpers";
 import { LOCALE } from "../../../i18n/constants";
+import { EVENT_STATUS } from "../../../lib/content/constants";
 
 // Components
 import BackToEventsLink from "../BackToEventsLink.astro";
@@ -27,6 +28,7 @@ const { event, isOnlineOnly } = Astro.props;
 const locale = getLocale(Astro.currentLocale);
 const t = getTranslations(locale);
 const titleLang = event.isDutchOnly ? LOCALE.NL : undefined;
+const isCancelled = event.status === EVENT_STATUS.CANCELLED;
 ---
 
 <div class="flex flex-col gap-3">
@@ -43,7 +45,10 @@ const titleLang = event.isDutchOnly ? LOCALE.NL : undefined;
   <h1
     id="event-title"
     lang={titleLang}
-    class="type-h1 font-extrabold text-balance break-words hyphens-auto text-text-heading"
+    class:list={[
+      "type-h1 font-extrabold text-balance break-words hyphens-auto text-text-heading",
+      { "line-through decoration-2": isCancelled },
+    ]}
   >
     {event.title}
   </h1>

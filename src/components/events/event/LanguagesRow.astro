@@ -1,0 +1,40 @@
+---
+// Dependencies
+import { Globe } from "@lucide/astro";
+import { INTL_LOCALE } from "../../../i18n/constants";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+
+// Components
+import FactRow from "./FactRow.astro";
+
+// Types
+import type { EventLanguage } from "../../../lib/events/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the LanguagesRow component, the facts card's Languages, or a visible placeholder when the editor chose none
+ */
+type Props = {
+  /** The languages spoken at the event. */
+  languages: EventLanguage[];
+};
+
+// Read the languages and list them in the page's language
+const { languages } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const list = new Intl.ListFormat(INTL_LOCALE[locale], { type: "conjunction" }).format(
+  languages.map((language) => t[`eventLanguage.${language}`]),
+);
+---
+
+<FactRow label={t["event.languages"]}>
+  <Globe slot="icon" aria-hidden="true" />
+  {list ? (
+    <span>{list}</span>
+  ) : (
+    <span class="self-start rounded-sm bg-warning-bg px-1.5 text-warning">
+      {t["event.languagesMissing"]}
+    </span>
+  )}
+</FactRow>

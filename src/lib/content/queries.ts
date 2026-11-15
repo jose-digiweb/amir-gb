@@ -7,6 +7,7 @@ import {
   COLLECTION,
   CONTENT_STATUS,
   DAY_MS,
+  EVENT_STATUS,
   EVENT_TYPE,
   FIELD,
   HOME_LIMIT,
@@ -94,18 +95,20 @@ export async function getUpcomingEvents(
     limit: HOME_LIMIT.EVENTS_READ,
   });
 
-  // Shape each event for its card, keep the ones still to start, and the soonest four across both languages
-  const events = items.map(({ entry, isDutchOnly }) => ({
-    id: entry.data.id,
-    href: getRelativeLocaleUrl(locale, `${ROUTE.EVENTS}${entry.data.slug ?? ""}/`),
-    title: entry.data.title,
-    startsAt: new Date(entry.data.starts_at),
-    endsAt: entry.data.ends_at ? new Date(entry.data.ends_at) : undefined,
-    placeName: entry.data.place_name,
-    isOnline: Boolean(entry.data.online_link),
-    image: entry.data.image,
-    isDutchOnly,
-  }));
+  // Shape each event for its card, keep the ones still to start and not cancelled, and the soonest four across both languages
+  const events = items
+    .filter(({ entry }) => entry.data.event_status !== EVENT_STATUS.CANCELLED)
+    .map(({ entry, isDutchOnly }) => ({
+      id: entry.data.id,
+      href: getRelativeLocaleUrl(locale, `${ROUTE.EVENTS}${entry.data.slug ?? ""}/`),
+      title: entry.data.title,
+      startsAt: new Date(entry.data.starts_at),
+      endsAt: entry.data.ends_at ? new Date(entry.data.ends_at) : undefined,
+      placeName: entry.data.place_name,
+      isOnline: Boolean(entry.data.online_link),
+      image: entry.data.image,
+      isDutchOnly,
+    }));
   const upcoming = events.filter((event) => event.startsAt >= now);
   upcoming.sort((a, b) => a.startsAt.getTime() - b.startsAt.getTime());
   return { items: upcoming.slice(0, HOME_LIMIT.EVENTS), cacheHints };
@@ -132,9 +135,10 @@ export async function getGeneralMeeting(
     limit: MEETING_READ,
   });
 
-  // Keep the marked meetings still to start, soonest first across both languages
+  // Keep the marked meetings that are not cancelled and still to start, soonest first across both languages
   const meetings = items
     .filter(({ entry }) => entry.data.general_meeting)
+    .filter(({ entry }) => entry.data.event_status !== EVENT_STATUS.CANCELLED)
     .map(({ entry, isDutchOnly }) => ({
       id: entry.data.id,
       href: getRelativeLocaleUrl(locale, `${ROUTE.EVENTS}${entry.data.slug ?? ""}/`),

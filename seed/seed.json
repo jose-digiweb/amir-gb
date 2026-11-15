@@ -42,6 +42,17 @@
           }
         },
         {
+          "slug": "event_status",
+          "label": "Status (Afgelast of Verplaatst toont een melding bovenaan de pagina)",
+          "type": "select",
+          "required": true,
+          "translatable": false,
+          "defaultValue": "gaat door",
+          "validation": {
+            "options": ["gaat door", "verplaatst", "afgelast"]
+          }
+        },
+        {
           "slug": "general_meeting",
           "label": "Algemene ledenvergadering (aanvinken bij de ledenvergadering, soort gemeenschap; de pagina Doe mee toont de eerstvolgende)",
           "type": "boolean",
@@ -59,6 +70,12 @@
         {
           "slug": "ends_at",
           "label": "Eindigt (leeg laten als er geen vaste eindtijd is)",
+          "type": "datetime",
+          "translatable": false
+        },
+        {
+          "slug": "original_starts_at",
+          "label": "Oude datum (alleen bij Verplaatst: zet de nieuwe datum bij Begint, en de oude hier)",
           "type": "datetime",
           "translatable": false
         },
@@ -93,6 +110,17 @@
           "translatable": false,
           "validation": {
             "options": ["nederlands", "engels", "portugees", "kriol"]
+          }
+        },
+        {
+          "slug": "for_whom",
+          "label": "Voor wie (Leden toont 'Nog geen lid? Word lid')",
+          "type": "select",
+          "required": true,
+          "translatable": false,
+          "defaultValue": "iedereen",
+          "validation": {
+            "options": ["iedereen", "leden"]
           }
         },
         {
@@ -197,7 +225,7 @@
         },
         {
           "slug": "event",
-          "label": "Over welke activiteit (mag leeg; alleen voor aankondigingen)",
+          "label": "Over welke activiteit (mag leeg; bij een aankondiging, of bij een verhaal met foto's van die dag)",
           "type": "reference",
           "translatable": false,
           "validation": {
@@ -330,7 +358,9 @@
               ]
             }
           ],
-          "online_link": "https://example.org/online"
+          "online_link": "https://example.org/online",
+          "event_status": "gaat door",
+          "for_whom": "leden"
         }
       },
       {
@@ -360,7 +390,9 @@
           "address": "Westersingel 14, Rotterdam",
           "online_link": "https://example.org/online",
           "type": "gemeenschap",
-          "general_meeting": true
+          "general_meeting": true,
+          "event_status": "gaat door",
+          "for_whom": "leden"
         }
       },
       {
@@ -394,7 +426,9 @@
               "filename": "drop-in-help.jpg"
             }
           },
-          "languages": ["nederlands", "portugees", "kriol"]
+          "languages": ["nederlands", "portugees", "kriol"],
+          "event_status": "gaat door",
+          "for_whom": "iedereen"
         }
       },
       {
@@ -430,7 +464,9 @@
           "place_name": "[PLACE]",
           "address": "[ADDRESS]",
           "type": "hulp",
-          "languages": ["nederlands", "portugees", "kriol"]
+          "languages": ["nederlands", "portugees", "kriol"],
+          "event_status": "gaat door",
+          "for_whom": "iedereen"
         }
       },
       {
@@ -525,7 +561,9 @@
               "filename": "community-dinner.jpg"
             }
           },
-          "languages": ["nederlands", "portugees", "kriol"]
+          "languages": ["nederlands", "portugees", "kriol"],
+          "event_status": "gaat door",
+          "for_whom": "iedereen"
         }
       },
       {
@@ -622,7 +660,9 @@
           "place_name": "[PLACE]",
           "address": "[ADDRESS]",
           "type": "gemeenschap",
-          "languages": ["nederlands", "portugees", "kriol"]
+          "languages": ["nederlands", "portugees", "kriol"],
+          "event_status": "gaat door",
+          "for_whom": "iedereen"
         }
       },
       {
@@ -656,7 +696,9 @@
               "filename": "choir.jpg"
             }
           },
-          "languages": ["portugees", "kriol"]
+          "languages": ["portugees", "kriol"],
+          "event_status": "gaat door",
+          "for_whom": "iedereen"
         }
       }
     ],

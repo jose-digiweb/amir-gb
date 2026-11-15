@@ -4,6 +4,9 @@ import { ExternalLink } from "@lucide/astro";
 import { getLocale, getTranslations } from "../../../i18n/helpers";
 import { getOnlineLinkFrom } from "../../../lib/events/helpers";
 
+// Components
+import FactLink from "./FactLink.astro";
+
 /**
  * The {@link Props} type
  * @description The props of the OnlineLink component, the way to join an event online, shown from an hour before it starts
@@ -24,17 +27,16 @@ const from = getOnlineLinkFrom({ startsAt });
 const isOpen = now >= from;
 ---
 
-<a
+<FactLink
   href={href}
   target="_blank"
   rel="noopener"
   hidden={!isOpen}
   data-online-from={from.getTime()}
-  class="mt-1 inline-flex items-center gap-1.5 self-start type-button-sm text-link underline underline-offset-4 [&[hidden]]:hidden"
 >
   {t["event.joinOnline"]}
-  <ExternalLink aria-hidden="true" class="size-4" />
-</a>
+  <ExternalLink aria-hidden="true" />
+</FactLink>
 
 <script>
   // Dependencies

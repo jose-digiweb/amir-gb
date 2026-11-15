@@ -713,4 +713,15 @@ export const en = {
   "archive.photos": "Photos",
   "eventsPage.photoAlt": "Women dancing in wax print dresses",
   "event.aboutTitle": "About this event",
+  "event.forWhom": "FOR WHOM",
+  "event.everyone": "Everyone is welcome",
+  "event.members": "Members of AMIR-GB",
+  "event.joinLink": "Not a member yet? Join in",
+  "event.onlineMembers": "Members who signed up get the link from us.",
+  "event.cancelledTitle": "Cancelled",
+  "event.cancelledText":
+    "This event does not go ahead. We are sorry. Nothing changes for other events.",
+  "event.movedTitle": "New date",
+  "event.movedText": "This event moved to {date}.",
+  "event.oldDate": "Old date",
 };

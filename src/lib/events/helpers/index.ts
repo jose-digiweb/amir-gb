@@ -10,6 +10,7 @@ export {
   getLongDate,
   getMonthKey,
   getMonthName,
+  getMovedFromDate,
   getShortDate,
   getShortWeekday,
 } from "./dates";

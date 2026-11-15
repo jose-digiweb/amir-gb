@@ -1,0 +1,45 @@
+---
+// Dependencies
+import { CalendarDays } from "@lucide/astro";
+import { INTL_LOCALE } from "../../../i18n/constants";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { EVENT_STATUS } from "../../../lib/content/constants";
+import { getEventTimes, getLongDate, getMovedFromDate } from "../../../lib/events/helpers";
+
+// Components
+import FactRow from "./FactRow.astro";
+
+// Types
+import type { EventDetail } from "../../../lib/events/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the WhenRow component, the facts card's When: the date and times, the old date struck after a move, the date struck when cancelled
+ */
+type Props = {
+  /** The event. */
+  event: EventDetail;
+};
+
+// Read the event and write its dates in the page's language
+const { event } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const intl = INTL_LOCALE[locale];
+const date = getLongDate(event.startsAt, intl);
+const times = getEventTimes(event, intl, t["weekly.until"], t["eventsPage.from"]);
+const isCancelled = event.status === EVENT_STATUS.CANCELLED;
+const oldDate = getMovedFromDate(event, intl);
+---
+
+<FactRow label={t["event.when"]}>
+  <CalendarDays slot="icon" aria-hidden="true" />
+  {oldDate ? (
+    <del class="font-normal text-text-muted">
+      <span class="sr-only">{t["event.oldDate"]}: </span>
+      {oldDate}
+    </del>
+  ) : null}
+  {isCancelled ? <del>{date}</del> : <span>{date}</span>}
+  {isCancelled ? null : <span>{times}</span>}
+</FactRow>

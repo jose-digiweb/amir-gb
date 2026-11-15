@@ -1,6 +1,7 @@
 ---
 // Dependencies
 import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { EVENT_STATUS } from "../../../lib/content/constants";
 import { EVENT_PHASE } from "../../../lib/events/constants";
 import { isOnlineOnly } from "../../../lib/events/helpers";
 
@@ -10,12 +11,14 @@ import DecorBead from "../../ui/DecorBead.astro";
 import DotPatch from "../../ui/DotPatch.astro";
 import WovenDefs from "../../ui/WovenDefs.astro";
 import WovenShade from "../../ui/WovenShade.astro";
+import CancelledNote from "./CancelledNote.astro";
 import DutchOnlyNote from "./DutchOnlyNote.astro";
 import EndedNote from "./EndedNote.astro";
 import EventAbout from "./EventAbout.astro";
 import EventFacts from "./EventFacts.astro";
 import EventHeader from "./EventHeader.astro";
 import EventMedia from "./EventMedia.astro";
+import MovedNote from "./MovedNote.astro";
 import OtherEventsSection from "./OtherEventsSection.astro";
 
 // Types
@@ -36,7 +39,9 @@ type Props = {
 const { content, now } = Astro.props;
 const { event, phase, storyHref, others } = content;
 const t = getTranslations(getLocale(Astro.currentLocale));
-const isEnded = phase === EVENT_PHASE.ENDED;
+const isCancelled = event.status === EVENT_STATUS.CANCELLED;
+const isMoved = event.status === EVENT_STATUS.MOVED;
+const isEnded = phase === EVENT_PHASE.ENDED && !isCancelled;
 const description = event.summary ?? t["eventsPage.description"];
 ---
 
@@ -56,6 +61,8 @@ const description = event.summary ?? t["eventsPage.description"];
     <div class="event-layout grid gap-5 tablet:gap-x-6 tablet:gap-y-8 desktop:gap-x-8">
       <div class="event-head flex flex-col gap-4">
         {event.isDutchOnly ? <DutchOnlyNote /> : null}
+        {isCancelled ? <CancelledNote /> : null}
+        {isMoved && !isEnded ? <MovedNote startsAt={event.startsAt} /> : null}
         {isEnded ? <EndedNote hasPhotos={Boolean(storyHref)} /> : null}
         <EventHeader event={event} isOnlineOnly={isOnlineOnly(event)} />
       </div>

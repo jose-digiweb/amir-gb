@@ -3,7 +3,14 @@ import { getRelativeLocaleUrl } from "astro:i18n";
 import { getEmDashEntry, getEmDashReferences, isSafeHref } from "emdash";
 import { DEFAULT_LOCALE, INTL_LOCALE } from "../../i18n/constants";
 import { ROUTE } from "../../site/constants";
-import { COLLECTION, FIELD, POST_TYPE, SORT } from "../content/constants";
+import {
+  COLLECTION,
+  CONTENT_STATUS,
+  EVENT_STATUS,
+  FIELD,
+  POST_TYPE,
+  SORT,
+} from "../content/constants";
 import { getWeeklyActivities, readLocalised } from "../content/queries";
 import { EVENT_PHASE, EVENT_TIME, EVENTS_LIMIT, EVENTS_PARAM } from "./constants";
 import {
@@ -87,6 +94,7 @@ function toEventItem(entry: Entry<"events">, isDutchOnly: boolean, locale: Local
     href: getRelativeLocaleUrl(locale, `${ROUTE.EVENTS}${slug}/`),
     title: data.title,
     type: data.type,
+    status: data.event_status,
     startsAt,
     endsAt: toOptionalDate(data.ends_at),
     dayKey: getDayKey(startsAt),
@@ -100,7 +108,7 @@ function toEventItem(entry: Entry<"events">, isDutchOnly: boolean, locale: Local
 
 /**
  * The {@link readEvents} helper
- * @description Reads events in the page's language and the Dutch ones without a translation, shaped and soonest first
+ * @description Reads events in the page's language and the Dutch ones without a translation, shaped and soonest first, without cancelled ones
  * @param {Locale} locale - The page's language
  * @param {CollectionFilter} filter - The filter both languages share
  * @returns {Promise<ContentRead<EventItem>>} The events, with their cache hints
@@ -110,11 +118,13 @@ async function readEvents(
   filter: CollectionFilter,
 ): Promise<ContentRead<EventItem>> {
   const { items, cacheHints } = await readLocalised(COLLECTION.EVENTS, locale, {
-    status: "published",
+    status: CONTENT_STATUS.PUBLISHED,
     ...filter,
   });
-  const events = items.map(({ entry, isDutchOnly }) => toEventItem(entry, isDutchOnly, locale));
-  // Order both languages together by their start
+  const events = items
+    .map(({ entry, isDutchOnly }) => toEventItem(entry, isDutchOnly, locale))
+    .filter((event) => event.status !== EVENT_STATUS.CANCELLED);
+  // Order both languages together by their start, leaving cancelled events to their own page
   events.sort((a, b) => a.startsAt.getTime() - b.startsAt.getTime());
   return { items: events, cacheHints };
 }
@@ -319,6 +329,8 @@ function toEventDetail(entry: Entry<"events">, locale: Locale): EventDetail {
   // The shared fields, plus what only the page shows
   return {
     ...toEventItem(entry, data.locale !== locale, locale),
+    originalStartsAt: toOptionalDate(data.original_starts_at),
+    forWhom: data.for_whom,
     address: data.address,
     onlineLink: toSafeLink(data.online_link),
     registrationLink: toSafeLink(data.registration_link),
@@ -365,7 +377,7 @@ export async function readEventEntry(
  */
 async function getStories(locale: Locale): Promise<ContentRead<Story>> {
   const { items, cacheHints } = await readLocalised(COLLECTION.POSTS, locale, {
-    status: "published",
+    status: CONTENT_STATUS.PUBLISHED,
     where: { [FIELD.TYPE]: POST_TYPE.STORY },
     orderBy: { [FIELD.PUBLISHED_AT]: SORT.DESC },
     limit: EVENTS_LIMIT.STORIES_READ,

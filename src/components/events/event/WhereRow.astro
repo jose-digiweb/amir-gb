@@ -1,0 +1,43 @@
+---
+// Dependencies
+import { ExternalLink, MapPin } from "@lucide/astro";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { getMapsHref, getPlaceLines, getPlaceQuery } from "../../../lib/events/helpers";
+
+// Components
+import FactLink from "./FactLink.astro";
+import FactRow from "./FactRow.astro";
+
+// Types
+import type { EventDetail } from "../../../lib/events/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the WhereRow component, the facts card's Where: the place and its address, with Open in maps while the event goes ahead
+ */
+type Props = {
+  /** The event, which has a place. */
+  event: EventDetail;
+  /** Show Open in maps; a cancelled event has nowhere to go. */
+  showMaps: boolean;
+};
+
+// Read the place and its maps link
+const { event, showMaps } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+const lines = getPlaceLines(event);
+const mapsHref = getMapsHref(getPlaceQuery(event));
+---
+
+<FactRow label={t["event.where"]}>
+  <MapPin slot="icon" aria-hidden="true" />
+  {lines.map((line) => (
+    <span>{line}</span>
+  ))}
+  {showMaps ? (
+    <FactLink href={mapsHref} target="_blank" rel="noopener">
+      {t["event.openMaps"]}
+      <ExternalLink aria-hidden="true" />
+    </FactLink>
+  ) : null}
+</FactRow>

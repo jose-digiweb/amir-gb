@@ -13,6 +13,7 @@ import {
   getEventTimes,
   getEventWhere,
   getLongDate,
+  getMovedFromDate,
   getPlaceLines,
   getTypeChips,
   getWeekdayNames,
@@ -36,6 +37,7 @@ const event = (id: string, startsAt: string, endsAt?: string): EventItem => ({
   href: `/events/${id}/`,
   title: id,
   type: "gemeenschap",
+  status: "gaat door",
   startsAt: new Date(startsAt),
   endsAt: endsAt ? new Date(endsAt) : undefined,
   dayKey: getDayKey(new Date(startsAt)),
@@ -141,6 +143,19 @@ describe("the calendar", () => {
     expect(day(17).weekly).toHaveLength(1);
     expect(day(21).isPicked).toBe(true);
     expect(day(21).events).toHaveLength(1);
+  });
+});
+
+describe("a moved event", () => {
+  it("strikes its old date only when it moved and the editor gave one", () => {
+    const old = new Date("2026-11-21T13:30:00Z");
+    expect(getMovedFromDate({ status: "verplaatst", originalStartsAt: old }, "en-GB")).toBe(
+      "Saturday 21 November 2026",
+    );
+    expect(getMovedFromDate({ status: "verplaatst" }, "en-GB")).toBeUndefined();
+    expect(
+      getMovedFromDate({ status: "gaat door", originalStartsAt: old }, "en-GB"),
+    ).toBeUndefined();
   });
 });
 
