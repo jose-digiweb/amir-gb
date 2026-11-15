@@ -1,4 +1,5 @@
 // Types
+import type { ROUTE } from "../../site/constants";
 import type { DONATE_ERROR, FREQUENCY, GIFT_STATE } from "./constants";
 
 /**
@@ -27,6 +28,12 @@ export type GiftChoice = {
   frequency: Frequency;
   amountCents: number;
 };
+
+/**
+ * The {@link GiftPageRoute} type
+ * @description A page with the donation widget, which Stripe sends a donor back to: the home page or the Donate page
+ */
+export type GiftPageRoute = typeof ROUTE.HOME | typeof ROUTE.DONATE;
 
 /**
  * The {@link SupportState} type

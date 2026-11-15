@@ -414,4 +414,37 @@ export const en = {
   "contactMail.topic": "About",
   "contactMail.noTopic": "Not chosen",
   "contactPage.whatsappTitle": "WhatsApp",
+  "donatePage.title": "Donate to AMIR-GB",
+  "donatePage.description":
+    "Give once or every month with iDEAL, or by bank transfer. Your gift supports migrants and the Guinea-Bissau community across the Netherlands.",
+  "donatePage.opener": "GIVE WHAT YOU CAN",
+  "donatePage.titleStart": "Support our",
+  "donatePage.titleEnd": "community",
+  "donatePage.text":
+    "Our board works unpaid. Gifts support families in hard times, advice on rights, learning, and our bridge with Guinea-Bissau.",
+  "donatePage.usesOpener": "WHERE YOUR GIFT GOES",
+  "donatePage.usesTitle": "What your gift does",
+  "donatePage.usesText":
+    "This is what gifts are for, from our own plan. As a new association, we will show the first results here after our first year.",
+  "donatePage.emergencyTitle": "Emergency Fund",
+  "donatePage.emergencyText": "For families facing a death, serious illness or eviction.",
+  "donatePage.rightsTitle": "Advice on your rights",
+  "donatePage.rightsText": "Free legal advice and help with official letters.",
+  "donatePage.learningTitle": "Learning",
+  "donatePage.learningText": "Dutch lessons, homework help and training for work.",
+  "donatePage.bridgeTitle": "The bridge with Guinea-Bissau",
+  "donatePage.bridgeText":
+    "Solidarity projects in the communities we come from, like Natal na Tabanca.",
+  "donatePage.waysOpener": "GOOD TO KNOW",
+  "donatePage.waysTitle": "Other ways and questions",
+  "donatePage.bankTitle": "By bank transfer",
+  "donatePage.bankLine": "Rabobank, in the name of AMIR-GB",
+  "donatePage.monthlyTitle": "Giving monthly?",
+  "donatePage.monthlyText":
+    "You can stop your monthly gift whenever you like, on the page of our payment provider. For another amount, stop it and start a new gift here.",
+  "donatePage.monthlyLink": "Stop or change my monthly gift",
+  "donatePage.taxTitle": "About tax",
+  "donatePage.taxText":
+    "AMIR-GB is an SBBI, not an ANBI. We plan to apply, but for now gifts to us are not tax-deductible.",
+  "donatePage.taxLink": "How we handle money",
 };

@@ -34,7 +34,7 @@ function getLineItem(choice: GiftChoice): Stripe.Checkout.SessionCreateParams.Li
  * @description The Checkout Session for a gift: a payment for a one-off gift, a subscription for a monthly one, in the page's language, with the payment methods the Stripe Dashboard turns on
  * @param {GiftChoice} choice - The donor's choice
  * @param {Locale} locale - The page's language
- * @param {string} pageUrl - The full address of the page's home, where Stripe sends the donor back
+ * @param {string} pageUrl - The full address of the page the gift was started from, where Stripe sends the donor back
  * @returns {Stripe.Checkout.SessionCreateParams} The parameters for creating the session
  */
 export function getCheckoutParams(

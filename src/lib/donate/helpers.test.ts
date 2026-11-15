@@ -8,6 +8,7 @@ import {
   formatAmount,
   getChoiceLabel,
   getChosenAmount,
+  getGiftFormHref,
   getReturnUrls,
   getSessionState,
   getWhatsAppShareHref,
@@ -188,6 +189,12 @@ describe("getReturnUrls", () => {
       success: `${PAGE}?gift={CHECKOUT_SESSION_ID}#support`,
       cancel: `${PAGE}?gift=stopped&frequency=once&amount=4000#support`,
     });
+  });
+});
+
+describe("getGiftFormHref", () => {
+  it("points at the form on the same page, without the return", () => {
+    expect(getGiftFormHref("/en/donate/")).toBe("/en/donate/#support");
   });
 });
 

@@ -419,4 +419,37 @@ export const nl: Translations = {
   "contactMail.topic": "Onderwerp",
   "contactMail.noTopic": "Niet gekozen",
   "contactPage.whatsappTitle": "WhatsApp",
+  "donatePage.title": "Doneer aan AMIR-GB",
+  "donatePage.description":
+    "Geef één keer of elke maand met iDEAL, of per bankoverschrijving. Je gift steunt migranten en de Guinee-Bissause gemeenschap in heel Nederland.",
+  "donatePage.opener": "GEEF WAT JE KUNT",
+  "donatePage.titleStart": "Steun onze",
+  "donatePage.titleEnd": "gemeenschap",
+  "donatePage.text":
+    "Ons bestuur werkt onbetaald. Giften steunen gezinnen in moeilijke tijden, advies over je rechten, leren, en onze brug met Guinee-Bissau.",
+  "donatePage.usesOpener": "WAAR JE GIFT HEEN GAAT",
+  "donatePage.usesTitle": "Wat je gift doet",
+  "donatePage.usesText":
+    "Hier zijn giften voor, uit ons eigen plan. Als nieuwe vereniging laten we hier na ons eerste jaar de eerste resultaten zien.",
+  "donatePage.emergencyTitle": "Noodfonds",
+  "donatePage.emergencyText": "Voor gezinnen bij een overlijden, ernstige ziekte of uitzetting.",
+  "donatePage.rightsTitle": "Advies over je rechten",
+  "donatePage.rightsText": "Gratis juridisch advies en hulp bij officiële brieven.",
+  "donatePage.learningTitle": "Leren",
+  "donatePage.learningText": "Nederlandse les, huiswerkhulp en training voor werk.",
+  "donatePage.bridgeTitle": "De brug met Guinee-Bissau",
+  "donatePage.bridgeText":
+    "Solidariteitsprojecten in de gemeenschappen waar we vandaan komen, zoals Natal na Tabanca.",
+  "donatePage.waysOpener": "GOED OM TE WETEN",
+  "donatePage.waysTitle": "Andere manieren en vragen",
+  "donatePage.bankTitle": "Per bankoverschrijving",
+  "donatePage.bankLine": "Rabobank, op naam van AMIR-GB",
+  "donatePage.monthlyTitle": "Geef je maandelijks?",
+  "donatePage.monthlyText":
+    "Je kunt je maandelijkse gift stoppen wanneer je wilt, op de pagina van onze betaalprovider. Wil je een ander bedrag? Stop dan en start hier een nieuwe gift.",
+  "donatePage.monthlyLink": "Mijn maandelijkse gift stoppen of wijzigen",
+  "donatePage.taxTitle": "Over belasting",
+  "donatePage.taxText":
+    "AMIR-GB is een SBBI, geen ANBI. We willen dat aanvragen, maar voorlopig zijn giften aan ons niet aftrekbaar voor de belasting.",
+  "donatePage.taxLink": "Zo gaan we met geld om",
 };

@@ -419,4 +419,38 @@ export const pt: Translations = {
   "contactMail.topic": "Assunto",
   "contactMail.noTopic": "Não escolhido",
   "contactPage.whatsappTitle": "WhatsApp",
+  "donatePage.title": "Doe à AMIR-GB",
+  "donatePage.description":
+    "Doe uma vez ou todos os meses com iDEAL, ou por transferência bancária. O seu donativo apoia migrantes e a comunidade guineense em todos os Países Baixos.",
+  "donatePage.opener": "DÊ O QUE PUDER",
+  "donatePage.titleStart": "Apoie a nossa",
+  "donatePage.titleEnd": "comunidade",
+  "donatePage.text":
+    "A nossa direção trabalha sem remuneração. Os donativos apoiam famílias em tempos difíceis, aconselhamento sobre direitos, aprendizagem e a nossa ponte com a Guiné-Bissau.",
+  "donatePage.usesOpener": "PARA ONDE VAI O SEU DONATIVO",
+  "donatePage.usesTitle": "O que o seu donativo faz",
+  "donatePage.usesText":
+    "É para isto que servem os donativos, segundo o nosso próprio plano. Como associação nova, mostraremos aqui os primeiros resultados depois do nosso primeiro ano.",
+  "donatePage.emergencyTitle": "Fundo de Emergência",
+  "donatePage.emergencyText": "Para famílias perante uma morte, uma doença grave ou um despejo.",
+  "donatePage.rightsTitle": "Aconselhamento sobre os seus direitos",
+  "donatePage.rightsText": "Aconselhamento jurídico gratuito e ajuda com cartas oficiais.",
+  "donatePage.learningTitle": "Aprendizagem",
+  "donatePage.learningText":
+    "Aulas de neerlandês, apoio aos trabalhos de casa e formação para o trabalho.",
+  "donatePage.bridgeTitle": "A ponte com a Guiné-Bissau",
+  "donatePage.bridgeText":
+    "Projetos de solidariedade nas comunidades de onde viemos, como o Natal na Tabanca.",
+  "donatePage.waysOpener": "BOM SABER",
+  "donatePage.waysTitle": "Outras formas e perguntas",
+  "donatePage.bankTitle": "Por transferência bancária",
+  "donatePage.bankLine": "Rabobank, em nome da AMIR-GB",
+  "donatePage.monthlyTitle": "Doa todos os meses?",
+  "donatePage.monthlyText":
+    "Pode parar o seu donativo mensal quando quiser, na página do nosso fornecedor de pagamentos. Para outro valor, pare-o e comece aqui um novo donativo.",
+  "donatePage.monthlyLink": "Parar ou alterar o meu donativo mensal",
+  "donatePage.taxTitle": "Sobre impostos",
+  "donatePage.taxText":
+    "A AMIR-GB é uma SBBI, não uma ANBI. Planeamos candidatar-nos, mas por agora os donativos não são dedutíveis nos impostos.",
+  "donatePage.taxLink": "Como gerimos o dinheiro",
 };

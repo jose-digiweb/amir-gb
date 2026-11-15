@@ -1,0 +1,31 @@
+---
+/**
+ * The {@link Props} type
+ * @description The props of the DotPatch component, a faint patch of dots that fades out at its edges, behind a section's content
+ */
+type Props = {
+  /** The pattern's id, unique on the page. */
+  id: string;
+  /** Place and size classes from the caller. */
+  class?: string;
+};
+
+// Read the id and the layout
+const { id, class: className } = Astro.props;
+const fill = `url(#${id})`;
+---
+
+<svg
+  aria-hidden="true"
+  class:list={[
+    "pointer-events-none absolute -z-10 mask-radial-from-30% mask-radial-to-100% mask-radial-closest-side",
+    className,
+  ]}
+>
+  <defs>
+    <pattern id={id} width="14" height="14" patternUnits="userSpaceOnUse">
+      <circle cx="7" cy="7" r="1.6" class="fill-decor-strong"></circle>
+    </pattern>
+  </defs>
+  <rect width="100%" height="100%" fill={fill}></rect>
+</svg>

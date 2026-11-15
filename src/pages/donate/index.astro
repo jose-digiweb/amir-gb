@@ -1,0 +1,34 @@
+---
+// Dependencies
+import { actions } from "astro:actions";
+import {
+  cacheDonatePage,
+  getSupportState,
+  isPrivateState,
+  keepPagePrivate,
+} from "../../lib/donate/support";
+
+// Components
+import DonatePage from "../../components/donate/DonatePage.astro";
+
+// The Donate page takes gifts and shows their result, so it renders per request
+export const prerender = false;
+
+// A posted gift without JavaScript goes straight to Stripe's payment page
+const donation = Astro.getActionResult(actions.donate);
+if (donation?.data) {
+  return Astro.redirect(donation.data.url, 303);
+}
+
+// What the widget shows: the form, a failed try, or a return from Stripe
+const support = await getSupportState(Astro.url, donation?.error);
+
+// A page with one donor's gift is never cached; the plain form is cached at the edge, set before rendering starts
+if (isPrivateState(support)) {
+  keepPagePrivate(Astro.response.headers);
+} else {
+  cacheDonatePage(Astro.cache);
+}
+---
+
+<DonatePage support={support} />

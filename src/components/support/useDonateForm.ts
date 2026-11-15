@@ -1,11 +1,11 @@
 // Dependencies
 import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
-import { DONATE_ERROR, DONATION, FREQUENCY, PAGE_SHOW } from "../../../lib/donate/constants";
-import { checkAmount, getChoiceLabel, getChosenAmount } from "../../../lib/donate/helpers";
+import { DONATE_ERROR, DONATION, FREQUENCY, PAGE_SHOW } from "../../lib/donate/constants";
+import { checkAmount, getChoiceLabel, getChosenAmount } from "../../lib/donate/helpers";
 
 // Types
-import type { Locale } from "../../../i18n/types";
-import type { DonateError, DonateFormCopy, Frequency } from "../../../lib/donate/types";
+import type { Locale } from "../../i18n/types";
+import type { DonateError, DonateFormCopy, Frequency } from "../../lib/donate/types";
 
 /**
  * The {@link DonateFormOptions} type

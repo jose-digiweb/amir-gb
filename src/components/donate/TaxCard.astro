@@ -1,0 +1,31 @@
+---
+// Dependencies
+import { ArrowRight, Info } from "@lucide/astro";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { ROUTE } from "../../site/constants";
+import { WAY_CARD_TONE } from "./constants";
+
+// Components
+import CardLink from "./CardLink.astro";
+import WayCard from "./WayCard.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the TaxCard component: AMIR-GB is an SBBI, not an ANBI, so gifts are not tax-deductible for now, with the way to how it handles money
+ */
+type Props = Record<string, never>;
+
+// Read the copy and the About us page in this language
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const aboutHref = getRelativeLocaleUrl(locale, ROUTE.ABOUT);
+---
+
+<WayCard title={t["donatePage.taxTitle"]} tone={WAY_CARD_TONE.INFO}>
+  <Info slot="icon" />
+  <p class="type-body text-pretty">{t["donatePage.taxText"]}</p>
+  <CardLink href={aboutHref} label={t["donatePage.taxLink"]}>
+    <ArrowRight />
+  </CardLink>
+</WayCard>

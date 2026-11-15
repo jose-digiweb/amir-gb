@@ -1,0 +1,22 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { getGiftFormHref } from "../../lib/donate/helpers";
+
+/**
+ * The {@link Props} type
+ * @description The props of the GiveAgainLink component, which takes a donor from a thank you back to the donation form
+ */
+type Props = Record<string, never>;
+
+// The donation form on this page, without the return
+const t = getTranslations(getLocale(Astro.currentLocale));
+const formHref = getGiftFormHref(Astro.url.pathname);
+---
+
+<a
+  href={formHref}
+  class="inline-flex min-h-tap items-center self-center type-button text-text-heading underline underline-offset-4"
+>
+  {t["gift.giveAgain"]}
+</a>

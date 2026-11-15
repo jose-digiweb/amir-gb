@@ -1,0 +1,27 @@
+---
+// Dependencies
+import { Bridge, GraduationCap, LifeBuoy, Scale } from "@lucide/astro";
+import { GIFT_USE } from "./constants";
+
+// Types
+import type { GiftUse } from "./types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the GiftUseIcon component, the Lucide pictogram of one thing gifts are for
+ */
+type Props = {
+  /** What the gift is for. */
+  use: GiftUse;
+  /** Size classes from the caller. */
+  class?: string;
+};
+
+// Read the use and the size
+const { use, class: className } = Astro.props;
+---
+
+{use === GIFT_USE.EMERGENCY ? <LifeBuoy class={className} /> : null}
+{use === GIFT_USE.RIGHTS ? <Scale class={className} /> : null}
+{use === GIFT_USE.LEARNING ? <GraduationCap class={className} /> : null}
+{use === GIFT_USE.BRIDGE ? <Bridge class={className} /> : null}

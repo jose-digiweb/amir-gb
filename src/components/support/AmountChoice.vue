@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // Dependencies
-import { DONATE_FIELD } from "../../../lib/donate/constants";
+import { DONATE_FIELD } from "../../lib/donate/constants";
 
 /**
  * The {@link Props} type

@@ -199,4 +199,18 @@ const bridgeStyle = `background-image: url(${bridgeLine.src})`;
       padding-top: calc(var(--space-20) + var(--space-32) + var(--space-6));
     }
   }
+
+  /* A section that slides under the footer (the Donate page's last) has the footer pulled up over it, as the sections stack */
+  :global(main:has([data-under-footer])) + .site-footer {
+    position: relative;
+    margin-top: calc(var(--space-10) * -1);
+
+    @variant tablet {
+      margin-top: calc(var(--space-12) * -1);
+    }
+
+    @variant desktop {
+      margin-top: calc((var(--space-6) + var(--space-8)) * -1);
+    }
+  }
 </style>

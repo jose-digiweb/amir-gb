@@ -2,19 +2,17 @@
 // Dependencies
 import { Heart, Undo2 } from "@lucide/astro";
 import { actions } from "astro:actions";
-import { getRelativeLocaleUrl } from "astro:i18n";
-import { getLocale, getTranslations } from "../../../i18n/helpers";
-import { DONATE_FIELD, GIFT_RETURN } from "../../../lib/donate/constants";
-import { getChoiceLabel, toEuroText } from "../../../lib/donate/helpers";
-import { ROUTE } from "../../../site/constants";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { DONATE_FIELD, GIFT_RETURN } from "../../lib/donate/constants";
+import { getChoiceLabel, getGiftFormHref, toEuroText } from "../../lib/donate/helpers";
 import { RETURN_TONE } from "./constants";
 
 // Components
-import Button from "../../ui/Button.astro";
+import Button from "../ui/Button.astro";
 import ReturnCard from "./ReturnCard.astro";
 
 // Types
-import type { GiftChoice } from "../../../lib/donate/types";
+import type { GiftChoice } from "../../lib/donate/types";
 
 /**
  * The {@link Props} type
@@ -37,7 +35,7 @@ const submitLabel = getChoiceLabel(
 );
 const euros = toEuroText(choice.amountCents);
 const formAction = `${actions.donate}${GIFT_RETURN.HASH}`;
-const changeHref = `${getRelativeLocaleUrl(locale, ROUTE.HOME)}${GIFT_RETURN.HASH}`;
+const changeHref = getGiftFormHref(Astro.url.pathname);
 ---
 
 <ReturnCard tone={RETURN_TONE.NEUTRAL} title={t["gift.stoppedTitle"]} text={t["gift.stoppedText"]}>

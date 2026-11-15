@@ -158,6 +158,15 @@ export const PRIVATE_PAGE = {
 } as const;
 
 /**
+ * The {@link DONATE_PAGE_CACHE} constant
+ * @description How long the edge keeps the Donate page with the plain form, in seconds, as long as the home page
+ */
+export const DONATE_PAGE_CACHE = {
+  MAX_AGE: 600,
+  STALE_WHILE_REVALIDATE: 3600,
+} as const;
+
+/**
  * The {@link BANK_TRANSFER} constant
  * @description AMIR-GB's Rabobank account for gifts by bank transfer; a placeholder in the real number's shape until AMIR sends it
  */
@@ -167,12 +176,13 @@ export const BANK_TRANSFER = {
 
 /**
  * The {@link COPY_ACCOUNT} constant
- * @description The copy button's hooks and how long its copied state stays, in milliseconds
+ * @description The copy buttons' hooks, the mark of one already set up, and how long the copied state stays, in milliseconds
  */
 export const COPY_ACCOUNT = {
   ROOT: "[data-copy-account]",
   BUTTON: "[data-copy-account-button]",
   COPIED: "copied",
+  READY: "copyAccountReady",
   VALUE_ATTRIBUTE: "data-copy-account",
   RESET_MS: 3000,
   CLICK: "click",

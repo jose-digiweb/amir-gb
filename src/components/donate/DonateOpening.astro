@@ -1,0 +1,70 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { getNestedLozengePath } from "../../lib/woven/helpers";
+
+// Components
+import DonationWidget from "../support/DonationWidget.astro";
+import JoinedHandsRing from "../support/JoinedHandsRing.astro";
+import Opener from "../ui/Opener.astro";
+import WovenShade from "../ui/WovenShade.astro";
+import DotPatch from "./DotPatch.astro";
+
+// Types
+import type { SupportState } from "../../lib/donate/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the DonateOpening component: Support our community on sand, the joined hands in their ring, and the donation widget, or the result of a gift in its place
+ */
+type Props = {
+  /** The form, or the result of a return from Stripe, read by the page route. */
+  support: SupportState;
+};
+
+// Read the state, the copy and the large faint lozenge in the corner
+const { support } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+const lozengePath = getNestedLozengePath();
+---
+
+<section
+  aria-labelledby="donate-title"
+  class="relative isolate -mt-16 overflow-hidden bg-bg-alt px-margin pt-28 pb-24 text-text tablet:px-margin-md tablet:pt-32 tablet:pb-28 desktop:-mt-20 desktop:px-margin-lg desktop:pt-40 desktop:pb-36"
+>
+  <WovenShade />
+  <svg
+    aria-hidden="true"
+    viewBox="0 0 219 219"
+    class="pointer-events-none absolute -right-32 -bottom-40 -z-10 size-80 fill-decor-strong desktop:-right-70 desktop:-bottom-80 desktop:size-140"
+  >
+    <path d={lozengePath}></path>
+  </svg>
+  <DotPatch
+    id="donate-opening-dots"
+    class="hidden desktop:top-176 desktop:left-10 desktop:block desktop:h-56 desktop:w-76"
+  />
+  <div class="mx-auto grid w-full max-w-page gap-y-3 tablet:grid-cols-[minmax(0,1fr)_--spacing(95)] tablet:items-start tablet:gap-x-8 tablet:gap-y-6 desktop:grid-cols-[minmax(0,1fr)_--spacing(115)] desktop:gap-x-20 desktop:gap-y-4">
+    <div class="flex flex-col gap-3 tablet:col-span-2 tablet:gap-4 desktop:col-span-1 desktop:pt-8">
+      <Opener label={t["donatePage.opener"]} />
+      <h1 id="donate-title" class="type-display text-text-heading">
+        <span class="block whitespace-nowrap">{t["donatePage.titleStart"]}</span>{" "}
+        <span class="whitespace-nowrap">{t["donatePage.titleEnd"]}</span>
+      </h1>
+    </div>
+    <div class="flex items-center gap-4 tablet:flex-col tablet:items-start tablet:gap-0">
+      <p class="flex-1 type-body text-pretty tablet:max-w-measure desktop:type-lead">
+        {t["donatePage.text"]}
+      </p>
+      <JoinedHandsRing
+        sizes="(min-width: 1180px) 380px, (min-width: 700px) 240px, 110px"
+        class="relative -mr-10 size-32 shrink-0 tablet:mt-16 tablet:mr-0 tablet:aspect-square tablet:size-auto tablet:w-full tablet:max-w-70 tablet:self-center desktop:mt-12 desktop:max-w-110 desktop:self-end"
+      />
+    </div>
+    <DonationWidget
+      id="support"
+      support={support}
+      class="relative z-10 mt-3 scroll-mt-8 tablet:col-start-2 tablet:row-start-2 tablet:mt-0 desktop:row-span-2 desktop:row-start-1"
+    />
+  </div>
+</section>

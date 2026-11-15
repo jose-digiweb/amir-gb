@@ -1,0 +1,29 @@
+---
+// Dependencies
+import { ExternalLink, RotateCw } from "@lucide/astro";
+import { STRIPE_PORTAL_URL } from "astro:env/server";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+
+// Components
+import CardLink from "./CardLink.astro";
+import WayCard from "./WayCard.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the MonthlyGiftCard component: how to stop a monthly gift, with the link to Stripe's page for it, the same as the footer's
+ */
+type Props = Record<string, never>;
+
+// Read the copy
+const t = getTranslations(getLocale(Astro.currentLocale));
+---
+
+<WayCard title={t["donatePage.monthlyTitle"]}>
+  <RotateCw slot="icon" />
+  <p class="type-body text-pretty">{t["donatePage.monthlyText"]}</p>
+  {STRIPE_PORTAL_URL ? (
+    <CardLink href={STRIPE_PORTAL_URL} label={t["donatePage.monthlyLink"]}>
+      <ExternalLink />
+    </CardLink>
+  ) : null}
+</WayCard>

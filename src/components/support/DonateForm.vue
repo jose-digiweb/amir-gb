@@ -1,8 +1,8 @@
 <script setup lang="ts">
 // Dependencies
 import { CircleAlert, Heart, LoaderCircle, Lock } from "@lucide/vue";
-import { DONATE_FIELD, DONATION, FREQUENCY } from "../../../lib/donate/constants";
-import { formatAmount } from "../../../lib/donate/helpers";
+import { DONATE_FIELD, DONATION, FREQUENCY } from "../../lib/donate/constants";
+import { formatAmount } from "../../lib/donate/helpers";
 import { useDonateForm } from "./useDonateForm";
 
 // Components
@@ -10,8 +10,8 @@ import AmountChoice from "./AmountChoice.vue";
 import FrequencyChoice from "./FrequencyChoice.vue";
 
 // Types
-import type { Locale } from "../../../i18n/types";
-import type { DonateError, DonateFormCopy } from "../../../lib/donate/types";
+import type { Locale } from "../../i18n/types";
+import type { DonateError, DonateFormCopy } from "../../lib/donate/types";
 
 /**
  * The {@link Props} type

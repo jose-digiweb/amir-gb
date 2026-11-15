@@ -1,10 +1,17 @@
 // Dependencies
 import { isInputError } from "astro:actions";
-import { DONATE_ERROR, DONATE_FIELD, GIFT_STATE, PRIVATE_PAGE } from "./constants";
+import {
+  DONATE_ERROR,
+  DONATE_FIELD,
+  DONATE_PAGE_CACHE,
+  GIFT_STATE,
+  PRIVATE_PAGE,
+} from "./constants";
 import { isStoppedReturn, readGiftReturn } from "./helpers";
 import { readCheckoutSession } from "./stripe";
 
 // Types
+import type { AstroGlobal } from "astro";
 import type { ActionError } from "astro:actions";
 import type { DonateError, SupportState } from "./types";
 
@@ -84,4 +91,23 @@ export function isPrivateState(support: SupportState): boolean {
  */
 export function keepPagePrivate(headers: Headers): void {
   headers.set(PRIVATE_PAGE.HEADER, PRIVATE_PAGE.VALUE);
+}
+
+/**
+ * The {@link cacheDonatePage} helper
+ * @description Caches the Donate page with the plain form at the edge, which is the same for everyone
+ * @param {AstroGlobal["cache"]} cache - The page route's cache, set before rendering starts so the headers carry it
+ * @returns {void}
+ */
+export function cacheDonatePage(cache: Pick<AstroGlobal["cache"], "enabled" | "set">): void {
+  // Without a cache provider, as in development, there is nothing to set
+  if (!cache.enabled) {
+    return;
+  }
+
+  // Keep the page for a while, and serve it stale while a fresh one renders
+  cache.set({
+    maxAge: DONATE_PAGE_CACHE.MAX_AGE,
+    swr: DONATE_PAGE_CACHE.STALE_WHILE_REVALIDATE,
+  });
 }

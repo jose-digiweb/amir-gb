@@ -254,7 +254,7 @@ export function getSessionState(session: CheckoutSessionResult): SupportState {
 /**
  * The {@link getReturnUrls} helper
  * @description Where Stripe sends a donor back: the Support section of their page, with the session or with their choice when they stop
- * @param {string} pageUrl - The full address of the page's home, without query or hash
+ * @param {string} pageUrl - The full address of the page the gift was started from, without query or hash
  * @param {GiftChoice} choice - The donor's choice
  * @returns {{ success: string; cancel: string }} The success and cancel addresses for Checkout
  */
@@ -272,6 +272,16 @@ export function getReturnUrls(
     [GIFT_RETURN.AMOUNT]: String(choice.amountCents),
   });
   return { success, cancel: `${pageUrl}?${stopped.toString()}${GIFT_RETURN.HASH}` };
+}
+
+/**
+ * The {@link getGiftFormHref} helper
+ * @description The donation form on the page a donor is on, without the return from Stripe, for the links on a return card
+ * @param {string} pathname - The page's path
+ * @returns {string} The page's path with the form's anchor
+ */
+export function getGiftFormHref(pathname: string): string {
+  return `${pathname}${GIFT_RETURN.HASH}`;
 }
 
 /**
@@ -315,11 +325,18 @@ export function getDonateFormCopy(t: Translations): DonateFormCopy {
 
 /**
  * The {@link enableCopyAccount} helper
- * @description Lets the bank transfer bar's button copy the account number and show it was copied for a few seconds
+ * @description Lets each account number's button copy it and show it was copied for a few seconds; the bar and the Donate page's card both call it, and each is set up once
  * @returns {void}
  */
 export function enableCopyAccount(): void {
   for (const root of document.querySelectorAll<HTMLElement>(COPY_ACCOUNT.ROOT)) {
+    // A number already set up by another caller is left as it is
+    if (root.dataset[COPY_ACCOUNT.READY] !== undefined) {
+      continue;
+    }
+
+    // Copy on a press of its button
+    root.dataset[COPY_ACCOUNT.READY] = "";
     const button = root.querySelector<HTMLButtonElement>(COPY_ACCOUNT.BUTTON);
     button?.addEventListener(COPY_ACCOUNT.CLICK, () => copyAccount(root));
   }
@@ -327,8 +344,8 @@ export function enableCopyAccount(): void {
 
 /**
  * The {@link copyAccount} helper
- * @description Copies the account number without spaces and marks the bar copied until the reset
- * @param {HTMLElement} root - The bank transfer bar
+ * @description Copies the account number without spaces and marks its bar or card copied until the reset
+ * @param {HTMLElement} root - The bank transfer bar or card
  * @returns {Promise<void>}
  */
 async function copyAccount(root: HTMLElement): Promise<void> {
