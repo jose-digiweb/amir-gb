@@ -1,14 +1,14 @@
 ---
 // Dependencies
 import { getLocale, getTranslations } from "../../i18n/helpers";
-import { VALUE, VALUE_LABEL } from "../../site/constants";
+import { MOTTO_STACKED_LOCALES, VALUE, VALUE_LABEL } from "../../site/constants";
 
 // Components
 import StarMark from "../ui/StarMark.astro";
 
 /**
  * The {@link Props} type
- * @description The props of the MottoChips component, AMIR-GB's motto sewn on as dashed gold labels, two by two at every size so no label is left alone on a row; labels, never controls
+ * @description The props of the MottoChips component, AMIR-GB's motto sewn on as dashed gold labels that never wrap: in pairs where a pair fits, one per row where it does not, two aligned columns from desktop; labels, never controls
  */
 type Props = {
   /** Where the motto shows, from the caller. */
@@ -17,10 +17,12 @@ type Props = {
 
 // Name every value in the page's language
 const { class: className } = Astro.props;
-const t = getTranslations(getLocale(Astro.currentLocale));
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const isStacked = MOTTO_STACKED_LOCALES.includes(locale);
 const values = Object.values(VALUE).map((value) => ({ value, label: t[VALUE_LABEL[value]] }));
 
-// Pair the values into the two rows they keep on a phone
+// Pair the values into the two rows they keep where a pair fits
 const half = values.length / 2;
 const rows = [values.slice(0, half), values.slice(half)];
 ---
@@ -34,11 +36,16 @@ const rows = [values.slice(0, half), values.slice(half)];
   ]}
 >
   {rows.map((row) => (
-    <div class="flex max-w-full flex-wrap items-center gap-2 desktop:contents">
+    <div
+      class:list={[
+        "flex max-w-full gap-2 desktop:contents",
+        { "flex-wrap items-center": !isStacked, "flex-col items-start": isStacked },
+      ]}
+    >
       {row.map((item) => (
         <span
           role="listitem"
-          class="flex min-h-chip max-w-max grow basis-[min-content] items-center gap-2 rounded-pill border-(length:--border-width-stitch) border-dashed border-stitch py-2 pr-3.5 pl-3 type-sewn-label text-balance text-text-heading uppercase select-none desktop:whitespace-nowrap"
+          class="flex min-h-chip items-center gap-2 rounded-pill border-(length:--border-width-stitch) border-dashed border-stitch py-2 pr-3.5 pl-3 type-sewn-label whitespace-nowrap text-text-heading uppercase select-none"
         >
           <StarMark class="size-icon-xs shrink-0 text-accent" />
           {item.label}
