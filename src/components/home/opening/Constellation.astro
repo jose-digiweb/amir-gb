@@ -4,6 +4,7 @@ import { Picture } from "astro:assets";
 import { getBeadRing } from "../../../lib/woven/helpers";
 import { BEAD } from "../../../lib/woven/constants";
 import { WOVEN_DEFS } from "../constants";
+import { CONSTELLATION_PHOTO } from "./constants";
 import joinedHands from "../../../assets/photos/joined-hands.jpg";
 
 // Components
@@ -133,8 +134,9 @@ const ringedHref = `#${WOVEN_DEFS.RINGED}`;
       <Picture
         src={joinedHands}
         alt=""
-        widths={[photo.size, photo.size * 2]}
-        sizes={`${photo.size}px`}
+        widths={[...CONSTELLATION_PHOTO.WIDTHS]}
+        sizes={CONSTELLATION_PHOTO.SIZES}
+        priority
         class="size-full object-cover"
       />
     </div>
