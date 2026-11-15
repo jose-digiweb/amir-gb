@@ -104,6 +104,13 @@ export default defineConfig({
         url: true,
         optional: true,
       }),
+      // The address the contact and sign-up forms send from, on AMIR's domain onboarded to
+      // Cloudflare Email Service (e.g. website@amir-gb.nl). Without it the forms say they could not send.
+      CONTACT_FROM_ADDRESS: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
       // EmDash: encrypts plugin settings stored as secrets. Generate with `pnpm exec emdash secrets generate`.
       EMDASH_ENCRYPTION_KEY: envField.string({
         context: "server",
@@ -120,7 +127,11 @@ export default defineConfig({
     // (used by @lucide/vue) failed. Pre-bundling both keeps one Vue. Builds are not affected.
     ssr: {
       optimizeDeps: {
-        include: ["@astrojs/vue > @astrojs/vue-renderer/server.js", "vue/server-renderer"],
+        include: [
+          "@astrojs/vue > @astrojs/vue-renderer/server.js",
+          "vue/server-renderer",
+          "qrcode",
+        ],
       },
     },
     plugins: [

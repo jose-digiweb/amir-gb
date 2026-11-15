@@ -1,0 +1,30 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { SOCIAL_LINKS } from "../../site/constants";
+
+/**
+ * The {@link Props} type
+ * @description The props of the SocialPills component, AMIR-GB's social profiles as named pills
+ */
+type Props = Record<string, never>;
+
+// Label the list in the page's language
+const t = getTranslations(getLocale(Astro.currentLocale));
+---
+
+<ul aria-label={t["social.label"]} class="flex flex-wrap gap-2">
+  {SOCIAL_LINKS.map((social) => (
+    <li>
+      <a
+        href={social.href}
+        class="inline-flex min-h-tap touch-manipulation items-center gap-2.5 rounded-pill bg-surface pr-4.5 pl-3.5 type-button-sm text-text-heading inset-ring inset-ring-border transition-colors duration-fast select-none hover:bg-hover-quiet active:bg-pressed-quiet"
+      >
+        <svg aria-hidden="true" viewBox="0 0 24 24" class="size-icon-sm fill-current">
+          <path d={social.path} />
+        </svg>
+        {social.name}
+      </a>
+    </li>
+  ))}
+</ul>

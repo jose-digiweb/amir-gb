@@ -1,0 +1,62 @@
+---
+// Dependencies
+import { MapPinned } from "@lucide/astro";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { CONTACT_PLACEHOLDER_LEGAL } from "./constants";
+import { LEGAL } from "../../site/constants";
+import { BUTTON_TONE } from "../ui/constants";
+
+// Components
+import Button from "../ui/Button.astro";
+import Opener from "../ui/Opener.astro";
+import WovenShade from "../ui/WovenShade.astro";
+import MapCard from "./MapCard.astro";
+import SocialPills from "./SocialPills.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the AddressSection component: the official address with a link to maps, the social profiles and the registration numbers
+ */
+type Props = Record<string, never>;
+
+// Prepare the copy and the legal line with the numbers
+const t = getTranslations(getLocale(Astro.currentLocale));
+const legal = t["contactPage.legal"]
+  .replace(CONTACT_PLACEHOLDER_LEGAL.KVK, LEGAL.KVK)
+  .replace(CONTACT_PLACEHOLDER_LEGAL.RSIN, LEGAL.RSIN);
+---
+
+<section
+  aria-labelledby="address-title"
+  data-footer-overlaps
+  data-hides-footer-talk
+  class="relative isolate -mt-8 overflow-hidden rounded-t-xl bg-bg px-margin pt-12 pb-20 tablet:-mt-10 tablet:grid tablet:grid-cols-2 tablet:items-center tablet:gap-10 tablet:px-margin-md tablet:pt-16 tablet:pb-28 desktop:-mt-14 desktop:grid-cols-11 desktop:gap-20 desktop:px-margin-lg desktop:pt-26 desktop:pb-38"
+>
+  <WovenShade />
+  <div class="desktop:col-span-6">
+    <MapCard />
+  </div>
+  <div class="mt-8 flex flex-col gap-3 tablet:mt-0 desktop:col-span-5">
+    <Opener label={t["contactPage.addressOpener"]} />
+    <h2 id="address-title" class="type-section-title text-balance text-text-heading">
+      {t["contactPage.addressTitle"]}
+    </h2>
+    <address class="type-h3 text-text-heading not-italic">
+      {LEGAL.STREET}
+      <br />
+      {LEGAL.POSTCODE_CITY}
+    </address>
+    <p class="type-body text-pretty text-text-muted">{t["contactPage.addressText"]}</p>
+    <div class="mt-1">
+      <Button href={LEGAL.MAPS_HREF} tone={BUTTON_TONE.OUTLINE}>
+        <MapPinned />
+        {t["contactPage.openMaps"]}
+      </Button>
+    </div>
+    <div class="mt-6 flex flex-col gap-3 desktop:mt-9">
+      <Opener label={t["contactPage.followOpener"]} />
+      <SocialPills />
+    </div>
+    <p class="mt-5 type-small text-pretty text-text-muted desktop:mt-7">{legal}</p>
+  </div>
+</section>

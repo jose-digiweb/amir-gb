@@ -1,0 +1,81 @@
+---
+// Dependencies
+import { Clock } from "@lucide/astro";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { OPENING_HOURS } from "../../lib/contact/constants";
+
+/**
+ * The {@link Props} type
+ * @description The props of the OpeningHoursCard component: when AMIR-GB answers, and once the page knows the time, whether it is open now and when that changes
+ */
+type Props = {
+  /** Layout classes from the caller. */
+  class?: string;
+};
+
+// Prepare the copy and each row's days, which the script compares with today
+const { class: className } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+const [weekdays, weekend] = OPENING_HOURS;
+const rows = [
+  {
+    days: weekdays.days.join(","),
+    label: t["contactPage.weekdays"],
+    time: t["contactPage.weekdaysTime"],
+  },
+  {
+    days: weekend.days.join(","),
+    label: t["contactPage.weekend"],
+    time: t["contactPage.weekendTime"],
+  },
+];
+---
+
+<article
+  data-opening-hours
+  data-closes-at={t["contactPage.closesAt"]}
+  data-opens-today={t["contactPage.opensToday"]}
+  data-opens-tomorrow={t["contactPage.opensTomorrow"]}
+  data-opens-on={t["contactPage.opensOn"]}
+  class:list={[
+    "group flex flex-col gap-4 rounded-lg bg-surface p-6 text-text shadow-sm inset-ring inset-ring-border",
+    className,
+  ]}
+>
+  <div class="flex items-center gap-4">
+    <span class="grid size-13 shrink-0 place-items-center rounded-full bg-bg-alt text-text-heading">
+      <Clock class="size-icon-md" />
+    </span>
+    <h3 class="type-h3 text-text-heading">{t["contactPage.hoursTitle"]}</h3>
+  </div>
+  <div class="hidden flex-wrap items-center gap-2.5 group-data-state:flex">
+    <span class="inline-flex h-7.5 items-center gap-2 rounded-pill bg-surface-sunken px-3 type-tag text-text-heading group-data-[state=open]:bg-success-bg group-data-[state=open]:text-success">
+      <span aria-hidden="true" class="size-2 rounded-full bg-current"></span>
+      <span class="hidden group-data-[state=open]:inline">{t["contactPage.openNow"]}</span>
+      <span class="hidden group-data-[state=closed]:inline">{t["contactPage.closedNow"]}</span>
+    </span>
+    <span data-opening-status hidden class="type-body-sm text-text-muted"></span>
+  </div>
+  <ul>
+    {rows.map((row) => (
+      <li
+        data-opening-days={row.days}
+        class="flex justify-between gap-3 border-t border-border py-3 type-body-sm text-text first:border-t-0 first:pt-0 data-today:font-bold data-today:text-text-heading"
+      >
+        <span>{row.label}</span>
+        <span class="whitespace-nowrap tabular-nums">{row.time}</span>
+      </li>
+    ))}
+  </ul>
+  <p class="hidden type-body-sm text-pretty text-text-muted group-data-[state=closed]:block">
+    {t["contactPage.closedNote"]}
+  </p>
+</article>
+
+<script>
+  // Dependencies
+  import { enableOpeningStatus } from "../../lib/contact/helpers";
+
+  // Show whether AMIR-GB answers now, in the visitor's own time
+  enableOpeningStatus();
+</script>
