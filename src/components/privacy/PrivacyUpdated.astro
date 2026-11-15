@@ -1,0 +1,37 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { formatUpdatedDate, toIsoDay } from "./helpers";
+
+/**
+ * The {@link Props} type
+ * @description The props of the PrivacyUpdated component, Last updated with the date the board approved the text, or a visible [DATE] until it has
+ */
+type Props = {
+  /** The date from the Markdown file, absent while the text is a draft. */
+  updated: Date | undefined;
+};
+
+// Read the date and the page's language
+const { updated } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+
+// Write the date out when the text has one
+let date: string | undefined;
+let datetime: string | undefined;
+if (updated) {
+  date = formatUpdatedDate(updated, locale);
+  datetime = toIsoDay(updated);
+}
+
+// Show the placeholder while the board has not approved a date
+const isPending = !date;
+---
+
+<p class="type-small text-text-muted">
+  {t["privacy.updated"]} {date ? <time datetime={datetime}>{date}</time> : null}
+  {isPending ? (
+    <span class="rounded-sm bg-warning-bg px-1 text-warning">{t["privacy.datePending"]}</span>
+  ) : null}
+</p>

@@ -167,6 +167,17 @@ Placeholders until AMIR sends them: the three PDFs, the board photos, and the tw
 
 The footer leaves out its own Questions? Talk to us on this page (`data-hides-footer-talk`) and overlaps the last section (`data-footer-overlaps`). The footer's small print now links the privacy page on every page.
 
+## Privacy page
+
+`src/pages/privacy.astro`, `en/privacy.astro` and `pt/privacy.astro` render `src/components/privacy/PrivacyPage.astro`, a static page. The footer's small print and the Contact form's consent tick link it.
+
+**The text is a draft.** It was written from what the site really does (the forms email AMIR's Gmail inbox and store nothing, gifts go through Stripe Checkout with iDEAL and SEPA or by bank transfer, no cookies for visitors, only the theme choice and a closed announcement in `localStorage`, hosting at Cloudflare with the database and media in the EU). AMIR-GB's board checks it before launch. When it approves, set `updated:` in the front matter of each file (for example `updated: 2027-01-15`); until then the page shows a visible [DATE].
+
+**Where the text lives.** Page copy stays in code, never in the CMS, so the seven sections are one Markdown file per language in `src/content/privacy/` (`nl.md`, `en.md`, `pt.md`), a build-time content collection (`src/content.config.ts`, glob loader; EmDash's live collection stays in `src/live.config.ts`). Each `##` heading starts a section: Astro gives it an id in its own language (`#jouw-rechten`, `#your-rights`) and `render()` returns the headings that On this page lists (`getContentsLinks`), so adding, renaming or removing a section needs only the Markdown. The files repeat the KvK number, the address, the email and the phone number from `LEGAL` and `CONTACT` in `src/site/constants.ts`: change both together. The short interface copy (opener, title, summary, the three promises, On this page) is in the dictionaries as `privacy.*`.
+
+- **Opening** (`PrivacyOpening.astro`): YOUR DATA, Privacy and the summary on sand, Last updated (`PrivacyUpdated.astro`, the date written out in the page's language), then three white cards (`PromiseCard.astro`): Only to help you, Never sold, never shared, No tracking.
+- **The text** (`PrivacyTextSection.astro`): a paper sheet over the opening that the footer overlaps. On desktop, On this page is a list of anchors in a left column (`PrivacyContents.astro`); on phone and tablet it is a closed `<details>` fold-out above the text (`PrivacyContentsFold.astro`). `PrivacyText.astro` sets the Markdown in the design system's type: `type-h2` headings with a hairline between sections, `type-body` paragraphs within `max-w-measure` in a 720 column. Each heading has `scroll-mt-6` on top of the page's `scroll-padding-top`, so an anchor lands 24px below the sticky header at every width.
+
 ## Donations
 
 One-off and monthly gifts go through Stripe Checkout, Stripe's own payment page. The site keeps no record of gifts: Stripe's Dashboard is the record, and Stripe's own emails send receipts and tell donors about failed monthly payments. There is no webhook.

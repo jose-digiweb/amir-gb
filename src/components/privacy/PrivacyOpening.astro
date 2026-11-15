@@ -1,0 +1,69 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { BEAD, LOZENGE } from "../../lib/woven/constants";
+import { getWovenPath } from "../../lib/woven/helpers";
+import { getPromiseViews } from "./helpers";
+
+// Components
+import DecorBead from "../ui/DecorBead.astro";
+import DotPatch from "../ui/DotPatch.astro";
+import Opener from "../ui/Opener.astro";
+import WovenShade from "../ui/WovenShade.astro";
+import PrivacyUpdated from "./PrivacyUpdated.astro";
+import PromiseCard from "./PromiseCard.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the PrivacyOpening component: Privacy on sand, the summary and the date, then the three promises as white cards
+ */
+type Props = {
+  /** The date the board approved the text, absent while it is a draft. */
+  updated: Date | undefined;
+};
+
+// Prepare the copy, the promises and the faint woven ring beside the title
+const { updated } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const promises = getPromiseViews(locale);
+const ringViewBox = `0 0 ${BEAD.UNITS} ${BEAD.UNITS}`;
+const ringPath = getWovenPath(
+  LOZENGE.PIECE_RADIUS,
+  (distance) => distance >= LOZENGE.PIECE_RING_FROM,
+);
+---
+
+<section
+  aria-labelledby="privacy-title"
+  class="relative isolate -mt-16 overflow-hidden bg-bg-alt px-margin pt-28 pb-20 tablet:px-margin-md tablet:pt-32 tablet:pb-24 desktop:-mt-20 desktop:px-margin-lg desktop:pt-40"
+>
+  <WovenShade />
+  <DotPatch id="privacy-opening" class="top-30 right-5 h-40 w-55 tablet:right-25" />
+  <svg
+    aria-hidden="true"
+    viewBox={ringViewBox}
+    class="pointer-events-none absolute -z-10 hidden fill-decor-strong tablet:top-35 tablet:right-15 tablet:block tablet:size-20 desktop:top-42 desktop:right-35 desktop:size-29"
+  >
+    <path d={ringPath}></path>
+  </svg>
+  <DecorBead ringed class="top-39 left-79 size-8 tablet:hidden" />
+
+  <div class="mx-auto flex max-w-page flex-col gap-8 tablet:gap-10">
+    <div class="flex flex-col gap-3">
+      <Opener label={t["privacy.opener"]} />
+      <h1 id="privacy-title" class="type-display text-balance text-text-heading">
+        {t["privacy.heading"]}
+      </h1>
+      <p class="max-w-150 type-body text-pretty text-text tablet:type-lead">
+        {t["privacy.summary"]}
+      </p>
+      <PrivacyUpdated updated={updated} />
+    </div>
+    <ul class="grid gap-4 tablet:grid-cols-3">
+      {promises.map(({ promise, title, text }) => (
+        <PromiseCard promise={promise} title={title} text={text} />
+      ))}
+    </ul>
+  </div>
+</section>

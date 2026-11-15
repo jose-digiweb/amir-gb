@@ -1,0 +1,29 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../i18n/helpers";
+
+// Components
+import Opener from "../ui/Opener.astro";
+import PrivacyContentsLinks from "./PrivacyContentsLinks.astro";
+
+// Types
+import type { ContentsLink } from "./types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the PrivacyContents component, On this page as a list in the left column on desktop
+ */
+type Props = {
+  /** Each section's anchor and heading, in order. */
+  links: ContentsLink[];
+};
+
+// Read the sections and the copy
+const { links } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+---
+
+<nav aria-label={t["privacy.contents"]} class="hidden flex-col gap-3 desktop:flex">
+  <Opener label={t["privacy.contentsOpener"]} />
+  <PrivacyContentsLinks links={links} />
+</nav>

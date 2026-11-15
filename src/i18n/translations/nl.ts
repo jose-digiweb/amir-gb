@@ -452,4 +452,24 @@ export const nl: Translations = {
   "donatePage.taxText":
     "AMIR-GB is een SBBI, geen ANBI. We willen dat aanvragen, maar voorlopig zijn giften aan ons niet aftrekbaar voor de belasting.",
   "donatePage.taxLink": "Zo gaan we met geld om",
+  "privacy.title": "Privacy bij AMIR-GB",
+  "privacy.description":
+    "Hoe AMIR-GB je gegevens gebruikt: alleen om je te helpen, nooit verkocht, en geen tracking op deze website.",
+  "privacy.opener": "JOUW GEGEVENS",
+  "privacy.heading": "Privacy",
+  "privacy.summary":
+    "Kort gezegd: we gebruiken je gegevens alleen om je te helpen, we verkopen ze nooit, en deze website volgt je niet.",
+  "privacy.updated": "Laatst bijgewerkt",
+  "privacy.datePending": "[DATUM]",
+  "privacy.promiseHelpTitle": "Alleen om je te helpen",
+  "privacy.promiseHelpText":
+    "We gebruiken je gegevens om je te antwoorden, leden welkom te heten en contact te houden. Verder niets.",
+  "privacy.promiseNeverSoldTitle": "Nooit verkocht, nooit gedeeld",
+  "privacy.promiseNeverSoldText":
+    "We verkopen je gegevens niet en geven ze niet aan anderen, tenzij de wet dat vraagt.",
+  "privacy.promiseNoTrackingTitle": "Geen tracking",
+  "privacy.promiseNoTrackingText":
+    "Deze website zet geen cookies die je volgen of advertenties tonen, dus er is geen cookiemelding.",
+  "privacy.contents": "Op deze pagina",
+  "privacy.contentsOpener": "OP DEZE PAGINA",
 };
