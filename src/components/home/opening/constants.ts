@@ -139,6 +139,15 @@ export const DESKTOP_CONSTELLATION = {
 export const DESKTOP_CROP_X = 560;
 
 /**
+ * The {@link CONSTELLATION_PHOTO} constant
+ * @description The joined hands' widths and sizes, shared by all three drawings so the page fetches one photo; the breakpoints repeat --breakpoint-desktop and --breakpoint-tablet
+ */
+export const CONSTELLATION_PHOTO = {
+  WIDTHS: [200, 300, 400, 480, 600],
+  SIZES: "(min-width: 1180px) 190px, (min-width: 700px) 17.9vh, 38.4vw",
+} as const;
+
+/**
  * The {@link PILL_BOX} constant
  * @description The box a value pill is centred in, wide enough for the longest value in any language
  */
