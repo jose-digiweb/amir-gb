@@ -84,8 +84,6 @@ export const en = {
   "together.titleEnd": "together",
   "together.text":
     "Like the pano di pinti, woven in narrow strips and sewn into one cloth, AMIR-GB brings Guinea-Bissau families across the Netherlands together.",
-  "together.year": "2026",
-  "together.founded": "founded 20 July",
   "together.clothLabel": "A cloth of photos and woven strips, sewn together",
   "events.opener": "COME ALONG",
   "events.title": "What’s on",

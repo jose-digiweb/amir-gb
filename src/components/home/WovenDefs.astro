@@ -10,7 +10,7 @@ import { WOVEN_DEFS } from "./constants";
  */
 type Props = Record<string, never>;
 
-// Draw the solid bead, the ringed bead with its eye, and the open bead for the next member
+// Draw the solid bead and the ringed bead with its eye
 const solidPath = getWovenPath(LOZENGE.PIECE_RADIUS, () => true);
 const ringPath = getWovenPath(
   LOZENGE.PIECE_RADIUS,
@@ -27,9 +27,6 @@ const eyePath = getWovenPath(LOZENGE.PIECE_RADIUS, (distance) => distance <= LOZ
     <g id={WOVEN_DEFS.RINGED}>
       <path d={ringPath} class="fill-accent"></path>
       <path d={eyePath} class="fill-on-accent-fill"></path>
-    </g>
-    <g id={WOVEN_DEFS.OPEN}>
-      <path d={ringPath} class="fill-text-muted"></path>
     </g>
   </defs>
 </svg>
