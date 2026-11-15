@@ -1,5 +1,7 @@
 // Types
-import type { AnswerLanguage, ContactError } from "../../lib/contact/types";
+import type { ContactError } from "../../lib/contact/types";
+import type { AnswerLanguage } from "../../site/types";
+import type { ChoiceOption } from "../forms/types";
 import type { CONTACT_FORM_STATE } from "./constants";
 
 /**
@@ -7,15 +9,6 @@ import type { CONTACT_FORM_STATE } from "./constants";
  * @description One of the {@link CONTACT_FORM_STATE} values
  */
 export type ContactFormState = (typeof CONTACT_FORM_STATE)[keyof typeof CONTACT_FORM_STATE];
-
-/**
- * The {@link ChoiceOption} type
- * @description One chip of a single choice: what it posts and what it says
- */
-export type ChoiceOption = {
-  value: string;
-  label: string;
-};
 
 /**
  * The {@link ContactFormCopy} type

@@ -1,0 +1,55 @@
+---
+// Dependencies
+import { ArrowRight } from "@lucide/astro";
+import { TILE_COLOUR } from "../../lib/content/constants";
+import { BUTTON_SIZE, BUTTON_TONE } from "../ui/constants";
+
+// Components
+import Button from "../ui/Button.astro";
+import WayIcon from "./WayIcon.astro";
+import WayText from "./WayText.astro";
+
+// Types
+import type { ButtonTone } from "../ui/types";
+import type { WayCardData } from "./types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the WayCard component, one way to take part: its pictogram on a tint, its words and one action
+ */
+type Props = {
+  /** The way, ready to show. */
+  card: WayCardData;
+};
+
+// Read the card; the main way's action is the gold one
+const { card } = Astro.props;
+let tone: ButtonTone = BUTTON_TONE.OUTLINE;
+if (card.isMain) {
+  tone = BUTTON_TONE.PRIMARY;
+}
+---
+
+<article class="flex h-full flex-col gap-4 rounded-lg bg-surface p-6 inset-ring inset-ring-border">
+  <span
+    class:list={[
+      "grid size-14 shrink-0 place-items-center rounded-full text-text-heading",
+      {
+        "bg-tint-gold": card.tint === TILE_COLOUR.GOLD,
+        "bg-tint-forest": card.tint === TILE_COLOUR.FOREST,
+        "bg-tint-brick": card.tint === TILE_COLOUR.BRICK,
+        "bg-tint-navy": card.tint === TILE_COLOUR.NAVY,
+      },
+    ]}
+  >
+    <WayIcon way={card.way} class="size-7" />
+  </span>
+  <h3 class="type-h3 text-balance text-text-heading">{card.title}</h3>
+  <WayText sentence={card.sentence} />
+  <div>
+    <Button href={card.href} tone={tone} size={BUTTON_SIZE.COMPACT} class="px-5">
+      {card.action}
+      {card.isMain ? null : <ArrowRight />}
+    </Button>
+  </div>
+</article>

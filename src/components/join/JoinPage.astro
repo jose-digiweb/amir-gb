@@ -1,0 +1,34 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../i18n/helpers";
+
+// Components
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import WovenDefs from "../ui/WovenDefs.astro";
+import JoinOpening from "./JoinOpening.astro";
+import SignUpSection from "./SignUpSection.astro";
+import WaysSection from "./WaysSection.astro";
+
+// Types
+import type { GeneralMeeting } from "../../lib/content/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the JoinPage component, the join page in the page's language
+ */
+type Props = {
+  /** The next general meeting, when one is planned. */
+  meeting?: GeneralMeeting;
+};
+
+// Read the meeting and the page's title and summary
+const { meeting } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+---
+
+<SiteLayout title={t["joinPage.title"]} description={t["joinPage.description"]}>
+  <WovenDefs />
+  <JoinOpening />
+  <WaysSection meeting={meeting} />
+  <SignUpSection />
+</SiteLayout>

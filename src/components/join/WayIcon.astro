@@ -1,0 +1,27 @@
+---
+// Dependencies
+import { BuildingComplex, HandHelping, Heart, IdCard } from "@lucide/astro";
+import { JOIN_WAY } from "./constants";
+
+// Types
+import type { JoinWay } from "./types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the WayIcon component, the pictogram of one way to take part
+ */
+type Props = {
+  /** The way it stands for. */
+  way: JoinWay;
+  /** Size classes from the caller. */
+  class?: string;
+};
+
+// Read the way
+const { way, class: className } = Astro.props;
+---
+
+{way === JOIN_WAY.MEMBER ? <IdCard class={className} aria-hidden="true" /> : null}
+{way === JOIN_WAY.VOLUNTEER ? <HandHelping class={className} aria-hidden="true" /> : null}
+{way === JOIN_WAY.PARTNER ? <BuildingComplex class={className} aria-hidden="true" /> : null}
+{way === JOIN_WAY.GIVE ? <Heart class={className} aria-hidden="true" /> : null}

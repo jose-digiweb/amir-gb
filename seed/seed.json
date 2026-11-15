@@ -42,6 +42,13 @@
           }
         },
         {
+          "slug": "general_meeting",
+          "label": "Algemene ledenvergadering (aanvinken bij de ledenvergadering, soort gemeenschap; de pagina Doe mee toont de eerstvolgende)",
+          "type": "boolean",
+          "translatable": false,
+          "defaultValue": false
+        },
+        {
           "slug": "starts_at",
           "label": "Begint (datum en tijd)",
           "type": "datetime",
@@ -310,6 +317,7 @@
           "place_name": "Westersingel 14",
           "address": "Westersingel 14, Rotterdam",
           "type": "gemeenschap",
+          "general_meeting": true,
           "content": [
             {
               "_type": "block",
@@ -351,7 +359,8 @@
           "place_name": "Westersingel 14",
           "address": "Westersingel 14, Rotterdam",
           "online_link": "https://example.org/online",
-          "type": "gemeenschap"
+          "type": "gemeenschap",
+          "general_meeting": true
         }
       },
       {

@@ -1,4 +1,5 @@
 // Dependencies
+import { EMAIL_PATTERN } from "../forms/constants";
 import {
   CONTACT_ERROR,
   CONTACT_PLACEHOLDER,
@@ -62,7 +63,7 @@ export function checkReach(reach: string): ContactError | undefined {
 
   // An email address needs a name, an @ and a domain with a dot
   if (isEmailLike(reach)) {
-    if (REACH_PATTERN.EMAIL.test(reach)) {
+    if (EMAIL_PATTERN.test(reach)) {
       return undefined;
     }
     return CONTACT_ERROR.EMAIL_INCOMPLETE;
@@ -268,14 +269,4 @@ function getWeekdayName(locale: string, weekday: number): string {
  */
 export function isContactError(value: string | undefined): value is ContactError {
   return Object.values(CONTACT_ERROR).some((error) => error === value);
-}
-
-/**
- * The {@link toOneLine} helper
- * @description Folds line breaks into spaces, so a name or an address can never start a new line in the email's headers
- * @param {string} value - The typed value
- * @returns {string} The value on one line
- */
-export function toOneLine(value: string): string {
-  return value.replace(REACH_PATTERN.LINE_BREAKS, " ");
 }

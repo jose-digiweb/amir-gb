@@ -1,13 +1,10 @@
 // Dependencies
 import { z } from "astro/zod";
-import {
-  ANSWER_LANGUAGES,
-  CONSENT_VALUE,
-  CONTACT_FIELD,
-  CONTACT_LIMIT,
-  CONTACT_TOPICS,
-} from "./constants";
-import { checkContactValues, toOneLine } from "./helpers";
+import { ANSWER_LANGUAGES } from "../../site/constants";
+import { CHECKBOX_ON } from "../forms/constants";
+import { toOneLine } from "../forms/helpers";
+import { CONTACT_FIELD, CONTACT_LIMIT, CONTACT_TOPICS } from "./constants";
+import { checkContactValues } from "./helpers";
 
 /**
  * The {@link CONTACT_INPUT} constant
@@ -20,7 +17,7 @@ export const CONTACT_INPUT = z
     [CONTACT_FIELD.LANGUAGE]: z.enum(ANSWER_LANGUAGES),
     [CONTACT_FIELD.TOPIC]: z.enum(CONTACT_TOPICS).nullish(),
     [CONTACT_FIELD.MESSAGE]: z.string().trim().max(CONTACT_LIMIT.MESSAGE),
-    [CONTACT_FIELD.CONSENT]: z.literal(CONSENT_VALUE).nullish(),
+    [CONTACT_FIELD.CONSENT]: z.literal(CHECKBOX_ON).nullish(),
     [CONTACT_FIELD.TRAP]: z.string().nullish(),
   })
   .transform((input, context) => {
@@ -30,7 +27,7 @@ export const CONTACT_INPUT = z
       language: input.language,
       topic: input.topic ?? undefined,
       message: input.message,
-      consent: input.consent === CONSENT_VALUE,
+      consent: input.consent === CHECKBOX_ON,
     };
     const errors = checkContactValues(values);
 

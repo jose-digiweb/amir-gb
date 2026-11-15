@@ -2,7 +2,7 @@
 // Dependencies
 import { actions } from "astro:actions";
 import { getLocale } from "../i18n/helpers";
-import { cacheHomePage } from "../lib/content/helpers";
+import { cacheContentPage } from "../lib/content/helpers";
 import { getHomeContent } from "../lib/content/queries";
 import { getSupportState, isPrivateState, keepPagePrivate } from "../lib/donate/support";
 
@@ -28,7 +28,7 @@ const [content, support] = await Promise.all([
 if (isPrivateState(support)) {
   keepPagePrivate(Astro.response.headers);
 } else {
-  cacheHomePage(Astro.cache, content.cacheHints);
+  cacheContentPage(Astro.cache, content.cacheHints);
 }
 ---
 

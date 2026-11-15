@@ -65,13 +65,30 @@ export const CLOCK_TIME = {
 
 /**
  * The {@link FIELD} constant
- * @description The content fields the home page filters and sorts on
+ * @description The content fields the pages filter and sort on
  */
 export const FIELD = {
   STARTS_AT: "starts_at",
   PUBLISHED_AT: "published_at",
   TYPE: "type",
 } as const;
+
+/**
+ * The {@link EVENT_TYPE} constant
+ * @description The kinds of event, as EmDash stores them, in Dutch so editors pick a Dutch word
+ */
+export const EVENT_TYPE = {
+  YOUTH: "jeugd",
+  HELP: "hulp",
+  CULTURE: "cultuur",
+  COMMUNITY: "gemeenschap",
+} as const;
+
+/**
+ * The {@link MEETING_READ} constant
+ * @description How many upcoming community events to read per language when looking for the next general meeting; EmDash cannot filter on a tick, so this reads well past any month of events
+ */
+export const MEETING_READ = 50;
 
 /**
  * The {@link SORT} constant
@@ -95,10 +112,10 @@ export const HOME_LIMIT = {
 } as const;
 
 /**
- * The {@link HOME_CACHE} constant
- * @description How long the edge keeps the home page, in seconds; publishing in EmDash purges it sooner
+ * The {@link CONTENT_CACHE} constant
+ * @description How long the edge keeps a page that shows CMS content, in seconds; publishing in EmDash purges it sooner
  */
-export const HOME_CACHE = {
+export const CONTENT_CACHE = {
   MAX_AGE: 600,
   STALE_WHILE_REVALIDATE: 3600,
 } as const;

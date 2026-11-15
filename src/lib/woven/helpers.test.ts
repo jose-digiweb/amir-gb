@@ -1,7 +1,13 @@
 // Dependencies
 import { describe, expect, it } from "vitest";
 import { LATTICE, LATTICE_PIECE, LOZENGE } from "./constants";
-import { getBeadRing, getLatticeLayout, getNestedLozengePath, getWovenPath } from "./helpers";
+import {
+  getBeadRing,
+  getLatticeLayout,
+  getNestedLozengePath,
+  getOpenPlacePath,
+  getWovenPath,
+} from "./helpers";
 
 /**
  * The {@link countThreads} helper
@@ -53,5 +59,12 @@ describe("getBeadRing", () => {
     expect(ring.solid).toHaveLength(10);
     expect(ring.ringed).toHaveLength(10);
     expect(ring.solid[0]?.transform).toBe("translate(86.5 36.5) scale(1)");
+  });
+});
+
+describe("getOpenPlacePath", () => {
+  it("weaves the piece's outline and a plus, and leaves the rest open", () => {
+    // 16 outline cells and a plus of 9 cells across both arms
+    expect(countThreads(getOpenPlacePath())).toBe(25);
   });
 });

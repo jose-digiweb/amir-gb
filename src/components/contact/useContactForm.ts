@@ -1,23 +1,21 @@
 // Dependencies
 import { actions, isInputError } from "astro:actions";
-import { computed, nextTick, ref } from "vue";
+import { computed, ref } from "vue";
 import {
-  CONSENT_VALUE,
   CONTACT_CHECKED_FIELDS,
   CONTACT_FIELD,
   CONTACT_PLACEHOLDER,
 } from "../../lib/contact/constants";
 import { checkContactValues, isContactError } from "../../lib/contact/helpers";
+import { CHECKBOX_ON } from "../../lib/forms/constants";
+import { listFieldNames } from "../../lib/forms/helpers";
+import { focusWhenDrawn, readFieldErrors } from "../forms/helpers";
 import { CONTACT_FORM_ID, CONTACT_FORM_STATE } from "./constants";
 
 // Types
 import type { Locale } from "../../i18n/types";
-import type {
-  AnswerLanguage,
-  ContactError,
-  ContactErrors,
-  ContactTopic,
-} from "../../lib/contact/types";
+import type { ContactError, ContactErrors, ContactTopic } from "../../lib/contact/types";
+import type { AnswerLanguage } from "../../site/types";
 import type { ContactFormCopy, ContactFormState } from "./types";
 
 /**
@@ -72,11 +70,12 @@ export function useContactForm({ locale, copy }: ContactFormOptions) {
 
   // The summary's title and its sentence naming the fields, in the page's language
   const summaryTitle = computed(() => copy.summaryTitles[errorFields.value.length - 1] ?? "");
-  const summaryText = computed(() => {
-    const fields = errorFields.value.map((field) => copy.summaryFields[field]);
-    const sentence = new Intl.ListFormat(locale, { type: "conjunction" }).format(fields);
-    return `${sentence.charAt(0).toLocaleUpperCase(locale)}${sentence.slice(1)}.`;
-  });
+  const summaryText = computed(() =>
+    listFieldNames(
+      locale,
+      errorFields.value.map((field) => copy.summaryFields[field]),
+    ),
+  );
 
   // Each field's sentence, empty when it is fine
   const errorText = (error: ContactError | undefined) => (error ? copy.errors[error] : "");
@@ -90,36 +89,6 @@ export function useContactForm({ locale, copy }: ContactFormOptions) {
       .replace(CONTACT_PLACEHOLDER.LANGUAGE, copy.languagesInSentence[sentLanguage.value])
       .replace(CONTACT_PLACEHOLDER.REACH, sentReach.value),
   );
-
-  /**
-   * The {@link readServerErrors} helper
-   * @description The errors the server found, by field, keeping only the ones the form knows
-   * @param {Record<string, string[] | undefined>} fields - The action's input errors
-   * @returns {ContactErrors} The errors by field
-   */
-  function readServerErrors(fields: Record<string, string[] | undefined>): ContactErrors {
-    const found: ContactErrors = {};
-
-    // Each checked field takes its first error, when it is one the form can show
-    for (const field of CONTACT_CHECKED_FIELDS) {
-      const error = fields[field]?.[0];
-      if (isContactError(error)) {
-        found[field] = error;
-      }
-    }
-    return found;
-  }
-
-  /**
-   * The {@link focusById} helper
-   * @description Moves focus to a part of the form once the page has drawn it
-   * @param {string} id - The part's id
-   * @returns {Promise<void>}
-   */
-  async function focusById(id: string): Promise<void> {
-    await nextTick();
-    document.getElementById(id)?.focus();
-  }
 
   /**
    * The {@link toFormData} helper
@@ -139,7 +108,7 @@ export function useContactForm({ locale, copy }: ContactFormOptions) {
       data.set(CONTACT_FIELD.TOPIC, topic.value);
     }
     if (consent.value) {
-      data.set(CONTACT_FIELD.CONSENT, CONSENT_VALUE);
+      data.set(CONTACT_FIELD.CONSENT, CHECKBOX_ON);
     }
     return data;
   }
@@ -167,7 +136,7 @@ export function useContactForm({ locale, copy }: ContactFormOptions) {
     // Errors stay on the page, named at the top
     if (Object.keys(checkContactValues(values.value)).length > 0) {
       state.value = CONTACT_FORM_STATE.EDITING;
-      await focusById(CONTACT_FORM_ID.SUMMARY);
+      await focusWhenDrawn(CONTACT_FORM_ID.SUMMARY);
       return;
     }
 
@@ -179,16 +148,16 @@ export function useContactForm({ locale, copy }: ContactFormOptions) {
 
     // The server found something the page did not
     if (error && isInputError(error)) {
-      serverErrors.value = readServerErrors(error.fields);
+      serverErrors.value = readFieldErrors(error.fields, CONTACT_CHECKED_FIELDS, isContactError);
       state.value = CONTACT_FORM_STATE.EDITING;
-      await focusById(CONTACT_FORM_ID.SUMMARY);
+      await focusWhenDrawn(CONTACT_FORM_ID.SUMMARY);
       return;
     }
 
     // It did not go: say so above the form, with the text still there
     if (error) {
       state.value = CONTACT_FORM_STATE.FAILED;
-      await focusById(CONTACT_FORM_ID.FAILED);
+      await focusWhenDrawn(CONTACT_FORM_ID.FAILED);
       return;
     }
 
@@ -197,7 +166,7 @@ export function useContactForm({ locale, copy }: ContactFormOptions) {
     sentReach.value = values.value.reach;
     sentLanguage.value = values.value.language;
     state.value = CONTACT_FORM_STATE.SENT;
-    await focusById(CONTACT_FORM_ID.SENT);
+    await focusWhenDrawn(CONTACT_FORM_ID.SENT);
   }
 
   /**
@@ -213,7 +182,7 @@ export function useContactForm({ locale, copy }: ContactFormOptions) {
     consent.value = false;
     wasSubmitted.value = false;
     state.value = CONTACT_FORM_STATE.EDITING;
-    await focusById(CONTACT_FORM_ID.NAME);
+    await focusWhenDrawn(CONTACT_FORM_ID.NAME);
   }
 
   // The form's state and its handlers

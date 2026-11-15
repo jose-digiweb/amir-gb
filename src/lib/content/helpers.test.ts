@@ -1,7 +1,7 @@
 // Dependencies
 import { describe, expect, it } from "vitest";
 import {
-  cacheHomePage,
+  cacheContentPage,
   compareWeekly,
   getEventDay,
   getEventWhen,
@@ -148,16 +148,18 @@ describe("event dates", () => {
 
 type CacheOptions = Parameters<AstroGlobal["cache"]["set"]>[0];
 
-describe("cacheHomePage", () => {
+describe("cacheContentPage", () => {
   it("keeps the page for a while and adds every query's tags", () => {
     const calls: CacheOptions[] = [];
-    cacheHomePage({ enabled: true, set: (options) => calls.push(options) }, [{ tags: ["events"] }]);
+    cacheContentPage({ enabled: true, set: (options) => calls.push(options) }, [
+      { tags: ["events"] },
+    ]);
     expect(calls).toEqual([{ maxAge: 600, swr: 3600 }, { tags: ["events"] }]);
   });
 
   it("sets nothing without a cache provider", () => {
     const calls: CacheOptions[] = [];
-    cacheHomePage({ enabled: false, set: (options) => calls.push(options) }, [
+    cacheContentPage({ enabled: false, set: (options) => calls.push(options) }, [
       { tags: ["events"] },
     ]);
     expect(calls).toHaveLength(0);

@@ -1,0 +1,59 @@
+---
+// Dependencies
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { JOIN_PLACEHOLDER } from "../../lib/join/constants";
+import { CONTACT, ROUTE } from "../../site/constants";
+import { WHATSAPP_SHARE } from "./constants";
+import { getJoinFormCopy } from "./helpers";
+
+// Components
+import DecorBead from "../ui/DecorBead.astro";
+import DotPatch from "../ui/DotPatch.astro";
+import Opener from "../ui/Opener.astro";
+import WovenShade from "../ui/WovenShade.astro";
+import JoinSignUp from "./JoinSignUp.vue";
+import MemberCard from "./MemberCard.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the SignUpSection component: Join AMIR-GB, a member card, the sign-up form and what happens next
+ */
+type Props = Record<string, never>;
+
+// Prepare the copy, the form's copy and its links in the page's language
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const copy = getJoinFormCopy(locale);
+const joinUrl = new URL(getRelativeLocaleUrl(locale, ROUTE.JOIN), Astro.url).href;
+const shareText = t["joinPage.shareText"].replace(JOIN_PLACEHOLDER.URL, joinUrl);
+const links = {
+  privacy: getRelativeLocaleUrl(locale, ROUTE.PRIVACY),
+  whatsapp: CONTACT.WHATSAPP_HREF,
+  whatsOn: getRelativeLocaleUrl(locale, ROUTE.EVENTS),
+  tellFriend: `${WHATSAPP_SHARE}${encodeURIComponent(shareText)}`,
+};
+---
+
+<section
+  id="sign-up"
+  aria-labelledby="sign-up-title"
+  data-footer-overlaps
+  class="relative isolate -mt-8 grid grid-cols-1 gap-y-8 overflow-hidden rounded-t-xl bg-bg-alt px-margin pt-12 pb-20 tablet:-mt-10 tablet:grid-cols-[1fr_auto] tablet:gap-x-8 tablet:px-margin-md tablet:pt-16 tablet:pb-28 desktop:-mt-14 desktop:grid-cols-11 desktop:grid-rows-[auto_auto_1fr] desktop:gap-x-20 desktop:gap-y-12 desktop:px-margin-lg desktop:pt-26 desktop:pb-38"
+>
+  <WovenShade />
+  <DotPatch id="join-sign-up" class="top-15 -right-7.5 h-42 w-60" />
+  <DecorBead class="top-64 right-4 hidden size-6 desktop:block" />
+
+  <div class="flex flex-col gap-3 tablet:self-center desktop:col-span-4 desktop:self-start">
+    <Opener label={t["joinPage.signUpOpener"]} />
+    <h2 id="sign-up-title" class="type-section-title text-balance text-text-heading">
+      {t["joinPage.signUpTitle"]}
+    </h2>
+    <p class="type-body text-pretty text-text">{t["joinPage.signUpIntro"]}</p>
+  </div>
+  <MemberCard class="ml-1.5 tablet:mr-3 tablet:ml-0 tablet:justify-self-end desktop:col-span-4 desktop:ml-4 desktop:justify-self-start" />
+  <JoinSignUp client:idle locale={locale} copy={copy} links={links}>
+    <Opener label={t["joinPage.nextOpener"]} />
+  </JoinSignUp>
+</section>
