@@ -1,18 +1,6 @@
 // Dependencies
 import { TILE_COLOUR } from "../../lib/content/constants";
-
-/**
- * The {@link HELP_SERVICE} constant
- * @description The six kinds of help AMIR-GB offers, as the opening and the help tiles show them
- */
-export const HELP_SERVICE = {
-  LETTERS: "letters",
-  DUTCH: "dutch",
-  WORK: "work",
-  KIDS: "kids",
-  HEALTH: "health",
-  CULTURE: "culture",
-} as const;
+import { HELP_SERVICE } from "../../lib/help/constants";
 
 /**
  * The {@link HELP_SERVICES} constant
@@ -59,14 +47,6 @@ export const HELP_SERVICE_LABEL = {
   [HELP_SERVICE.WORK]: "help.work",
   [HELP_SERVICE.KIDS]: "help.kids",
   [HELP_SERVICE.HEALTH]: "help.health",
+  [HELP_SERVICE.YOUTH]: "help.youth",
   [HELP_SERVICE.CULTURE]: "help.culture",
-} as const;
-
-/**
- * The {@link WOVEN_DEFS} constant
- * @description The ids of the woven beads every home drawing reuses
- */
-export const WOVEN_DEFS = {
-  SOLID: "woven-bead-solid",
-  RINGED: "woven-bead-ringed",
 } as const;

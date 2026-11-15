@@ -1,0 +1,48 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { HOW_STEPS } from "./constants";
+
+// Components
+import Opener from "../ui/Opener.astro";
+import WovenShade from "../ui/WovenShade.astro";
+import HowStep from "./HowStep.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the HowItWorksSection component: three small steps, joined by a gold stitched thread
+ */
+type Props = Record<string, never>;
+
+// Write each step in the page's language, every one but the last stitched to the next
+const t = getTranslations(getLocale(Astro.currentLocale));
+const steps = HOW_STEPS.map((step, index) => ({
+  number: step.number,
+  title: t[step.title],
+  text: t[step.text],
+  joinsNext: index < HOW_STEPS.length - 1,
+}));
+---
+
+<section
+  aria-labelledby="how-it-works-title"
+  class="relative isolate -mt-8 overflow-hidden rounded-t-xl bg-bg px-margin pt-12 pb-16 tablet:-mt-10 tablet:px-margin-md tablet:pt-16 tablet:pb-24 desktop:-mt-14 desktop:grid desktop:grid-cols-12 desktop:items-start desktop:gap-x-8 desktop:px-margin-lg desktop:pt-24 desktop:pb-32"
+>
+  <WovenShade />
+  <div class="flex flex-col gap-2 tablet:gap-3 desktop:col-span-4">
+    <Opener label={t["getHelp.stepsOpener"]} />
+    <h2 id="how-it-works-title" class="type-section-title text-balance text-text-heading">
+      {t["getHelp.stepsTitle"]}
+    </h2>
+  </div>
+  <ol class="mt-8 tablet:mt-10 tablet:grid tablet:grid-cols-3 tablet:gap-8 desktop:col-span-8 desktop:mt-2 desktop:gap-12">
+    {steps.map((step) => (
+      <HowStep
+        number={step.number}
+        title={step.title}
+        text={step.text}
+        joinsNext={step.joinsNext}
+      />
+    ))}
+  </ol>
+</section>

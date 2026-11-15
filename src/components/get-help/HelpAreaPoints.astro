@@ -1,0 +1,25 @@
+---
+/**
+ * The {@link Props} type
+ * @description The props of the HelpAreaPoints component, the list of what AMIR-GB offers in one area of help
+ */
+type Props = {
+  /** What the area offers, one line each, in the page's language. */
+  points: string[];
+};
+
+// Read the points
+const { points } = Astro.props;
+---
+
+<ul class="flex flex-col gap-2 type-body-sm text-text">
+  {points.map((point) => (
+    <li class="flex gap-2.5">
+      <span
+        aria-hidden="true"
+        class="mt-2 size-1.5 shrink-0 rotate-45 bg-current opacity-55"
+      ></span>
+      <span>{point}</span>
+    </li>
+  ))}
+</ul>

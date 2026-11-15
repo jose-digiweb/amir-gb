@@ -1,6 +1,7 @@
 // Types
 import type { TileColour } from "../../../lib/content/types";
-import type { HelpService, Value } from "../types";
+import type { HelpService } from "../../../lib/help/types";
+import type { Value } from "../types";
 
 /**
  * The {@link ConstellationDisc} type

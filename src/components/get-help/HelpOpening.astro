@@ -1,0 +1,108 @@
+---
+// Dependencies
+import { MessageCircle, Phone } from "@lucide/astro";
+import { Picture } from "astro:assets";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { NESTED_LOZENGE_VIEW_BOX } from "../../lib/woven/constants";
+import { getNestedLozengePath } from "../../lib/woven/helpers";
+import { CONTACT } from "../../site/constants";
+import { BUTTON_TONE } from "../ui/constants";
+import homeworkHelp from "../../assets/photos/homework-help.jpg";
+import volunteerHelping from "../../assets/photos/volunteer-helping.jpg";
+
+// Components
+import Button from "../ui/Button.astro";
+import Opener from "../ui/Opener.astro";
+import WovenShade from "../ui/WovenShade.astro";
+import DecorBead from "./DecorBead.astro";
+import DotPatch from "./DotPatch.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the HelpOpening component: How can we help?, WhatsApp us and Call us with the opening hours, beside two photos
+ */
+type Props = Record<string, never>;
+
+// Prepare the copy and the faint woven figure behind the desktop opening
+const t = getTranslations(getLocale(Astro.currentLocale));
+const figurePath = getNestedLozengePath();
+---
+
+<section
+  aria-labelledby="get-help-title"
+  class="relative isolate -mt-16 overflow-hidden bg-bg-alt px-margin pt-28 pb-20 text-text-heading tablet:px-margin-md tablet:pt-32 tablet:pb-28 desktop:-mt-20 desktop:px-margin-lg desktop:pt-40 desktop:pb-40"
+>
+  <WovenShade />
+  <svg
+    aria-hidden="true"
+    viewBox={NESTED_LOZENGE_VIEW_BOX}
+    class="pointer-events-none absolute -bottom-95 -left-75 -z-10 hidden size-140 fill-decor-strong desktop:block"
+  >
+    <path d={figurePath}></path>
+  </svg>
+  <div class="absolute top-24 -right-22 -z-10 h-46 w-44 tablet:top-27 tablet:-right-18 tablet:aspect-square tablet:h-auto tablet:w-5/12 desktop:top-24 desktop:right-16 desktop:w-3/8">
+    <div class="opening-blob size-full overflow-hidden bg-border">
+      <Picture
+        src={volunteerHelping}
+        alt={t["help.photoAlt"]}
+        widths={[176, 352, 560, 1120]}
+        sizes="(min-width: 1180px) 38vw, (min-width: 700px) 42vw, 176px"
+        priority
+        class="size-full object-cover object-[40%_42%]"
+      />
+    </div>
+    <div class="absolute top-2/3 -left-1/5 hidden aspect-square w-2/5 overflow-hidden rounded-full bg-border ring-6 ring-bg-alt tablet:block desktop:-left-1/6 desktop:ring-8">
+      <Picture
+        src={homeworkHelp}
+        alt={t["getHelp.homeworkAlt"]}
+        widths={[160, 220, 440]}
+        sizes="(min-width: 1180px) 15vw, 17vw"
+        class="size-full object-cover object-[62%_40%]"
+      />
+    </div>
+  </div>
+  <DecorBead ringed class="top-64 left-50 size-7 tablet:hidden" />
+  <DecorBead class="top-72 left-85 size-5 tablet:hidden" />
+  <DecorBead ringed class="top-33 left-110 hidden size-9 tablet:block desktop:hidden" />
+  <DecorBead class="top-134 right-4 hidden size-6 tablet:block desktop:hidden" />
+  <DecorBead ringed class="top-43 right-22 hidden size-11 desktop:block" />
+  <DecorBead class="top-50 left-182 hidden size-7 desktop:block" />
+  <DecorBead ringed class="top-149 right-16 hidden size-7 desktop:block" />
+  <DotPatch
+    id="get-help-opening"
+    class="top-75 right-2.5 h-28 w-38 tablet:top-24 tablet:right-75 tablet:h-40 tablet:w-55 desktop:top-130 desktop:right-15 desktop:h-55 desktop:w-75"
+  />
+
+  <div class="flex flex-col gap-3 tablet:w-115 tablet:gap-4 desktop:w-150">
+    <Opener label={t["help.opener"]} />
+    <h1 id="get-help-title" class="max-w-64 type-hero text-balance tablet:max-w-none">
+      {t["help.title"]}
+    </h1>
+    <p class="mt-16 type-body text-pretty text-text tablet:mt-0 tablet:max-w-sm desktop:max-w-md desktop:type-lead">
+      {t["getHelp.intro"]}
+    </p>
+    <div class="mt-2 flex flex-col gap-2.5 tablet:mt-3 tablet:flex-row desktop:mt-4">
+      <Button href={CONTACT.WHATSAPP_HREF} block class="tablet:w-auto">
+        <MessageCircle />
+        {t["contact.whatsapp"]}
+      </Button>
+      <Button href={CONTACT.PHONE_HREF} tone={BUTTON_TONE.OUTLINE} block class="tablet:w-auto">
+        <Phone />
+        {t["contact.call"]}
+      </Button>
+    </div>
+    <p class="flex flex-col items-center type-body-sm text-text-muted tablet:flex-row tablet:items-center tablet:gap-2">
+      <span>{t["contact.hoursWeekdays"]}</span>
+      <span aria-hidden="true" class="hidden size-1 rounded-full bg-current tablet:block"></span>
+      <span>{t["contact.hoursWeekend"]}</span>
+    </p>
+  </div>
+</section>
+
+<style>
+  @reference "../../styles/global.css";
+
+  .opening-blob {
+    border-radius: 58% 42% 46% 54% / 48% 56% 44% 52%;
+  }
+</style>

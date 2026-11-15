@@ -146,6 +146,20 @@ const bridgeStyle = `background-image: url(${bridgeLine.src})`;
 <style>
   @reference "../../styles/global.css";
 
+  /* A page whose last section the footer overlaps (Get help) pulls the footer up by the sections' overlap */
+  :global(main:has([data-footer-overlaps])) + .site-footer {
+    position: relative;
+    margin-top: calc(var(--space-8) * -1);
+
+    @variant tablet {
+      margin-top: calc(var(--space-10) * -1);
+    }
+
+    @variant desktop {
+      margin-top: calc((var(--space-12) + var(--space-2)) * -1);
+    }
+  }
+
   /* A section that overlaps the footer (Support AMIR-GB) gets its overlap added to the footer's top */
   :global(main:has([data-overlaps-footer])) + .site-footer {
     padding-top: calc(var(--space-12) + var(--space-24));

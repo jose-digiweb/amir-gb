@@ -1,10 +1,18 @@
 ---
 // Dependencies
-import { Briefcase, GraduationCap, HeartPulse, Languages, Mail, EighthNotes } from "@lucide/astro";
-import { HELP_SERVICE } from "./constants";
+import {
+  Briefcase,
+  EighthNotes,
+  GraduationCap,
+  HeartPulse,
+  Languages,
+  Mail,
+  Trophy,
+} from "@lucide/astro";
+import { HELP_SERVICE } from "../../lib/help/constants";
 
 // Types
-import type { HelpService } from "./types";
+import type { HelpService } from "../../lib/help/types";
 
 /**
  * The {@link Props} type
@@ -26,4 +34,5 @@ const { service, class: className } = Astro.props;
 {service === HELP_SERVICE.WORK ? <Briefcase class={className} /> : null}
 {service === HELP_SERVICE.KIDS ? <GraduationCap class={className} /> : null}
 {service === HELP_SERVICE.HEALTH ? <HeartPulse class={className} /> : null}
+{service === HELP_SERVICE.YOUTH ? <Trophy class={className} /> : null}
 {service === HELP_SERVICE.CULTURE ? <EighthNotes class={className} /> : null}

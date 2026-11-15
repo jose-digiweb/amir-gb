@@ -1,0 +1,43 @@
+---
+// Dependencies
+import { DOT_PATCH } from "./constants";
+
+/**
+ * The {@link Props} type
+ * @description The props of the DotPatch component, a faint patch of dots that fades out at its edges, behind a section's content
+ */
+type Props = {
+  /** A prefix for the drawing's own ids, unique on the page. */
+  id: string;
+  /** Place and size classes from the caller. */
+  class?: string;
+};
+
+// Name the patch's pattern, fade and mask, and centre the dot in its cell
+const { id, class: className } = Astro.props;
+const patternId = `${id}-dots`;
+const fadeId = `${id}-fade`;
+const maskId = `${id}-mask`;
+const centre = DOT_PATCH.STEP / 2;
+---
+
+<svg aria-hidden="true" class:list={["pointer-events-none absolute -z-10", className]}>
+  <defs>
+    <pattern
+      id={patternId}
+      width={DOT_PATCH.STEP}
+      height={DOT_PATCH.STEP}
+      patternUnits="userSpaceOnUse"
+    >
+      <circle cx={centre} cy={centre} r={DOT_PATCH.RADIUS} class="fill-decor-strong"></circle>
+    </pattern>
+    <radialGradient id={fadeId}>
+      <stop offset={DOT_PATCH.FADE_FROM}></stop>
+      <stop offset="1" stop-opacity="0"></stop>
+    </radialGradient>
+    <mask id={maskId} mask-type="alpha">
+      <rect width="100%" height="100%" fill={`url(#${fadeId})`}></rect>
+    </mask>
+  </defs>
+  <rect width="100%" height="100%" fill={`url(#${patternId})`} mask={`url(#${maskId})`}></rect>
+</svg>

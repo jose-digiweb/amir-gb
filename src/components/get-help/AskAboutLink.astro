@@ -1,0 +1,26 @@
+---
+// Dependencies
+import { MessageCircle } from "@lucide/astro";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+
+/**
+ * The {@link Props} type
+ * @description The props of the AskAboutLink component, "Ask about this", which opens WhatsApp with the area's topic already typed
+ */
+type Props = {
+  /** The WhatsApp link with the message for this area. */
+  href: string;
+};
+
+// Read the link and label it in the page's language
+const { href } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+---
+
+<a
+  href={href}
+  class="inline-flex min-h-tap touch-manipulation items-center gap-2 self-start type-button-sm text-text-heading select-none"
+>
+  <MessageCircle class="size-icon-sm shrink-0" />
+  <span class="underline decoration-2 underline-offset-4">{t["getHelp.ask"]}</span>
+</a>

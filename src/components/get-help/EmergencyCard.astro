@@ -1,0 +1,52 @@
+---
+// Dependencies
+import { LifeBuoy, Phone } from "@lucide/astro";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { CONTACT } from "../../site/constants";
+import { GET_HELP_PLACEHOLDER } from "./constants";
+import { fillPlaceholder } from "./helpers";
+
+// Components
+import Button from "../ui/Button.astro";
+import Opener from "../ui/Opener.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the EmergencyCard component: a death in the family, serious illness or eviction, with a button that calls AMIR-GB
+ */
+type Props = Record<string, never>;
+
+// Write the card and the call button with the number, in the page's language
+const t = getTranslations(getLocale(Astro.currentLocale));
+const callLabel = fillPlaceholder(
+  t["getHelp.emergencyCall"],
+  GET_HELP_PLACEHOLDER.PHONE,
+  CONTACT.PHONE,
+);
+---
+
+<aside
+  aria-labelledby="emergency-title"
+  class="flex flex-col gap-4 rounded-lg bg-tint-brick p-5 text-text-heading tablet:p-6 desktop:flex-row desktop:items-center desktop:gap-6 desktop:px-8"
+>
+  <div class="flex flex-1 flex-col gap-4 tablet:flex-row tablet:items-start tablet:gap-5 desktop:items-center">
+    <span class="grid size-14 shrink-0 place-items-center rounded-full bg-surface text-danger desktop:size-16">
+      <LifeBuoy class="size-icon-lg" />
+    </span>
+    <div class="flex min-w-0 flex-col gap-1.5">
+      <Opener label={t["getHelp.emergencyOpener"]} />
+      <h3 id="emergency-title" class="type-h3 text-balance tablet:type-h2">
+        {t["getHelp.emergencyTitle"]}
+      </h3>
+      <p class="type-body text-pretty text-text">{t["getHelp.emergencyText"]}</p>
+    </div>
+  </div>
+  <Button
+    href={CONTACT.PHONE_HREF}
+    block
+    class="tablet:w-auto tablet:self-start desktop:self-center"
+  >
+    <Phone />
+    {callLabel}
+  </Button>
+</aside>
