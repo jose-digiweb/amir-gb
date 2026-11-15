@@ -1,5 +1,9 @@
 // Dependencies
 import { siFacebook, siInstagram, siTiktok } from "simple-icons";
+import { LOCALE } from "../i18n/constants";
+
+// Types
+import type { Locale } from "../i18n/types";
 
 /**
  * The {@link ROUTE} constant
@@ -129,6 +133,12 @@ export const VALUE_LABEL = {
   [VALUE.UNITY]: "values.unity",
   [VALUE.DIGNITY]: "values.dignity",
 } as const;
+
+/**
+ * The {@link MOTTO_STACKED_LOCALES} constant
+ * @description The languages whose motto pairs are wider than a phone or tablet column, so below desktop the motto lists one label per row
+ */
+export const MOTTO_STACKED_LOCALES: readonly Locale[] = [LOCALE.NL, LOCALE.PT];
 
 /**
  * The {@link ANSWER_LANGUAGE} constant
