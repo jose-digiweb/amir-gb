@@ -13,9 +13,9 @@ export const COLLECTION = {
  * @description The kinds of News post: a board announcement, news, or a story for Life at AMIR
  */
 export const POST_TYPE = {
-  ANNOUNCEMENT: "announcement",
-  NEWS: "news",
-  STORY: "story",
+  ANNOUNCEMENT: "aankondiging",
+  NEWS: "nieuws",
+  STORY: "verhaal",
 } as const;
 
 /**
@@ -31,17 +31,37 @@ export const TILE_COLOUR = {
 
 /**
  * The {@link WEEKDAYS} constant
- * @description The weekdays in the order a week runs in the Netherlands, Monday first
+ * @description The weekdays as EmDash stores them, in Dutch so editors pick a Dutch day, Monday first
  */
 export const WEEKDAYS = [
-  "monday",
-  "tuesday",
-  "wednesday",
-  "thursday",
-  "friday",
-  "saturday",
-  "sunday",
+  "maandag",
+  "dinsdag",
+  "woensdag",
+  "donderdag",
+  "vrijdag",
+  "zaterdag",
+  "zondag",
 ] as const;
+
+/**
+ * The {@link WEEKLY_TINTS} constant
+ * @description The help tints weekly activity tiles take in turn, through the week
+ */
+export const WEEKLY_TINTS = [
+  TILE_COLOUR.FOREST,
+  TILE_COLOUR.GOLD,
+  TILE_COLOUR.BRICK,
+  TILE_COLOUR.NAVY,
+] as const;
+
+/**
+ * The {@link CLOCK_TIME} constant
+ * @description How an editor may write a time of day, 9:30 or 10.00, and the separator the site shows
+ */
+export const CLOCK_TIME = {
+  PATTERN: /^(\d{1,2})[:.](\d{2})$/,
+  SEPARATOR: ":",
+} as const;
 
 /**
  * The {@link FIELD} constant

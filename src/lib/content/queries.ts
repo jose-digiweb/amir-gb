@@ -4,7 +4,13 @@ import { getEmDashCollection } from "emdash";
 import { DEFAULT_LOCALE } from "../../i18n/constants";
 import { ROUTE } from "../../site/constants";
 import { COLLECTION, DAY_MS, FIELD, HOME_LIMIT, POST_TYPE, SORT } from "./constants";
-import { compareWeekly, isStripActive, mergeWithDutch } from "./helpers";
+import {
+  compareWeekly,
+  getWeeklyTint,
+  isStripActive,
+  mergeWithDutch,
+  toClockTime,
+} from "./helpers";
 
 // Types
 import type { CacheHint, CollectionFilter, ContentEntry, EmDashCollections } from "emdash";
@@ -116,18 +122,23 @@ export async function getWeeklyActivities(locale: Locale): Promise<Read<WeeklyAc
     status: "published",
   });
 
-  // Shape each activity for its tile and order them through the week
+  // Shape each activity for its tile, with its times as HH:MM, and order them through the week
   const activities = items.map(({ entry, isDutchOnly }) => ({
     id: entry.data.id,
     name: entry.data.name,
     weekday: entry.data.weekday,
-    startTime: entry.data.start_time,
-    endTime: entry.data.end_time,
-    tileColour: entry.data.tile_colour,
+    startTime: toClockTime(entry.data.start_time),
+    endTime: toClockTime(entry.data.end_time),
     isDutchOnly,
   }));
   activities.sort(compareWeekly);
-  return { items: activities, cacheHints };
+
+  // Each tile takes its tint from its place in the week
+  const tinted = activities.map((activity, index) => ({
+    ...activity,
+    tileColour: getWeeklyTint(index),
+  }));
+  return { items: tinted, cacheHints };
 }
 
 /**

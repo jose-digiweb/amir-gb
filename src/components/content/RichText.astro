@@ -1,0 +1,102 @@
+---
+// Dependencies
+import { Block, PortableText } from "emdash/ui";
+
+// Components
+import RichTextHeading from "./RichTextHeading.astro";
+
+// Types
+import type { PortableTextBlock } from "emdash";
+
+/**
+ * The {@link Props} type
+ * @description The props of the RichText component, which shows text written in EmDash's editor in the site's type and colours
+ */
+type Props = {
+  /** The text as EmDash stores it. */
+  value: PortableTextBlock[] | undefined;
+};
+
+// Read the text; EmDash renders every block (quotes too, grouped), the headings move under the page title
+const { value } = Astro.props;
+---
+
+<div class="rich-text flex flex-col gap-5">
+  <PortableText
+    value={value}
+    components={{
+      block: {
+        normal: Block,
+        h1: RichTextHeading,
+        h2: RichTextHeading,
+        h3: RichTextHeading,
+        h4: RichTextHeading,
+        h5: RichTextHeading,
+        h6: RichTextHeading,
+      },
+    }}
+  />
+</div>
+
+<style>
+  @reference "../../styles/global.css";
+
+  .rich-text :global(p),
+  .rich-text :global(li) {
+    @apply type-body text-pretty text-text;
+  }
+
+  .rich-text :global(strong) {
+    @apply font-semibold text-text-heading;
+  }
+
+  .rich-text :global(a:not(.emdash-button)) {
+    @apply text-link underline underline-offset-4 hover:decoration-2;
+  }
+
+  .rich-text :global(ul),
+  .rich-text :global(ol) {
+    @apply flex flex-col gap-2 ps-6;
+  }
+
+  .rich-text :global(ul) {
+    @apply list-disc;
+  }
+
+  .rich-text :global(ol) {
+    @apply list-decimal;
+  }
+
+  .rich-text :global(li) {
+    @apply marker:text-text-muted;
+  }
+
+  .rich-text :global(blockquote) {
+    @apply flex flex-col gap-3 border-s-(length:--border-width-control) border-border-strong ps-5;
+  }
+
+  .rich-text :global(blockquote p) {
+    @apply type-lead text-text-heading;
+  }
+
+  .rich-text :global(hr) {
+    @apply my-3 border-border;
+  }
+
+  .rich-text :global(figure),
+  .rich-text :global(img) {
+    @apply overflow-hidden rounded-lg;
+  }
+
+  .rich-text :global(figcaption) {
+    @apply mt-2 type-small text-text-muted;
+  }
+
+  .rich-text :global(.has-text-align-center) {
+    @apply text-center;
+  }
+
+  .rich-text :global(.has-text-align-right) {
+    @apply text-end;
+  }
+</style>
