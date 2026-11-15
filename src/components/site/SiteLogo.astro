@@ -30,13 +30,16 @@ const homeHref = getRelativeLocaleUrl(locale, ROUTE.HOME);
     width={logoColour.width}
     height={logoColour.height}
     alt=""
-    class:list={["h-full w-auto", { hidden: reverse, "theme-dark:hidden": !reverse }]}
+    class:list={[
+      "site-logo-colour h-full w-auto",
+      { hidden: reverse, "theme-dark:hidden": !reverse },
+    ]}
   />
   <img
     src={logoReverse.src}
     width={logoReverse.width}
     height={logoReverse.height}
     alt=""
-    class:list={["h-full w-auto", { "hidden theme-dark:block": !reverse }]}
+    class:list={["site-logo-reverse h-full w-auto", { "hidden theme-dark:block": !reverse }]}
   />
 </a>

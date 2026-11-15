@@ -14,6 +14,7 @@ export const ROUTE = {
   JOIN: "/join/",
   CONTACT: "/contact/",
   DONATE: "/donate/",
+  PRIVACY: "/privacy/",
 } as const;
 
 /**
@@ -60,6 +61,7 @@ export const CONTACT = {
   PHONE: "+31 6 15 18 87 45",
   PHONE_HREF: "tel:+31615188745",
   WHATSAPP_HREF: "https://wa.me/31615188745",
+  TELEGRAM_HREF: "https://t.me/+31615188745",
   EMAIL: "amirgbnederland@gmail.com",
   EMAIL_HREF: "mailto:amirgbnederland@gmail.com",
 } as const;
@@ -73,6 +75,8 @@ export const LEGAL = {
   POSTCODE_CITY: "4827 LJ Breda",
   KVK: "KvK 42120588",
   RSIN: "RSIN 869821118",
+  MAPS_HREF:
+    "https://www.google.com/maps/search/?api=1&query=Willem%20van%20Kesselstraat%2021%2C%204827%20LJ%20Breda",
 } as const;
 
 /**

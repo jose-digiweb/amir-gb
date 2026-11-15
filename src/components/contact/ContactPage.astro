@@ -1,0 +1,29 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../i18n/helpers";
+
+// Components
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import WovenDefs from "../ui/WovenDefs.astro";
+import AddressSection from "./AddressSection.astro";
+import ContactOpening from "./ContactOpening.astro";
+import MessageSection from "./MessageSection.astro";
+import ReachSection from "./ReachSection.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the ContactPage component, the Contact page in the page's language
+ */
+type Props = Record<string, never>;
+
+// Read the page's title and summary
+const t = getTranslations(getLocale(Astro.currentLocale));
+---
+
+<SiteLayout title={t["contactPage.title"]} description={t["contactPage.description"]}>
+  <WovenDefs />
+  <ContactOpening />
+  <ReachSection />
+  <MessageSection />
+  <AddressSection />
+</SiteLayout>

@@ -33,3 +33,13 @@ export const ATTRIBUTE = {
   COMMAND: "command",
   COMMAND_FOR: "commandfor",
 } as const;
+
+/**
+ * The {@link HEADER_OVER_BRAND} constant
+ * @description How the phone and tablet header finds a navy opening and marks itself once the opening has scrolled under it
+ */
+export const HEADER_OVER_BRAND = {
+  OPENING: "[data-header-over-brand]",
+  BAR: ".site-header-bar",
+  PAST: "data-past-brand",
+} as const;

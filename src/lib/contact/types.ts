@@ -1,0 +1,82 @@
+// Types
+import type {
+  ANSWER_LANGUAGE,
+  CONTACT_ERROR,
+  CONTACT_FIELD,
+  CONTACT_MAIL_ERROR,
+  CONTACT_TOPIC,
+} from "./constants";
+
+/**
+ * The {@link ContactField} type
+ * @description One of the {@link CONTACT_FIELD} values
+ */
+export type ContactField = (typeof CONTACT_FIELD)[keyof typeof CONTACT_FIELD];
+
+/**
+ * The {@link AnswerLanguage} type
+ * @description One of the {@link ANSWER_LANGUAGE} values
+ */
+export type AnswerLanguage = (typeof ANSWER_LANGUAGE)[keyof typeof ANSWER_LANGUAGE];
+
+/**
+ * The {@link ContactTopic} type
+ * @description One of the {@link CONTACT_TOPIC} values
+ */
+export type ContactTopic = (typeof CONTACT_TOPIC)[keyof typeof CONTACT_TOPIC];
+
+/**
+ * The {@link ContactError} type
+ * @description One of the {@link CONTACT_ERROR} values
+ */
+export type ContactError = (typeof CONTACT_ERROR)[keyof typeof CONTACT_ERROR];
+
+/**
+ * The {@link ContactMailError} type
+ * @description One of the {@link CONTACT_MAIL_ERROR} values
+ */
+export type ContactMailError = (typeof CONTACT_MAIL_ERROR)[keyof typeof CONTACT_MAIL_ERROR];
+
+/**
+ * The {@link ContactValues} type
+ * @description A message as the visitor typed it
+ */
+export type ContactValues = {
+  name: string;
+  reach: string;
+  language: AnswerLanguage;
+  topic?: ContactTopic;
+  message: string;
+  consent: boolean;
+};
+
+/**
+ * The {@link ContactErrors} type
+ * @description What is wrong with a message, by the field it belongs to
+ */
+export type ContactErrors = {
+  name?: ContactError;
+  reach?: ContactError;
+  message?: ContactError;
+  consent?: ContactError;
+};
+
+/**
+ * The {@link OpeningStatus} type
+ * @description Whether AMIR-GB answers now, and when that changes: the time, and how many days from today
+ */
+export type OpeningStatus = {
+  isOpen: boolean;
+  time: string;
+  weekday: number;
+  daysAway: number;
+};
+
+/**
+ * The {@link QrDrawing} type
+ * @description A QR code as one SVG path, with the size of its square in modules
+ */
+export type QrDrawing = {
+  size: number;
+  path: string;
+};

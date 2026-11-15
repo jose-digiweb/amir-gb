@@ -1,0 +1,27 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { getQrDrawing } from "../../lib/contact/qr";
+import { CONTACT } from "../../site/constants";
+
+/**
+ * The {@link Props} type
+ * @description The props of the WhatsAppQr component, a QR code for the WhatsApp chat, navy on white in both themes, drawn when the page is built
+ */
+type Props = Record<string, never>;
+
+// Draw the code for the real chat link
+const t = getTranslations(getLocale(Astro.currentLocale));
+const qr = getQrDrawing(CONTACT.WHATSAPP_HREF);
+const viewBox = `0 0 ${qr.size} ${qr.size}`;
+---
+
+<svg
+  role="img"
+  aria-label={t["contactPage.qrAlt"]}
+  viewBox={viewBox}
+  shape-rendering="crispEdges"
+  class="size-28 shrink-0 rounded-sm bg-brand-white fill-brand-navy p-1"
+>
+  <path d={qr.path}></path>
+</svg>

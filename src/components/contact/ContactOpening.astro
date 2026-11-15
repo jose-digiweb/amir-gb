@@ -1,0 +1,62 @@
+---
+// Dependencies
+import { Picture } from "astro:assets";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { OPENER_TONE, WOVEN_SHADE_TONE } from "../ui/constants";
+import womanLaughing from "../../assets/photos/woman-laughing.jpg";
+
+// Components
+import DecorBead from "../ui/DecorBead.astro";
+import Opener from "../ui/Opener.astro";
+import WovenShade from "../ui/WovenShade.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the ContactOpening component: Contact, on navy, beside a laughing woman
+ */
+type Props = Record<string, never>;
+
+// Prepare the copy
+const t = getTranslations(getLocale(Astro.currentLocale));
+---
+
+<section
+  aria-labelledby="contact-title"
+  data-header-over-brand
+  class="relative isolate -mt-16 overflow-hidden bg-surface-brand px-margin pt-40 pb-20 text-on-brand tablet:min-h-120 tablet:px-margin-md tablet:pt-36 tablet:pb-28 desktop:-mt-20 desktop:min-h-160 desktop:px-margin-lg desktop:pt-44 desktop:pb-32"
+>
+  <WovenShade tone={WOVEN_SHADE_TONE.ON_BRAND} />
+  <div class="contact-blob absolute top-19 -right-11 -z-10 h-45 w-44 overflow-hidden bg-surface-inverse tablet:top-24 tablet:-right-10 tablet:size-80 desktop:top-28 desktop:right-24 desktop:size-105">
+    <Picture
+      src={womanLaughing}
+      alt={t["contactPage.photoAlt"]}
+      widths={[176, 352, 420, 840]}
+      sizes="(min-width: 1180px) 420px, (min-width: 700px) 320px, 176px"
+      priority
+      class="size-full object-cover object-[30%_32%]"
+    />
+  </div>
+  <DecorBead
+    ringed
+    class="top-25 left-46 size-6 tablet:top-30 tablet:right-90 tablet:left-auto desktop:top-40 desktop:right-130 desktop:size-11"
+  />
+  <DecorBead ringed class="top-22 left-7 size-4.5 desktop:hidden" />
+
+  <div class="flex flex-col gap-3 tablet:w-105 tablet:gap-4 desktop:w-xl">
+    <Opener label={t["contactPage.opener"]} tone={OPENER_TONE.ON_BRAND} />
+    <h1 id="contact-title" class="type-hero text-balance">
+      {t["contactPage.heading"]}
+    </h1>
+    <p class="mt-6 max-w-sm type-body text-pretty text-on-brand-muted tablet:mt-2 desktop:max-w-md desktop:type-lead">
+      {t["contactPage.intro"]}
+    </p>
+  </div>
+</section>
+
+<style>
+  @reference "../../styles/global.css";
+
+  .contact-blob {
+    border-radius: 40% 60% 62% 38% / 55% 40% 60% 45%;
+  }
+</style>

@@ -1,7 +1,8 @@
 // Dependencies
 import { ActionError, defineAction } from "astro:actions";
 import { getRelativeLocaleUrl } from "astro:i18n";
-import { DONATE_ERROR, ORIGIN_HEADER } from "../lib/donate/constants";
+import { isForeignPost } from "../lib/actions/helpers";
+import { DONATE_ERROR } from "../lib/donate/constants";
 import { DONATE_INPUT } from "../lib/donate/schema";
 import { startCheckout } from "../lib/donate/stripe";
 import { ROUTE } from "../site/constants";
@@ -14,10 +15,8 @@ export const donate = defineAction({
   accept: "form",
   input: DONATE_INPUT,
   handler: async ({ choice, locale }, context) => {
-    const origin = context.request.headers.get(ORIGIN_HEADER);
-
-    // A post from another site never starts a payment, as the built Worker has no origin check of its own
-    if (origin && origin !== context.url.origin) {
+    // A post from another site never starts a payment
+    if (isForeignPost(context.request, context.url)) {
       throw new ActionError({ code: "FORBIDDEN" });
     }
 

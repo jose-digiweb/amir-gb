@@ -54,3 +54,13 @@ export const WOVEN_DEFS = {
   SOLID: "woven-bead-solid",
   RINGED: "woven-bead-ringed",
 } as const;
+
+/**
+ * The {@link DOT_PATCH} constant
+ * @description The faint dot patch behind a section's content: the dot's radius, the grid step and where the fade starts, in SVG units
+ */
+export const DOT_PATCH = {
+  RADIUS: 1.6,
+  STEP: 14,
+  FADE_FROM: 0.3,
+} as const;

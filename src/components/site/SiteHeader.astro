@@ -15,7 +15,7 @@ import SiteMenu from "./SiteMenu.astro";
 
 /**
  * The {@link Props} type
- * @description The props of the SiteHeader component: a blurred bar on phone and tablet, a paper sheet that lifts into an island on desktop
+ * @description The props of the SiteHeader component: a blurred bar on phone and tablet (see-through over a navy opening until it scrolls past), a paper sheet that lifts into an island on desktop
  */
 type Props = Record<string, never>;
 
@@ -48,14 +48,65 @@ const donateHref = getRelativeLocaleUrl(locale, ROUTE.DONATE);
 
 <script>
   // Dependencies
+  import { enableHeaderOverBrand } from "../../lib/dom/helpers";
   import { enableThemeChoice } from "../../lib/theme/helpers";
 
   // The header's appearance controls, in the card and in the menu, apply and remember a pick
   enableThemeChoice();
+
+  // Over a navy opening the phone and tablet header stays see-through until the opening scrolls past
+  enableHeaderOverBrand();
 </script>
 
 <style>
   @reference "../../styles/global.css";
+
+  /* Over a navy opening (marked data-header-over-brand) the phone and tablet bar is see-through, white on navy, until the opening scrolls past */
+  :global(body:has([data-header-over-brand])) .site-header-bar:not([data-past-brand]) {
+    @variant max-desktop {
+      border-color: transparent;
+      background-color: transparent;
+      backdrop-filter: none;
+    }
+  }
+
+  :global(body:has([data-header-over-brand]))
+    .site-header-bar:not([data-past-brand])
+    > :global(a .site-logo-colour) {
+    @variant max-desktop {
+      display: none;
+    }
+  }
+
+  :global(body:has([data-header-over-brand]))
+    .site-header-bar:not([data-past-brand])
+    > :global(a .site-logo-reverse) {
+    @variant max-desktop {
+      display: block;
+    }
+  }
+
+  :global(body:has([data-header-over-brand]))
+    .site-header-bar:not([data-past-brand])
+    :global(:is(.language-button, .site-menu-button)) {
+    @variant max-desktop {
+      color: var(--on-brand);
+    }
+  }
+
+  :global(body:has([data-header-over-brand]))
+    .site-header-bar:not([data-past-brand])
+    :global(:is(.language-button, .site-menu-button):hover) {
+    @variant max-desktop {
+      background-color: var(--hover-quiet-on-brand);
+    }
+  }
+
+  .site-header-bar {
+    transition-property: background-color, border-color, color;
+    transition-duration: var(--duration-base);
+    transition-timing-function: var(--ease-standard);
+  }
 
   @keyframes header-lift {
     to {

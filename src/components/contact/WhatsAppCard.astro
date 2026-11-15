@@ -1,0 +1,65 @@
+---
+// Dependencies
+import { ExternalLink, MessageCircle } from "@lucide/astro";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { CONTACT } from "../../site/constants";
+
+// Components
+import Button from "../ui/Button.astro";
+import Opener from "../ui/Opener.astro";
+import WhatsAppQr from "./WhatsAppQr.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the WhatsAppCard component, the first and largest way to reach AMIR-GB, with a QR code for people on a computer
+ */
+type Props = {
+  /** Layout classes from the caller. */
+  class?: string;
+};
+
+// Read the layout and prepare the copy
+const { class: className } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+---
+
+<article
+  class:list={[
+    "flex flex-col gap-4 rounded-lg bg-surface p-6 text-text shadow-md inset-ring inset-ring-border desktop:p-8",
+    className,
+  ]}
+>
+  <div class="flex items-center gap-4">
+    <span class="grid size-13 shrink-0 place-items-center rounded-full bg-tint-gold text-text-heading desktop:size-15">
+      <MessageCircle class="size-icon-md desktop:size-icon-lg" />
+    </span>
+    <div class="flex flex-col gap-0.5">
+      <Opener label={t["contactPage.fastest"]} />
+      <h3 class="type-h3 text-text-heading tablet:type-h2">{t["contactPage.whatsappTitle"]}</h3>
+    </div>
+  </div>
+  <p class="type-h2 whitespace-nowrap text-text-heading tabular-nums tablet:type-h1">
+    {CONTACT.PHONE}
+  </p>
+  <p class="type-body text-pretty text-text-muted">{t["contactPage.whatsappText"]}</p>
+  <div class="hidden items-center gap-4 rounded-md bg-bg-alt p-3.5 tablet:flex">
+    <WhatsAppQr />
+    <div class="flex flex-col gap-1">
+      <p class="type-h4 text-text-heading">{t["contactPage.qrTitle"]}</p>
+      <p class="type-body-sm text-pretty text-text">{t["contactPage.qrText"]}</p>
+    </div>
+  </div>
+  <div class="mt-auto flex flex-col gap-1.5">
+    <Button href={CONTACT.WHATSAPP_HREF} block>
+      <MessageCircle />
+      {t["contactPage.openWhatsapp"]}
+    </Button>
+    <a
+      href={CONTACT.TELEGRAM_HREF}
+      class="hidden min-h-tap items-center gap-2 self-center type-button-sm text-link tablet:inline-flex"
+    >
+      <span class="underline decoration-2 underline-offset-4">{t["contactPage.alsoTelegram"]}</span>
+      <ExternalLink class="size-icon-sm" />
+    </a>
+  </div>
+</article>

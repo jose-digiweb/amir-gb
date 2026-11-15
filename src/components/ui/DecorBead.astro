@@ -1,7 +1,7 @@
 ---
 // Dependencies
-import { WOVEN_DEFS } from "../ui/constants";
-import { DECOR_BEAD_VIEW_BOX } from "./constants";
+import { BEAD } from "../../lib/woven/constants";
+import { WOVEN_DEFS } from "./constants";
 
 /**
  * The {@link Props} type
@@ -19,11 +19,12 @@ const { ringed = false, class: className } = Astro.props;
 const ringedHref = `#${WOVEN_DEFS.RINGED}`;
 const solidHref = `#${WOVEN_DEFS.SOLID}`;
 const href = ringed ? ringedHref : solidHref;
+const viewBox = `0 0 ${BEAD.UNITS} ${BEAD.UNITS}`;
 ---
 
 <svg
   aria-hidden="true"
-  viewBox={DECOR_BEAD_VIEW_BOX}
+  viewBox={viewBox}
   class:list={["pointer-events-none absolute -z-10", className]}
 >
   <use href={href}></use>

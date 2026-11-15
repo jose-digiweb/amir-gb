@@ -1,5 +1,5 @@
 // Dependencies
-import { ATTRIBUTE, COMMAND, FEATURE, SELECTOR } from "./constants";
+import { ATTRIBUTE, COMMAND, FEATURE, HEADER_OVER_BRAND, SELECTOR } from "./constants";
 
 /**
  * The {@link enableDialogFallbacks} helper
@@ -73,4 +73,24 @@ function closeOnOutsideTap(dialog: HTMLDialogElement, event: MouseEvent): void {
   if (isOutside) {
     dialog.close();
   }
+}
+
+/**
+ * The {@link enableHeaderOverBrand} helper
+ * @description On a page that opens on navy, keeps the phone and tablet header see-through while the opening is under it, and solid once it has scrolled past
+ * @returns {void}
+ */
+export function enableHeaderOverBrand(): void {
+  const opening = document.querySelector<HTMLElement>(HEADER_OVER_BRAND.OPENING);
+  const bar = document.querySelector<HTMLElement>(HEADER_OVER_BRAND.BAR);
+  if (!opening || !bar) {
+    return;
+  }
+
+  // The opening counts as under the header while any of it shows below the bar
+  const observer = new IntersectionObserver(
+    ([entry]) => bar.toggleAttribute(HEADER_OVER_BRAND.PAST, !entry?.isIntersecting),
+    { rootMargin: `-${bar.offsetHeight}px 0px 0px 0px` },
+  );
+  observer.observe(opening);
 }
