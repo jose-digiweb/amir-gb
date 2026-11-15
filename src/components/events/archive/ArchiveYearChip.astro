@@ -20,7 +20,7 @@ const { year } = Astro.props;
     href={year.href}
     aria-current={year.isPicked ? "page" : undefined}
     class:list={[
-      "inline-flex h-10 touch-manipulation items-center rounded-pill px-4 type-button-sm transition-colors duration-base ease-standard select-none",
+      "relative inline-flex h-10 touch-manipulation items-center rounded-pill px-4 type-button-sm transition-colors duration-base ease-standard select-none after:absolute after:inset-x-0 after:-inset-y-1",
       {
         "bg-accent text-on-accent-fill": year.isPicked,
         "bg-surface text-text-heading hover:bg-hover-quiet": !year.isPicked,
