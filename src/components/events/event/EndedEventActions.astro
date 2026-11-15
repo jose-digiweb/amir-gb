@@ -1,0 +1,39 @@
+---
+// Dependencies
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { ArrowRight, Images } from "@lucide/astro";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { ROUTE } from "../../../site/constants";
+import { BUTTON_TONE } from "../../ui/constants";
+
+// Components
+import Button from "../../ui/Button.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the EndedEventActions component, an ended event's way on: its photos when a story exists, and what is on next
+ */
+type Props = {
+  /** The story with photos of the day, if any. */
+  storyHref?: string;
+};
+
+// Read the story and link the events page in the page's language
+const { storyHref } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const nextTone = storyHref ? BUTTON_TONE.OUTLINE : BUTTON_TONE.PRIMARY;
+---
+
+<div class="flex flex-col gap-2.5">
+  {storyHref ? (
+    <Button href={storyHref} block>
+      <Images aria-hidden="true" />
+      {t["event.seePhotos"]}
+    </Button>
+  ) : null}
+  <Button href={getRelativeLocaleUrl(locale, ROUTE.EVENTS)} tone={nextTone} block>
+    {t["event.seeNext"]}
+    <ArrowRight aria-hidden="true" />
+  </Button>
+</div>

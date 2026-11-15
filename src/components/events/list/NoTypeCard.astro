@@ -1,0 +1,40 @@
+---
+// Dependencies
+import { Search } from "@lucide/astro";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { BUTTON_SIZE, BUTTON_TONE } from "../../ui/constants";
+
+// Components
+import Button from "../../ui/Button.astro";
+import ListMessageCard from "./ListMessageCard.astro";
+
+// Types
+import type { EventType } from "../../../lib/events/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the NoTypeCard component, what the list says when a filter finds nothing, with the way back to everything
+ */
+type Props = {
+  /** The kind of event the visitor filtered on. */
+  type: EventType;
+  /** The list without the filter. */
+  allHref: string;
+};
+
+// Read the filter and the copy
+const { type, allHref } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+---
+
+<ListMessageCard title={t[`eventsPage.noType.${type}`]} text={t["eventsPage.noTypeText"]}>
+  <Search slot="icon" aria-hidden="true" />
+  <Button
+    href={allHref}
+    tone={BUTTON_TONE.OUTLINE}
+    size={BUTTON_SIZE.COMPACT}
+    class="mt-1 self-start"
+  >
+    {t["eventsPage.showAll"]}
+  </Button>
+</ListMessageCard>

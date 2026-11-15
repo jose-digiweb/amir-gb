@@ -1,0 +1,50 @@
+---
+// Dependencies
+import { Video } from "@lucide/astro";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { LOCALE } from "../../../i18n/constants";
+
+// Components
+import BackToEventsLink from "../BackToEventsLink.astro";
+import EventTypeChip from "../EventTypeChip.astro";
+
+// Types
+import type { EventDetail } from "../../../lib/events/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the EventHeader component, the way back to What's on, the event's kind and its name
+ */
+type Props = {
+  /** The event. */
+  event: EventDetail;
+  /** The event happens only online. */
+  isOnlineOnly: boolean;
+};
+
+// Read the event and link back in the page's language
+const { event, isOnlineOnly } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const titleLang = event.isDutchOnly ? LOCALE.NL : undefined;
+---
+
+<div class="flex flex-col gap-3">
+  <BackToEventsLink />
+  <div class="flex flex-wrap gap-2">
+    <EventTypeChip type={event.type} />
+    {isOnlineOnly ? (
+      <span class="inline-flex items-center gap-1.5 rounded-pill bg-info-bg px-3 py-1 type-tag text-info">
+        <Video aria-hidden="true" class="size-3.5" />
+        {t["event.onlineChip"]}
+      </span>
+    ) : null}
+  </div>
+  <h1
+    id="event-title"
+    lang={titleLang}
+    class="type-h1 font-extrabold text-balance break-words hyphens-auto text-text-heading"
+  >
+    {event.title}
+  </h1>
+</div>

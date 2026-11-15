@@ -1,0 +1,34 @@
+---
+// Components
+import EventCover from "../EventCover.astro";
+
+// Types
+import type { PastEvent } from "../../../lib/events/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the PinnedPhoto component, one photo of the year pinned in the archive's opening, tilted in its own place
+ */
+type Props = {
+  /** The event whose photo it is. */
+  event: PastEvent;
+  /** Its place among the pinned photos, from zero. */
+  place: number;
+};
+
+// Read the photo and its place
+const { event, place } = Astro.props;
+---
+
+<li
+  class:list={[
+    "absolute isolate overflow-hidden rounded-lg border-4 border-surface bg-surface-sunken shadow-md",
+    {
+      "top-4 left-0 size-48 -rotate-3 desktop:size-56": place === 0,
+      "top-0 right-0 size-44 rotate-3 desktop:right-6 desktop:size-52": place === 1,
+      "right-14 bottom-0 size-40 -rotate-2 desktop:right-0 desktop:size-44": place === 2,
+    },
+  ]}
+>
+  <EventCover image={event.image} sizes="224px" />
+</li>

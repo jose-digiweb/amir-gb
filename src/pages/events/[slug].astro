@@ -1,0 +1,29 @@
+---
+// Dependencies
+import { getLocale } from "../../i18n/helpers";
+import { cacheContentPage } from "../../lib/content/helpers";
+import { getEventPageContent } from "../../lib/events/queries";
+
+// Components
+import EventPage from "../../components/events/event/EventPage.astro";
+import NotFoundPage from "../404.astro";
+
+// An event page shows CMS content, so it renders per request
+export const prerender = false;
+
+// Read the event
+const now = new Date();
+const content = await getEventPageContent(
+  getLocale(Astro.currentLocale),
+  Astro.params.slug ?? "",
+  now,
+);
+// An address without an event answers not found; a found one is cached at the edge before rendering starts
+if (content) {
+  cacheContentPage(Astro.cache, content.cacheHints);
+} else {
+  Astro.response.status = 404;
+}
+---
+
+{content ? <EventPage content={content} now={now} /> : <NotFoundPage />}

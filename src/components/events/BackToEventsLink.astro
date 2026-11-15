@@ -1,0 +1,25 @@
+---
+// Dependencies
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { ChevronLeft } from "@lucide/astro";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { ROUTE } from "../../site/constants";
+
+/**
+ * The {@link Props} type
+ * @description The props of the BackToEventsLink component, the small link back to What's on at the top of an event page and the archive
+ */
+type Props = Record<string, never>;
+
+// Link the events page in the page's language
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+---
+
+<a
+  href={getRelativeLocaleUrl(locale, ROUTE.EVENTS)}
+  class="-ml-1 inline-flex min-h-tap items-center gap-1 self-start type-button-sm text-text-heading hover:underline hover:underline-offset-4"
+>
+  <ChevronLeft aria-hidden="true" class="size-5" />
+  {t["event.back"]}
+</a>

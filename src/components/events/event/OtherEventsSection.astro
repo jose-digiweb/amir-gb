@@ -1,0 +1,59 @@
+---
+// Dependencies
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { ArrowRight } from "@lucide/astro";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { ROUTE } from "../../../site/constants";
+
+// Components
+import Opener from "../../ui/Opener.astro";
+import WovenShade from "../../ui/WovenShade.astro";
+import OtherEventCard from "./OtherEventCard.astro";
+
+// Types
+import type { EventItem } from "../../../lib/events/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the OtherEventsSection component, the sand band under an event page with the next events after it; left out when there are none
+ */
+type Props = {
+  /** The other upcoming events, soonest first. */
+  events: EventItem[];
+};
+
+// Read the events and link the list in the page's language
+const { events } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+---
+
+{events.length > 0 ? (
+  <section
+    data-footer-overlaps
+    aria-labelledby="others-title"
+    class="relative isolate z-10 -mt-8 overflow-hidden rounded-t-xl bg-bg-alt px-margin pt-10 pb-20 tablet:-mt-10 tablet:px-margin-md tablet:pt-14 tablet:pb-28 desktop:-mt-14 desktop:px-margin-lg desktop:pt-20 desktop:pb-36"
+  >
+    <WovenShade />
+    <div class="flex items-end justify-between gap-4">
+      <div class="flex flex-col gap-2">
+        <Opener label={t["event.othersOpener"]} />
+        <h2 id="others-title" class="type-section-title text-balance text-text-heading">
+          {t["event.othersTitle"]}
+        </h2>
+      </div>
+      <a
+        href={getRelativeLocaleUrl(locale, ROUTE.EVENTS)}
+        class="hidden min-h-tap items-center gap-1.5 type-button text-text-heading underline underline-offset-5 tablet:flex"
+      >
+        {t["events.all"]}
+        <ArrowRight aria-hidden="true" class="size-5" />
+      </a>
+    </div>
+    <ul class="mt-5 rounded-lg bg-surface px-4 py-1 tablet:mt-8 tablet:grid tablet:grid-cols-2 tablet:gap-4 tablet:bg-transparent tablet:p-0 desktop:grid-cols-3 desktop:gap-6">
+      {events.map((event) => (
+        <OtherEventCard event={event} />
+      ))}
+    </ul>
+  </section>
+) : null}

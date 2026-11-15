@@ -1,0 +1,41 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../i18n/helpers";
+
+// Components
+import EventTypeDot from "./EventTypeDot.astro";
+
+// Types
+import type { TypeChip } from "../../lib/events/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the TypeFilterChip component, one filter chip on the navy band: gold when it is the current filter
+ */
+type Props = {
+  /** The chip's kind of event, link and state. */
+  chip: TypeChip;
+};
+
+// Read the chip and name it in the page's language
+const { chip } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+const label = chip.type ? t[`eventType.${chip.type}`] : t["eventsPage.all"];
+---
+
+<li class="shrink-0">
+  <a
+    href={chip.href}
+    aria-current={chip.isCurrent ? "true" : undefined}
+    class:list={[
+      "inline-flex h-chip touch-manipulation items-center gap-2 rounded-pill px-4 type-button-sm whitespace-nowrap transition-[background-color,scale] duration-base ease-standard select-none focus-visible:outline-focus-on-brand active:scale-97",
+      {
+        "bg-accent text-on-accent-fill hover:bg-accent-hover": chip.isCurrent,
+        "bg-surface-raised text-text-heading hover:bg-selected": !chip.isCurrent,
+      },
+    ]}
+  >
+    {chip.type ? <EventTypeDot type={chip.type} class="size-2.5" /> : null}
+    {label}
+  </a>
+</li>

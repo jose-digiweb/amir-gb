@@ -1,0 +1,81 @@
+---
+// Dependencies
+import { ChevronLeft, ChevronRight } from "@lucide/astro";
+import { INTL_LOCALE } from "../../../i18n/constants";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { CALENDAR_ANCHOR } from "../../../lib/events/constants";
+import { getWeekdayNames } from "../../../lib/events/helpers";
+
+// Components
+import CalendarDayCell from "./CalendarDayCell.astro";
+import CalendarLegend from "./CalendarLegend.astro";
+import CalendarMonthLink from "./CalendarMonthLink.astro";
+
+// Types
+import type { CalendarMonth } from "../../../lib/events/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the CalendarMonthCard component, the month grid Monday first, with the way to the months around it
+ */
+type Props = {
+  /** The month. */
+  month: CalendarMonth;
+};
+
+// Read the month and name the weekdays in the page's language
+const { month } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const letters = getWeekdayNames(INTL_LOCALE[locale], "narrow");
+const shortNames = getWeekdayNames(INTL_LOCALE[locale], "short");
+const weekdays = letters.map((letter, index) => ({ letter, short: shortNames[index] }));
+const blanks = Array.from({ length: month.leading }, (_, index) => index);
+---
+
+<div
+  id={CALENDAR_ANCHOR}
+  class="flex scroll-mt-24 flex-col gap-4 tablet:rounded-xl tablet:border tablet:border-border tablet:bg-surface tablet:p-4 tablet:shadow-sm desktop:p-6"
+>
+  <div class="flex items-center justify-between gap-3 tablet:mb-1">
+    <CalendarMonthLink
+      href={month.previousHref}
+      label={t["calendar.previous"]}
+      class="tablet:hidden"
+    >
+      <ChevronLeft aria-hidden="true" />
+    </CalendarMonthLink>
+    <h2 class="type-h3 text-text-heading tablet:type-h2 desktop:type-h1">{month.title}</h2>
+    <div class="flex gap-2">
+      <CalendarMonthLink
+        href={month.previousHref}
+        label={t["calendar.previous"]}
+        class="hidden tablet:grid"
+      >
+        <ChevronLeft aria-hidden="true" />
+      </CalendarMonthLink>
+      <CalendarMonthLink href={month.nextHref} label={t["calendar.next"]}>
+        <ChevronRight aria-hidden="true" />
+      </CalendarMonthLink>
+    </div>
+  </div>
+  <div class="rounded-lg bg-bg-alt px-1.5 pt-3.5 pb-2.5 tablet:rounded-none tablet:bg-transparent tablet:p-0">
+    <ol aria-hidden="true" class="grid grid-cols-7 pb-1 tablet:pb-2.5">
+      {weekdays.map((weekday) => (
+        <li class="text-center type-small font-semibold text-text-muted tablet:pl-2.5 tablet:text-left tablet:type-label tablet:text-text-muted">
+          <span class="desktop:hidden">{weekday.letter}</span>
+          <span class="hidden uppercase desktop:inline">{weekday.short}</span>
+        </li>
+      ))}
+    </ol>
+    <ol class="grid grid-cols-7 gap-y-1 tablet:gap-y-0">
+      {blanks.map((blank) => (
+        <li aria-hidden="true" data-blank={blank} class="tablet:border-t tablet:border-border"></li>
+      ))}
+      {month.days.map((day) => (
+        <CalendarDayCell day={day} />
+      ))}
+    </ol>
+  </div>
+  <CalendarLegend />
+</div>

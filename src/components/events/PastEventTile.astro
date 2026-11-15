@@ -1,0 +1,33 @@
+---
+// Components
+import DutchOnlyMark from "../site/DutchOnlyMark.astro";
+import EventCover from "./EventCover.astro";
+
+// Types
+import type { EventItem } from "../../lib/events/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the PastEventTile component, a past event as a photo with its name on a white label
+ */
+type Props = {
+  /** The past event. */
+  event: EventItem;
+};
+
+// Read the event
+const { event } = Astro.props;
+---
+
+<a
+  href={event.href}
+  class="relative isolate block h-40 touch-manipulation overflow-hidden rounded-lg bg-surface-sunken transition-[translate,scale] duration-fast ease-standard select-none hover:-translate-y-1 active:scale-98 desktop:h-56"
+>
+  <EventCover image={event.image} sizes="(min-width: 1180px) 240px, 214px" />
+  <span class="absolute right-3 bottom-3 left-3 flex">
+    <span class="inline-flex max-w-full items-center truncate rounded-pill bg-surface px-3 py-1 type-tag text-text-heading">
+      <span class="truncate">{event.title}</span>
+      {event.isDutchOnly ? <DutchOnlyMark /> : null}
+    </span>
+  </span>
+</a>

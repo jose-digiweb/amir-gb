@@ -1,0 +1,38 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { LOCALE } from "../../../i18n/constants";
+
+// Components
+import RichText from "../../content/RichText.astro";
+import Opener from "../../ui/Opener.astro";
+
+// Types
+import type { EventDetail } from "../../../lib/events/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the EventAbout component, About this event: the text written in EmDash's editor, or the short summary when there is none
+ */
+type Props = {
+  /** The event. */
+  event: EventDetail;
+  /** Layout classes from the caller. */
+  class?: string;
+};
+
+// Read the event's text; a Dutch original is marked as Dutch for screen readers and translators
+const { event, class: className } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+const textLang = event.isDutchOnly ? LOCALE.NL : undefined;
+const hasContent = Boolean(event.content?.length);
+---
+
+{hasContent || event.summary ? (
+  <section aria-label={t["event.aboutTitle"]} class:list={["flex flex-col gap-3", className]}>
+    <Opener label={t["event.aboutOpener"]} />
+    <div lang={textLang} class="max-w-measure type-body text-text">
+      {hasContent ? <RichText value={event.content} /> : <p>{event.summary}</p>}
+    </div>
+  </section>
+) : null}

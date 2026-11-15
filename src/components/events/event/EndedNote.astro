@@ -1,0 +1,27 @@
+---
+// Dependencies
+import { CalendarCheck } from "@lucide/astro";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+
+/**
+ * The {@link Props} type
+ * @description The props of the EndedNote component, the note at the top of an event that is over, pointing at the photos when they exist
+ */
+type Props = {
+  /** A story with photos of the day exists. */
+  hasPhotos: boolean;
+};
+
+// Read whether there are photos and pick the line
+const { hasPhotos } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+const text = hasPhotos ? t["event.endedPhotos"] : t["event.endedText"];
+---
+
+<div role="note" class="flex gap-3 rounded-lg bg-info-bg px-4 py-3.5 text-text-heading">
+  <CalendarCheck aria-hidden="true" class="mt-0.5 size-5.5 shrink-0" />
+  <p class="flex flex-col gap-0.5 type-body-sm">
+    <b class="font-heading">{t["event.endedTitle"]}</b>
+    <span class="text-pretty text-text">{text}</span>
+  </p>
+</div>

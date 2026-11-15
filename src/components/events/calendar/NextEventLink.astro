@@ -1,0 +1,47 @@
+---
+// Dependencies
+import { ArrowRight } from "@lucide/astro";
+import { INTL_LOCALE } from "../../../i18n/constants";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { getShortDate } from "../../../lib/events/helpers";
+
+// Components
+import DutchOnlyMark from "../../site/DutchOnlyMark.astro";
+import EventCover from "../EventCover.astro";
+
+// Types
+import type { EventItem } from "../../../lib/events/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the NextEventLink component, the next event after an empty month as a small link card
+ */
+type Props = {
+  /** The next event. */
+  event: EventItem;
+};
+
+// Read the event and write its day in the page's language
+const { event } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const date = getShortDate(event.startsAt, INTL_LOCALE[locale]);
+---
+
+<a
+  href={event.href}
+  class="group mt-1 grid touch-manipulation grid-cols-[--spacing(14)_minmax(0,1fr)_auto] items-center gap-3 rounded-lg border border-border bg-surface p-3 select-none"
+>
+  <span class="relative isolate block size-14 overflow-hidden rounded-md bg-surface-sunken">
+    <EventCover image={event.image} sizes="56px" />
+  </span>
+  <span class="flex min-w-0 flex-col gap-0.5">
+    <span class="type-label text-text-muted">{t["calendar.nextEvent"]}</span>
+    <span class="type-h4 text-text-heading group-hover:underline group-hover:underline-offset-4">
+      {event.title}
+      {event.isDutchOnly ? <DutchOnlyMark /> : null}
+    </span>
+    <span class="type-small text-text-muted">{date}</span>
+  </span>
+  <ArrowRight aria-hidden="true" class="size-icon-md text-text-heading" />
+</a>

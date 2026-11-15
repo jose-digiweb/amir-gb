@@ -1,0 +1,64 @@
+---
+// Dependencies
+import { Images } from "@lucide/astro";
+import { INTL_LOCALE } from "../../../i18n/constants";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { getArchiveDate } from "../../../lib/events/helpers";
+
+// Components
+import DutchOnlyMark from "../../site/DutchOnlyMark.astro";
+import EventCover from "../EventCover.astro";
+import EventTypeDot from "../EventTypeDot.astro";
+
+// Types
+import type { PastEvent } from "../../../lib/events/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the ArchiveEventCard component, a past event in the archive: its photo, kind, date and name, and its photos when a story exists
+ */
+type Props = {
+  /** The past event. */
+  event: PastEvent;
+};
+
+// Read the event and write its date in the page's language
+const { event } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const date = getArchiveDate(event.startsAt, INTL_LOCALE[locale]);
+---
+
+<li class="flex flex-col gap-2.5">
+  <a
+    href={event.href}
+    tabindex="-1"
+    aria-hidden="true"
+    class="relative isolate block h-32 overflow-hidden rounded-lg bg-surface-sunken transition-[translate] duration-fast ease-standard hover:-translate-y-1 tablet:h-44 desktop:h-56"
+  >
+    <EventCover
+      image={event.image}
+      sizes="(min-width: 1180px) 400px, (min-width: 700px) 360px, 50vw"
+    />
+  </a>
+  <span class="flex items-center gap-1.5 type-small text-text-muted">
+    <EventTypeDot type={event.type} class="size-2" />
+    {date}
+  </span>
+  <a
+    href={event.href}
+    class="type-h4 text-balance text-text-heading hover:underline hover:underline-offset-4 tablet:type-h3"
+  >
+    {event.title}
+    {event.isDutchOnly ? <DutchOnlyMark /> : null}
+  </a>
+  {event.storyHref ? (
+    <a
+      href={event.storyHref}
+      class="-my-3 inline-flex min-h-tap items-center gap-1.5 self-start type-button-sm text-text-heading underline underline-offset-4"
+    >
+      <Images aria-hidden="true" class="size-4" />
+      {t["archive.photos"]}
+    </a>
+  ) : null}
+</li>

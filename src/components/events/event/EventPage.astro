@@ -1,0 +1,108 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { EVENT_PHASE } from "../../../lib/events/constants";
+import { isOnlineOnly } from "../../../lib/events/helpers";
+
+// Components
+import SiteLayout from "../../../layouts/SiteLayout.astro";
+import DecorBead from "../../ui/DecorBead.astro";
+import DotPatch from "../../ui/DotPatch.astro";
+import WovenDefs from "../../ui/WovenDefs.astro";
+import WovenShade from "../../ui/WovenShade.astro";
+import DutchOnlyNote from "./DutchOnlyNote.astro";
+import EndedNote from "./EndedNote.astro";
+import EventAbout from "./EventAbout.astro";
+import EventFacts from "./EventFacts.astro";
+import EventHeader from "./EventHeader.astro";
+import EventMedia from "./EventMedia.astro";
+import OtherEventsSection from "./OtherEventsSection.astro";
+
+// Types
+import type { EventPageContent } from "../../../lib/events/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the EventPage component, one event: its name and picture, its facts and actions, what it is about, and the events after it
+ */
+type Props = {
+  /** What the page shows. */
+  content: EventPageContent;
+  /** The moment the page renders. */
+  now: Date;
+};
+
+// Read the event and its state, and describe the page for search and link previews
+const { content, now } = Astro.props;
+const { event, phase, storyHref, others } = content;
+const t = getTranslations(getLocale(Astro.currentLocale));
+const isEnded = phase === EVENT_PHASE.ENDED;
+const description = event.summary ?? t["eventsPage.description"];
+---
+
+<SiteLayout title={event.title} description={description}>
+  <WovenDefs />
+  <article
+    data-footer-overlaps
+    aria-labelledby="event-title"
+    class="relative isolate overflow-hidden bg-bg px-margin pt-6 pb-20 tablet:px-margin-md tablet:pt-10 tablet:pb-28 desktop:px-margin-lg desktop:pt-14 desktop:pb-36"
+  >
+    <WovenShade />
+    <DecorBead ringed class="top-14 right-10 size-6 desktop:top-16 desktop:right-36" />
+    <DotPatch
+      id="event-dots"
+      class="top-20 -left-5 h-20 w-30 desktop:top-24 desktop:h-28 desktop:w-44"
+    />
+    <div class="event-layout grid gap-5 tablet:gap-x-6 tablet:gap-y-8 desktop:gap-x-8">
+      <div class="event-head flex flex-col gap-4">
+        {event.isDutchOnly ? <DutchOnlyNote /> : null}
+        {isEnded ? <EndedNote hasPhotos={Boolean(storyHref)} /> : null}
+        <EventHeader event={event} isOnlineOnly={isOnlineOnly(event)} />
+      </div>
+      <div class="event-media">
+        <EventMedia event={event} />
+      </div>
+      <div class="event-facts desktop:sticky desktop:top-24">
+        <EventFacts event={event} phase={phase} storyHref={storyHref} now={now} />
+      </div>
+      <EventAbout event={event} class="event-about" />
+    </div>
+  </article>
+  <OtherEventsSection events={others} />
+</SiteLayout>
+
+<style>
+  @reference "../../../styles/global.css";
+
+  .event-layout {
+    grid-template-areas: "head" "media" "facts" "about";
+
+    @variant tablet {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      grid-template-areas: "head head" "media media" "about facts";
+      align-items: start;
+    }
+
+    @variant desktop {
+      grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
+      grid-template-areas: "head facts" "media facts" "about facts";
+      grid-template-rows: auto auto 1fr;
+    }
+  }
+
+  .event-head {
+    grid-area: head;
+  }
+
+  .event-media {
+    grid-area: media;
+  }
+
+  .event-facts {
+    grid-area: facts;
+  }
+
+  .event-about {
+    grid-area: about;
+  }
+</style>

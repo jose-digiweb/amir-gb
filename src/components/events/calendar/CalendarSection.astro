@@ -1,0 +1,50 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+
+// Components
+import WovenShade from "../../ui/WovenShade.astro";
+import CalendarDayPanel from "./CalendarDayPanel.astro";
+import CalendarMonthCard from "./CalendarMonthCard.astro";
+import EmptyMonthCard from "./EmptyMonthCard.astro";
+
+// Types
+import type { EventsCalendarContent } from "../../../lib/events/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the CalendarSection component, the paper sheet of the calendar: the month, and the picked day beside it on desktop and under it on phone and tablet
+ */
+type Props = {
+  /** What the calendar shows. */
+  content: EventsCalendarContent;
+};
+
+// Read the month, the picked day and the copy
+const { content } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+const isEmptyMonth = !content.hasMonthEvents;
+---
+
+<section
+  data-footer-overlaps
+  aria-label={t["eventsPage.calendar"]}
+  class="relative isolate z-10 -mt-10 rounded-t-xl bg-bg px-4 pt-8 pb-20 tablet:-mt-10 tablet:px-margin-md tablet:pt-10 tablet:pb-28 desktop:-mt-14 desktop:px-margin-lg desktop:pt-12 desktop:pb-36"
+>
+  <WovenShade />
+  <div class="flex flex-col gap-6 tablet:gap-8 desktop:grid desktop:grid-cols-12 desktop:items-start">
+    <div class="desktop:col-span-8">
+      <CalendarMonthCard month={content.month} />
+    </div>
+    <div class="desktop:col-span-4">
+      {content.picked ? <CalendarDayPanel day={content.picked} /> : null}
+      {isEmptyMonth ? (
+        <EmptyMonthCard
+          monthName={content.month.name}
+          hasWeekly={content.activities.length > 0}
+          next={content.nextAfter}
+        />
+      ) : null}
+    </div>
+  </div>
+</section>

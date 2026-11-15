@@ -1,0 +1,87 @@
+---
+// Dependencies
+import { INTL_LOCALE } from "../../../i18n/constants";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { EVENTS_LIMIT } from "../../../lib/events/constants";
+import { getCountLabel } from "../../../lib/events/helpers";
+
+// Components
+import EventTypeDot from "../EventTypeDot.astro";
+
+// Types
+import type { CalendarDay } from "../../../lib/events/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the CalendarDayCell component, one day of the month: dots on phone and tablet, the events' names on desktop
+ */
+type Props = {
+  /** The day. */
+  day: CalendarDay;
+};
+
+// Read the day and prepare what its cell shows
+const { day } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const chips = day.events.slice(0, EVENTS_LIMIT.DAY_CHIPS);
+const more = day.events.length - chips.length;
+const hasWeekly = day.weekly.length > 0;
+const moreLabel = t["calendar.more"].replace("{count}", String(more));
+const countLabel = getCountLabel(
+  day.events.length,
+  INTL_LOCALE[locale],
+  t["eventsPage.countOne"],
+  t["eventsPage.countOther"],
+);
+const hasEvents = day.events.length > 0;
+const srLabel = [day.label, hasEvents ? countLabel : ""].filter(Boolean).join(", ");
+---
+
+<li class="min-w-0">
+  <a
+    href={day.href}
+    aria-current={day.isToday ? "date" : undefined}
+    class:list={[
+      "flex h-full touch-manipulation flex-col items-center gap-1 py-1 select-none tablet:min-h-22 tablet:items-start tablet:gap-1.5 tablet:border-t tablet:border-border tablet:p-1.5 desktop:min-h-31",
+      { "tablet:rounded-md tablet:border-transparent tablet:bg-tint-gold": day.isPicked },
+    ]}
+  >
+    <span class="sr-only">{srLabel}</span>
+    <span
+      aria-hidden="true"
+      class:list={[
+        "grid size-10 place-items-center rounded-full type-button transition-colors duration-fast ease-standard tablet:size-8.5 tablet:type-button-sm",
+        {
+          "bg-accent text-on-accent-fill": day.isPicked,
+          "ring-2 ring-text-heading ring-inset": day.isToday && !day.isPicked,
+          "text-text-heading hover:bg-hover-quiet": !day.isPicked,
+          "opacity-50": day.isPast && !day.isPicked,
+        },
+      ]}
+    >
+      {day.day}
+    </span>
+    <span aria-hidden="true" class="flex h-1.5 gap-1 tablet:pl-3.5 desktop:hidden">
+      {day.events.map((event) => (
+        <EventTypeDot type={event.type} class="size-1.5" />
+      ))}
+      {hasWeekly ? <i class="size-1.5 rounded-full bg-text-muted opacity-60"></i> : null}
+    </span>
+    <span aria-hidden="true" class="hidden w-full flex-col gap-1.5 desktop:flex">
+      {chips.map((event) => (
+        <span class="flex items-start gap-1.5 rounded-sm bg-surface px-2 py-1 type-tag text-text-heading ring-1 ring-border ring-inset">
+          <EventTypeDot type={event.type} class="mt-1 size-1.75" />
+          <span class="line-clamp-2">{event.title}</span>
+        </span>
+      ))}
+      {more > 0 ? <span class="px-2 type-tag text-text-muted">{moreLabel}</span> : null}
+      {day.weekly.map((activity) => (
+        <span class="flex items-center gap-1.5 px-2 type-tag font-normal text-text-muted">
+          <i aria-hidden="true" class="size-1.5 shrink-0 rounded-full bg-text-muted opacity-60"></i>
+          <span class="truncate">{activity.name}</span>
+        </span>
+      ))}
+    </span>
+  </a>
+</li>

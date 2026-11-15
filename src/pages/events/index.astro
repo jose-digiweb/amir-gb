@@ -1,0 +1,27 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { cacheContentPage } from "../../lib/content/helpers";
+import { EVENTS_PARAM } from "../../lib/events/constants";
+import { parseEventType } from "../../lib/events/helpers";
+import { getEventsListContent } from "../../lib/events/queries";
+
+// Components
+import EventsListPage from "../../components/events/list/EventsListPage.astro";
+
+// The list shows CMS content, so it renders per request
+export const prerender = false;
+
+// Read the filter and the content, then cache the page at the edge before rendering starts
+const locale = getLocale(Astro.currentLocale);
+const type = parseEventType(Astro.url.searchParams.get(EVENTS_PARAM.TYPE));
+const content = await getEventsListContent(
+  locale,
+  new Date(),
+  getTranslations(locale)["eventsPage.laterIn"],
+  type,
+);
+cacheContentPage(Astro.cache, content.cacheHints);
+---
+
+<EventsListPage content={content} type={type} />

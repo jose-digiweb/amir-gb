@@ -1,0 +1,34 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+
+// Components
+import SiteLayout from "../../../layouts/SiteLayout.astro";
+import WovenDefs from "../../ui/WovenDefs.astro";
+import ArchiveOpening from "./ArchiveOpening.astro";
+import ArchiveYearSection from "./ArchiveYearSection.astro";
+
+// Types
+import type { ArchiveContent } from "../../../lib/events/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the ArchivePage component, the past events of one year with the way to the other years
+ */
+type Props = {
+  /** What the archive shows. */
+  content: ArchiveContent;
+  /** The year shown. */
+  year: string;
+};
+
+// Read the archive and the copy
+const { content, year } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+---
+
+<SiteLayout title={t["archive.title"]} description={t["archive.description"]}>
+  <WovenDefs />
+  <ArchiveOpening years={content.years} events={content.events} />
+  <ArchiveYearSection year={year} events={content.events} />
+</SiteLayout>

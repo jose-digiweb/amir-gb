@@ -1,0 +1,22 @@
+---
+// Dependencies
+import { Globe } from "@lucide/astro";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+
+/**
+ * The {@link Props} type
+ * @description The props of the DutchOnlyNote component, the note on an event shown in Dutch on an English or Portuguese page
+ */
+type Props = Record<string, never>;
+
+// Read the copy
+const t = getTranslations(getLocale(Astro.currentLocale));
+---
+
+<div role="note" class="flex gap-3 rounded-lg bg-info-bg px-4 py-3.5 text-text-heading">
+  <Globe aria-hidden="true" class="mt-0.5 size-5.5 shrink-0" />
+  <p class="flex flex-col gap-0.5 type-body-sm">
+    <b class="font-heading">{t["event.dutchOnlyTitle"]}</b>
+    <span class="text-pretty text-text">{t["event.dutchOnlyText"]}</span>
+  </p>
+</div>

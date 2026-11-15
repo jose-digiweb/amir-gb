@@ -1,0 +1,57 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+
+// Components
+import DecorBead from "../../ui/DecorBead.astro";
+import Opener from "../../ui/Opener.astro";
+import WovenShade from "../../ui/WovenShade.astro";
+import EventFeatureCard from "../EventFeatureCard.astro";
+import MonthSection from "./MonthSection.astro";
+import NoTypeCard from "./NoTypeCard.astro";
+import NoUpcomingCard from "./NoUpcomingCard.astro";
+
+// Types
+import type { EventItem, EventType, MonthGroup } from "../../../lib/events/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the EventsListSection component, the paper sheet of the list: the next event, then the rest by month, or a calm message when nothing is coming
+ */
+type Props = {
+  /** The next event, if any. */
+  next?: EventItem;
+  /** The events after it, by month. */
+  months: MonthGroup[];
+  /** The type filter, if any. */
+  type?: EventType;
+  /** The list without the filter. */
+  allHref: string;
+};
+
+// Read what the sheet shows and which message stands in when it is empty
+const { next, months, type, allHref } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+const isFilteredEmpty = !next && Boolean(type);
+const isEmpty = !next && !type;
+---
+
+<section
+  data-footer-overlaps
+  aria-label={t["eventsPage.title"]}
+  class="relative isolate z-10 -mt-10 flex flex-col gap-6 rounded-t-xl bg-bg px-margin pt-8 pb-20 tablet:-mt-10 tablet:gap-10 tablet:px-margin-md tablet:pt-10 tablet:pb-28 desktop:-mt-14 desktop:px-margin-lg desktop:pt-12 desktop:pb-36"
+>
+  <WovenShade />
+  {next ? (
+    <div class="relative flex flex-col gap-3">
+      <DecorBead ringed class="top-1 right-12 size-3 tablet:hidden" />
+      <Opener label={t["eventsPage.nextUp"]} />
+      <EventFeatureCard event={next} />
+    </div>
+  ) : null}
+  {isEmpty ? <NoUpcomingCard /> : null}
+  {isFilteredEmpty && type ? <NoTypeCard type={type} allHref={allHref} /> : null}
+  {months.map((group) => (
+    <MonthSection group={group} />
+  ))}
+</section>

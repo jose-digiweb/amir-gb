@@ -1,0 +1,45 @@
+---
+// Dependencies
+import { ExternalLink } from "@lucide/astro";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { getOnlineLinkFrom } from "../../../lib/events/helpers";
+
+/**
+ * The {@link Props} type
+ * @description The props of the OnlineLink component, the way to join an event online, shown from an hour before it starts
+ */
+type Props = {
+  /** The online meeting's address. */
+  href: string;
+  /** When the event starts. */
+  startsAt: Date;
+  /** The moment the page renders. */
+  now: Date;
+};
+
+// Read the link and work out when it shows; a script shows it on time on a page cached earlier
+const { href, startsAt, now } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+const from = getOnlineLinkFrom({ startsAt });
+const isOpen = now >= from;
+---
+
+<a
+  href={href}
+  target="_blank"
+  rel="noopener"
+  hidden={!isOpen}
+  data-online-from={from.getTime()}
+  class="mt-1 inline-flex items-center gap-1.5 self-start type-button-sm text-link underline underline-offset-4 [&[hidden]]:hidden"
+>
+  {t["event.joinOnline"]}
+  <ExternalLink aria-hidden="true" class="size-4" />
+</a>
+
+<script>
+  // Dependencies
+  import { revealOnlineLinks } from "../../../lib/events/reveal";
+
+  // Show each online link from an hour before its event, also on a cached page
+  revealOnlineLinks();
+</script>

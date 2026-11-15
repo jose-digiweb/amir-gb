@@ -1,0 +1,24 @@
+---
+/**
+ * The {@link Props} type
+ * @description The props of the ListMessageCard component, the calm white card the list shows in place of events: a round icon, a title, a line and an optional action
+ */
+type Props = {
+  /** The card's title. */
+  title: string;
+  /** The line under it. */
+  text: string;
+};
+
+// Read the card's copy
+const { title, text } = Astro.props;
+---
+
+<div class="flex flex-col gap-3 rounded-lg border border-border bg-surface p-5 shadow-sm tablet:max-w-xl tablet:p-6">
+  <span class="grid size-12 place-items-center rounded-full bg-tint-navy text-text-heading [&_svg]:size-icon-md">
+    <slot name="icon" />
+  </span>
+  <h2 class="type-h3 text-balance text-text-heading">{title}</h2>
+  <p class="type-body-sm text-pretty text-text">{text}</p>
+  <slot />
+</div>

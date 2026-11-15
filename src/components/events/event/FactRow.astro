@@ -1,0 +1,25 @@
+---
+/**
+ * The {@link Props} type
+ * @description The props of the FactRow component, one row of an event's facts card: a round icon, a small label in capitals and the fact
+ */
+type Props = {
+  /** The label, already in capitals. */
+  label: string;
+};
+
+// Read the row's label
+const { label } = Astro.props;
+---
+
+<li class="flex gap-3.5 border-t border-border py-3.5 first:border-t-0 first:pt-0">
+  <span class="grid size-10 shrink-0 place-items-center rounded-full bg-surface-sunken text-text-heading [&_svg]:size-5">
+    <slot name="icon" />
+  </span>
+  <div class="flex min-w-0 flex-col gap-1">
+    <span class="type-label text-text-muted">{label}</span>
+    <div class="flex flex-col gap-0.5 type-body-sm font-semibold text-text-heading">
+      <slot />
+    </div>
+  </div>
+</li>

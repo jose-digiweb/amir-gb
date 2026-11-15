@@ -73,12 +73,13 @@ export const CLOCK_TIME = {
 
 /**
  * The {@link FIELD} constant
- * @description The content fields the pages filter and sort on
+ * @description The content fields the site filters, sorts and follows references on
  */
 export const FIELD = {
   STARTS_AT: "starts_at",
   PUBLISHED_AT: "published_at",
   TYPE: "type",
+  EVENT: "event",
 } as const;
 
 /**

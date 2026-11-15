@@ -1,0 +1,54 @@
+---
+// Dependencies
+import { INTL_LOCALE } from "../../../i18n/constants";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { getCountLabel } from "../../../lib/events/helpers";
+
+// Components
+import WovenShade from "../../ui/WovenShade.astro";
+import ArchiveEventCard from "./ArchiveEventCard.astro";
+
+// Types
+import type { PastEvent } from "../../../lib/events/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the ArchiveYearSection component, the paper sheet with one year's past events, newest first
+ */
+type Props = {
+  /** The year. */
+  year: string;
+  /** The year's events, newest first. */
+  events: PastEvent[];
+};
+
+// Read the year and count its events in the page's language
+const { year, events } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const count = getCountLabel(
+  events.length,
+  INTL_LOCALE[locale],
+  t["eventsPage.countOne"],
+  t["eventsPage.countOther"],
+);
+---
+
+<section
+  data-footer-overlaps
+  aria-labelledby="archive-year"
+  class="relative isolate z-10 -mt-8 overflow-hidden rounded-t-xl bg-bg px-margin pt-8 pb-20 tablet:-mt-10 tablet:px-margin-md tablet:pt-10 tablet:pb-28 desktop:-mt-14 desktop:px-margin-lg desktop:pt-12 desktop:pb-36"
+>
+  <WovenShade />
+  <div class="flex items-baseline justify-between gap-4">
+    <h2 id="archive-year" class="type-h2 text-text-heading desktop:type-h1">
+      {year}
+    </h2>
+    <span class="type-small text-text-muted">{count}</span>
+  </div>
+  <ul class="mt-5 grid grid-cols-2 gap-x-3 gap-y-6 tablet:mt-6 tablet:gap-x-4 tablet:gap-y-8 desktop:grid-cols-3 desktop:gap-x-6">
+    {events.map((event) => (
+      <ArchiveEventCard event={event} />
+    ))}
+  </ul>
+</section>

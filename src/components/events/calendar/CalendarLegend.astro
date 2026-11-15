@@ -1,0 +1,37 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { EVENT_TYPES } from "../../../lib/events/constants";
+
+// Components
+import EventTypeDot from "../EventTypeDot.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the CalendarLegend component, what the ring and the dots mean, on phone and tablet where days show dots
+ */
+type Props = Record<string, never>;
+
+// Read the copy
+const t = getTranslations(getLocale(Astro.currentLocale));
+---
+
+<ul
+  aria-label={t["calendar.legend"]}
+  class="flex flex-wrap gap-x-3.5 gap-y-1.5 type-small text-text-muted desktop:hidden"
+>
+  <li class="flex items-center gap-1.5">
+    <i aria-hidden="true" class="size-3 rounded-full ring-2 ring-text-heading ring-inset"></i>
+    {t["calendar.today"]}
+  </li>
+  {EVENT_TYPES.map((type) => (
+    <li class="flex items-center gap-1.5">
+      <EventTypeDot type={type} class="size-2" />
+      {t[`eventType.${type}`]}
+    </li>
+  ))}
+  <li class="flex items-center gap-1.5">
+    <i aria-hidden="true" class="size-2 rounded-full bg-text-muted opacity-60"></i>
+    {t["calendar.weekly"]}
+  </li>
+</ul>

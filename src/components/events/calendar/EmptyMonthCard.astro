@@ -1,0 +1,34 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+
+// Components
+import NextEventLink from "./NextEventLink.astro";
+
+// Types
+import type { EventItem } from "../../../lib/events/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the EmptyMonthCard component, what the calendar says under a month with no events, with the next event after it
+ */
+type Props = {
+  /** The month's name in the page's language. */
+  monthName: string;
+  /** Whether weekly activities show as dots in the month. */
+  hasWeekly: boolean;
+  /** The first event after the month, if any. */
+  next?: EventItem;
+};
+
+// Read the month and the next event, and write their copy in the page's language
+const { monthName, hasWeekly, next } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+const title = t["calendar.nothingTitle"].replace("{month}", monthName);
+---
+
+<div class="flex flex-col gap-3 tablet:max-w-md">
+  <h2 class="type-h3 text-balance text-text-heading">{title}</h2>
+  {hasWeekly ? <p class="type-body-sm text-pretty text-text">{t["calendar.nothingText"]}</p> : null}
+  {next ? <NextEventLink event={next} /> : null}
+</div>

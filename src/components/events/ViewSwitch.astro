@@ -1,0 +1,43 @@
+---
+// Dependencies
+import { CalendarDays, List } from "@lucide/astro";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { EVENTS_VIEW } from "../../lib/events/constants";
+
+// Components
+import ViewSwitchLink from "./ViewSwitchLink.astro";
+
+// Types
+import type { EventsView } from "../../lib/events/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the ViewSwitch component, the List and Calendar switch on the navy band; each half is a link that keeps the type filter
+ */
+type Props = {
+  /** The view the page shows. */
+  view: EventsView;
+  /** The list's address, with the filter. */
+  listHref: string;
+  /** The calendar's address, with the filter. */
+  calendarHref: string;
+};
+
+// Read the current view and the copy
+const { view, listHref, calendarHref } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+---
+
+<nav
+  aria-label={t["eventsPage.viewLabel"]}
+  class="grid w-62 shrink-0 grid-cols-2 rounded-pill bg-surface-inverse p-1 tablet:w-65"
+>
+  <ViewSwitchLink href={listHref} isCurrent={view === EVENTS_VIEW.LIST}>
+    <List aria-hidden="true" />
+    {t["eventsPage.list"]}
+  </ViewSwitchLink>
+  <ViewSwitchLink href={calendarHref} isCurrent={view === EVENTS_VIEW.CALENDAR}>
+    <CalendarDays aria-hidden="true" />
+    {t["eventsPage.calendar"]}
+  </ViewSwitchLink>
+</nav>
