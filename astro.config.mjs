@@ -25,6 +25,13 @@ export default defineConfig({
     provider: cacheCloudflare(),
   },
 
+  // Every link to another page of the site starts loading when it is hovered or focused, so
+  // on desktop the page is on its way, and the edge cache warm, before the click lands.
+  prefetch: {
+    prefetchAll: true,
+    defaultStrategy: "hover",
+  },
+
   // NL is the default language at the root; EN and PT get a prefix (src/i18n/constants.ts).
   // EmDash reads this same block. Keep the default locale unprefixed: EmDash's admin
   // returns 404 with prefixDefaultLocale or "prefix-always".

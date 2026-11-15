@@ -153,8 +153,8 @@ export const PRIVATE_PAGE = {
  * @description How long the edge keeps the Donate page with the plain form, in seconds, as long as the home page
  */
 export const DONATE_PAGE_CACHE = {
-  MAX_AGE: 600,
-  STALE_WHILE_REVALIDATE: 3600,
+  MAX_AGE: 3600,
+  STALE_WHILE_REVALIDATE: 86400,
 } as const;
 
 /**
