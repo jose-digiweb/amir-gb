@@ -7,6 +7,7 @@ import { RETURN_TONE } from "./constants";
 
 // Components
 import GiftShareLink from "./GiftShareLink.astro";
+import GiveAgainLink from "./GiveAgainLink.astro";
 import ReturnCard from "./ReturnCard.astro";
 
 /**
@@ -33,4 +34,5 @@ const text = fillAmount(t["gift.processingText"], formatAmount(locale, amountCen
 >
   <Check slot="mark" />
   <GiftShareLink />
+  <GiveAgainLink />
 </ReturnCard>

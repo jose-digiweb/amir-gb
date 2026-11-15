@@ -1,0 +1,25 @@
+---
+// Dependencies
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { GIFT_RETURN } from "../../../lib/donate/constants";
+import { ROUTE } from "../../../site/constants";
+
+/**
+ * The {@link Props} type
+ * @description The props of the GiveAgainLink component, which takes a donor from a thank you back to the donation form
+ */
+type Props = Record<string, never>;
+
+// The donation form on the page's home, without the return
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const formHref = `${getRelativeLocaleUrl(locale, ROUTE.HOME)}${GIFT_RETURN.HASH}`;
+---
+
+<a
+  href={formHref}
+  class="inline-flex min-h-tap items-center self-center type-button text-text-heading underline underline-offset-4"
+>
+  {t["gift.giveAgain"]}
+</a>

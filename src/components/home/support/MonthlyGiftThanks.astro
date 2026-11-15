@@ -8,6 +8,7 @@ import { RETURN_TONE } from "./constants";
 
 // Components
 import GiftShareLink from "./GiftShareLink.astro";
+import GiveAgainLink from "./GiveAgainLink.astro";
 import ReturnCard from "./ReturnCard.astro";
 
 /**
@@ -34,10 +35,11 @@ const text = fillAmount(t["gift.monthlyText"], formatAmount(locale, amountCents)
 >
   <Check slot="mark" />
   <GiftShareLink />
+  <GiveAgainLink />
   {STRIPE_PORTAL_URL ? (
     <a
       href={STRIPE_PORTAL_URL}
-      class="inline-flex min-h-tap items-center self-center type-body-sm font-semibold text-text-muted underline underline-offset-4"
+      class="inline-flex min-h-tap items-center self-center text-center type-body-sm font-semibold text-balance text-text-muted underline underline-offset-4"
     >
       {t["gift.manage"]}
     </a>

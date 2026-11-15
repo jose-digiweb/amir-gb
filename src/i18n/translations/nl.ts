@@ -146,6 +146,7 @@ export const nl: Translations = {
   "gift.share": "Vertel het via WhatsApp",
   "gift.shareText":
     "Ik heb net gegeven aan AMIR-GB, dat migranten en de Guinee-Bissause gemeenschap in Nederland steunt. Jij kunt ook geven:",
+  "gift.giveAgain": "Nog een gift geven",
   "gift.manage": "Je maandelijkse gift stoppen of wijzigen",
   "gift.stoppedTitle": "Betaling gestopt",
   "gift.stoppedText":
