@@ -86,8 +86,6 @@ export const nl: Translations = {
   "together.titleEnd": "sterker",
   "together.text":
     "Zoals de pano di pinti, in smalle stroken geweven en tot één doek genaaid, brengt AMIR-GB Guinee-Bissause families in heel Nederland samen.",
-  "together.year": "2026",
-  "together.founded": "opgericht op 20 juli",
   "together.clothLabel": "Een doek van foto's en geweven stroken, aan elkaar genaaid",
   "events.opener": "KOM OOK",
   "events.title": "Agenda",

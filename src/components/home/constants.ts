@@ -69,5 +69,4 @@ export const HELP_SERVICE_LABEL = {
 export const WOVEN_DEFS = {
   SOLID: "woven-bead-solid",
   RINGED: "woven-bead-ringed",
-  OPEN: "woven-bead-open",
 } as const;

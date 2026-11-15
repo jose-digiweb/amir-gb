@@ -86,8 +86,6 @@ export const pt: Translations = {
   "together.titleEnd": "juntos",
   "together.text":
     "Como o pano di pinti, tecido em tiras estreitas e cosido num só pano, a AMIR-GB une famílias guineenses de todos os Países Baixos.",
-  "together.year": "2026",
-  "together.founded": "fundada a 20 de julho",
   "together.clothLabel": "Um pano de fotografias e tiras tecidas, cosidas umas às outras",
   "events.opener": "APAREÇA",
   "events.title": "Agenda",
