@@ -3,7 +3,7 @@
 
 /// <reference types="emdash/locals" />
 
-import type { BylineSummary, ContentBylineCredit, TaxonomyTerm, PortableTextBlock } from "emdash";
+import type { BylineSummary, ContentBylineCredit, TaxonomyTerm, PortableTextBlock, ReferencePage } from "emdash";
 
 export interface Event {
   id: string;
@@ -38,6 +38,8 @@ export interface Post {
   featured_image?: { id: string; src?: string; alt?: string; caption?: string; width?: number; height?: number; filename?: string; mimeType?: string; blurhash?: string; dominantColor?: string; focalX?: number; focalY?: number; provider?: string; previewUrl?: string; meta?: Record<string, unknown>; darkVariant?: { id: string; src?: string; alt?: string; caption?: string; width?: number; height?: number; filename?: string; mimeType?: string; blurhash?: string; dominantColor?: string; focalX?: number; focalY?: number; provider?: string; previewUrl?: string; meta?: Record<string, unknown> } };
   excerpt?: string;
   content?: PortableTextBlock[];
+  gallery?: { "image": { id: string; src?: string; alt?: string; caption?: string; width?: number; height?: number; filename?: string; mimeType?: string; blurhash?: string; dominantColor?: string; focalX?: number; focalY?: number; provider?: string; previewUrl?: string; meta?: Record<string, unknown>; darkVariant?: { id: string; src?: string; alt?: string; caption?: string; width?: number; height?: number; filename?: string; mimeType?: string; blurhash?: string; dominantColor?: string; focalX?: number; focalY?: number; provider?: string; previewUrl?: string; meta?: Record<string, unknown> } } }[];
+  board_names?: string;
   urgent?: boolean;
   strip_text?: string;
   strip_link_label?: string;
@@ -67,10 +69,17 @@ export interface Activity {
   terms?: Record<string, TaxonomyTerm[]>;
 }
 
+export interface PostReferences {
+  event: ReferencePage<Event>;
+}
+
 declare module "emdash" {
   interface EmDashCollections {
     events: Event;
     posts: Post;
     activities: Activity;
+  }
+  interface EmDashCollectionReferences {
+    posts: PostReferences;
   }
 }
