@@ -1,24 +1,20 @@
 ---
 // Dependencies
 import { HandHelping, IdCard } from "@lucide/astro";
-import { Picture } from "astro:assets";
 import { getLocale, getTranslations } from "../../i18n/helpers";
 import { JOIN_MODE } from "../../lib/join/constants";
 import { BUTTON_TONE } from "../ui/constants";
+import { JOIN_DRAWINGS } from "./constants";
 import { getModeHref } from "./helpers";
-import familyCheering from "../../assets/photos/family-cheering.jpg";
 
 // Components
 import Button from "../ui/Button.astro";
-import DecorBead from "../ui/DecorBead.astro";
-import DotPatch from "../ui/DotPatch.astro";
 import Opener from "../ui/Opener.astro";
-import WovenShade from "../ui/WovenShade.astro";
-import MembersLattice from "./MembersLattice.astro";
+import JoinDrawing from "./JoinDrawing.astro";
 
 /**
  * The {@link Props} type
- * @description The props of the JoinOpening component: Join in on sand, with Become a member and Volunteer with us, beside a family and the members lattice with its open place
+ * @description The props of the JoinOpening component: Join in on sand, with Become a member and Volunteer with us, beside the joined hands in a circle of seats with one open
  */
 type Props = Record<string, never>;
 
@@ -30,38 +26,25 @@ const volunteerHref = getModeHref(JOIN_MODE.VOLUNTEER);
 
 <section
   aria-labelledby="join-title"
-  class="relative isolate -mt-16 overflow-hidden bg-bg-alt px-margin pt-28 pb-20 text-text-heading tablet:min-h-140 tablet:px-margin-md tablet:pt-32 tablet:pb-28 desktop:-mt-20 desktop:min-h-176 desktop:px-margin-lg desktop:pt-48 desktop:pb-36"
+  class="relative isolate -mt-16 overflow-hidden bg-bg-alt text-text-heading desktop:-mt-20 desktop:flex desktop:min-h-215 desktop:items-center desktop:pt-20 desktop:pb-14"
 >
-  <WovenShade />
-  <div class="join-blob absolute top-20 -right-12 -z-10 h-48 w-47 overflow-hidden bg-border tablet:top-24 tablet:-right-15 tablet:h-88 tablet:w-85 desktop:top-28 desktop:right-15 desktop:h-110 desktop:w-105">
-    <Picture
-      src={familyCheering}
-      alt={t["joinPage.photoAlt"]}
-      widths={[188, 376, 420, 840]}
-      sizes="(min-width: 1180px) 420px, (min-width: 700px) 340px, 188px"
-      priority
-      class="size-full object-cover object-[50%_30%]"
-    />
-  </div>
-  <MembersLattice
-    label={t["joinPage.yourPlace"]}
-    class="top-59 left-49 w-30 tablet:top-101 tablet:right-24 tablet:left-auto tablet:w-45 desktop:top-119 desktop:right-128 desktop:w-57"
+  <JoinDrawing
+    layout={JOIN_DRAWINGS.PHONE}
+    id="join-phone"
+    class="pointer-events-none h-auto w-full tablet:hidden"
   />
-  <DotPatch
-    id="join-opening"
-    class="top-24 left-36 h-30 w-40 tablet:top-28 tablet:left-90 tablet:h-36 tablet:w-50 desktop:top-32 desktop:left-175 desktop:h-50 desktop:w-75"
-  />
-  <DecorBead class="top-30 right-60 hidden size-6 desktop:block" />
 
-  <div class="flex flex-col gap-3 tablet:w-105 tablet:gap-4 desktop:w-150">
-    <Opener label={t["joinPage.opener"]} />
-    <h1 id="join-title" class="type-hero text-balance">
-      {t["joinPage.heading"]}
-    </h1>
-    <p class="mt-29 type-body text-pretty text-text tablet:mt-0 desktop:max-w-md desktop:type-lead">
+  <div class="relative flex flex-col gap-6 px-margin pb-20 tablet:w-130 tablet:px-margin-md tablet:pt-34 tablet:pb-0 desktop:opening-words desktop:gap-8 desktop:pt-0 desktop:pr-0 desktop:pl-margin-lg">
+    <div class="flex flex-col gap-3 tablet:gap-4">
+      <Opener label={t["joinPage.opener"]} />
+      <h1 id="join-title" class="type-hero text-balance">
+        {t["joinPage.heading"]}
+      </h1>
+    </div>
+    <p class="type-body text-pretty text-text desktop:max-w-md desktop:type-lead">
       {t["joinPage.intro"]}
     </p>
-    <div class="mt-2 flex flex-col gap-2.5 tablet:mt-3 tablet:flex-row desktop:mt-4">
+    <div class="flex flex-col gap-2.5 tablet:flex-row">
       <Button href={memberHref} block class="tablet:w-auto">
         <IdCard />
         {t["joinPage.becomeMember"]}
@@ -72,12 +55,17 @@ const volunteerHref = getModeHref(JOIN_MODE.VOLUNTEER);
       </Button>
     </div>
   </div>
+
+  <div class="mx-auto hidden max-w-208.5 tablet:block desktop:hidden">
+    <JoinDrawing
+      layout={JOIN_DRAWINGS.TABLET}
+      id="join-tablet"
+      class="pointer-events-none h-auto w-full"
+    />
+  </div>
+  <JoinDrawing
+    layout={JOIN_DRAWINGS.DESKTOP}
+    id="join-desktop"
+    class="pointer-events-none opening-aside hidden desktop:block"
+  />
 </section>
-
-<style>
-  @reference "../../styles/global.css";
-
-  .join-blob {
-    border-radius: 50% 50% 46% 54% / 60% 60% 40% 40%;
-  }
-</style>

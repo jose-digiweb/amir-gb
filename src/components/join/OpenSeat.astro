@@ -1,0 +1,26 @@
+---
+// Dependencies
+import { Plus } from "@lucide/astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the OpenSeat component, the one open seat in the circle: a gold dashed ring with a plus, centred on its point
+ */
+type Props = {
+  /** The seat's centre and size, in drawing units. */
+  x: number;
+  y: number;
+  size: number;
+};
+
+// Read the seat and place its box by the centre
+const { x, y, size } = Astro.props;
+const left = x - size / 2;
+const top = y - size / 2;
+---
+
+<foreignObject x={left} y={top} width={size} height={size} overflow="visible">
+  <div class="flex size-full items-center justify-center rounded-full border-2 border-dashed border-accent bg-bg-alt text-text-accent">
+    <Plus class="size-1/2" />
+  </div>
+</foreignObject>

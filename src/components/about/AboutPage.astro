@@ -4,6 +4,7 @@ import { getLocale, getTranslations } from "../../i18n/helpers";
 
 // Components
 import SiteLayout from "../../layouts/SiteLayout.astro";
+import WovenDefs from "../ui/WovenDefs.astro";
 import AboutOpening from "./AboutOpening.astro";
 import BoardSection from "./BoardSection.astro";
 import MoneySection from "./MoneySection.astro";
@@ -21,7 +22,8 @@ type Props = Record<string, never>;
 const t = getTranslations(getLocale(Astro.currentLocale));
 ---
 
-<SiteLayout title={t["about.title"]} description={t["about.description"]} headerOverBrand>
+<SiteLayout title={t["about.title"]} description={t["about.description"]}>
+  <WovenDefs />
   <AboutOpening />
   <PurposeSection />
   <ValuesSection />

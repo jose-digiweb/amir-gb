@@ -2,10 +2,10 @@
 import { describe, expect, it } from "vitest";
 import { LATTICE, LATTICE_PIECE, LOZENGE } from "./constants";
 import {
+  getBeadArc,
   getBeadRing,
   getLatticeLayout,
   getNestedLozengePath,
-  getOpenPlacePath,
   getWovenPath,
 } from "./helpers";
 
@@ -60,11 +60,25 @@ describe("getBeadRing", () => {
     expect(ring.ringed).toHaveLength(10);
     expect(ring.solid[0]?.transform).toBe("translate(86.5 36.5) scale(1)");
   });
+
+  it("leaves the gaps empty and keeps every other bead's kind", () => {
+    const ring = getBeadRing(
+      { centreX: 100, centreY: 100, radius: 50, count: 20, size: 27 },
+      [0, 1],
+    );
+    expect(ring.solid).toHaveLength(9);
+    expect(ring.ringed).toHaveLength(9);
+    expect(ring.solid[0]?.key).toBe("2");
+  });
 });
 
-describe("getOpenPlacePath", () => {
-  it("weaves the piece's outline and a plus, and leaves the rest open", () => {
-    // 16 outline cells and a plus of 9 cells across both arms
-    expect(countThreads(getOpenPlacePath())).toBe(25);
+describe("getBeadArc", () => {
+  it("strings beads from the left end over the top to the right end", () => {
+    const arc = getBeadArc({ centreX: 100, centreY: 100, radius: 50, count: 5, size: 27 });
+    expect(arc.solid).toHaveLength(3);
+    expect(arc.ringed).toHaveLength(2);
+    expect(arc.solid[0]?.transform).toBe("translate(36.5 86.5) scale(1)");
+    expect(arc.solid[1]?.transform).toBe("translate(86.5 36.5) scale(1)");
+    expect(arc.solid[2]?.transform).toBe("translate(136.5 86.5) scale(1)");
   });
 });

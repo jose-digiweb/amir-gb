@@ -1,15 +1,18 @@
 ---
 // Dependencies
-import { Picture } from "astro:assets";
-import { getBeadRing } from "../../../lib/woven/helpers";
-import { BEAD } from "../../../lib/woven/constants";
-import { WOVEN_DEFS } from "../../ui/constants";
-import { CONSTELLATION_PHOTO, STITCH_REVEAL } from "./constants";
-import joinedHands from "../../../assets/photos/joined-hands.jpg";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { getValueChips } from "../../../site/helpers";
+import { CONSTELLATION_PHOTO_SIZES } from "./constants";
 
 // Components
+import BeadRing from "../../opening/BeadRing.astro";
+import CentreDisc from "../../opening/CentreDisc.astro";
+import JoinedHands from "../../opening/JoinedHands.astro";
+import OpeningDrawing from "../../opening/OpeningDrawing.astro";
+import Sparkles from "../../opening/Sparkles.astro";
+import StarChip from "../../opening/StarChip.astro";
+import StitchedThread from "../../opening/StitchedThread.astro";
 import ConstellationDisc from "./ConstellationDisc.astro";
-import ConstellationPill from "./ConstellationPill.astro";
 
 // Types
 import type { ConstellationLayout } from "./types";
@@ -23,185 +26,37 @@ type Props = {
   layout: ConstellationLayout;
   /** A prefix for the drawing's own pattern ids, unique on the page. */
   id: string;
-  /** Where the drawing starts on the left, to leave room for the words. */
-  cropX?: number;
   /** Size and placement classes from the caller. */
   class?: string;
 };
 
-// Read the drawing and work out every bead, lozenge, thread and the dot field before rendering
-const { layout, id, cropX = 0, class: className } = Astro.props;
-const viewBox = `${cropX} 0 ${layout.width - cropX} ${layout.height}`;
-const ring = getBeadRing({
-  centreX: layout.centreX,
-  centreY: layout.centreY,
-  radius: layout.ring.radius,
-  count: layout.ring.count,
-  size: layout.ring.size,
-});
-const lozenges = layout.lozenges.map((lozenge) => ({
-  key: `${lozenge.x}-${lozenge.y}`,
-  href: `#${lozenge.isRinged ? WOVEN_DEFS.RINGED : WOVEN_DEFS.SOLID}`,
-  transform: `translate(${lozenge.x} ${lozenge.y}) scale(${lozenge.size / BEAD.UNITS})`,
-}));
-const photo = {
-  x: layout.centreX - layout.photoSize / 2,
-  y: layout.centreY - layout.photoSize / 2,
-  size: layout.photoSize,
-};
-const dots = {
-  patternId: `${id}-dots`,
-  fadeId: `${id}-fade`,
-  maskId: `${id}-mask`,
-  x: layout.dots.centreX - layout.dots.radius,
-  y: layout.dots.centreY - layout.dots.radius,
-  size: layout.dots.radius * 2,
-};
-const threads = layout.threads.paths.map((path, index) => ({
-  path,
-  maskId: `${id}-thread-${index}`,
-  mask: `url(#${id}-thread-${index})`,
-  cascade: `--thread: ${index}`,
-}));
-const revealWidth = layout.threads.width * STITCH_REVEAL.WIDTH_SCALE;
-const solidHref = `#${WOVEN_DEFS.SOLID}`;
-const ringedHref = `#${WOVEN_DEFS.RINGED}`;
+// Read the drawing, name its threads and its values in the page's language
+const { layout, id, class: className } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+const threads = layout.threads.paths.map((path, index) => ({ path, id: `${id}-thread-${index}` }));
+const pills = getValueChips(layout.pills, t);
 ---
 
-<svg
-  aria-hidden="true"
-  viewBox={viewBox}
-  width={layout.width - cropX}
-  height={layout.height}
-  class:list={["overflow-visible", className]}
->
-  <defs>
-    <pattern
-      id={dots.patternId}
-      width={layout.dots.step}
-      height={layout.dots.step}
-      patternUnits="userSpaceOnUse"
-    >
-      <circle
-        cx={layout.dots.step / 2}
-        cy={layout.dots.step / 2}
-        r="1.5"
-        class="fill-decor-strong"
-      ></circle>
-    </pattern>
-    <radialGradient id={dots.fadeId}>
-      <stop offset="0.62"></stop>
-      <stop offset="1" stop-opacity="0"></stop>
-    </radialGradient>
-    <mask id={dots.maskId} mask-type="alpha">
-      <rect
-        x={dots.x}
-        y={dots.y}
-        width={dots.size}
-        height={dots.size}
-        fill={`url(#${dots.fadeId})`}
-      ></rect>
-    </mask>
-    {threads.map((thread) => (
-      <mask
-        id={thread.maskId}
-        mask-type="alpha"
-        maskUnits="userSpaceOnUse"
-        x="0"
-        y="0"
-        width={layout.width}
-        height={layout.height}
-      >
-        <path
-          d={thread.path}
-          pathLength="1"
-          fill="none"
-          stroke-width={revealWidth}
-          stroke-linecap="round"
-          style={thread.cascade}
-          class="constellation-stitch stroke-accent"
-        ></path>
-      </mask>
-    ))}
-  </defs>
-  <rect
-    x={dots.x}
-    y={dots.y}
-    width={dots.size}
-    height={dots.size}
-    fill={`url(#${dots.patternId})`}
-    mask={`url(#${dots.maskId})`}
-  ></rect>
-  <circle
-    cx={layout.centreX}
-    cy={layout.centreY}
-    r={layout.ring.radius}
-    fill="none"
-    stroke-width="1.5"
-    class="stroke-accent opacity-60"
-  ></circle>
-  {threads.map((thread) => (
-    <path
-      d={thread.path}
-      mask={thread.mask}
-      fill="none"
-      stroke-width={layout.threads.width}
-      stroke-linecap="round"
-      stroke-dasharray={layout.threads.dash}
-      class="stroke-accent opacity-80"
-    ></path>
-  ))}
-  {ring.solid.map((bead) => (
-    <use href={solidHref} transform={bead.transform} />
-  ))}
-  {ring.ringed.map((bead) => (
-    <use href={ringedHref} transform={bead.transform} />
-  ))}
-  {lozenges.map((lozenge) => (
-    <use href={lozenge.href} transform={lozenge.transform} />
-  ))}
-  <foreignObject x={photo.x} y={photo.y} width={photo.size} height={photo.size} overflow="visible">
-    <div class="constellation-photo size-full overflow-hidden rounded-full bg-surface shadow-md">
-      <Picture
-        src={joinedHands}
-        alt=""
-        widths={[...CONSTELLATION_PHOTO.WIDTHS]}
-        sizes={CONSTELLATION_PHOTO.SIZES}
-        priority
-        class="size-full object-cover"
+<OpeningDrawing frame={layout.frame} dots={layout.dots} id={id} class={className}>
+  <BeadRing ring={layout.ring}>
+    {threads.map((thread, index) => (
+      <StitchedThread
+        path={thread.path}
+        stitch={layout.threads.stitch}
+        frame={layout.frame}
+        id={thread.id}
+        order={index}
       />
-    </div>
-  </foreignObject>
+    ))}
+  </BeadRing>
+  <Sparkles sparkles={layout.lozenges} />
+  <CentreDisc disc={layout.photo}>
+    <JoinedHands sizes={CONSTELLATION_PHOTO_SIZES} />
+  </CentreDisc>
   {layout.discs.map((disc) => (
     <ConstellationDisc disc={disc} hasLabel={layout.hasLabels} />
   ))}
-  {layout.pills.map((pill) => (
-    <ConstellationPill pill={pill} />
+  {pills.map((pill) => (
+    <StarChip x={pill.x} y={pill.y} label={pill.label} />
   ))}
-</svg>
-
-<style>
-  @reference "../../../styles/global.css";
-
-  .constellation-photo {
-    box-shadow:
-      0 0 0 var(--border-width) color-mix(in srgb, var(--accent) 40%, transparent),
-      0 0 0 var(--space-2) var(--bg-alt),
-      0 0 0 calc(var(--space-2) + var(--border-width))
-        color-mix(in srgb, var(--accent) 35%, transparent),
-      var(--shadow-md);
-  }
-
-  @keyframes constellation-stitch-in {
-    from {
-      stroke-dashoffset: 1;
-    }
-  }
-
-  .constellation-stitch {
-    stroke-dasharray: 1;
-    stroke-dashoffset: 0;
-    animation: constellation-stitch-in var(--duration-slow) var(--ease-standard) both;
-    animation-delay: calc(var(--stagger) * var(--thread));
-  }
-</style>
+</OpeningDrawing>

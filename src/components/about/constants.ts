@@ -1,9 +1,10 @@
 // Dependencies
 import { TILE_COLOUR } from "../../lib/content/constants";
 import { MILESTONE_PRECISION } from "../../lib/timeline/constants";
-import { PENDING_LINK } from "../../site/constants";
+import { PENDING_LINK, VALUE } from "../../site/constants";
 
 // Types
+import type { AboutDrawingLayout } from "./types";
 import type {
   AboutDocument,
   Aim,
@@ -179,3 +180,62 @@ export const TIMELINE_THREAD = {
   DASH: "8 8",
   WIDTH: 3,
 } as const;
+
+/**
+ * The {@link ABOUT_DRAWINGS} constant
+ * @description The opening's drawing per screen size, from the About us boards: the logo under a stitched arc carrying the motto and an arc of woven beads, a woven star on top
+ */
+export const ABOUT_DRAWINGS = {
+  PHONE: {
+    frame: { width: 390, height: 392, cropX: 0, cropY: 0 },
+    dots: { centreX: 195, centreY: 228, radius: 260, step: 28 },
+    arc: { path: "M30 286 A165 165 0 0 1 360 286", stitch: { width: 2.5, dash: "8 7" } },
+    beads: { centreX: 195, centreY: 286, radius: 122, count: 13, size: 16 },
+    disc: { centreX: 195, centreY: 286, size: 140 },
+    chips: [],
+    founded: null,
+    sparkles: [
+      { x: 179, y: 105, size: 32, isRinged: true },
+      { x: 23, y: 113, size: 14, isRinged: true },
+      { x: 353, y: 113, size: 14, isRinged: false },
+    ],
+  },
+  TABLET: {
+    frame: { width: 834, height: 1080, cropX: 0, cropY: 440 },
+    dots: { centreX: 505, centreY: 728, radius: 450, step: 40 },
+    arc: { path: "M243 820 A262 262 0 0 1 767 820", stitch: { width: 3, dash: "8 7" } },
+    beads: { centreX: 505, centreY: 820, radius: 196, count: 17, size: 22 },
+    disc: { centreX: 505, centreY: 820, size: 190 },
+    chips: [
+      { value: VALUE.SOLIDARITY, x: 290, y: 686 },
+      { value: VALUE.WELCOME, x: 413, y: 568 },
+      { value: VALUE.UNITY, x: 597, y: 568 },
+      { value: VALUE.DIGNITY, x: 715, y: 686 },
+    ],
+    founded: { x: 505, y: 961 },
+    sparkles: [
+      { x: 482, y: 536, size: 45, isRinged: true },
+      { x: 173, y: 780, size: 20, isRinged: true },
+      { x: 828, y: 851, size: 18, isRinged: false },
+    ],
+  },
+  DESKTOP: {
+    frame: { width: 1440, height: 880, cropX: 560, cropY: 0 },
+    dots: { centreX: 1010, centreY: 490, radius: 590, step: 48 },
+    arc: { path: "M695 600 A315 315 0 0 1 1325 600", stitch: { width: 3, dash: "8 7" } },
+    beads: { centreX: 1010, centreY: 600, radius: 236, count: 17, size: 22 },
+    disc: { centreX: 1010, centreY: 600, size: 230 },
+    chips: [
+      { value: VALUE.SOLIDARITY, x: 712, y: 480 },
+      { value: VALUE.WELCOME, x: 869, y: 311 },
+      { value: VALUE.UNITY, x: 1151, y: 311 },
+      { value: VALUE.DIGNITY, x: 1290, y: 480 },
+    ],
+    founded: { x: 1010, y: 761 },
+    sparkles: [
+      { x: 988, y: 262, size: 45, isRinged: true },
+      { x: 625, y: 560, size: 20, isRinged: true },
+      { x: 1386, y: 631, size: 18, isRinged: false },
+    ],
+  },
+} as const satisfies Record<string, AboutDrawingLayout>;

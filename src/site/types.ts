@@ -54,3 +54,24 @@ export type Value = (typeof VALUE)[keyof typeof VALUE];
  * @description One of the {@link ANSWER_LANGUAGE} values
  */
 export type AnswerLanguage = (typeof ANSWER_LANGUAGE)[keyof typeof ANSWER_LANGUAGE];
+
+/**
+ * The {@link ValueChip} type
+ * @description One of AMIR-GB's values as a starred chip in an opening's drawing, placed by its centre
+ */
+export type ValueChip = {
+  value: Value;
+  x: number;
+  y: number;
+};
+
+/**
+ * The {@link LabelledChip} type
+ * @description A starred chip with its label in the page's language, placed by its centre
+ */
+export type LabelledChip = {
+  key: string;
+  label: string;
+  x: number;
+  y: number;
+};

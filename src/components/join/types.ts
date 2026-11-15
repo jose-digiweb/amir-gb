@@ -3,6 +3,7 @@ import type { JoinError, JoinMode, JoinSkill } from "../../lib/join/types";
 import type { AnswerLanguage } from "../../site/types";
 import type { TileColour } from "../../lib/content/types";
 import type { ChoiceOption } from "../forms/types";
+import type { Disc, DotField, DrawingFrame, Sparkle } from "../opening/types";
 import type { JOIN_FORM_STATE, JOIN_WAY } from "./constants";
 
 /**
@@ -103,4 +104,41 @@ export type JoinFormLinks = {
   whatsapp: string;
   whatsOn: string;
   tellFriend: string;
+};
+
+/**
+ * The {@link SeatCircle} type
+ * @description The circle of seats round the joined hands: its radius, the seats' size, which of the twelve places this screen draws, and the open one
+ */
+export type SeatCircle = {
+  radius: number;
+  size: number;
+  places: readonly number[];
+  open: number;
+};
+
+/**
+ * The {@link Seat} type
+ * @description One seat ready to draw: its centre, its tint and whether it is the open one
+ */
+export type Seat = {
+  key: string;
+  x: number;
+  y: number;
+  tint: TileColour;
+  isOpen: boolean;
+};
+
+/**
+ * The {@link JoinDrawingLayout} type
+ * @description One screen size's opening drawing: the joined hands, the seats round them, the stitched inner circle and Your place
+ */
+export type JoinDrawingLayout = {
+  frame: DrawingFrame;
+  dots: DotField;
+  photo: Disc;
+  seats: SeatCircle;
+  inner: string | null;
+  chip: { x: number; y: number; thread: string | null };
+  sparkles: readonly Sparkle[];
 };

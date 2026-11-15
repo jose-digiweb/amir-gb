@@ -1,64 +1,74 @@
 ---
 // Dependencies
 import { getLocale, getTranslations } from "../../../i18n/helpers";
-import { EVENTS_LIMIT } from "../../../lib/events/constants";
+import { ARCHIVE_DRAWINGS } from "./constants";
 
 // Components
 import BackToEventsLink from "../BackToEventsLink.astro";
-import DecorBead from "../../ui/DecorBead.astro";
-import DotPatch from "../../ui/DotPatch.astro";
 import Opener from "../../ui/Opener.astro";
-import WovenShade from "../../ui/WovenShade.astro";
+import ArchiveDrawing from "./ArchiveDrawing.astro";
 import ArchiveYearChip from "./ArchiveYearChip.astro";
-import PinnedPhoto from "./PinnedPhoto.astro";
 
 // Types
-import type { ArchiveYear, PastEvent } from "../../../lib/events/types";
+import type { ArchiveYear, TimelineMonth } from "../../../lib/events/types";
 
 /**
  * The {@link Props} type
- * @description The props of the ArchiveOpening component, Past events on sand, with the year chips and, from tablet up, a few photos of the year pinned beside the words
+ * @description The props of the ArchiveOpening component, Past events on sand with the year chips, beside a stitched timeline from the logo with the past events hanging off it
  */
 type Props = {
   /** The years with past events. */
   years: ArchiveYear[];
-  /** The year's events, newest first. */
-  events: PastEvent[];
+  /** The recent months with their past events, oldest first. */
+  timeline: TimelineMonth[];
 };
 
-// Read the years and pin the first photos of the year
-const { years, events } = Astro.props;
-const locale = getLocale(Astro.currentLocale);
-const t = getTranslations(locale);
-const pinned = events.filter((event) => event.image).slice(0, EVENTS_LIMIT.PINNED);
+// Read the years, the timeline and the copy
+const { years, timeline } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
 ---
 
 <section
   aria-labelledby="archive-title"
-  class="relative isolate overflow-hidden bg-bg-alt px-margin pt-6 pb-18 tablet:min-h-110 tablet:px-margin-md tablet:pt-10 tablet:pb-24 desktop:min-h-120 desktop:px-margin-lg desktop:pt-14 desktop:pb-28"
+  class="relative isolate -mt-16 overflow-hidden bg-bg-alt text-text-heading desktop:-mt-20 desktop:flex desktop:min-h-215 desktop:items-center desktop:pt-20 desktop:pb-14"
 >
-  <WovenShade />
-  <DecorBead ringed class="top-16 right-10 size-5 tablet:hidden" />
-  <DotPatch id="archive-dots" class="top-24 right-40 hidden h-36 w-52 tablet:block" />
-  <ul
-    aria-hidden="true"
-    class="absolute top-16 right-10 hidden h-90 w-90 tablet:block desktop:top-20 desktop:right-24 desktop:w-120"
-  >
-    {pinned.map((event, index) => (
-      <PinnedPhoto event={event} place={index} />
-    ))}
-  </ul>
-  <div class="flex flex-col gap-3 tablet:max-w-sm desktop:max-w-xl">
-    <BackToEventsLink />
-    <Opener label={t["eventsPage.pastOpener"]} />
-    <h1 id="archive-title" class="type-display text-balance text-text-heading">
-      {t["archive.title"]}
-    </h1>
-    <p class="type-body text-pretty text-text">{t["archive.intro"]}</p>
-    <ul aria-label={t["archive.yearsLabel"]} class="mt-2 flex flex-wrap gap-2">
+  <ArchiveDrawing
+    layout={ARCHIVE_DRAWINGS.PHONE}
+    months={timeline}
+    id="archive-phone"
+    class="pointer-events-none h-auto w-full tablet:hidden"
+  />
+
+  <div class="relative flex flex-col gap-6 px-margin pb-20 tablet:w-130 tablet:px-margin-md tablet:pt-30 tablet:pb-0 desktop:opening-words desktop:gap-8 desktop:pt-0 desktop:pr-0 desktop:pl-margin-lg">
+    <div class="flex flex-col gap-3 tablet:gap-4">
+      <BackToEventsLink />
+      <Opener label={t["eventsPage.pastOpener"]} />
+      <h1 id="archive-title" class="type-hero text-balance">
+        {t["archive.title"]}
+      </h1>
+    </div>
+    <p class="type-body text-pretty text-text desktop:max-w-lg desktop:type-lead">
+      {t["archive.intro"]}
+    </p>
+    <ul aria-label={t["archive.yearsLabel"]} class="flex flex-wrap gap-2">
       {years.map((year) => (
         <ArchiveYearChip year={year} />
       ))}
     </ul>
   </div>
+
+  <div class="mx-auto hidden max-w-208.5 tablet:block desktop:hidden">
+    <ArchiveDrawing
+      layout={ARCHIVE_DRAWINGS.TABLET}
+      months={timeline}
+      id="archive-tablet"
+      class="pointer-events-none h-auto w-full"
+    />
+  </div>
+  <ArchiveDrawing
+    layout={ARCHIVE_DRAWINGS.DESKTOP}
+    months={timeline}
+    id="archive-desktop"
+    class="pointer-events-none opening-aside hidden desktop:block"
+  />
 </section>

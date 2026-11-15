@@ -1,0 +1,74 @@
+---
+// Types
+import type { DotField, DrawingFrame } from "./types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the OpeningDrawing component, the svg an opening is drawn in, with the round fading dot field behind whatever its slot draws
+ */
+type Props = {
+  /** The drawing's size and the part of it this screen shows. */
+  frame: DrawingFrame;
+  /** The dot field behind the drawing. */
+  dots: DotField;
+  /** A prefix for the drawing's own pattern ids, unique on the page. */
+  id: string;
+  /** Size and placement classes from the caller. */
+  class?: string;
+};
+
+// Read the frame and work out the shown part and the dot field's square
+const { frame, dots, id, class: className } = Astro.props;
+const width = frame.width - frame.cropX;
+const height = frame.height - frame.cropY;
+const viewBox = `${frame.cropX} ${frame.cropY} ${width} ${height}`;
+const field = {
+  patternId: `${id}-dots`,
+  fadeId: `${id}-fade`,
+  maskId: `${id}-mask`,
+  x: dots.centreX - dots.radius,
+  y: dots.centreY - dots.radius,
+  size: dots.radius * 2,
+};
+---
+
+<svg
+  aria-hidden="true"
+  viewBox={viewBox}
+  width={width}
+  height={height}
+  class:list={["overflow-visible", className]}
+>
+  <defs>
+    <pattern
+      id={field.patternId}
+      width={dots.step}
+      height={dots.step}
+      patternUnits="userSpaceOnUse"
+    >
+      <circle cx={dots.step / 2} cy={dots.step / 2} r="1.5" class="fill-decor-strong"></circle>
+    </pattern>
+    <radialGradient id={field.fadeId}>
+      <stop offset="0.62"></stop>
+      <stop offset="1" stop-opacity="0"></stop>
+    </radialGradient>
+    <mask id={field.maskId} mask-type="alpha">
+      <rect
+        x={field.x}
+        y={field.y}
+        width={field.size}
+        height={field.size}
+        fill={`url(#${field.fadeId})`}
+      ></rect>
+    </mask>
+  </defs>
+  <rect
+    x={field.x}
+    y={field.y}
+    width={field.size}
+    height={field.size}
+    fill={`url(#${field.patternId})`}
+    mask={`url(#${field.maskId})`}
+  ></rect>
+  <slot />
+</svg>

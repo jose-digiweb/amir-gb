@@ -37,10 +37,9 @@ export const NEWS_LIST_STATE = {
 
 /**
  * The {@link NEWS_COUNT} constant
- * @description How many story prints the opening pins at most, and how many posts More from News shows
+ * @description How many posts More from News shows
  */
 export const NEWS_COUNT = {
-  PINNED: 3,
   MORE: 3,
 } as const;
 

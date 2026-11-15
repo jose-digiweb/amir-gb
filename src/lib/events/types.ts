@@ -151,10 +151,11 @@ export type ArchiveYear = {
 
 /**
  * The {@link EventsContent} type
- * @description What the list and the calendar share: the weekly activities and the latest past events
+ * @description What the list and the calendar share: the weekly activities, the next few events of every kind for the opening, and the latest past events
  */
 export type EventsContent = {
   activities: WeeklyActivity[];
+  orbit: EventItem[];
   past: EventItem[];
   cacheHints: CacheHint[];
 };
@@ -193,12 +194,13 @@ export type EventPageContent = {
 
 /**
  * The {@link ArchiveContent} type
- * @description What the archive shows: the years, the picked year's events and a few of its photos
+ * @description What the archive shows: the years, the picked year's events and the opening's timeline of recent months
  */
 export type ArchiveContent = {
   years: ArchiveYear[];
   year?: string;
   events: PastEvent[];
+  timeline: TimelineMonth[];
   cacheHints: CacheHint[];
 };
 
@@ -279,4 +281,15 @@ export type CalendarFileInput = {
   url: string;
   /** The moment the file is made. */
   now: Date;
+};
+
+/**
+ * The {@link TimelineMonth} type
+ * @description One month on the archive opening's timeline, with the events that hang from it
+ */
+export type TimelineMonth = {
+  key: string;
+  year: number;
+  month: number;
+  events: EventItem[];
 };

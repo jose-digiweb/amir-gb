@@ -1,0 +1,41 @@
+---
+// Dependencies
+import { getBeadRing } from "../../lib/woven/helpers";
+import { WOVEN_DEFS } from "../ui/constants";
+
+// Types
+import type { RingSpec } from "../../lib/woven/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the BeadRing component, the thin gold circle round a centre disc and the woven beads strung on it; its slot draws between the two
+ */
+type Props = {
+  /** The ring's centre, radius, bead count and bead size. */
+  ring: RingSpec;
+  /** The places, counted from the top, left without a bead. */
+  gaps?: readonly number[];
+};
+
+// Read the ring and string its beads
+const { ring, gaps } = Astro.props;
+const beads = getBeadRing(ring, gaps);
+const solidHref = `#${WOVEN_DEFS.SOLID}`;
+const ringedHref = `#${WOVEN_DEFS.RINGED}`;
+---
+
+<circle
+  cx={ring.centreX}
+  cy={ring.centreY}
+  r={ring.radius}
+  fill="none"
+  stroke-width="1.5"
+  class="stroke-accent opacity-60"
+></circle>
+<slot />
+{beads.solid.map((bead) => (
+  <use href={solidHref} transform={bead.transform} />
+))}
+{beads.ringed.map((bead) => (
+  <use href={ringedHref} transform={bead.transform} />
+))}

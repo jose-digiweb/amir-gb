@@ -1,0 +1,50 @@
+---
+// Components
+import BeadRing from "../opening/BeadRing.astro";
+import CentreDisc from "../opening/CentreDisc.astro";
+import CentreLogo from "../opening/CentreLogo.astro";
+import OpeningDrawing from "../opening/OpeningDrawing.astro";
+import Sparkles from "../opening/Sparkles.astro";
+import StitchedThread from "../opening/StitchedThread.astro";
+import WelcomeBubble from "./WelcomeBubble.astro";
+
+// Types
+import type { ContactDrawingLayout } from "./types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the ContactDrawing component, the opening's drawing: the logo in its ring of beads, with welcome bubbles in four languages stitched to it
+ */
+type Props = {
+  /** The screen size's drawing. */
+  layout: ContactDrawingLayout;
+  /** A prefix for the drawing's own ids, unique on the page. */
+  id: string;
+  /** Size and placement classes from the caller. */
+  class?: string;
+};
+
+// Read the drawing and give each thread its own mask id
+const { layout, id, class: className } = Astro.props;
+const threads = layout.threads.paths.map((path, index) => ({ path, id: `${id}-thread-${index}` }));
+---
+
+<OpeningDrawing frame={layout.frame} dots={layout.dots} id={id} class={className}>
+  {threads.map((thread, index) => (
+    <StitchedThread
+      path={thread.path}
+      stitch={layout.threads.stitch}
+      frame={layout.frame}
+      id={thread.id}
+      order={index}
+    />
+  ))}
+  <Sparkles sparkles={layout.sparkles} />
+  <BeadRing ring={layout.ring} gaps={layout.gaps} />
+  <CentreDisc disc={layout.disc}>
+    <CentreLogo />
+  </CentreDisc>
+  {layout.bubbles.map((bubble) => (
+    <WelcomeBubble bubble={bubble} />
+  ))}
+</OpeningDrawing>

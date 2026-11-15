@@ -16,7 +16,7 @@ import type { NewsFilter, NewsListState, NewsPost } from "../../lib/news/types";
 
 /**
  * The {@link Props} type
- * @description The props of the NewsListSection component, the sand sheet with the newest post, the rest of the list and Show older posts, or the message when there is nothing to show
+ * @description The props of the NewsListSection component, the paper sheet with the newest post, the rest of the list and Show older posts, or the message when there is nothing to show
  */
 type Props = {
   /** What the list shows. */
@@ -40,7 +40,7 @@ const hasPosts = posts.length > 0;
 
 <section
   data-footer-overlaps
-  class="relative isolate -mt-8 overflow-hidden rounded-t-xl bg-bg-alt px-margin pt-8 pb-20 tablet:-mt-10 tablet:px-margin-md tablet:pt-10 tablet:pb-24 desktop:-mt-14 desktop:px-margin-lg desktop:pt-12 desktop:pb-36"
+  class="relative isolate -mt-8 overflow-hidden rounded-t-xl bg-bg px-margin pt-8 pb-20 tablet:-mt-10 tablet:px-margin-md tablet:pt-10 tablet:pb-24 desktop:-mt-14 desktop:px-margin-lg desktop:pt-12 desktop:pb-36"
 >
   <WovenShade />
   <DotPatch

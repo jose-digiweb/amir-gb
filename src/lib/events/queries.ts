@@ -16,6 +16,7 @@ import { EVENT_PHASE, EVENT_TIME, EVENTS_LIMIT, EVENTS_PARAM } from "./constants
 import {
   buildCalendarMonth,
   buildEventsHref,
+  buildTimeline,
   getDayKey,
   getEventPhase,
   getMonthKey,
@@ -193,21 +194,28 @@ async function readPast(locale: Locale, now: Date, limit: number): Promise<Conte
 
 /**
  * The {@link getEventsShared} helper
- * @description Reads what the list and the calendar share: the weekly activities and the latest past events
+ * @description Reads what the list and the calendar share: the weekly activities, the next events of every kind for the opening's orbit and the latest past events
  * @param {Locale} locale - The page's language
  * @param {Date} now - The moment the page renders
- * @returns {Promise<EventsContent>} The weekly activities and up to three past events
+ * @param {Promise<ContentRead<EventItem>>} everyKind - The upcoming events of every kind, read once by the page
+ * @returns {Promise<EventsContent>} The weekly activities, up to six next events and up to three past events
  */
-async function getEventsShared(locale: Locale, now: Date): Promise<EventsContent> {
-  const [activities, past] = await Promise.all([
+async function getEventsShared(
+  locale: Locale,
+  now: Date,
+  everyKind: Promise<ContentRead<EventItem>>,
+): Promise<EventsContent> {
+  const [activities, orbit, past] = await Promise.all([
     getWeeklyActivities(locale),
+    everyKind,
     readPast(locale, now, EVENTS_LIMIT.PAST_PREVIEW_READ),
   ]);
-  // Both parts with every hint that purges the page
+  // Every part with every hint that purges the page
   return {
     activities: activities.items,
+    orbit: orbit.items.slice(0, EVENTS_LIMIT.ORBIT),
     past: past.items.slice(0, EVENTS_LIMIT.PAST_PREVIEW),
-    cacheHints: [...activities.cacheHints, ...past.cacheHints],
+    cacheHints: [...activities.cacheHints, ...orbit.cacheHints, ...past.cacheHints],
   };
 }
 
@@ -226,10 +234,13 @@ export async function getEventsListContent(
   laterIn: string,
   type?: EventType,
 ): Promise<EventsListContent> {
-  const [upcoming, shared] = await Promise.all([
-    readUpcoming(locale, now, type),
-    getEventsShared(locale, now),
-  ]);
+  // Without a filter the list's own read is the orbit's too, so it is read once
+  const filtered = readUpcoming(locale, now, type);
+  let everyKind = filtered;
+  if (type) {
+    everyKind = readUpcoming(locale, now);
+  }
+  const [upcoming, shared] = await Promise.all([filtered, getEventsShared(locale, now, everyKind)]);
   const [next, ...rest] = upcoming.items;
   const nextMonth = next ? getMonthKey(next.dayKey) : undefined;
   // The next event leads, the rest follow by month
@@ -264,7 +275,7 @@ export async function getEventsCalendarContent(
       orderBy: { [FIELD.STARTS_AT]: SORT.ASC },
       limit: EVENTS_LIMIT.MONTH_READ,
     }),
-    getEventsShared(locale, now),
+    getEventsShared(locale, now, readUpcoming(locale, now)),
   ]);
   // Keep the events that fall in the month in Dutch time
   const events = read.items.filter((event) => getMonthKey(event.dayKey) === monthKey);
@@ -453,7 +464,7 @@ export async function getEventPageContent(
 
 /**
  * The {@link getArchiveContent} helper
- * @description Reads the archive: the years with past events and the picked year's events, each with its story when one exists
+ * @description Reads the archive: the years with past events, the picked year's events, each with its story when one exists, and the opening's timeline
  * @param {Locale} locale - The page's language
  * @param {Date} now - The moment the page renders
  * @param {string | undefined} year - The year in the address, if any
@@ -473,7 +484,7 @@ export async function getArchiveContent(
   const years = [...new Set(past.items.map((event) => event.dayKey.slice(0, 4)))];
   const picked = years.find((candidate) => candidate === year) ?? years[0];
   const storyByGroup = new Map(stories.items.map((story) => [story.group, story.href]));
-  // The picked year's events, each with its story when one exists
+  // The picked year's events, each with its story when one exists, and the recent months for the opening
   const events: PastEvent[] = past.items
     .filter((event) => event.dayKey.startsWith(picked ?? ""))
     .map((event) => ({ ...event, storyHref: storyByGroup.get(event.group) }));
@@ -485,6 +496,7 @@ export async function getArchiveContent(
     })),
     year: picked,
     events,
+    timeline: buildTimeline(past.items, now),
     cacheHints: [...past.cacheHints, ...stories.cacheHints],
   };
 }

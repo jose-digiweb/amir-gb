@@ -1,0 +1,41 @@
+---
+// Dependencies
+import { TILE_COLOUR } from "../../lib/content/constants";
+
+// Types
+import type { TileColour } from "../../lib/content/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the TintDisc component, a small disc in one of the four tints holding a pictogram, centred on its point in a drawing
+ */
+type Props = {
+  /** The disc's centre and size, in drawing units. */
+  x: number;
+  y: number;
+  size: number;
+  /** The disc's tint. */
+  tint: TileColour;
+};
+
+// Read the disc and place its box by the centre
+const { x, y, size, tint } = Astro.props;
+const left = x - size / 2;
+const top = y - size / 2;
+---
+
+<foreignObject x={left} y={top} width={size} height={size} overflow="visible">
+  <div
+    class:list={[
+      "flex size-full items-center justify-center rounded-full text-text-heading shadow-sm ring-4 ring-bg-alt [&_svg]:size-1/2",
+      {
+        "bg-tint-gold": tint === TILE_COLOUR.GOLD,
+        "bg-tint-forest": tint === TILE_COLOUR.FOREST,
+        "bg-tint-brick": tint === TILE_COLOUR.BRICK,
+        "bg-tint-navy": tint === TILE_COLOUR.NAVY,
+      },
+    ]}
+  >
+    <slot />
+  </div>
+</foreignObject>

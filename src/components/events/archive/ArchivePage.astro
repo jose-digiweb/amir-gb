@@ -29,6 +29,6 @@ const t = getTranslations(getLocale(Astro.currentLocale));
 
 <SiteLayout title={t["archive.title"]} description={t["archive.description"]}>
   <WovenDefs />
-  <ArchiveOpening years={content.years} events={content.events} />
+  <ArchiveOpening years={content.years} timeline={content.timeline} />
   <ArchiveYearSection year={year} events={content.events} />
 </SiteLayout>

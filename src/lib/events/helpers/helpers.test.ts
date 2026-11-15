@@ -4,6 +4,7 @@ import {
   buildCalendarFile,
   buildCalendarMonth,
   buildEventsHref,
+  buildTimeline,
   escapeCalendarText,
   foldCalendarLine,
   getArchiveDate,
@@ -13,6 +14,7 @@ import {
   getEventTimes,
   getEventWhere,
   getLongDate,
+  getMonthMark,
   getMovedFromDate,
   getPlaceLines,
   getTypeChips,
@@ -191,5 +193,39 @@ describe("the calendar file", () => {
     expect(file).toContain("DTEND:20261121T170000Z\r\n");
     expect(file).toContain("LOCATION:Westersingel 14\r\n");
     expect(file.endsWith("END:VCALENDAR\r\n")).toBe(true);
+  });
+});
+
+describe("buildTimeline", () => {
+  const past = [
+    event("sep", "2026-09-12T13:00:00Z"),
+    ...["03", "10", "14", "24", "28", "31"].map((day) =>
+      event(`oct-${day}`, `2026-10-${day}T13:00:00Z`),
+    ),
+  ];
+
+  it("ends at the current month and hangs at most five events from a month", () => {
+    const months = buildTimeline(past, new Date("2026-11-15T12:00:00Z"));
+    expect(months.map((month) => month.key)).toEqual(["2026-08", "2026-09", "2026-10", "2026-11"]);
+    expect(months[1]?.events.map((item) => item.id)).toEqual(["sep"]);
+    expect(months[2]?.events).toHaveLength(5);
+    expect(months[3]?.events).toHaveLength(0);
+  });
+
+  it("never starts before the month after AMIR-GB was founded", () => {
+    const months = buildTimeline(past, new Date("2026-09-20T12:00:00Z"));
+    expect(months.map((month) => month.key)).toEqual(["2026-08", "2026-09"]);
+  });
+
+  it("keeps the four latest months once more have passed", () => {
+    const months = buildTimeline(past, new Date("2027-03-02T12:00:00Z"));
+    expect(months.map((month) => month.key)).toEqual(["2026-12", "2027-01", "2027-02", "2027-03"]);
+  });
+});
+
+describe("getMonthMark", () => {
+  it("writes a month short, in capitals, without a full stop", () => {
+    expect(getMonthMark(2026, 10, "nl-NL")).toBe("OKT");
+    expect(getMonthMark(2026, 10, "pt-PT")).toBe("OUT");
   });
 });

@@ -4,6 +4,7 @@ import { ShieldCheck } from "@lucide/astro";
 import { getRelativeLocaleUrl } from "astro:i18n";
 import { getLocale, getTranslations } from "../../i18n/helpers";
 import { CONTACT, ROUTE } from "../../site/constants";
+import { MESSAGE_ANCHOR } from "./constants";
 import { getContactFormCopy } from "./helpers";
 
 // Components
@@ -30,6 +31,7 @@ const links = {
 ---
 
 <section
+  id={MESSAGE_ANCHOR}
   aria-labelledby="message-title"
   class="relative isolate -mt-8 overflow-hidden rounded-t-xl bg-bg-alt px-margin pt-12 pb-20 tablet:-mt-10 tablet:px-margin-md tablet:pt-16 tablet:pb-24 desktop:-mt-14 desktop:grid desktop:grid-cols-11 desktop:items-start desktop:gap-x-16 desktop:px-margin-lg desktop:pt-26 desktop:pb-38"
 >

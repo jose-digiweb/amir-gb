@@ -1,0 +1,65 @@
+---
+// Dependencies
+import { INTL_LOCALE } from "../../i18n/constants";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { getValueChips } from "../../site/helpers";
+import { getOrbitBadges, getOrbitPath } from "./helpers";
+
+// Components
+import BeadRing from "../opening/BeadRing.astro";
+import CentreDisc from "../opening/CentreDisc.astro";
+import CentreLogo from "../opening/CentreLogo.astro";
+import OpeningDrawing from "../opening/OpeningDrawing.astro";
+import Sparkles from "../opening/Sparkles.astro";
+import StarChip from "../opening/StarChip.astro";
+import StitchedThread from "../opening/StitchedThread.astro";
+import OrbitBadge from "./OrbitBadge.astro";
+
+// Types
+import type { EventItem } from "../../lib/events/types";
+import type { EventsDrawingLayout } from "./types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the EventsDrawing component, the opening's drawing: the logo in its ring inside a tilted stitched orbit carrying the next dates
+ */
+type Props = {
+  /** The screen size's drawing. */
+  layout: EventsDrawingLayout;
+  /** The next events of every kind, soonest first. */
+  events: EventItem[];
+  /** A prefix for the drawing's own ids, unique on the page. */
+  id: string;
+  /** Size and placement classes from the caller. */
+  class?: string;
+};
+
+// Read the drawing, put the next events on the orbit and name the values in the page's language
+const { layout, events, id, class: className } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const orbitPath = getOrbitPath(layout.orbit);
+const badges = getOrbitBadges(events, layout.slots, INTL_LOCALE[locale]);
+const chips = getValueChips(layout.chips, t);
+---
+
+<OpeningDrawing frame={layout.frame} dots={layout.dots} id={id} class={className}>
+  <StitchedThread
+    path={orbitPath}
+    stitch={layout.stitch}
+    frame={layout.frame}
+    id={`${id}-orbit`}
+    order={0}
+  />
+  <Sparkles sparkles={layout.sparkles} />
+  <BeadRing ring={layout.ring} />
+  <CentreDisc disc={layout.disc}>
+    <CentreLogo />
+  </CentreDisc>
+  {badges.map((badge) => (
+    <OrbitBadge badge={badge} width={layout.badge.width} height={layout.badge.height} />
+  ))}
+  {chips.map((chip) => (
+    <StarChip x={chip.x} y={chip.y} label={chip.label} />
+  ))}
+</OpeningDrawing>

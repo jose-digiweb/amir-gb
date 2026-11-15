@@ -1,62 +1,71 @@
 ---
 // Dependencies
-import { Picture } from "astro:assets";
+import { ChevronDown, MessageCircle } from "@lucide/astro";
 import { getLocale, getTranslations } from "../../i18n/helpers";
-import { DECOR_TONE, OPENER_TONE, WOVEN_SHADE_TONE } from "../ui/constants";
-import womanLaughing from "../../assets/photos/woman-laughing.jpg";
+import { CONTACT } from "../../site/constants";
+import { CONTACT_DRAWINGS, MESSAGE_ANCHOR } from "./constants";
 
 // Components
-import DecorBead from "../ui/DecorBead.astro";
+import Button from "../ui/Button.astro";
 import Opener from "../ui/Opener.astro";
-import WovenShade from "../ui/WovenShade.astro";
+import ContactDrawing from "./ContactDrawing.astro";
 
 /**
  * The {@link Props} type
- * @description The props of the ContactOpening component: Contact, on navy, beside a laughing woman
+ * @description The props of the ContactOpening component: Contact on sand, with WhatsApp us and the way down to the form, beside the logo and its welcome bubbles
  */
 type Props = Record<string, never>;
 
-// Prepare the copy
+// Prepare the copy and the link down to the form
 const t = getTranslations(getLocale(Astro.currentLocale));
+const messageHref = `#${MESSAGE_ANCHOR}`;
 ---
 
 <section
   aria-labelledby="contact-title"
-  class="relative isolate -mt-16 overflow-hidden bg-surface-brand px-margin pt-40 pb-20 text-on-brand tablet:min-h-120 tablet:px-margin-md tablet:pt-36 tablet:pb-28 desktop:-mt-20 desktop:min-h-160 desktop:px-margin-lg desktop:pt-44 desktop:pb-32"
+  class="relative isolate -mt-16 overflow-hidden bg-bg-alt text-text-heading desktop:-mt-20 desktop:flex desktop:min-h-215 desktop:items-center desktop:pt-20 desktop:pb-14"
 >
-  <WovenShade tone={WOVEN_SHADE_TONE.ON_BRAND} />
-  <div class="contact-blob absolute top-19 -right-11 -z-10 h-45 w-44 overflow-hidden bg-surface-inverse tablet:top-24 tablet:-right-10 tablet:size-80 desktop:top-28 desktop:right-24 desktop:size-105">
-    <Picture
-      src={womanLaughing}
-      alt={t["contactPage.photoAlt"]}
-      widths={[176, 352, 420, 840]}
-      sizes="(min-width: 1180px) 420px, (min-width: 700px) 320px, 176px"
-      priority
-      class="size-full object-cover object-[30%_32%]"
-    />
-  </div>
-  <DecorBead
-    ringed
-    tone={DECOR_TONE.ON_BRAND}
-    class="top-25 left-46 size-6 tablet:top-30 tablet:right-90 tablet:left-auto desktop:top-40 desktop:right-130 desktop:size-11"
+  <ContactDrawing
+    layout={CONTACT_DRAWINGS.PHONE}
+    id="contact-phone"
+    class="pointer-events-none h-auto w-full tablet:hidden"
   />
-  <DecorBead ringed tone={DECOR_TONE.ON_BRAND} class="top-22 left-7 size-4.5 desktop:hidden" />
 
-  <div class="flex flex-col gap-3 tablet:w-105 tablet:gap-4 desktop:w-xl">
-    <Opener label={t["contactPage.opener"]} tone={OPENER_TONE.ON_BRAND} />
-    <h1 id="contact-title" class="type-hero text-balance">
-      {t["contactPage.heading"]}
-    </h1>
-    <p class="mt-6 max-w-sm type-body text-pretty text-on-brand-muted tablet:mt-2 desktop:max-w-md desktop:type-lead">
+  <div class="relative flex flex-col gap-6 px-margin pb-20 tablet:w-130 tablet:px-margin-md tablet:pt-34 tablet:pb-0 desktop:opening-words desktop:gap-8 desktop:pt-0 desktop:pr-0 desktop:pl-margin-lg">
+    <div class="flex flex-col gap-3 tablet:gap-4">
+      <Opener label={t["contactPage.opener"]} />
+      <h1 id="contact-title" class="type-hero text-balance">
+        {t["contactPage.heading"]}
+      </h1>
+    </div>
+    <p class="type-body text-pretty text-text desktop:max-w-md desktop:type-lead">
       {t["contactPage.intro"]}
     </p>
+    <div class="flex flex-col items-center gap-2 tablet:flex-row tablet:gap-8">
+      <Button href={CONTACT.WHATSAPP_HREF} block class="tablet:w-auto">
+        <MessageCircle />
+        {t["contact.whatsapp"]}
+      </Button>
+      <a
+        href={messageHref}
+        class="flex min-h-tap touch-manipulation items-center gap-2 type-button text-link underline decoration-2 underline-offset-4 select-none hover:decoration-4"
+      >
+        {t["contactPage.writeMessage"]}
+        <ChevronDown aria-hidden="true" class="size-icon-sm" />
+      </a>
+    </div>
   </div>
+
+  <div class="mx-auto hidden max-w-208.5 tablet:block desktop:hidden">
+    <ContactDrawing
+      layout={CONTACT_DRAWINGS.TABLET}
+      id="contact-tablet"
+      class="pointer-events-none h-auto w-full"
+    />
+  </div>
+  <ContactDrawing
+    layout={CONTACT_DRAWINGS.DESKTOP}
+    id="contact-desktop"
+    class="pointer-events-none opening-aside hidden desktop:block"
+  />
 </section>
-
-<style>
-  @reference "../../styles/global.css";
-
-  .contact-blob {
-    border-radius: 40% 60% 62% 38% / 55% 40% 60% 45%;
-  }
-</style>

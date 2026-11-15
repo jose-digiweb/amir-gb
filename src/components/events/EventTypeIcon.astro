@@ -1,0 +1,27 @@
+---
+// Dependencies
+import { BookOpen, Music, Smile, Users } from "@lucide/astro";
+import { EVENT_TYPE } from "../../lib/content/constants";
+
+// Types
+import type { EventType } from "../../lib/events/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the EventTypeIcon component, the Lucide pictogram of one kind of event
+ */
+type Props = {
+  /** The kind of event. */
+  type: EventType;
+  /** Size classes from the caller. */
+  class?: string;
+};
+
+// Read the kind and the size
+const { type, class: className } = Astro.props;
+---
+
+{type === EVENT_TYPE.YOUTH ? <Smile class={className} /> : null}
+{type === EVENT_TYPE.HELP ? <BookOpen class={className} /> : null}
+{type === EVENT_TYPE.CULTURE ? <Music class={className} /> : null}
+{type === EVENT_TYPE.COMMUNITY ? <Users class={className} /> : null}

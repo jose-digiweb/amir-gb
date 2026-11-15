@@ -1,0 +1,58 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { getValueChips } from "../../site/helpers";
+
+// Components
+import BeadRing from "../opening/BeadRing.astro";
+import CentreDisc from "../opening/CentreDisc.astro";
+import CentreLogo from "../opening/CentreLogo.astro";
+import OpeningDrawing from "../opening/OpeningDrawing.astro";
+import Sparkles from "../opening/Sparkles.astro";
+import StarChip from "../opening/StarChip.astro";
+import StitchedThread from "../opening/StitchedThread.astro";
+import NoticeCardTile from "./NoticeCardTile.astro";
+
+// Types
+import type { NewsDrawingLayout } from "./types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the NewsDrawing component, the opening's drawing: the logo holding one end of a stitched line, the kinds of post hanging from it as pinned cards
+ */
+type Props = {
+  /** The screen size's drawing. */
+  layout: NewsDrawingLayout;
+  /** A prefix for the drawing's own ids, unique on the page. */
+  id: string;
+  /** Size and placement classes from the caller. */
+  class?: string;
+};
+
+// Read the drawing and name its values in the page's language
+const { layout, id, class: className } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+const chips = getValueChips(layout.chips, t);
+---
+
+<OpeningDrawing frame={layout.frame} dots={layout.dots} id={id} class={className}>
+  <Sparkles sparkles={layout.sparkles} />
+  <StitchedThread
+    path={layout.line.path}
+    stitch={layout.line.stitch}
+    frame={layout.frame}
+    id={`${id}-line`}
+    order={0}
+  />
+  <BeadRing ring={layout.ring} />
+  <CentreDisc disc={layout.disc}>
+    <CentreLogo />
+  </CentreDisc>
+  {layout.cards.map((card) => (
+    <NoticeCardTile card={card} hasLabel={layout.hasLabels} />
+  ))}
+  <Sparkles sparkles={layout.pins} />
+  {chips.map((chip) => (
+    <StarChip x={chip.x} y={chip.y} label={chip.label} />
+  ))}
+</OpeningDrawing>

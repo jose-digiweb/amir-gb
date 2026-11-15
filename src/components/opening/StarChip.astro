@@ -1,0 +1,33 @@
+---
+// Dependencies
+import { CHIP_BOX } from "./constants";
+
+// Components
+import StarMark from "../ui/StarMark.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the StarChip component, a white chip with the gold star, centred on its point in a drawing
+ */
+type Props = {
+  /** The chip's centre, in drawing units. */
+  x: number;
+  y: number;
+  /** What the chip says. */
+  label: string;
+};
+
+// Read the chip and centre its box on its point
+const { x, y, label } = Astro.props;
+const left = x - CHIP_BOX.WIDTH / 2;
+const top = y - CHIP_BOX.HEIGHT / 2;
+---
+
+<foreignObject x={left} y={top} width={CHIP_BOX.WIDTH} height={CHIP_BOX.HEIGHT} overflow="visible">
+  <div class="flex size-full items-center justify-center">
+    <p class="flex max-w-60 items-center gap-2 rounded-pill bg-surface py-3 pr-4 pl-3 type-h4 font-extrabold text-text-heading shadow-md ring-5 ring-bg-alt">
+      <StarMark class="size-4 shrink-0 text-accent" />
+      <span class="text-balance">{label}</span>
+    </p>
+  </div>
+</foreignObject>

@@ -38,7 +38,6 @@ export type NewsListPlan = {
   state: NewsListState;
   featured?: NewsPost;
   posts: NewsPost[];
-  pinned: MediaImage[];
   page: number;
   hasMore: boolean;
 };

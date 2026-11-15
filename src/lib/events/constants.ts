@@ -1,5 +1,5 @@
 // Dependencies
-import { EVENT_TYPE } from "../content/constants";
+import { EVENT_TYPE, TILE_COLOUR } from "../content/constants";
 
 /**
  * The {@link EVENT_TYPES} constant
@@ -67,7 +67,7 @@ export const EVENTS_LIMIT = {
   OTHER: 3,
   OTHER_READ: 8,
   STORIES_READ: 24,
-  PINNED: 3,
+  ORBIT: 6,
   DAY_CHIPS: 3,
 } as const;
 
@@ -119,4 +119,25 @@ export const ONLINE_LINK = {
   SELECTOR: "[data-online-from]",
   DATA_FROM: "onlineFrom",
   LONGEST_WAIT: 86_400_000,
+} as const;
+
+/**
+ * The {@link EVENT_TYPE_TINT} constant
+ * @description The tile tint of each kind of event, for the pictogram discs in the openings
+ */
+export const EVENT_TYPE_TINT = {
+  [EVENT_TYPE.YOUTH]: TILE_COLOUR.NAVY,
+  [EVENT_TYPE.HELP]: TILE_COLOUR.FOREST,
+  [EVENT_TYPE.CULTURE]: TILE_COLOUR.BRICK,
+  [EVENT_TYPE.COMMUNITY]: TILE_COLOUR.GOLD,
+} as const;
+
+/**
+ * The {@link ARCHIVE_TIMELINE} constant
+ * @description The archive opening's timeline: its first month, the one after AMIR-GB was founded in July 2026, how many recent months it shows and how many events hang from a month
+ */
+export const ARCHIVE_TIMELINE = {
+  FIRST_MONTH: { year: 2026, month: 8 },
+  MONTHS: 4,
+  KNOTS: 5,
 } as const;

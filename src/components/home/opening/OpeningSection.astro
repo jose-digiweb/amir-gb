@@ -4,12 +4,7 @@ import { ArrowRight } from "@lucide/astro";
 import { getRelativeLocaleUrl } from "astro:i18n";
 import { getLocale, getTranslations } from "../../../i18n/helpers";
 import { ROUTE } from "../../../site/constants";
-import {
-  DESKTOP_CONSTELLATION,
-  DESKTOP_CROP_X,
-  PHONE_CONSTELLATION,
-  TABLET_CONSTELLATION,
-} from "./constants";
+import { DESKTOP_CONSTELLATION, PHONE_CONSTELLATION, TABLET_CONSTELLATION } from "./constants";
 
 // Components
 import WhatsAppHelpLink from "../../site/WhatsAppHelpLink.astro";
@@ -46,7 +41,6 @@ const joinHref = getRelativeLocaleUrl(locale, ROUTE.JOIN);
   <Constellation
     layout={DESKTOP_CONSTELLATION}
     id="opening-desktop"
-    cropX={DESKTOP_CROP_X}
     class="opening-desktop absolute right-0 -z-10 hidden h-full w-auto desktop:block"
   />
 

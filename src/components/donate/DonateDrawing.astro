@@ -1,0 +1,61 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { getValueChips } from "../../site/helpers";
+import { DONATE_PHOTO_SIZES } from "./constants";
+
+// Components
+import BeadRing from "../opening/BeadRing.astro";
+import CentreDisc from "../opening/CentreDisc.astro";
+import JoinedHands from "../opening/JoinedHands.astro";
+import OpeningDrawing from "../opening/OpeningDrawing.astro";
+import Sparkles from "../opening/Sparkles.astro";
+import StarChip from "../opening/StarChip.astro";
+import StitchedThread from "../opening/StitchedThread.astro";
+import GiftFlowTile from "./GiftFlowTile.astro";
+
+// Types
+import type { DonateDrawingLayout } from "./types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the DonateDrawing component, the opening's drawing: the joined hands in their ring, with stitched threads flowing down to the four things gifts pay for
+ */
+type Props = {
+  /** The screen size's drawing. */
+  layout: DonateDrawingLayout;
+  /** A prefix for the drawing's own ids, unique on the page. */
+  id: string;
+  /** Size and placement classes from the caller. */
+  class?: string;
+};
+
+// Read the drawing, give each thread its own mask id and name the values in the page's language
+const { layout, id, class: className } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+const threads = layout.threads.paths.map((path, index) => ({ path, id: `${id}-thread-${index}` }));
+const chips = getValueChips(layout.chips, t);
+---
+
+<OpeningDrawing frame={layout.frame} dots={layout.dots} id={id} class={className}>
+  {threads.map((thread, index) => (
+    <StitchedThread
+      path={thread.path}
+      stitch={layout.threads.stitch}
+      frame={layout.frame}
+      id={thread.id}
+      order={index}
+    />
+  ))}
+  <Sparkles sparkles={layout.sparkles} />
+  <BeadRing ring={layout.ring} />
+  <CentreDisc disc={layout.photo}>
+    <JoinedHands sizes={DONATE_PHOTO_SIZES} />
+  </CentreDisc>
+  {layout.tiles.map((tile) => (
+    <GiftFlowTile tile={tile} hasLabel={layout.hasLabels} />
+  ))}
+  {chips.map((chip) => (
+    <StarChip x={chip.x} y={chip.y} label={chip.label} />
+  ))}
+</OpeningDrawing>

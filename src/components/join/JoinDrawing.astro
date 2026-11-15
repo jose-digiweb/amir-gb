@@ -1,0 +1,80 @@
+---
+// Dependencies
+import { UserRound } from "@lucide/astro";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { JOIN_PHOTO_SIZES, JOIN_STITCH } from "./constants";
+import { getSeats } from "./helpers";
+
+// Components
+import CentreDisc from "../opening/CentreDisc.astro";
+import JoinedHands from "../opening/JoinedHands.astro";
+import OpeningDrawing from "../opening/OpeningDrawing.astro";
+import Sparkles from "../opening/Sparkles.astro";
+import StarChip from "../opening/StarChip.astro";
+import StitchedThread from "../opening/StitchedThread.astro";
+import TintDisc from "../opening/TintDisc.astro";
+import OpenSeat from "./OpenSeat.astro";
+
+// Types
+import type { JoinDrawingLayout } from "./types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the JoinDrawing component, the opening's drawing: the joined hands in a circle of seats, one of them open with Your place beside it
+ */
+type Props = {
+  /** The screen size's drawing. */
+  layout: JoinDrawingLayout;
+  /** A prefix for the drawing's own ids, unique on the page. */
+  id: string;
+  /** Size and placement classes from the caller. */
+  class?: string;
+};
+
+// Read the drawing, place its seats and name Your place in the page's language
+const { layout, id, class: className } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+const seats = getSeats(layout.photo, layout.seats);
+const open = seats.find((seat) => seat.isOpen);
+const taken = seats.filter((seat) => !seat.isOpen);
+---
+
+<OpeningDrawing frame={layout.frame} dots={layout.dots} id={id} class={className}>
+  <Sparkles sparkles={layout.sparkles} />
+  <circle
+    cx={layout.photo.centreX}
+    cy={layout.photo.centreY}
+    r={layout.seats.radius}
+    fill="none"
+    stroke-width="1.5"
+    class="stroke-accent opacity-50"
+  ></circle>
+  {layout.inner ? (
+    <StitchedThread
+      path={layout.inner}
+      stitch={JOIN_STITCH}
+      frame={layout.frame}
+      id={`${id}-inner`}
+      order={0}
+    />
+  ) : null}
+  <CentreDisc disc={layout.photo}>
+    <JoinedHands sizes={JOIN_PHOTO_SIZES} />
+  </CentreDisc>
+  {taken.map((seat) => (
+    <TintDisc x={seat.x} y={seat.y} size={layout.seats.size} tint={seat.tint}>
+      <UserRound />
+    </TintDisc>
+  ))}
+  {open ? <OpenSeat x={open.x} y={open.y} size={layout.seats.size} /> : null}
+  {layout.chip.thread ? (
+    <StitchedThread
+      path={layout.chip.thread}
+      stitch={JOIN_STITCH}
+      frame={layout.frame}
+      id={`${id}-place`}
+      order={1}
+    />
+  ) : null}
+  <StarChip x={layout.chip.x} y={layout.chip.y} label={t["joinPage.yourPlace"]} />
+</OpeningDrawing>

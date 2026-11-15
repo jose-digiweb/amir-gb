@@ -1,0 +1,73 @@
+---
+// Dependencies
+import { STITCH_REVEAL } from "./constants";
+
+// Types
+import type { DrawingFrame, Stitch } from "./types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the StitchedThread component, one dashed gold thread that sews itself in along its path
+ */
+type Props = {
+  /** The thread's SVG path, in drawing units. */
+  path: string;
+  /** How the thread is sewn. */
+  stitch: Stitch;
+  /** The drawing it belongs to, so its reveal covers the whole of it. */
+  frame: DrawingFrame;
+  /** The mask's id, unique on the page. */
+  id: string;
+  /** Its place in the order the threads sew in. */
+  order: number;
+};
+
+// Read the thread and widen its reveal so the round ends are covered
+const { path, stitch, frame, id, order } = Astro.props;
+const revealWidth = stitch.width * STITCH_REVEAL.WIDTH_SCALE;
+const cascade = `--thread: ${order}`;
+---
+
+<mask
+  id={id}
+  mask-type="alpha"
+  maskUnits="userSpaceOnUse"
+  x="0"
+  y="0"
+  width={frame.width}
+  height={frame.height}
+>
+  <path
+    d={path}
+    pathLength="1"
+    fill="none"
+    stroke-width={revealWidth}
+    stroke-linecap="round"
+    style={cascade}
+    class="stitched-thread stroke-accent"
+  ></path>
+</mask>
+<path
+  d={path}
+  mask={`url(#${id})`}
+  fill="none"
+  stroke-width={stitch.width}
+  stroke-linecap="round"
+  stroke-dasharray={stitch.dash}
+  class="stroke-accent opacity-80"
+></path>
+
+<style>
+  @keyframes stitched-thread-in {
+    from {
+      stroke-dashoffset: 1;
+    }
+  }
+
+  .stitched-thread {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+    animation: stitched-thread-in var(--duration-slow) var(--ease-standard) both;
+    animation-delay: calc(var(--stagger) * var(--thread));
+  }
+</style>

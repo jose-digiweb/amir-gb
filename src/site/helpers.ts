@@ -2,11 +2,11 @@
 import { getRelativeLocaleUrl } from "astro:i18n";
 import { LANGUAGES, LOCALES } from "../i18n/constants";
 import { getPagePath, getTranslations } from "../i18n/helpers";
-import { ROUTE } from "./constants";
+import { ROUTE, VALUE_LABEL } from "./constants";
 
 // Types
-import type { Locale } from "../i18n/types";
-import type { LanguageLink, NavLink, PageLink } from "./types";
+import type { Locale, Translations } from "../i18n/types";
+import type { LabelledChip, LanguageLink, NavLink, PageLink, ValueChip } from "./types";
 
 /**
  * The {@link getPageLinks} helper
@@ -82,4 +82,21 @@ export function withTrailingSlash(path: string): string {
 
   // Any other path gets one
   return `${path}/`;
+}
+
+/**
+ * The {@link getValueChips} helper
+ * @description Names each value chip of an opening's drawing in the page's language
+ * @param {readonly ValueChip[]} chips - The chips, each a value and its point
+ * @param {Translations} t - The page's copy
+ * @returns {LabelledChip[]} The chips with their labels, ready to render
+ */
+export function getValueChips(chips: readonly ValueChip[], t: Translations): LabelledChip[] {
+  // Each chip at its point, named in the page's language
+  return chips.map((chip) => ({
+    key: chip.value,
+    label: t[VALUE_LABEL[chip.value]],
+    x: chip.x,
+    y: chip.y,
+  }));
 }

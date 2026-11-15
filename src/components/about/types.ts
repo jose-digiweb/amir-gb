@@ -2,6 +2,9 @@
 import type { TranslationKey } from "../../i18n/types";
 import type { TileColour } from "../../lib/content/types";
 import type { MilestonePrecision, MilestoneState } from "../../lib/timeline/types";
+import type { RingSpec } from "../../lib/woven/types";
+import type { ValueChip } from "../../site/types";
+import type { Disc, DotField, DrawingFrame, Point, Sparkle, Stitch } from "../opening/types";
 import type { ABOUT_VALUE, MONEY_RULE } from "./constants";
 
 /**
@@ -99,4 +102,19 @@ export type AboutDocument = {
   title: TranslationKey;
   dutchName: string;
   href: string;
+};
+
+/**
+ * The {@link AboutDrawingLayout} type
+ * @description One screen size's opening drawing: the stitched arc and its motto chips, the arc of beads, the logo and the founding date centred under it
+ */
+export type AboutDrawingLayout = {
+  frame: DrawingFrame;
+  dots: DotField;
+  arc: { path: string; stitch: Stitch };
+  beads: RingSpec;
+  disc: Disc;
+  chips: readonly ValueChip[];
+  founded: Point | null;
+  sparkles: readonly Sparkle[];
 };

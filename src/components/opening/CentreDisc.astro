@@ -1,0 +1,37 @@
+---
+// Types
+import type { Disc } from "./types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the CentreDisc component, the white disc at a drawing's heart with its thin gold halo; its slot is what the disc holds
+ */
+type Props = {
+  /** Where the disc sits and how big it is. */
+  disc: Disc;
+};
+
+// Read the disc and place its box by the centre
+const { disc } = Astro.props;
+const x = disc.centreX - disc.size / 2;
+const y = disc.centreY - disc.size / 2;
+---
+
+<foreignObject x={x} y={y} width={disc.size} height={disc.size} overflow="visible">
+  <div class="centre-disc size-full overflow-hidden rounded-full bg-surface shadow-md">
+    <slot />
+  </div>
+</foreignObject>
+
+<style>
+  @reference "../../styles/global.css";
+
+  .centre-disc {
+    box-shadow:
+      0 0 0 var(--border-width) color-mix(in srgb, var(--accent) 40%, transparent),
+      0 0 0 var(--space-2) var(--bg-alt),
+      0 0 0 calc(var(--space-2) + var(--border-width))
+        color-mix(in srgb, var(--accent) 35%, transparent),
+      var(--shadow-md);
+  }
+</style>
