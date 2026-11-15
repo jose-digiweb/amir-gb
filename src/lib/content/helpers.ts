@@ -1,5 +1,13 @@
 // Dependencies
-import { HOME_CACHE, SITE_TIME_ZONE, WEEKDAYS, WHATS_ON_SLOTS, WHATS_ON_STATE } from "./constants";
+import {
+  CLOCK_TIME,
+  HOME_CACHE,
+  SITE_TIME_ZONE,
+  WEEKDAYS,
+  WEEKLY_TINTS,
+  WHATS_ON_SLOTS,
+  WHATS_ON_STATE,
+} from "./constants";
 
 // Types
 import type { AstroGlobal } from "astro";
@@ -8,6 +16,7 @@ import type {
   EventDay,
   HomeEvent,
   Localised,
+  TileColour,
   Translated,
   WeeklyActivity,
   Weekday,
@@ -85,6 +94,34 @@ export function compareWeekly(
 
   // The same day follows the clock
   return a.startTime.localeCompare(b.startTime);
+}
+
+/**
+ * The {@link toClockTime} helper
+ * @description Writes a time an editor typed, such as 9:30 or 10.00, the way the site shows it
+ * @param {string} text - The time as the editor typed it
+ * @returns {string} The time as HH:MM, or the text unchanged when it is not a time
+ */
+export function toClockTime(text: string): string {
+  const match = CLOCK_TIME.PATTERN.exec(text.trim());
+
+  // Anything else stays as written, so nothing an editor typed is lost
+  if (!match) {
+    return text;
+  }
+
+  // Pad the hour and join the parts with the site's separator
+  return `${match[1].padStart(2, "0")}${CLOCK_TIME.SEPARATOR}${match[2]}`;
+}
+
+/**
+ * The {@link getWeeklyTint} helper
+ * @description The help tint a weekly activity tile takes from its place in the week
+ * @param {number} index - The activity's place in the week, from zero
+ * @returns {TileColour} The tint, the four taking turns
+ */
+export function getWeeklyTint(index: number): TileColour {
+  return WEEKLY_TINTS[index % WEEKLY_TINTS.length];
 }
 
 /**

@@ -1,0 +1,32 @@
+---
+// Dependencies
+import { TEXT_ALIGN } from "./constants";
+import { getRichTextHeadingLevel } from "./helpers";
+
+/**
+ * The {@link Props} type
+ * @description The props of the RichTextHeading component, an editor's heading one level under the page title
+ */
+type Props = {
+  /** The heading block as the Portable Text renderer passes it. */
+  node: { style?: string; textAlign?: string };
+};
+
+// Place the heading one level under the page's own title
+const { node } = Astro.props;
+const level = getRichTextHeadingLevel(node.style);
+const Tag = `h${level}` as const;
+---
+
+<Tag
+  class:list={[
+    "mt-3 text-balance text-text-heading first:mt-0",
+    { "type-h2": level === 2, "type-h3": level === 3, "type-h4": level >= 4 },
+    {
+      "text-center": node.textAlign === TEXT_ALIGN.CENTER,
+      "text-end": node.textAlign === TEXT_ALIGN.RIGHT,
+    },
+  ]}
+>
+  <slot />
+</Tag>

@@ -5,9 +5,11 @@ import {
   compareWeekly,
   getEventDay,
   getEventWhen,
+  getWeeklyTint,
   isStripActive,
   mergeWithDutch,
   planWhatsOn,
+  toClockTime,
 } from "./helpers";
 
 // Types
@@ -53,13 +55,38 @@ describe("isStripActive", () => {
 describe("compareWeekly", () => {
   it("orders by weekday from Monday, then by start time", () => {
     const items = [
-      { weekday: "wednesday", startTime: "15:30" },
-      { weekday: "tuesday", startTime: "18:00" },
-      { weekday: "tuesday", startTime: "10:00" },
+      { weekday: "woensdag", startTime: "15:30" },
+      { weekday: "dinsdag", startTime: "18:00" },
+      { weekday: "dinsdag", startTime: "10:00" },
     ] as const;
     expect(
       [...items].sort(compareWeekly).map((item) => `${item.weekday} ${item.startTime}`),
-    ).toEqual(["tuesday 10:00", "tuesday 18:00", "wednesday 15:30"]);
+    ).toEqual(["dinsdag 10:00", "dinsdag 18:00", "woensdag 15:30"]);
+  });
+});
+
+describe("toClockTime", () => {
+  it("reads the ways an editor writes a time as HH:MM", () => {
+    expect(toClockTime("10:00")).toBe("10:00");
+    expect(toClockTime("9:30")).toBe("09:30");
+    expect(toClockTime("10.00")).toBe("10:00");
+    expect(toClockTime(" 7.15 ")).toBe("07:15");
+  });
+
+  it("leaves anything else as written", () => {
+    expect(toClockTime("noon")).toBe("noon");
+  });
+});
+
+describe("getWeeklyTint", () => {
+  it("gives the tiles the four help tints in turn", () => {
+    expect([0, 1, 2, 3, 4].map((index) => getWeeklyTint(index))).toEqual([
+      "forest",
+      "gold",
+      "brick",
+      "navy",
+      "forest",
+    ]);
   });
 });
 
@@ -75,7 +102,7 @@ describe("planWhatsOn", () => {
   const weekly = {
     id: "w",
     name: "W",
-    weekday: "tuesday",
+    weekday: "dinsdag",
     startTime: "10:00",
     endTime: "13:00",
     tileColour: "forest",

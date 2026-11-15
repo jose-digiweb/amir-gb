@@ -44,6 +44,21 @@ export default defineConfig({
     emdash({
       database: d1({ binding: "DB" }),
       storage: r2({ binding: "MEDIA" }),
+      // The editors are volunteers: the admin speaks Dutch or Portuguese (English always ships),
+      // and the menu leaves out what the site does not use or keeps in code. Hidden pages stay
+      // reachable by their address.
+      admin: {
+        locales: ["nl", "pt-PT"],
+        hiddenNavItems: [
+          "comments",
+          "menus",
+          "redirects",
+          "widgets",
+          "sections",
+          "bylines",
+          "import",
+        ],
+      },
     }),
   ],
 
