@@ -76,5 +76,10 @@ const taken = seats.filter((seat) => !seat.isOpen);
       order={1}
     />
   ) : null}
-  <StarChip x={layout.chip.x} y={layout.chip.y} label={t["joinPage.yourPlace"]} />
+  <StarChip
+    x={layout.chip.x}
+    y={layout.chip.y}
+    size={layout.chip.size}
+    label={t["joinPage.yourPlace"]}
+  />
 </OpeningDrawing>

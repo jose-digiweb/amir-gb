@@ -21,6 +21,7 @@ import {
   getEventPhase,
   getMonthKey,
   groupByMonth,
+  orderEventLanguages,
   shiftMonth,
   toMonthKey,
 } from "./helpers";
@@ -345,7 +346,7 @@ function toEventDetail(entry: Entry<"events">, locale: Locale): EventDetail {
     address: data.address,
     onlineLink: toSafeLink(data.online_link),
     registrationLink: toSafeLink(data.registration_link),
-    languages: data.languages ?? [],
+    languages: orderEventLanguages(data.languages ?? []),
     content: data.content,
   };
 }

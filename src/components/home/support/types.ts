@@ -1,7 +1,7 @@
 // Types
 import type { RingSpec } from "../../../lib/woven/types";
 import type { ValueChip } from "../../../site/types";
-import type { Disc, DotField, DrawingFrame, Sparkle, Stitch } from "../../opening/types";
+import type { ChipSize, Disc, DotField, DrawingFrame, Sparkle, Stitch } from "../../opening/types";
 
 /**
  * The {@link SupportHandsLayout} type
@@ -14,6 +14,7 @@ export type SupportHandsLayout = {
   photo: Disc;
   thread: { path: string; stitch: Stitch };
   chip: ValueChip;
+  chipSize: ChipSize;
   sparkles: Sparkle[];
 };
 

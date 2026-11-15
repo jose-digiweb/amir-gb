@@ -1,7 +1,6 @@
 // Types
 import type { TranslationKey } from "../../i18n/types";
 import type { TileColour } from "../../lib/content/types";
-import type { MilestonePrecision, MilestoneState } from "../../lib/timeline/types";
 import type { RingSpec } from "../../lib/woven/types";
 import type { ValueChip } from "../../site/types";
 import type { Disc, DotField, DrawingFrame, Point, Sparkle, Stitch } from "../opening/types";
@@ -48,30 +47,6 @@ export type ValueTile = {
   kriol?: TranslationKey;
   title: TranslationKey;
   text: TranslationKey;
-};
-
-/**
- * The {@link Milestone} type
- * @description One date of AMIR-GB's first months: when, how exactly, and the key of what happened
- */
-export type Milestone = {
-  date: string;
-  precision: MilestonePrecision;
-  text: TranslationKey;
-};
-
-/**
- * The {@link MilestoneView} type
- * @description One milestone ready to render: its date written in the page's language, what happened, and its state today
- */
-export type MilestoneView = {
-  date: string;
-  precision: MilestonePrecision;
-  when: string;
-  year: string;
-  text: string;
-  state: MilestoneState;
-  joinsNext: boolean;
 };
 
 /**

@@ -67,6 +67,7 @@
   --disabled-bg: #e9e5da;
   --disabled-text: #6f7889;
   --scrim: rgba(12, 31, 61, 0.6);
+  --stitch: rgba(212, 167, 44, 0.85);
   --decor: rgba(20, 48, 90, 0.08);
   --tint-gold: #fbe9c7;
   --tint-forest: #e3f1e6;
@@ -103,6 +104,7 @@
   --radius-pill: 999px;
   --border-width: 1px;
   --border-width-control: 2px;
+  --border-width-stitch: 1.5px;
   --focus-width: 3px;
   --focus-offset: 2px;
   --bridge-stroke: 11px;
@@ -132,11 +134,12 @@
   --tap-min: 48px;
   --control-height: 48px;
   --control-height-lg: 56px;
+  --icon-xs: 12px;
   --icon-sm: 16px;
   --icon-md: 24px;
   --icon-lg: 32px;
   --pictogram: 48px;
-  --chip-height: 40px;
+  --chip-height: 32px;
   --bridge-height: 32px;
   --bridge-height-md: 40px;
   --bridge-height-lg: 48px;
@@ -207,6 +210,7 @@
   --disabled-bg: #24282f;
   --disabled-text: #8b919b;
   --scrim: rgba(0, 0, 0, 0.7);
+  --stitch: rgba(230, 190, 74, 0.85);
   --decor: rgba(225, 228, 234, 0.07);
   --tint-gold: #3d3110;
   --tint-forest: #123b2c;
@@ -273,6 +277,7 @@
   --disabled-bg: #24282f;
   --disabled-text: #8b919b;
   --scrim: rgba(0, 0, 0, 0.7);
+  --stitch: rgba(230, 190, 74, 0.85);
   --decor: rgba(225, 228, 234, 0.07);
   --tint-gold: #3d3110;
   --tint-forest: #123b2c;

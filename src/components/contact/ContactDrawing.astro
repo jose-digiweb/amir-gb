@@ -45,6 +45,6 @@ const threads = layout.threads.paths.map((path, index) => ({ path, id: `${id}-th
     <CentreLogo />
   </CentreDisc>
   {layout.bubbles.map((bubble) => (
-    <WelcomeBubble bubble={bubble} />
+    <WelcomeBubble bubble={bubble} size={layout.bubbleSize} />
   ))}
 </OpeningDrawing>

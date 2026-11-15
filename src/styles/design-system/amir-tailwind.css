@@ -78,6 +78,7 @@
   --color-disabled-bg: var(--disabled-bg);
   --color-disabled-text: var(--disabled-text);
   --color-scrim: var(--scrim);
+  --color-stitch: var(--stitch);
   --color-decor: var(--decor);
   --color-tint-gold: var(--tint-gold);
   --color-tint-forest: var(--tint-forest);
@@ -100,6 +101,7 @@
   --spacing-tap: var(--tap-min);
   --spacing-control: var(--control-height);
   --spacing-control-lg: var(--control-height-lg);
+  --spacing-icon-xs: var(--icon-xs);
   --spacing-icon-sm: var(--icon-sm);
   --spacing-icon-md: var(--icon-md);
   --spacing-icon-lg: var(--icon-lg);
@@ -281,6 +283,13 @@
   line-height: 1.125rem;
   font-weight: 700;
   letter-spacing: 0;
+}
+@utility type-sewn-label {
+  font-family: var(--font-heading);
+  font-size: 0.8125rem;
+  line-height: 0.8125rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
 }
 @utility type-field-label {
   font-family: var(--font-heading);

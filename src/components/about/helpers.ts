@@ -1,16 +1,10 @@
 // Dependencies
-import { INTL_LOCALE } from "../../i18n/constants";
 import { getTranslations } from "../../i18n/helpers";
-import { SITE_TIME_ZONE } from "../../lib/content/constants";
-import { getEventDay } from "../../lib/content/helpers";
-import { MILESTONE_PRECISION } from "../../lib/timeline/constants";
-import { getMilestoneState, getSiteToday } from "../../lib/timeline/helpers";
 import { LEGAL } from "../../site/constants";
-import { AIM_NUMBER_DIGITS, MILESTONE_NOON, MILESTONES, TAX_PLACEHOLDER } from "./constants";
+import { AIM_NUMBER_DIGITS, TAX_PLACEHOLDER } from "./constants";
 
 // Types
 import type { Locale } from "../../i18n/types";
-import type { Milestone, MilestoneView } from "./types";
 
 /**
  * The {@link getAimNumber} helper
@@ -38,52 +32,6 @@ export function getInitials(name: string): string {
     return first.charAt(0);
   }
   return `${first.charAt(0)}${last.charAt(0)}`;
-}
-
-/**
- * The {@link getMilestoneWhen} helper
- * @description A milestone's day and month, or only its month, in the page's language and Dutch time
- * @param {Milestone} milestone - The milestone
- * @param {Date} date - Its date as a moment
- * @param {string} intlLocale - The page's locale for dates
- * @returns {string} For example "20 Jul" or "Mar"
- */
-function getMilestoneWhen(milestone: Milestone, date: Date, intlLocale: string): string {
-  const { day, month } = getEventDay(date, intlLocale);
-
-  // A month-only milestone shows its month alone
-  if (milestone.precision === MILESTONE_PRECISION.MONTH) {
-    return month;
-  }
-  return `${day} ${month}`;
-}
-
-/**
- * The {@link getMilestoneViews} helper
- * @description AMIR-GB's first months in the page's language, each done or coming up on the given day
- * @param {Locale} locale - The page's language
- * @param {Date} now - The moment the page is built
- * @returns {MilestoneView[]} The milestones in order, every one but the last stitched to the next
- */
-export function getMilestoneViews(locale: Locale, now: Date): MilestoneView[] {
-  const t = getTranslations(locale);
-  const intlLocale = INTL_LOCALE[locale];
-  const today = getSiteToday(now);
-  const year = new Intl.DateTimeFormat(intlLocale, { year: "numeric", timeZone: SITE_TIME_ZONE });
-
-  // Each milestone gets its written date, its words and its state
-  return MILESTONES.map((milestone, index) => {
-    const date = new Date(`${milestone.date}${MILESTONE_NOON}`);
-    return {
-      date: milestone.date,
-      precision: milestone.precision,
-      when: getMilestoneWhen(milestone, date, intlLocale),
-      year: year.format(date),
-      text: t[milestone.text],
-      state: getMilestoneState(milestone, today),
-      joinsNext: index < MILESTONES.length - 1,
-    };
-  });
 }
 
 /**

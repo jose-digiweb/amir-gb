@@ -1,5 +1,6 @@
 // Dependencies
 import { VALUE } from "../../../site/constants";
+import { CHIP_SIZE } from "../../opening/constants";
 
 // Types
 import type { SupportCrownLayout, SupportHandsLayout } from "./types";
@@ -18,6 +19,7 @@ export const DESKTOP_SUPPORT_HANDS = {
     stitch: { width: 2.5, dash: "8 7" },
   },
   chip: { value: VALUE.SOLIDARITY, x: 300, y: 710 },
+  chipSize: CHIP_SIZE.REGULAR,
   sparkles: [
     { x: 630, y: 110, size: 20, isRinged: true },
     { x: 1231, y: 711, size: 18, isRinged: false },
@@ -39,6 +41,7 @@ export const TABLET_SUPPORT_HANDS = {
     stitch: { width: 2.5, dash: "8 7" },
   },
   chip: { value: VALUE.SOLIDARITY, x: 130, y: 654 },
+  chipSize: CHIP_SIZE.SMALL,
   sparkles: [
     { x: 371, y: 31, size: 18, isRinged: true },
     { x: 722, y: 632, size: 16, isRinged: false },

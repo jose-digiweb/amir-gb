@@ -49,4 +49,4 @@ If you think we handle your details badly, you can complain to the Dutch Data Pr
 
 ## Questions
 
-Email [amirgbnederland@gmail.com](mailto:amirgbnederland@gmail.com) or WhatsApp [+31 6 15 18 87 45](https://wa.me/31615188745), in Dutch, Portuguese, English or Kriol.
+Email [amirgbnederland@gmail.com](mailto:amirgbnederland@gmail.com) or WhatsApp [+31 6 15 18 87 45](https://wa.me/31615188745), in Dutch, English, Kriolu or Portuguese.

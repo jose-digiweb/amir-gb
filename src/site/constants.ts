@@ -1,5 +1,9 @@
 // Dependencies
 import { siFacebook, siInstagram, siTiktok } from "simple-icons";
+import { LOCALE } from "../i18n/constants";
+
+// Types
+import type { Locale } from "../i18n/types";
 
 /**
  * The {@link ROUTE} constant
@@ -63,7 +67,6 @@ export const CONTACT = {
   PHONE: "+31 6 15 18 87 45",
   PHONE_HREF: "tel:+31615188745",
   WHATSAPP_HREF: "https://wa.me/31615188745",
-  TELEGRAM_HREF: "https://t.me/+31615188745",
   EMAIL: "amirgbnederland@gmail.com",
   EMAIL_HREF: "mailto:amirgbnederland@gmail.com",
 } as const;
@@ -122,6 +125,12 @@ export const VALUE_LABEL = {
 } as const;
 
 /**
+ * The {@link MOTTO_STACKED_LOCALES} constant
+ * @description The languages whose motto pairs are wider than a phone or tablet column, so below desktop the motto lists one label per row
+ */
+export const MOTTO_STACKED_LOCALES: readonly Locale[] = [LOCALE.NL, LOCALE.PT];
+
+/**
  * The {@link ANSWER_LANGUAGE} constant
  * @description The languages AMIR-GB can answer in
  */
@@ -139,8 +148,8 @@ export const ANSWER_LANGUAGE = {
 export const ANSWER_LANGUAGES = [
   ANSWER_LANGUAGE.NL,
   ANSWER_LANGUAGE.EN,
-  ANSWER_LANGUAGE.PT,
   ANSWER_LANGUAGE.KRIOL,
+  ANSWER_LANGUAGE.PT,
 ] as const;
 
 /**

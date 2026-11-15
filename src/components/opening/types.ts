@@ -1,3 +1,12 @@
+// Types
+import type { CHIP_SIZE } from "./constants";
+
+/**
+ * The {@link ChipSize} type
+ * @description One of the {@link CHIP_SIZE} values
+ */
+export type ChipSize = (typeof CHIP_SIZE)[keyof typeof CHIP_SIZE];
+
 /**
  * The {@link DotField} type
  * @description The round fading dot field behind a drawing: its centre, radius and grid step, in drawing units

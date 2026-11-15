@@ -1,8 +1,7 @@
 // Dependencies
 import { describe, expect, it } from "vitest";
 import { LOCALE } from "../../i18n/constants";
-import { MILESTONE_STATE } from "../../lib/timeline/constants";
-import { getAimNumber, getInitials, getMilestoneViews, getTaxStatusText } from "./helpers";
+import { getAimNumber, getInitials, getTaxStatusText } from "./helpers";
 
 describe("getAimNumber", () => {
   it("numbers the aims with a leading zero", () => {
@@ -20,34 +19,6 @@ describe("getInitials", () => {
 
   it("gives one letter for a single name", () => {
     expect(getInitials("Umaru")).toBe("U");
-  });
-});
-
-describe("getMilestoneViews", () => {
-  it("marks the general meeting coming up before 21 November and done after it", () => {
-    const before = getMilestoneViews(LOCALE.EN, new Date("2026-11-15T12:00:00Z"));
-    const after = getMilestoneViews(LOCALE.EN, new Date("2026-11-22T12:00:00Z"));
-    expect(before.map((item) => item.state)).toEqual([
-      MILESTONE_STATE.DONE,
-      MILESTONE_STATE.DONE,
-      MILESTONE_STATE.DONE,
-      MILESTONE_STATE.COMING,
-      MILESTONE_STATE.COMING,
-    ]);
-    expect(after[3]?.state).toBe(MILESTONE_STATE.DONE);
-  });
-
-  it("writes days with their month and the founding phase's end as a month", () => {
-    const views = getMilestoneViews(LOCALE.EN, new Date("2026-11-15T12:00:00Z"));
-    expect(views[0]?.when).toBe("20 Jul");
-    expect(views[0]?.year).toBe("2026");
-    expect(views[4]?.when).toBe("Mar");
-    expect(views[4]?.year).toBe("2027");
-  });
-
-  it("stitches every milestone to the next but the last", () => {
-    const views = getMilestoneViews(LOCALE.NL, new Date("2026-11-15T12:00:00Z"));
-    expect(views.map((item) => item.joinsNext)).toEqual([true, true, true, true, false]);
   });
 });
 

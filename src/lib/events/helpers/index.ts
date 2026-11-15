@@ -26,6 +26,7 @@ export {
   getWhatsAppShareHref,
   isOnlineOnly,
 } from "./links";
+export { orderEventLanguages } from "./languages";
 export { getCountLabel, getEventWhere, groupByMonth } from "./list";
 export {
   buildEventsHref,

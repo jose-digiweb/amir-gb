@@ -21,6 +21,7 @@ import {
   getWeekdayNames,
   groupByMonth,
   isOnlineOnly,
+  orderEventLanguages,
   parseDay,
   parseEventType,
   parseMonth,
@@ -168,6 +169,17 @@ describe("the event page", () => {
     ]);
     expect(isOnlineOnly({ onlineLink: "https://example.org" })).toBe(true);
     expect(isOnlineOnly({ onlineLink: "https://example.org", placeName: "Hall" })).toBe(false);
+  });
+});
+
+describe("event languages", () => {
+  it("lists them Dutch, English, Kriolu, Portuguese, whatever order they were picked in", () => {
+    expect(orderEventLanguages(["portugees", "kriol", "nederlands"])).toEqual([
+      "nederlands",
+      "kriol",
+      "portugees",
+    ]);
+    expect(orderEventLanguages([])).toEqual([]);
   });
 });
 

@@ -109,7 +109,7 @@
           "type": "multiSelect",
           "translatable": false,
           "validation": {
-            "options": ["nederlands", "engels", "portugees", "kriol"]
+            "options": ["nederlands", "engels", "kriol", "portugees"]
           }
         },
         {
@@ -426,7 +426,7 @@
               "filename": "drop-in-help.jpg"
             }
           },
-          "languages": ["nederlands", "portugees", "kriol"],
+          "languages": ["nederlands", "kriol", "portugees"],
           "event_status": "gaat door",
           "for_whom": "iedereen"
         }
@@ -464,7 +464,7 @@
           "place_name": "[PLACE]",
           "address": "[ADDRESS]",
           "type": "hulp",
-          "languages": ["nederlands", "portugees", "kriol"],
+          "languages": ["nederlands", "kriol", "portugees"],
           "event_status": "gaat door",
           "for_whom": "iedereen"
         }
@@ -561,7 +561,7 @@
               "filename": "community-dinner.jpg"
             }
           },
-          "languages": ["nederlands", "portugees", "kriol"],
+          "languages": ["nederlands", "kriol", "portugees"],
           "event_status": "gaat door",
           "for_whom": "iedereen"
         }
@@ -660,7 +660,7 @@
           "place_name": "[PLACE]",
           "address": "[ADDRESS]",
           "type": "gemeenschap",
-          "languages": ["nederlands", "portugees", "kriol"],
+          "languages": ["nederlands", "kriol", "portugees"],
           "event_status": "gaat door",
           "for_whom": "iedereen"
         }
@@ -696,7 +696,7 @@
               "filename": "choir.jpg"
             }
           },
-          "languages": ["portugees", "kriol"],
+          "languages": ["kriol", "portugees"],
           "event_status": "gaat door",
           "for_whom": "iedereen"
         }

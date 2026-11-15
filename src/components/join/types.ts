@@ -3,7 +3,7 @@ import type { JoinError, JoinMode, JoinSkill } from "../../lib/join/types";
 import type { AnswerLanguage } from "../../site/types";
 import type { TileColour } from "../../lib/content/types";
 import type { ChoiceOption } from "../forms/types";
-import type { Disc, DotField, DrawingFrame, Sparkle } from "../opening/types";
+import type { ChipSize, Disc, DotField, DrawingFrame, Sparkle } from "../opening/types";
 import type { JOIN_FORM_STATE, JOIN_WAY } from "./constants";
 
 /**
@@ -139,6 +139,6 @@ export type JoinDrawingLayout = {
   photo: Disc;
   seats: SeatCircle;
   inner: string | null;
-  chip: { x: number; y: number; thread: string | null };
+  chip: { x: number; y: number; size: ChipSize; thread: string | null };
   sparkles: readonly Sparkle[];
 };

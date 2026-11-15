@@ -16,7 +16,7 @@ export const EVENT_TYPES = [
  * The {@link EVENT_LANGUAGES} constant
  * @description The languages an event can be held in, stored in Dutch as EmDash's choices show them
  */
-export const EVENT_LANGUAGES = ["nederlands", "engels", "portugees", "kriol"] as const;
+export const EVENT_LANGUAGES = ["nederlands", "engels", "kriol", "portugees"] as const;
 
 /**
  * The {@link EVENTS_PARAM} constant

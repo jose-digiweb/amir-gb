@@ -4,7 +4,7 @@ import type { AnswerLanguage } from "../../site/types";
 import type { ChoiceOption } from "../forms/types";
 import type { RingSpec } from "../../lib/woven/types";
 import type { Disc, DotField, DrawingFrame, Sparkle, Stitch } from "../opening/types";
-import type { BUBBLE_TAIL, CONTACT_FORM_STATE, WELCOME_LANGUAGE } from "./constants";
+import type { BUBBLE_SIZE, BUBBLE_TAIL, CONTACT_FORM_STATE, WELCOME_LANGUAGE } from "./constants";
 
 /**
  * The {@link ContactFormState} type
@@ -78,6 +78,12 @@ export type WelcomeBubbleSpot = {
 };
 
 /**
+ * The {@link BubbleSize} type
+ * @description One of the {@link BUBBLE_SIZE} values
+ */
+export type BubbleSize = (typeof BUBBLE_SIZE)[keyof typeof BUBBLE_SIZE];
+
+/**
  * The {@link ContactDrawingLayout} type
  * @description One screen size's opening drawing: the logo in its ring of beads, the stitched threads and the welcome bubbles
  */
@@ -88,6 +94,7 @@ export type ContactDrawingLayout = {
   gaps: readonly number[];
   disc: Disc;
   threads: { paths: readonly string[]; stitch: Stitch };
+  bubbleSize: BubbleSize;
   bubbles: readonly WelcomeBubbleSpot[];
   sparkles: readonly Sparkle[];
 };

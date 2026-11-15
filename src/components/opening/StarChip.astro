@@ -1,32 +1,46 @@
 ---
 // Dependencies
-import { CHIP_BOX } from "./constants";
+import { CHIP_BOX, CHIP_SIZE } from "./constants";
 
 // Components
 import StarMark from "../ui/StarMark.astro";
 
+// Types
+import type { ChipSize } from "./types";
+
 /**
  * The {@link Props} type
- * @description The props of the StarChip component, a white chip with the gold star, centred on its point in a drawing
+ * @description The props of the StarChip component, a value sewn onto the ground as a dashed gold label with the star, centred on its point in a drawing; it is a label, never a control
  */
 type Props = {
-  /** The chip's centre, in drawing units. */
+  /** The label's centre, in drawing units. */
   x: number;
   y: number;
-  /** What the chip says. */
+  /** What the label says. */
   label: string;
+  /** Regular, or small where the board draws it smaller. */
+  size?: ChipSize;
 };
 
-// Read the chip and centre its box on its point
-const { x, y, label } = Astro.props;
+// Read the label and centre its box on its point
+const { x, y, label, size = CHIP_SIZE.REGULAR } = Astro.props;
 const left = x - CHIP_BOX.WIDTH / 2;
 const top = y - CHIP_BOX.HEIGHT / 2;
+const isSmall = size === CHIP_SIZE.SMALL;
 ---
 
 <foreignObject x={left} y={top} width={CHIP_BOX.WIDTH} height={CHIP_BOX.HEIGHT} overflow="visible">
   <div class="flex size-full items-center justify-center">
-    <p class="flex max-w-60 items-center gap-2 rounded-pill bg-surface py-3 pr-4 pl-3 type-h4 font-extrabold text-text-heading shadow-md ring-5 ring-bg-alt">
-      <StarMark class="size-4 shrink-0 text-accent" />
+    <p
+      class:list={[
+        "flex max-w-60 items-center gap-2 rounded-pill border-(length:--border-width-stitch) border-dashed border-stitch bg-bg-alt py-2 text-text-heading uppercase ring-4 ring-bg-alt select-none",
+        {
+          "pr-3.5 pl-3 type-sewn-label": !isSmall,
+          "pr-3 pl-2 type-tag leading-none font-extrabold tracking-widest": isSmall,
+        },
+      ]}
+    >
+      <StarMark class="size-icon-xs shrink-0 text-accent" />
       <span class="text-balance">{label}</span>
     </p>
   </div>

@@ -133,6 +133,15 @@ export const BUBBLE_TAIL = {
 } as const;
 
 /**
+ * The {@link BUBBLE_SIZE} constant
+ * @description The two sizes of a welcome bubble: regular, and compact for the phone's column of four
+ */
+export const BUBBLE_SIZE = {
+  REGULAR: "regular",
+  COMPACT: "compact",
+} as const;
+
+/**
  * The {@link BUBBLE_BOX} constant
  * @description The box a welcome bubble is centred in, wide enough for the longest welcome
  */
@@ -153,12 +162,20 @@ export const CONTACT_DRAWINGS = {
     gaps: [12, 13, 14, 15],
     disc: { centreX: 300, centreY: 190, size: 150 },
     threads: {
-      paths: ["M128 132 Q190 130 214 160", "M118 262 Q180 270 214 232"],
+      paths: [
+        "M144 106 Q172 112 214 125",
+        "M158 176 Q179 182 193 176",
+        "M152 246 Q176 240 204 239",
+        "M142 316 Q171 310 229 271",
+      ],
       stitch: { width: 1.5, dash: "6 6" },
     },
+    bubbleSize: BUBBLE_SIZE.COMPACT,
     bubbles: [
-      { language: WELCOME_LANGUAGE.KRIOL, x: 92, y: 116, tail: BUBBLE_TAIL.BOTTOM_RIGHT },
-      { language: WELCOME_LANGUAGE.PORTUGUESE, x: 84, y: 268, tail: BUBBLE_TAIL.TOP_RIGHT },
+      { language: WELCOME_LANGUAGE.DUTCH, x: 82, y: 106, tail: BUBBLE_TAIL.BOTTOM_RIGHT },
+      { language: WELCOME_LANGUAGE.ENGLISH, x: 96, y: 176, tail: BUBBLE_TAIL.TOP_RIGHT },
+      { language: WELCOME_LANGUAGE.KRIOL, x: 90, y: 246, tail: BUBBLE_TAIL.BOTTOM_RIGHT },
+      { language: WELCOME_LANGUAGE.PORTUGUESE, x: 80, y: 316, tail: BUBBLE_TAIL.TOP_RIGHT },
     ],
     sparkles: [
       { x: 22, y: 102, size: 16, isRinged: true },
@@ -181,11 +198,12 @@ export const CONTACT_DRAWINGS = {
       ],
       stitch: { width: 1.75, dash: "6 6" },
     },
+    bubbleSize: BUBBLE_SIZE.REGULAR,
     bubbles: [
       { language: WELCOME_LANGUAGE.DUTCH, x: 330, y: 520, tail: BUBBLE_TAIL.BOTTOM_RIGHT },
-      { language: WELCOME_LANGUAGE.PORTUGUESE, x: 720, y: 410, tail: BUBBLE_TAIL.BOTTOM_LEFT },
-      { language: WELCOME_LANGUAGE.KRIOL, x: 735, y: 845, tail: BUBBLE_TAIL.TOP_LEFT },
-      { language: WELCOME_LANGUAGE.ENGLISH, x: 360, y: 820, tail: BUBBLE_TAIL.TOP_RIGHT },
+      { language: WELCOME_LANGUAGE.ENGLISH, x: 720, y: 410, tail: BUBBLE_TAIL.BOTTOM_LEFT },
+      { language: WELCOME_LANGUAGE.KRIOL, x: 360, y: 820, tail: BUBBLE_TAIL.TOP_RIGHT },
+      { language: WELCOME_LANGUAGE.PORTUGUESE, x: 735, y: 845, tail: BUBBLE_TAIL.TOP_LEFT },
     ],
     sparkles: [
       { x: 790, y: 320, size: 20, isRinged: false },
@@ -208,11 +226,12 @@ export const CONTACT_DRAWINGS = {
       ],
       stitch: { width: 1.75, dash: "6 6" },
     },
+    bubbleSize: BUBBLE_SIZE.REGULAR,
     bubbles: [
       { language: WELCOME_LANGUAGE.DUTCH, x: 805, y: 235, tail: BUBBLE_TAIL.BOTTOM_RIGHT },
-      { language: WELCOME_LANGUAGE.PORTUGUESE, x: 1300, y: 215, tail: BUBBLE_TAIL.BOTTOM_LEFT },
-      { language: WELCOME_LANGUAGE.KRIOL, x: 1315, y: 660, tail: BUBBLE_TAIL.TOP_LEFT },
-      { language: WELCOME_LANGUAGE.ENGLISH, x: 800, y: 655, tail: BUBBLE_TAIL.TOP_RIGHT },
+      { language: WELCOME_LANGUAGE.ENGLISH, x: 1300, y: 215, tail: BUBBLE_TAIL.BOTTOM_LEFT },
+      { language: WELCOME_LANGUAGE.KRIOL, x: 800, y: 655, tail: BUBBLE_TAIL.TOP_RIGHT },
+      { language: WELCOME_LANGUAGE.PORTUGUESE, x: 1315, y: 660, tail: BUBBLE_TAIL.TOP_LEFT },
     ],
     sparkles: [
       { x: 689, y: 419, size: 22, isRinged: false },
