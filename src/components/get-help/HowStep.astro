@@ -1,0 +1,70 @@
+---
+// Dependencies
+import { STEP_THREAD } from "./constants";
+
+/**
+ * The {@link Props} type
+ * @description The props of the HowStep component, one numbered step of How it works, stitched to the next one
+ */
+type Props = {
+  /** The step's place, shown on its disc. */
+  number: number;
+  /** The step's name. */
+  title: string;
+  /** One sentence about it. */
+  text: string;
+  /** Whether a stitched thread runs on to the next step. */
+  joinsNext: boolean;
+};
+
+// Read the step and the thread's dash
+const { number, title, text, joinsNext } = Astro.props;
+---
+
+<li class="relative flex gap-4 pb-8 last:pb-0 tablet:flex-col tablet:pb-0">
+  {joinsNext ? (
+    <>
+      <span
+        aria-hidden="true"
+        class="absolute top-12 bottom-0 left-6 w-1 -translate-x-1/2 tablet:hidden"
+      >
+        <svg class="size-full overflow-visible">
+          <line
+            x1="50%"
+            y1="0"
+            x2="50%"
+            y2="100%"
+            stroke-width={STEP_THREAD.WIDTH}
+            stroke-dasharray={STEP_THREAD.DASH}
+            stroke-linecap="round"
+            class="stroke-accent"
+          ></line>
+        </svg>
+      </span>
+      <span
+        aria-hidden="true"
+        class="absolute top-6 left-12 hidden h-1 -translate-y-1/2 tablet:-right-8 tablet:block desktop:-right-12"
+      >
+        <svg class="size-full overflow-visible">
+          <line
+            x1="0"
+            y1="50%"
+            x2="100%"
+            y2="50%"
+            stroke-width={STEP_THREAD.WIDTH}
+            stroke-dasharray={STEP_THREAD.DASH}
+            stroke-linecap="round"
+            class="stroke-accent"
+          ></line>
+        </svg>
+      </span>
+    </>
+  ) : null}
+  <span class="relative grid size-12 shrink-0 place-items-center rounded-full bg-surface type-h3 font-extrabold text-text-heading ring-6 inset-ring-3 ring-bg inset-ring-accent">
+    {number}
+  </span>
+  <span class="flex flex-col gap-1 pt-2.5 tablet:gap-2 tablet:pt-0">
+    <span class="type-h3 text-balance text-text-heading">{title}</span>
+    <span class="type-body text-pretty text-text">{text}</span>
+  </span>
+</li>

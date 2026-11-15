@@ -1,5 +1,6 @@
 ---
 // Dependencies
+import { NESTED_LOZENGE_VIEW_BOX } from "../../lib/woven/constants";
 import { getNestedLozengePath } from "../../lib/woven/helpers";
 import { WOVEN_SHADE_TONE } from "./constants";
 
@@ -26,7 +27,7 @@ const path = getNestedLozengePath();
   class="pointer-events-none absolute inset-0 -z-10 overflow-hidden rounded-[inherit]"
 >
   <svg
-    viewBox="0 0 219 219"
+    viewBox={NESTED_LOZENGE_VIEW_BOX}
     class:list={[
       "absolute top-0 right-3 size-32 translate-x-1/2 -translate-y-1/2 tablet:right-4 tablet:size-48 desktop:right-8 desktop:size-80",
       { "fill-decor-strong": !isOnBrand, "fill-motif-band-on-brand": isOnBrand },

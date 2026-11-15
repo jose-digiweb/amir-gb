@@ -59,3 +59,9 @@ export const BEAD = {
   UNITS: 27,
   START_TURN: -90,
 } as const;
+
+/**
+ * The {@link NESTED_LOZENGE_VIEW_BOX} constant
+ * @description The drawing box of the nested lozenge: 73 cells of 3 units
+ */
+export const NESTED_LOZENGE_VIEW_BOX = "0 0 219 219";

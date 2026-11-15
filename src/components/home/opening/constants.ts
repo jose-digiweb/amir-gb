@@ -1,6 +1,7 @@
 // Dependencies
 import { TILE_COLOUR } from "../../../lib/content/constants";
-import { HELP_SERVICE, VALUE } from "../constants";
+import { HELP_SERVICE } from "../../../lib/help/constants";
+import { VALUE } from "../constants";
 
 // Types
 import type { ConstellationLayout } from "./types";

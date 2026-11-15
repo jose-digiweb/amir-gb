@@ -1,0 +1,30 @@
+---
+// Dependencies
+import { WOVEN_DEFS } from "../ui/constants";
+import { DECOR_BEAD_VIEW_BOX } from "./constants";
+
+/**
+ * The {@link Props} type
+ * @description The props of the DecorBead component, one small woven lozenge scattered behind a section's content
+ */
+type Props = {
+  /** The gold bead with its eye, rather than the plain navy one. */
+  ringed?: boolean;
+  /** Place and size classes from the caller. */
+  class?: string;
+};
+
+// Read the bead's look and point at its shared drawing
+const { ringed = false, class: className } = Astro.props;
+const ringedHref = `#${WOVEN_DEFS.RINGED}`;
+const solidHref = `#${WOVEN_DEFS.SOLID}`;
+const href = ringed ? ringedHref : solidHref;
+---
+
+<svg
+  aria-hidden="true"
+  viewBox={DECOR_BEAD_VIEW_BOX}
+  class:list={["pointer-events-none absolute -z-10", className]}
+>
+  <use href={href}></use>
+</svg>

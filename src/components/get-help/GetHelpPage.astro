@@ -1,0 +1,27 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../i18n/helpers";
+
+// Components
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import WovenDefs from "../ui/WovenDefs.astro";
+import HelpAreasSection from "./HelpAreasSection.astro";
+import HelpOpening from "./HelpOpening.astro";
+import HowItWorksSection from "./HowItWorksSection.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the GetHelpPage component, the Get help page in the page's language
+ */
+type Props = Record<string, never>;
+
+// Read the page's title and summary
+const t = getTranslations(getLocale(Astro.currentLocale));
+---
+
+<SiteLayout title={t["getHelp.title"]} description={t["getHelp.description"]}>
+  <WovenDefs />
+  <HelpOpening />
+  <HowItWorksSection />
+  <HelpAreasSection />
+</SiteLayout>

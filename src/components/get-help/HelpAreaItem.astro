@@ -1,0 +1,66 @@
+---
+// Dependencies
+import { ChevronDown } from "@lucide/astro";
+import { TILE_COLOUR } from "../../lib/content/constants";
+import { HELP_AREA_ITEM } from "./constants";
+
+// Components
+import HelpServiceIcon from "../help/HelpServiceIcon.astro";
+import AskAboutLink from "./AskAboutLink.astro";
+import HelpAreaPoints from "./HelpAreaPoints.astro";
+
+// Types
+import type { TileColour } from "../../lib/content/types";
+import type { HelpService } from "../../lib/help/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the HelpAreaItem component, one area of help as a row of the phone's accordion, one open at a time
+ */
+type Props = {
+  /** The area's service, which a home tile names in the address (#letters). */
+  service: HelpService;
+  /** The tint of the row's icon disc. */
+  tint: TileColour;
+  /** The area's name. */
+  title: string;
+  /** What AMIR-GB offers in it. */
+  points: string[];
+  /** The WhatsApp link that names the area. */
+  askHref: string;
+  /** Whether the row starts open. */
+  isOpen: boolean;
+};
+
+// Read the area and whether it starts open
+const { service, tint, title, points, askHref, isOpen } = Astro.props;
+---
+
+<details
+  name={HELP_AREA_ITEM.GROUP}
+  data-help-area={service}
+  open={isOpen}
+  class="group border-b border-border last:border-b-0"
+>
+  <summary class="flex min-h-18 cursor-pointer touch-manipulation list-none items-center gap-3 py-2.5 text-text-heading select-none [&::-webkit-details-marker]:hidden">
+    <span
+      class:list={[
+        "grid size-12 shrink-0 place-items-center rounded-full",
+        {
+          "bg-tint-gold": tint === TILE_COLOUR.GOLD,
+          "bg-tint-forest": tint === TILE_COLOUR.FOREST,
+          "bg-tint-brick": tint === TILE_COLOUR.BRICK,
+          "bg-tint-navy": tint === TILE_COLOUR.NAVY,
+        },
+      ]}
+    >
+      <HelpServiceIcon service={service} class="size-icon-md" />
+    </span>
+    <span class="flex-1 type-h4 text-balance">{title}</span>
+    <ChevronDown class="size-5 shrink-0 transition-transform duration-base group-open:rotate-180" />
+  </summary>
+  <div class="flex flex-col gap-3 pb-5 pl-15">
+    <HelpAreaPoints points={points} />
+    <AskAboutLink href={askHref} />
+  </div>
+</details>

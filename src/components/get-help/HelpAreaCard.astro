@@ -1,0 +1,55 @@
+---
+// Dependencies
+import { TILE_COLOUR } from "../../lib/content/constants";
+
+// Components
+import HelpServiceIcon from "../help/HelpServiceIcon.astro";
+import AskAboutLink from "./AskAboutLink.astro";
+import HelpAreaPoints from "./HelpAreaPoints.astro";
+
+// Types
+import type { TileColour } from "../../lib/content/types";
+import type { HelpService } from "../../lib/help/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the HelpAreaCard component, one area of help as a tinted card on tablet and desktop
+ */
+type Props = {
+  /** The area's service, also its address on the page (#letters). */
+  service: HelpService;
+  /** The card's tint. */
+  tint: TileColour;
+  /** The area's name. */
+  title: string;
+  /** What AMIR-GB offers in it. */
+  points: string[];
+  /** The WhatsApp link that names the area. */
+  askHref: string;
+};
+
+// Read the area
+const { service, tint, title, points, askHref } = Astro.props;
+---
+
+<article
+  id={service}
+  class:list={[
+    "flex flex-col gap-4 rounded-lg p-5 text-text-heading desktop:p-6",
+    {
+      "bg-tint-gold": tint === TILE_COLOUR.GOLD,
+      "bg-tint-forest": tint === TILE_COLOUR.FOREST,
+      "bg-tint-brick": tint === TILE_COLOUR.BRICK,
+      "bg-tint-navy": tint === TILE_COLOUR.NAVY,
+    },
+  ]}
+>
+  <span class="grid size-14 place-items-center rounded-full bg-tile-icon desktop:size-16">
+    <HelpServiceIcon service={service} class="size-icon-lg" />
+  </span>
+  <h3 class="type-h3 text-balance">{title}</h3>
+  <div class="flex-1">
+    <HelpAreaPoints points={points} />
+  </div>
+  <AskAboutLink href={askHref} />
+</article>

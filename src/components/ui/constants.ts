@@ -45,3 +45,12 @@ export const WOVEN_SHADE_TONE = {
   LIGHT: "light",
   ON_BRAND: "on-brand",
 } as const;
+
+/**
+ * The {@link WOVEN_DEFS} constant
+ * @description The ids of the woven beads that a page's drawings reuse
+ */
+export const WOVEN_DEFS = {
+  SOLID: "woven-bead-solid",
+  RINGED: "woven-bead-ringed",
+} as const;

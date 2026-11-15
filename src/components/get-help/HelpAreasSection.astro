@@ -1,0 +1,88 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { getHelpAreaViews } from "./helpers";
+
+// Components
+import Opener from "../ui/Opener.astro";
+import WovenShade from "../ui/WovenShade.astro";
+import DecorBead from "./DecorBead.astro";
+import DotPatch from "./DotPatch.astro";
+import EmergencyCard from "./EmergencyCard.astro";
+import HelpAreaCard from "./HelpAreaCard.astro";
+import HelpAreaItem from "./HelpAreaItem.astro";
+import NotSureCard from "./NotSureCard.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the HelpAreasSection component: what AMIR-GB helps with, as an accordion on phone and cards from tablet up, then the emergency card
+ */
+type Props = Record<string, never>;
+
+// Prepare every area in the page's language; on phone the first one starts open
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const areas = getHelpAreaViews(locale).map((area, index) => ({ ...area, isOpen: index === 0 }));
+---
+
+<section
+  aria-labelledby="help-areas-title"
+  data-footer-overlaps
+  class="relative isolate -mt-8 overflow-hidden rounded-t-xl bg-bg-alt px-margin pt-12 pb-20 tablet:-mt-10 tablet:px-margin-md tablet:pt-16 tablet:pb-28 desktop:-mt-14 desktop:px-margin-lg desktop:pt-24 desktop:pb-36"
+>
+  <WovenShade />
+  <DecorBead
+    ringed
+    class="top-4 right-16 size-6 tablet:top-6 tablet:right-28 desktop:top-12 desktop:right-30 desktop:size-8"
+  />
+  <DotPatch
+    id="get-help-areas"
+    class="bottom-65 -left-5 h-25 w-35 tablet:top-10 tablet:bottom-auto tablet:-left-10 tablet:h-45 tablet:w-65"
+  />
+
+  <div class="flex flex-col gap-2.5 desktop:max-w-190">
+    <Opener label={t["getHelp.areasOpener"]} />
+    <h2 id="help-areas-title" class="type-section-title text-balance text-text-heading">
+      {t["getHelp.areasTitle"]}
+    </h2>
+    <p class="type-body text-pretty text-text-muted">{t["getHelp.areasNote"]}</p>
+  </div>
+
+  <div class="mt-5 rounded-lg bg-surface px-4 py-1 tablet:hidden">
+    {areas.map((area) => (
+      <HelpAreaItem
+        service={area.service}
+        tint={area.tint}
+        title={area.title}
+        points={area.points}
+        askHref={area.askHref}
+        isOpen={area.isOpen}
+      />
+    ))}
+  </div>
+
+  <div class="mt-9 hidden grid-cols-2 gap-4 tablet:grid desktop:mt-12 desktop:grid-cols-4 desktop:gap-5">
+    {areas.map((area) => (
+      <HelpAreaCard
+        service={area.service}
+        tint={area.tint}
+        title={area.title}
+        points={area.points}
+        askHref={area.askHref}
+      />
+    ))}
+    <NotSureCard />
+  </div>
+
+  <div class="mt-4 desktop:mt-5">
+    <EmergencyCard />
+  </div>
+</section>
+
+<script>
+  // Dependencies
+  import { openHelpAreaFromHash } from "./helpers";
+
+  // A home tile's link opens its own topic in the phone's accordion
+  openHelpAreaFromHash();
+</script>
