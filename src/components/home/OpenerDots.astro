@@ -1,0 +1,47 @@
+---
+// Dependencies
+import { DECOR_TONE } from "../ui/constants";
+
+// Components
+import DotPatch from "../ui/DotPatch.astro";
+
+// Types
+import type { DecorTone } from "../ui/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the OpenerDots component, the soft dot patch above a home section's opener, running off the section's left edge; its parent is the opener's positioned wrapper
+ */
+type Props = {
+  /** A prefix for the patch's own ids, unique on the page. */
+  id: string;
+  /** The ground it sits on: a light section, or the navy band. */
+  tone?: DecorTone;
+};
+
+// Read the patch's ids and its ground, light by default
+const { id, tone = DECOR_TONE.LIGHT } = Astro.props;
+---
+
+<DotPatch
+  id={id}
+  tone={tone}
+  class="opener-dots -top-9 h-25 w-35 tablet:-top-16 tablet:h-45 tablet:w-65"
+/>
+
+<style>
+  @reference "../../styles/global.css";
+
+  /* The patch starts past the section's edge, as the opener sits on the section's margin; global, as the svg is DotPatch's */
+  :global(.opener-dots) {
+    left: calc((var(--grid-margin) + var(--space-5)) * -1);
+
+    @variant tablet {
+      left: calc((var(--grid-margin-md) + var(--space-10)) * -1);
+    }
+
+    @variant desktop {
+      left: calc((var(--grid-margin-lg) + var(--space-10)) * -1);
+    }
+  }
+</style>

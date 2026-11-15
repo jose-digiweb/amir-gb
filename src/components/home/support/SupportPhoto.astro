@@ -1,0 +1,35 @@
+---
+// Dependencies
+import { Picture } from "astro:assets";
+import { SUPPORT_PHOTO } from "./constants";
+import joinedHands from "../../../assets/photos/joined-hands.jpg";
+
+// Types
+import type { Disc } from "../../opening/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the SupportPhoto component, the joined hands in a round frame with a sand halo, centred on their point in Support AMIR-GB's drawing
+ */
+type Props = {
+  /** Where the photo sits and how big it is, in drawing units. */
+  disc: Disc;
+};
+
+// Read the disc and place its box by the centre
+const { disc } = Astro.props;
+const x = disc.centreX - disc.size / 2;
+const y = disc.centreY - disc.size / 2;
+---
+
+<foreignObject x={x} y={y} width={disc.size} height={disc.size} overflow="visible">
+  <div class="size-full overflow-hidden rounded-full bg-border shadow-md ring-8 ring-bg-alt desktop:ring-10">
+    <Picture
+      src={joinedHands}
+      alt=""
+      widths={[...SUPPORT_PHOTO.WIDTHS]}
+      sizes={SUPPORT_PHOTO.SIZES}
+      class="size-full object-cover"
+    />
+  </div>
+</foreignObject>

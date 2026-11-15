@@ -14,6 +14,7 @@ import volunteerHelping from "../../../assets/photos/volunteer-helping.jpg";
 // Components
 import Button from "../../ui/Button.astro";
 import Opener from "../../ui/Opener.astro";
+import OpenerDots from "../OpenerDots.astro";
 import WovenShade from "../../ui/WovenShade.astro";
 import HelpTile from "./HelpTile.astro";
 
@@ -44,10 +45,11 @@ const centrePath = getWovenPath(HELP_DISC.RADIUS, (distance) => distance === 0);
 <section
   id="help"
   aria-labelledby="help-title"
-  class="relative isolate z-10 -mt-10 flex flex-col gap-3 rounded-t-xl bg-bg px-margin pt-14 pb-28 tablet:-mt-12 tablet:px-margin-md tablet:pt-12 tablet:pb-32 desktop:-mt-14 desktop:grid desktop:grid-cols-12 desktop:items-center desktop:gap-x-6 desktop:px-margin-lg desktop:pb-44"
+  class="relative isolate z-10 -mt-10 flex flex-col gap-3 overflow-clip rounded-t-xl bg-bg px-margin pt-14 pb-28 tablet:-mt-12 tablet:px-margin-md tablet:pt-12 tablet:pb-32 desktop:-mt-14 desktop:grid desktop:grid-cols-12 desktop:items-center desktop:gap-x-6 desktop:px-margin-lg desktop:pb-44"
 >
   <WovenShade />
   <div class="relative flex flex-col gap-3 pb-3 desktop:col-span-5 desktop:h-140 desktop:pb-0">
+    <OpenerDots id="opener-dots-help" />
     <Opener label={t["help.opener"]} />
     <h2 id="help-title" class="type-section-title text-balance text-text-heading desktop:w-sm">
       {t["help.title"]}

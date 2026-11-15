@@ -6,11 +6,12 @@ import { getLocale, getTranslations } from "../../../i18n/helpers";
 import { WHATS_ON_STATE } from "../../../lib/content/constants";
 import { planWhatsOn } from "../../../lib/content/helpers";
 import { ROUTE } from "../../../site/constants";
-import { BUTTON_TONE, OPENER_TONE, WOVEN_SHADE_TONE } from "../../ui/constants";
+import { BUTTON_TONE, DECOR_TONE, OPENER_TONE, WOVEN_SHADE_TONE } from "../../ui/constants";
 
 // Components
 import Button from "../../ui/Button.astro";
 import Opener from "../../ui/Opener.astro";
+import OpenerDots from "../OpenerDots.astro";
 import WovenShade from "../../ui/WovenShade.astro";
 import EventCard from "./EventCard.astro";
 import FeaturedEventCard from "./FeaturedEventCard.astro";
@@ -48,11 +49,12 @@ const hasWeekly = plan.weekly.length > 0;
 <section
   id="events"
   aria-labelledby="events-title"
-  class="relative isolate z-20 -mt-8 rounded-xl bg-surface-brand pt-12 pb-28 text-on-brand tablet:-mt-10 tablet:pt-15 tablet:pb-36 desktop:-mt-14 desktop:px-margin-lg desktop:pt-22 desktop:pb-48"
+  class="relative isolate z-20 -mt-8 overflow-x-clip rounded-xl bg-surface-brand pt-12 pb-28 text-on-brand tablet:-mt-10 tablet:pt-15 tablet:pb-36 desktop:-mt-14 desktop:px-margin-lg desktop:pt-22 desktop:pb-48"
 >
   <WovenShade tone={WOVEN_SHADE_TONE.ON_BRAND} />
   <div class="flex items-end justify-between gap-4 px-margin pb-6 tablet:px-margin-md tablet:pb-7 desktop:px-0 desktop:pb-10">
-    <div class="flex flex-col gap-3">
+    <div class="relative flex flex-col gap-3">
+      <OpenerDots id="opener-dots-events" tone={DECOR_TONE.ON_BRAND} />
       <Opener label={t["events.opener"]} tone={OPENER_TONE.ON_BRAND} />
       <h2 id="events-title" class="type-section-title">
         {t["events.title"]}
