@@ -14,6 +14,7 @@ export {
   getMovedFromDate,
   getShortDate,
   getShortWeekday,
+  getWeekdayDate,
 } from "./dates";
 export { buildCalendarFile, escapeCalendarText, foldCalendarLine, toCalendarTime } from "./ics";
 export {
@@ -27,6 +28,7 @@ export {
   isOnlineOnly,
 } from "./links";
 export { orderEventLanguages } from "./languages";
+export { getNextWeeklyDay } from "./weekly";
 export { getCountLabel, getEventWhere, groupByMonth } from "./list";
 export {
   buildEventsHref,

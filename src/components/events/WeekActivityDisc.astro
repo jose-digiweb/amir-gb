@@ -1,0 +1,52 @@
+---
+// Dependencies
+import { Repeat } from "@lucide/astro";
+import { DEFAULT_LOCALE } from "../../i18n/constants";
+import { TILE_COLOUR } from "../../lib/content/constants";
+
+// Types
+import type { WeekStopActivity, WeekStopSpot } from "./types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the WeekActivityDisc component, a day on the week orbit that holds a weekly activity: a disc in its tile colour with its name and, from tablet up, the day it comes back on
+ */
+type Props = {
+  /** The day's place. */
+  stop: WeekStopSpot;
+  /** The activity the day holds. */
+  activity: WeekStopActivity;
+  /** The disc's size, in drawing units. */
+  size: number;
+};
+
+// Read the disc and place its box by the centre
+const { stop, activity, size } = Astro.props;
+const x = stop.x - size / 2;
+const y = stop.y - size / 2;
+---
+
+<foreignObject x={x} y={y} width={size} height={size} overflow="visible">
+  <div
+    class:list={[
+      "flex size-full flex-col items-center justify-center gap-1 rounded-full px-2 text-center text-text-heading shadow-md ring-5 ring-bg-alt",
+      {
+        "bg-tint-gold": activity.tileColour === TILE_COLOUR.GOLD,
+        "bg-tint-forest": activity.tileColour === TILE_COLOUR.FOREST,
+        "bg-tint-brick": activity.tileColour === TILE_COLOUR.BRICK,
+        "bg-tint-navy": activity.tileColour === TILE_COLOUR.NAVY,
+      },
+    ]}
+  >
+    <Repeat class="size-icon-sm shrink-0" aria-hidden="true" />
+    <span
+      lang={activity.isDutchOnly ? DEFAULT_LOCALE : undefined}
+      class="max-w-full type-tag font-extrabold wrap-break-word hyphens-auto desktop:type-button-sm"
+    >
+      {activity.name}
+    </span>
+    <span class="hidden type-tag tracking-wider uppercase opacity-80 tablet:block">
+      {activity.days}
+    </span>
+  </div>
+</foreignObject>

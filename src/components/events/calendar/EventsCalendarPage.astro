@@ -43,6 +43,7 @@ const calendarPath = getRelativeLocaleUrl(locale, ROUTE.EVENTS_CALENDAR);
     calendarHref={buildEventsHref(calendarPath, { [EVENTS_PARAM.TYPE]: type })}
     chips={getTypeChips(calendarPath, type, { [EVENTS_PARAM.MONTH]: content.month.key })}
     orbit={content.orbit}
+    activities={content.activities}
   />
   <CalendarSection content={content} />
   <WeeklyAndPastSection

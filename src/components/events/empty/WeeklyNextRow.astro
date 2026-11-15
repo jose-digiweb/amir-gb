@@ -1,0 +1,65 @@
+---
+// Dependencies
+import { Repeat } from "@lucide/astro";
+import { INTL_LOCALE } from "../../../i18n/constants";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { TILE_COLOUR } from "../../../lib/content/constants";
+import { getWeeklyNextTexts } from "../helpers";
+
+// Components
+import DutchOnlyMark from "../../site/DutchOnlyMark.astro";
+
+// Types
+import type { WeeklyActivity } from "../../../lib/content/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the WeeklyNextRow component, one weekly activity as a wide tinted row with its day, its times and its next date
+ */
+type Props = {
+  /** The weekly activity. */
+  activity: WeeklyActivity;
+  /** The moment the page renders, to work out the next date from. */
+  now: Date;
+};
+
+// Read the activity and write its day, times and next date in the page's language
+const { activity, now } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const day = t[`weekly.${activity.weekday}`];
+const times = `${activity.startTime} ${t["weekly.until"]} ${activity.endTime}`;
+const next = getWeeklyNextTexts(activity, now, INTL_LOCALE[locale], t);
+---
+
+<li
+  class:list={[
+    "flex items-center gap-4 rounded-lg p-5 text-text-heading tablet:gap-5 tablet:p-6 desktop:gap-6 desktop:px-8 desktop:py-7",
+    {
+      "bg-tint-gold": activity.tileColour === TILE_COLOUR.GOLD,
+      "bg-tint-forest": activity.tileColour === TILE_COLOUR.FOREST,
+      "bg-tint-brick": activity.tileColour === TILE_COLOUR.BRICK,
+      "bg-tint-navy": activity.tileColour === TILE_COLOUR.NAVY,
+    },
+  ]}
+>
+  <span class="grid size-12 shrink-0 place-items-center rounded-full bg-tile-icon tablet:size-16 desktop:size-18">
+    <Repeat class="size-icon-md" aria-hidden="true" />
+  </span>
+  <span class="flex min-w-0 flex-col gap-1">
+    <span class="type-h3 text-balance desktop:type-h2">
+      {activity.name}
+      {activity.isDutchOnly ? <DutchOnlyMark /> : null}
+    </span>
+    <span class="type-body-sm font-semibold opacity-85">
+      {day}
+      <span class="hidden tablet:inline">{", "}</span>
+      <br class="tablet:hidden" />
+      {times}
+    </span>
+    <span class="type-small font-semibold opacity-75">
+      <span class="tablet:hidden">{next.short}</span>
+      <span class="hidden tablet:inline">{next.long}</span>
+    </span>
+  </span>
+</li>

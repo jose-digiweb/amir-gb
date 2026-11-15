@@ -1,19 +1,21 @@
 ---
 // Dependencies
 import { getLocale, getTranslations } from "../../i18n/helpers";
-import { EVENTS_DRAWINGS } from "./constants";
+import { EVENTS_DRAWINGS, EVENTS_WEEK_DRAWINGS } from "./constants";
 
 // Components
 import Opener from "../ui/Opener.astro";
 import EventsDrawing from "./EventsDrawing.astro";
+import EventsWeekDrawing from "./EventsWeekDrawing.astro";
 import EventsViewControls from "./EventsViewControls.astro";
 
 // Types
+import type { WeeklyActivity } from "../../lib/content/types";
 import type { EventItem, EventsView, TypeChip } from "../../lib/events/types";
 
 /**
  * The {@link Props} type
- * @description The props of the EventsOpening component: What's on on sand with the List and Calendar switch and the type chips, beside the logo inside an orbit carrying the next dates
+ * @description The props of the EventsOpening component: What's on on sand with the List and Calendar switch and the type chips, beside the logo inside an orbit carrying the next dates, or the week with its weekly activities while no event is planned
  */
 type Props = {
   /** The view the page shows. */
@@ -26,23 +28,35 @@ type Props = {
   chips: TypeChip[];
   /** The next events of every kind, soonest first, for the orbit. */
   orbit: EventItem[];
+  /** The weekly activities, Monday first, for the week the orbit shows while no event is planned. */
+  activities: WeeklyActivity[];
 };
 
 // Read the view, its links, the next events and the copy
-const { view, listHref, calendarHref, chips, orbit } = Astro.props;
+const { view, listHref, calendarHref, chips, orbit, activities } = Astro.props;
 const t = getTranslations(getLocale(Astro.currentLocale));
+const hasEvents = orbit.length > 0;
 ---
 
 <section
   aria-labelledby="events-title"
   class="relative isolate -mt-16 overflow-hidden bg-bg-alt text-text-heading desktop:-mt-20 desktop:flex desktop:min-h-220 desktop:items-center desktop:pt-20 desktop:pb-14"
 >
-  <EventsDrawing
-    layout={EVENTS_DRAWINGS.PHONE}
-    events={orbit}
-    id="events-phone"
-    class="pointer-events-none h-auto w-full tablet:hidden"
-  />
+  {hasEvents ? (
+    <EventsDrawing
+      layout={EVENTS_DRAWINGS.PHONE}
+      events={orbit}
+      id="events-phone"
+      class="pointer-events-none h-auto w-full tablet:hidden"
+    />
+  ) : (
+    <EventsWeekDrawing
+      layout={EVENTS_WEEK_DRAWINGS.PHONE}
+      activities={activities}
+      id="events-phone"
+      class="pointer-events-none h-auto w-full tablet:hidden"
+    />
+  )}
 
   <div class="relative flex flex-col gap-6 px-margin pb-20 tablet:w-130 tablet:px-margin-md tablet:pt-34 tablet:pb-0 desktop:opening-words desktop:gap-8 desktop:pt-0 desktop:pr-0 desktop:pl-margin-lg">
     <div class="flex flex-col gap-3 tablet:gap-4">
@@ -65,20 +79,38 @@ const t = getTranslations(getLocale(Astro.currentLocale));
   </div>
 
   <div class="mx-auto hidden max-w-208.5 tablet:block desktop:hidden">
-    <EventsDrawing
-      layout={EVENTS_DRAWINGS.TABLET}
-      events={orbit}
-      id="events-tablet"
-      class="pointer-events-none h-auto w-full"
-    />
+    {hasEvents ? (
+      <EventsDrawing
+        layout={EVENTS_DRAWINGS.TABLET}
+        events={orbit}
+        id="events-tablet"
+        class="pointer-events-none h-auto w-full"
+      />
+    ) : (
+      <EventsWeekDrawing
+        layout={EVENTS_WEEK_DRAWINGS.TABLET}
+        activities={activities}
+        id="events-tablet"
+        class="pointer-events-none h-auto w-full"
+      />
+    )}
   </div>
   <div class="relative hidden px-margin-md pb-24 tablet:block desktop:hidden">
     <EventsViewControls view={view} listHref={listHref} calendarHref={calendarHref} chips={chips} />
   </div>
-  <EventsDrawing
-    layout={EVENTS_DRAWINGS.DESKTOP}
-    events={orbit}
-    id="events-desktop"
-    class="pointer-events-none opening-aside hidden desktop:block"
-  />
+  {hasEvents ? (
+    <EventsDrawing
+      layout={EVENTS_DRAWINGS.DESKTOP}
+      events={orbit}
+      id="events-desktop"
+      class="pointer-events-none opening-aside hidden desktop:block"
+    />
+  ) : (
+    <EventsWeekDrawing
+      layout={EVENTS_WEEK_DRAWINGS.DESKTOP}
+      activities={activities}
+      id="events-desktop"
+      class="pointer-events-none opening-aside hidden desktop:block"
+    />
+  )}
 </section>

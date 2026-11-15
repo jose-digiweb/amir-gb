@@ -9,7 +9,6 @@ import WovenShade from "../../ui/WovenShade.astro";
 import EventFeatureCard from "../EventFeatureCard.astro";
 import MonthSection from "./MonthSection.astro";
 import NoTypeCard from "./NoTypeCard.astro";
-import NoUpcomingCard from "./NoUpcomingCard.astro";
 
 // Types
 import type { EventItem, EventType, MonthGroup } from "../../../lib/events/types";
@@ -33,7 +32,6 @@ type Props = {
 const { next, months, type, allHref } = Astro.props;
 const t = getTranslations(getLocale(Astro.currentLocale));
 const isFilteredEmpty = !next && Boolean(type);
-const isEmpty = !next && !type;
 ---
 
 <section
@@ -49,7 +47,6 @@ const isEmpty = !next && !type;
       <EventFeatureCard event={next} />
     </div>
   ) : null}
-  {isEmpty ? <NoUpcomingCard /> : null}
   {isFilteredEmpty && type ? <NoTypeCard type={type} allHref={allHref} /> : null}
   {months.map((group) => (
     <MonthSection group={group} />

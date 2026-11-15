@@ -89,13 +89,23 @@ export const LEGAL = {
 export const PENDING_LINK = "#";
 
 /**
+ * The {@link SOCIAL_PROFILE} constant
+ * @description AMIR-GB's social profiles by network, with their Simple Icons mark; addresses still to come from AMIR
+ */
+export const SOCIAL_PROFILE = {
+  FACEBOOK: { name: siFacebook.title, href: PENDING_LINK, path: siFacebook.path },
+  TIKTOK: { name: siTiktok.title, href: PENDING_LINK, path: siTiktok.path },
+  INSTAGRAM: { name: siInstagram.title, href: PENDING_LINK, path: siInstagram.path },
+} as const;
+
+/**
  * The {@link SOCIAL_LINKS} constant
- * @description AMIR-GB's social profiles, with their Simple Icons mark; addresses still to come from AMIR
+ * @description AMIR-GB's social profiles in the order the site lists them
  */
 export const SOCIAL_LINKS = [
-  { name: siFacebook.title, href: PENDING_LINK, path: siFacebook.path },
-  { name: siTiktok.title, href: PENDING_LINK, path: siTiktok.path },
-  { name: siInstagram.title, href: PENDING_LINK, path: siInstagram.path },
+  SOCIAL_PROFILE.FACEBOOK,
+  SOCIAL_PROFILE.TIKTOK,
+  SOCIAL_PROFILE.INSTAGRAM,
 ] as const;
 
 /**

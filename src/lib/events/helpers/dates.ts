@@ -4,7 +4,7 @@ import { EVENT_STATUS } from "../../content/constants";
 import { EVENT_PHASE } from "../constants";
 
 // Types
-import type { EventDetail, EventItem, EventPhase } from "../types";
+import type { EventDetail, EventItem, EventPhase, WeekdayStyle } from "../types";
 
 /**
  * The {@link DAY_KEY_FORMAT} constant
@@ -95,6 +95,20 @@ export function getLongDate(date: Date, locale: string): string {
   });
   // Drop the comma English puts after the weekday, and lead with a capital
   return capitalise(text.replace(",", ""));
+}
+
+/**
+ * The {@link getWeekdayDate} helper
+ * @description A day's weekday, day and month without the year, for a weekly activity's next date
+ * @param {Date} date - The day
+ * @param {string} locale - The page's language
+ * @param {WeekdayStyle} weekday - The weekday written out, or short on a phone
+ * @returns {string} For example "Tuesday 17 November" in English, or "dinsdag 17 november" in Dutch
+ */
+export function getWeekdayDate(date: Date, locale: string, weekday: WeekdayStyle): string {
+  const text = formatInSiteTime(date, locale, { weekday, day: "numeric", month: "long" });
+  // Drop the comma and dot some languages add; it follows a label, so it keeps the language's own case
+  return text.replace(",", "").replace(".", "");
 }
 
 /**

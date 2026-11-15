@@ -2,7 +2,13 @@
 import type { CacheHint, PortableTextBlock } from "emdash";
 import type { MediaImage, WeeklyActivity } from "../content/types";
 import type { EVENT_STATUS, EVENT_TYPE, FOR_WHOM } from "../content/constants";
-import type { EVENT_LANGUAGES, EVENT_PHASE, EVENTS_PARAM, EVENTS_VIEW } from "./constants";
+import type {
+  EVENT_LANGUAGES,
+  EVENT_PHASE,
+  EVENTS_PARAM,
+  EVENTS_VIEW,
+  WEEKDAY_STYLE,
+} from "./constants";
 
 /**
  * The {@link EventType} type
@@ -293,3 +299,9 @@ export type TimelineMonth = {
   month: number;
   events: EventItem[];
 };
+
+/**
+ * The {@link WeekdayStyle} type
+ * @description One of the {@link WEEKDAY_STYLE} values
+ */
+export type WeekdayStyle = (typeof WEEKDAY_STYLE)[keyof typeof WEEKDAY_STYLE];
