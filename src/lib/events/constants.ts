@@ -141,3 +141,22 @@ export const ARCHIVE_TIMELINE = {
   MONTHS: 4,
   KNOTS: 5,
 } as const;
+
+/**
+ * The {@link WEEKLY_NEXT} constant
+ * @description How a weekly activity's next date is worked out: read at noon so the time zone never moves it to another day, and the clock format today's time is compared in
+ */
+export const WEEKLY_NEXT = {
+  NOON_HOUR: 12,
+  CLOCK_LOCALE: "en-GB",
+  DAYS_IN_WEEK: 7,
+} as const;
+
+/**
+ * The {@link WEEKDAY_STYLE} constant
+ * @description How a weekly activity's next date writes its weekday: in full, or short on a phone
+ */
+export const WEEKDAY_STYLE = {
+  LONG: "long",
+  SHORT: "short",
+} as const;

@@ -1,0 +1,65 @@
+---
+// Dependencies
+import { CalendarOff } from "@lucide/astro";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { SOCIAL_PROFILE } from "../../../site/constants";
+import { BUTTON_TONE } from "../../ui/constants";
+
+// Components
+import Button from "../../ui/Button.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the NoNewDatesCard component, the white card that says no event is planned, where new ones are announced, and how to follow AMIR-GB until then
+ */
+type Props = {
+  /** Whether weekly activities follow on the page, so the card can point down to them. */
+  hasWeekly: boolean;
+};
+
+// Read the copy
+const { hasWeekly } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+const sentences = [t["eventsPage.noneIntro"]];
+
+// Point down to the weekly activities only when they follow
+if (hasWeekly) {
+  sentences.push(t["eventsPage.noneWeekly"]);
+}
+
+// Then say where new events are announced
+sentences.push(t["eventsPage.noneAnnounce"]);
+const text = sentences.join(" ");
+---
+
+<article class="flex flex-col gap-4 rounded-xl bg-surface p-6 shadow-md tablet:p-8 desktop:p-11">
+  <span class="grid size-14 shrink-0 place-items-center rounded-full bg-tint-navy text-text-heading">
+    <CalendarOff class="size-icon-md" aria-hidden="true" />
+  </span>
+  <h2 class="type-h1 text-balance text-text-heading">{t["events.noneTitle"]}</h2>
+  <p class="type-body text-pretty text-text desktop:max-w-140 desktop:type-lead">{text}</p>
+  <div class="mt-2 flex flex-col gap-3 tablet:flex-row">
+    <Button
+      href={SOCIAL_PROFILE.FACEBOOK.href}
+      tone={BUTTON_TONE.OUTLINE}
+      block
+      class="tablet:w-auto"
+    >
+      <svg aria-hidden="true" viewBox="0 0 24 24" class="fill-current">
+        <path d={SOCIAL_PROFILE.FACEBOOK.path} />
+      </svg>
+      {t["eventsPage.followFacebook"]}
+    </Button>
+    <Button
+      href={SOCIAL_PROFILE.INSTAGRAM.href}
+      tone={BUTTON_TONE.OUTLINE}
+      block
+      class="tablet:w-auto"
+    >
+      <svg aria-hidden="true" viewBox="0 0 24 24" class="fill-current">
+        <path d={SOCIAL_PROFILE.INSTAGRAM.path} />
+      </svg>
+      {t["eventsPage.followInstagram"]}
+    </Button>
+  </div>
+</article>

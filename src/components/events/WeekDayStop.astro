@@ -1,0 +1,26 @@
+---
+// Types
+import type { WeekStopSpot } from "./types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the WeekDayStop component, a quiet white stop on the week orbit with the day's short name
+ */
+type Props = {
+  /** The day's place and short name. */
+  stop: WeekStopSpot;
+  /** The stop's size, in drawing units. */
+  size: number;
+};
+
+// Read the stop and place its box by the centre
+const { stop, size } = Astro.props;
+const x = stop.x - size / 2;
+const y = stop.y - size / 2;
+---
+
+<foreignObject x={x} y={y} width={size} height={size} overflow="visible">
+  <div class="grid size-full place-items-center rounded-full bg-surface type-tag tracking-widest text-text-muted uppercase shadow-sm ring-5 ring-bg-alt">
+    {stop.label}
+  </div>
+</foreignObject>

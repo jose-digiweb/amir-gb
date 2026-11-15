@@ -1,0 +1,39 @@
+---
+// Dependencies
+import { ArrowRight, Lightbulb } from "@lucide/astro";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { ROUTE } from "../../../site/constants";
+import { MESSAGE_ANCHOR } from "../../contact/constants";
+import { BUTTON_TONE } from "../../ui/constants";
+
+// Components
+import Button from "../../ui/Button.astro";
+import DotPatch from "../../ui/DotPatch.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the EventIdeaCard component, the sand card that asks for ideas for events and leads to the Contact page's message form; one row on tablet
+ */
+type Props = Record<string, never>;
+
+// Read the copy and link the Contact page's message form
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const ideaHref = `${getRelativeLocaleUrl(locale, ROUTE.CONTACT)}#${MESSAGE_ANCHOR}`;
+---
+
+<article class="relative isolate flex flex-col gap-4 overflow-hidden rounded-xl bg-bg-alt p-6 tablet:flex-row tablet:items-center tablet:gap-6 tablet:p-8 desktop:flex-col desktop:items-start desktop:gap-4 desktop:p-11">
+  <DotPatch id="event-idea-dots" class="-right-8 -bottom-5 h-35 w-50" />
+  <span class="grid size-14 shrink-0 place-items-center rounded-full bg-tint-navy text-text-heading">
+    <Lightbulb class="size-icon-md" aria-hidden="true" />
+  </span>
+  <div class="flex flex-col gap-2 tablet:flex-1 desktop:flex-none">
+    <h2 class="type-h2 text-balance text-text-heading">{t["eventsPage.ideaTitle"]}</h2>
+    <p class="type-body text-pretty text-text">{t["eventsPage.ideaText"]}</p>
+  </div>
+  <Button href={ideaHref} tone={BUTTON_TONE.OUTLINE} block class="tablet:w-auto desktop:mt-auto">
+    {t["eventsPage.ideaAction"]}
+    <ArrowRight aria-hidden="true" />
+  </Button>
+</article>

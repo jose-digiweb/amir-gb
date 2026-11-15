@@ -1,0 +1,56 @@
+---
+// Dependencies
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+
+// Components
+import DecorBead from "../../ui/DecorBead.astro";
+import Opener from "../../ui/Opener.astro";
+import WovenShade from "../../ui/WovenShade.astro";
+import EventIdeaCard from "./EventIdeaCard.astro";
+import NoNewDatesCard from "./NoNewDatesCard.astro";
+import WeeklyNextRow from "./WeeklyNextRow.astro";
+
+// Types
+import type { WeeklyActivity } from "../../../lib/content/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the NoUpcomingSection component, the list's sheet while no event is planned: no new dates yet beside the call for ideas, then the weekly activities carrying on, each with its next date
+ */
+type Props = {
+  /** The weekly activities, Monday first. */
+  activities: WeeklyActivity[];
+};
+
+// Read the activities and the moment the page renders, for their next dates
+const { activities } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+const hasWeekly = activities.length > 0;
+const now = new Date();
+---
+
+<section
+  data-footer-overlaps
+  aria-label={t["eventsPage.title"]}
+  class="relative isolate z-10 -mt-10 flex flex-col gap-12 rounded-t-xl bg-bg px-margin pt-8 pb-20 tablet:-mt-10 tablet:gap-16 tablet:px-margin-md tablet:pt-10 tablet:pb-28 desktop:-mt-14 desktop:gap-16 desktop:px-margin-lg desktop:pt-16 desktop:pb-32"
+>
+  <WovenShade />
+  <DecorBead ringed class="top-12 right-9 hidden size-7 desktop:block" />
+  <div class="flex flex-col gap-4 tablet:gap-5 desktop:grid desktop:grid-cols-[7fr_5fr] desktop:gap-6">
+    <NoNewDatesCard hasWeekly={hasWeekly} />
+    <EventIdeaCard />
+  </div>
+  {hasWeekly ? (
+    <div class="flex flex-col gap-2">
+      <Opener label={t["weekly.label"]} />
+      <h2 class="type-section-title text-balance text-text-heading">
+        {t["eventsPage.carryingOnTitle"]}
+      </h2>
+      <ul class="mt-3 flex flex-col gap-3 tablet:mt-4 tablet:gap-4 desktop:grid desktop:grid-cols-2 desktop:gap-5">
+        {activities.map((activity) => (
+          <WeeklyNextRow activity={activity} now={now} />
+        ))}
+      </ul>
+    </div>
+  ) : null}
+</section>

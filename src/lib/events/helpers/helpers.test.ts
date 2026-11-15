@@ -16,6 +16,8 @@ import {
   getLongDate,
   getMonthMark,
   getMovedFromDate,
+  getNextWeeklyDay,
+  getWeekdayDate,
   getPlaceLines,
   getTypeChips,
   getWeekdayNames,
@@ -169,6 +171,31 @@ describe("the event page", () => {
     ]);
     expect(isOnlineOnly({ onlineLink: "https://example.org" })).toBe(true);
     expect(isOnlineOnly({ onlineLink: "https://example.org", placeName: "Hall" })).toBe(false);
+  });
+});
+
+describe("a weekly activity's next date", () => {
+  it("is today while today's session has not ended, in Dutch time", () => {
+    const tuesdayMorning = new Date("2026-11-17T09:00:00Z");
+    const next = getNextWeeklyDay("dinsdag", "13:00", tuesdayMorning);
+    expect(getWeekdayDate(next, "en-GB", "long")).toBe("Tuesday 17 November");
+  });
+
+  it("moves to next week once today's session has ended", () => {
+    const tuesdayEvening = new Date("2026-11-17T18:00:00Z");
+    const next = getNextWeeklyDay("dinsdag", "13:00", tuesdayEvening);
+    expect(getWeekdayDate(next, "en-GB", "long")).toBe("Tuesday 24 November");
+  });
+
+  it("finds the coming weekday and keeps the Dutch date late at night", () => {
+    const sundayLateInAmsterdam = new Date("2026-11-15T23:30:00Z");
+    expect(
+      getWeekdayDate(
+        getNextWeeklyDay("woensdag", "17:30", sundayLateInAmsterdam),
+        "en-GB",
+        "short",
+      ),
+    ).toBe("Wed 18 November");
   });
 });
 

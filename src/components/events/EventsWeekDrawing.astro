@@ -1,0 +1,68 @@
+---
+// Dependencies
+import { INTL_LOCALE } from "../../i18n/constants";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { getOrbitPath, getWeekStops } from "./helpers";
+
+// Components
+import BeadRing from "../opening/BeadRing.astro";
+import CentreDisc from "../opening/CentreDisc.astro";
+import CentreLogo from "../opening/CentreLogo.astro";
+import OpeningDrawing from "../opening/OpeningDrawing.astro";
+import Sparkles from "../opening/Sparkles.astro";
+import StarChip from "../opening/StarChip.astro";
+import StitchedThread from "../opening/StitchedThread.astro";
+import WeekActivityDisc from "./WeekActivityDisc.astro";
+import WeekDayStop from "./WeekDayStop.astro";
+
+// Types
+import type { WeeklyActivity } from "../../lib/content/types";
+import type { EventsWeekLayout } from "./types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the EventsWeekDrawing component, the opening's drawing while no event is planned: the logo in its ring inside the orbit turned into the week, its days carrying the weekly activities
+ */
+type Props = {
+  /** The screen size's drawing. */
+  layout: EventsWeekLayout;
+  /** The weekly activities, Monday first. */
+  activities: WeeklyActivity[];
+  /** A prefix for the drawing's own ids, unique on the page. */
+  id: string;
+  /** Size and placement classes from the caller. */
+  class?: string;
+};
+
+// Read the drawing and put the week on the orbit in the page's language
+const { layout, activities, id, class: className } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const orbitPath = getOrbitPath(layout.orbit);
+const stops = getWeekStops(activities, layout.stops, INTL_LOCALE[locale], t);
+---
+
+<OpeningDrawing frame={layout.frame} dots={layout.dots} id={id} class={className}>
+  <StitchedThread
+    path={orbitPath}
+    stitch={layout.stitch}
+    frame={layout.frame}
+    id={`${id}-orbit`}
+    order={0}
+  />
+  <Sparkles sparkles={layout.sparkles} />
+  <BeadRing ring={layout.ring} />
+  <CentreDisc disc={layout.disc}>
+    <CentreLogo />
+  </CentreDisc>
+  {stops.map((stop) =>
+    stop.activity ? (
+      <WeekActivityDisc stop={stop} activity={stop.activity} size={layout.activitySize} />
+    ) : (
+      <WeekDayStop stop={stop} size={layout.stopSize} />
+    ),
+  )}
+  {layout.chip ? (
+    <StarChip x={layout.chip.x} y={layout.chip.y} label={t["eventsPage.newDatesSoon"]} />
+  ) : null}
+</OpeningDrawing>

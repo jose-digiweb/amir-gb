@@ -1,0 +1,62 @@
+---
+// Dependencies
+import { ArrowRight } from "@lucide/astro";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { BUTTON_TONE } from "../../ui/constants";
+
+// Components
+import Button from "../../ui/Button.astro";
+import DotPatch from "../../ui/DotPatch.astro";
+import Opener from "../../ui/Opener.astro";
+import WovenShade from "../../ui/WovenShade.astro";
+import PastEventTile from "../PastEventTile.astro";
+
+// Types
+import type { EventItem } from "../../../lib/events/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the LookingBackSection component, the sand card after the list while no event is planned: the latest past events and the way to the archive; left out when there are none yet
+ */
+type Props = {
+  /** The latest past events, newest first. */
+  past: EventItem[];
+  /** The archive's address. */
+  archiveHref: string;
+};
+
+// Read the past events and the copy
+const { past, archiveHref } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+---
+
+{past.length > 0 ? (
+  <section
+    data-footer-overlaps
+    aria-labelledby="looking-back-title"
+    class="relative isolate z-10 -mt-8 overflow-hidden rounded-t-xl bg-bg-alt px-margin pt-10 pb-20 tablet:-mt-10 tablet:px-margin-md tablet:pt-16 tablet:pb-28 desktop:-mt-14 desktop:px-margin-lg desktop:pt-24 desktop:pb-36"
+  >
+    <WovenShade />
+    <DotPatch id="looking-back-dots" class="bottom-25 -left-5 h-40 w-55" />
+    <div class="flex flex-col gap-6 desktop:grid desktop:grid-cols-[4fr_8fr] desktop:items-center desktop:gap-14">
+      <div class="flex flex-col gap-2">
+        <Opener label={t["eventsPage.pastOpener"]} />
+        <h2 id="looking-back-title" class="type-section-title text-balance text-text-heading">
+          {t["eventsPage.pastTitle"]}
+        </h2>
+        <p class="type-body text-pretty text-text desktop:max-w-85">{t["eventsPage.pastLine"]}</p>
+        <Button href={archiveHref} tone={BUTTON_TONE.OUTLINE} class="mt-3 self-start">
+          {t["eventsPage.seeArchive"]}
+          <ArrowRight aria-hidden="true" />
+        </Button>
+      </div>
+      <ul class="grid grid-cols-2 gap-3 tablet:grid-cols-3 tablet:gap-4">
+        {past.map((event) => (
+          <li class="nth-3:hidden tablet:nth-3:block">
+            <PastEventTile event={event} />
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+) : null}
