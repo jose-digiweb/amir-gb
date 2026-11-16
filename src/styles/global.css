@@ -74,6 +74,14 @@
   height: auto;
 }
 
+/* EmDash's Image component styles its photos outside any layer (max-width: 100%, height: auto), which
+   beats every Tailwind utility, so a photo meant to cover its frame kept its own height. This hands
+   the size back to the classes on the photo; one without classes still gets preflight's same rule. */
+img.emdash-image-media[class] {
+  max-width: revert-layer;
+  height: revert-layer;
+}
+
 /* Going to another page of the site swaps the pages without a blank frame: a quick crossfade of
    the content while the header, named on its own, stays where it is. Reduced motion turns the
    duration tokens to 0, so the pages swap at once. */
