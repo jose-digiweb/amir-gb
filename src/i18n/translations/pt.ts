@@ -44,7 +44,7 @@ export const pt: Translations = {
     "AMIR-GB, Associação de Apoio aos Migrantes e à Comunidade Guineense nos Países Baixos",
   "footer.manageGift": "Parar ou alterar um donativo mensal",
   "social.label": "AMIR-GB nas redes sociais",
-  "seo.shareImageAlt": "AMIR-GB: mãos dadas",
+  "seo.shareImageAlt": "AMIR-GB: mãos dadas num círculo tecido, com os temas de ajuda à volta",
   "eventsPage.pageTitle": "Agenda · AMIR-GB",
   "eventsPage.calendarPageTitle": "Agenda: calendário · AMIR-GB",
   "archive.pageTitle": "Eventos passados · AMIR-GB",

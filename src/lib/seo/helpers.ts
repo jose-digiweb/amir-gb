@@ -82,6 +82,7 @@ function getShareImage(seo: PageSeo, site: URL, shareImageAlt: string): HeadSeo[
       url: toAbsoluteUrl(seo.image, site),
       width: null,
       height: null,
+      type: null,
       alt: seo.imageAlt ?? shareImageAlt,
     };
   }
@@ -91,6 +92,7 @@ function getShareImage(seo: PageSeo, site: URL, shareImageAlt: string): HeadSeo[
     url: toAbsoluteUrl(SHARE_IMAGE.SRC, site),
     width: SHARE_IMAGE.WIDTH,
     height: SHARE_IMAGE.HEIGHT,
+    type: SHARE_IMAGE.TYPE,
     alt: shareImageAlt,
   };
 }
