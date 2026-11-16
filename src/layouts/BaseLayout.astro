@@ -7,6 +7,7 @@ import {
   THEME_SELECTOR,
   THEME_STORAGE_KEY,
 } from "../lib/theme/constants";
+import { SPECULATION_RULES } from "../site/constants";
 import "../styles/global.css";
 
 // Components
@@ -34,6 +35,9 @@ const { title, description, seo } = Astro.props;
 
 // Use the language of the URL, or the site's default language where Astro reports none
 const lang = Astro.currentLocale ?? i18n?.defaultLocale;
+
+// Write the rules that let Chrome render the next page early
+const speculationRules = JSON.stringify(SPECULATION_RULES);
 ---
 
 <!doctype html>
@@ -62,6 +66,7 @@ const lang = Astro.currentLocale ?? i18n?.defaultLocale;
       }
     </script>
     <SeoHead title={title} description={description} seo={seo} />
+    <script is:inline type="speculationrules" set:html={speculationRules} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />

@@ -3,6 +3,7 @@
 import { Check, ChevronDown } from "@lucide/astro";
 import { LANGUAGES } from "../../i18n/constants";
 import { getLocale, getTranslations } from "../../i18n/helpers";
+import { PREFETCH_ON_HOVER } from "../../site/constants";
 import { getLanguageLinks } from "../../site/helpers";
 
 /**
@@ -37,6 +38,7 @@ const languages = getLanguageLinks(locale, Astro.url.pathname);
       <li>
         <a
           href={language.href}
+          data-astro-prefetch={PREFETCH_ON_HOVER}
           lang={language.locale}
           hreflang={language.locale}
           aria-current={language.isCurrent ? "true" : undefined}

@@ -4,7 +4,7 @@ import { MessageCircle, Phone } from "@lucide/astro";
 import { STRIPE_PORTAL_URL } from "astro:env/server";
 import { getRelativeLocaleUrl } from "astro:i18n";
 import { getLocale, getTranslations } from "../../i18n/helpers";
-import { CONTACT, FOOTER_NAV, LEGAL, ROUTE } from "../../site/constants";
+import { CONTACT, FOOTER_NAV, LEGAL, PREFETCH_ON_HOVER, ROUTE } from "../../site/constants";
 import { getLanguageLinks, getPageLinks } from "../../site/helpers";
 import { BUTTON_TONE, ICON_BUTTON_TONE, OPENER_TONE } from "../ui/constants";
 import bridgeLine from "../../assets/brand/amir-gb_braid_white-gold.svg";
@@ -85,6 +85,7 @@ const bridgeStyle = `background-image: url(${bridgeLine.src})`;
           <li>
             <a
               href={link.href}
+              data-astro-prefetch={PREFETCH_ON_HOVER}
               aria-current={link.isCurrent ? "page" : undefined}
               class="flex min-h-tap touch-manipulation items-center rounded-pill bg-surface-brand px-4 type-button-sm text-on-brand transition-colors duration-fast select-none hover:bg-pressed-quiet-on-brand active:bg-pressed-quiet-on-brand"
             >
@@ -95,6 +96,7 @@ const bridgeStyle = `background-image: url(${bridgeLine.src})`;
         <li>
           <a
             href={donateHref}
+            data-astro-prefetch={PREFETCH_ON_HOVER}
             class="flex min-h-tap touch-manipulation items-center rounded-pill bg-primary px-4 type-button-sm text-on-primary transition-colors duration-fast select-none hover:bg-primary-hover active:bg-primary-pressed"
           >
             {t["nav.donate"]}
@@ -129,6 +131,7 @@ const bridgeStyle = `background-image: url(${bridgeLine.src})`;
         ) : null}
         <a
           href={privacyHref}
+          data-astro-prefetch={PREFETCH_ON_HOVER}
           class="inline-flex min-h-tap items-center underline underline-offset-3"
         >
           {t["footer.privacy"]}
@@ -139,6 +142,7 @@ const bridgeStyle = `background-image: url(${bridgeLine.src})`;
           <li>
             <a
               href={language.href}
+              data-astro-prefetch={PREFETCH_ON_HOVER}
               lang={language.locale}
               hreflang={language.locale}
               aria-current={language.isCurrent ? "true" : undefined}

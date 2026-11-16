@@ -24,6 +24,31 @@ export const ROUTE = {
 } as const;
 
 /**
+ * The {@link PREFETCH_ON_HOVER} constant
+ * @description The prefetch strategy for links that are on every page (header, footer, languages), so they load only when hovered instead of whenever they show
+ */
+export const PREFETCH_ON_HOVER = "hover";
+
+/**
+ * The {@link SPECULATION_RULES} constant
+ * @description Lets Chrome render a page of the site in full once a visitor shows intent to open it, so the tap shows it at once; never the admin or a calendar file
+ */
+export const SPECULATION_RULES = {
+  prerender: [
+    {
+      where: {
+        and: [
+          { href_matches: "/*" },
+          { not: { href_matches: "/_emdash/*" } },
+          { not: { href_matches: "/*.ics" } },
+        ],
+      },
+      eagerness: "moderate",
+    },
+  ],
+} as const;
+
+/**
  * The {@link MAIN_NAV} constant
  * @description The header and menu links, in order
  */

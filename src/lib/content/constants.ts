@@ -141,11 +141,11 @@ export const HOME_LIMIT = {
 
 /**
  * The {@link CONTENT_CACHE} constant
- * @description How long the edge keeps a page that shows CMS content fresh, then serves it stale while it renders anew, in seconds; publishing in EmDash purges it sooner
+ * @description How long the edge keeps a page that shows CMS content fresh, in seconds, then for how long it still serves it at once while a fresh copy renders in the background; publishing in EmDash purges it, and so does a deploy
  */
 export const CONTENT_CACHE = {
   MAX_AGE: 3600,
-  STALE_WHILE_REVALIDATE: 86400,
+  STALE_WHILE_REVALIDATE: 31_536_000,
 } as const;
 
 /**
