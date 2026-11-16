@@ -173,7 +173,7 @@ describe("cacheContentPage", () => {
     cacheContentPage({ enabled: true, set: (options) => calls.push(options) }, [
       { tags: ["events"] },
     ]);
-    expect(calls).toEqual([{ maxAge: 3600, swr: 86400 }, { tags: ["events"] }]);
+    expect(calls).toEqual([{ maxAge: 3600, swr: 31_536_000 }, { tags: ["events"] }]);
   });
 
   it("sets nothing without a cache provider", () => {

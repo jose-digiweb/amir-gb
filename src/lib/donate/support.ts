@@ -107,9 +107,6 @@ export function cacheDonatePage(cache: Pick<AstroGlobal["cache"], "enabled" | "s
     return;
   }
 
-  // Keep the page for a while, and serve it stale while a fresh one renders
-  cache.set({
-    maxAge: DONATE_PAGE_CACHE.MAX_AGE,
-    swr: DONATE_PAGE_CACHE.STALE_WHILE_REVALIDATE,
-  });
+  // Keep the page until the next deploy
+  cache.set({ maxAge: DONATE_PAGE_CACHE.MAX_AGE });
 }

@@ -152,11 +152,10 @@ export const PRIVATE_PAGE = {
 
 /**
  * The {@link DONATE_PAGE_CACHE} constant
- * @description How long the edge keeps the Donate page with the plain form, in seconds, as long as the home page
+ * @description How long the edge keeps the Donate page with the plain form, in seconds: it reads nothing from EmDash or the clock, so it stays until the next deploy clears it
  */
 export const DONATE_PAGE_CACHE = {
-  MAX_AGE: 3600,
-  STALE_WHILE_REVALIDATE: 86400,
+  MAX_AGE: 31_536_000,
 } as const;
 
 /**

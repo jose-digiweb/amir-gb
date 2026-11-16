@@ -30,11 +30,14 @@ export default defineConfig({
     provider: cacheCloudflare(),
   },
 
-  // Every link to another page of the site starts loading when it is hovered or focused, so
-  // on desktop the page is on its way, and the edge cache warm, before the click lands.
+  // Every link to another page of the site starts loading once it has been on screen for a
+  // moment, so on a phone the next page is usually there before the tap. The header, footer and
+  // language links wait for a hover instead (PREFETCH_ON_HOVER), so they do not load every page
+  // of the menu on each visit. Chrome also renders a page in full once a visitor shows intent
+  // (SPECULATION_RULES in src/site/constants.ts).
   prefetch: {
     prefetchAll: true,
-    defaultStrategy: "hover",
+    defaultStrategy: "viewport",
   },
 
   // NL is the default language at the root; EN and PT get a prefix (src/i18n/constants.ts).
