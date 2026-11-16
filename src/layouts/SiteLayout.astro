@@ -4,6 +4,9 @@ import SiteFooter from "../components/site/SiteFooter.astro";
 import SiteHeader from "../components/site/SiteHeader.astro";
 import BaseLayout from "./BaseLayout.astro";
 
+// Types
+import type { PageSeo } from "../lib/seo/types";
+
 /**
  * The {@link Props} type
  * @description The props of the SiteLayout component: every page with the site's header and footer
@@ -13,13 +16,15 @@ type Props = {
   title: string;
   /** One-sentence summary for search results and link previews. */
   description: string;
+  /** What the page sets for search and link previews beyond its title and description. */
+  seo?: PageSeo;
 };
 
-// Pass the page's title and description to the document shell
-const { title, description } = Astro.props;
+// Pass the page's title, description and search settings to the document shell
+const { title, description, seo } = Astro.props;
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout title={title} description={description} seo={seo}>
   <slot name="head" slot="head" />
   <div class="flex min-h-svh flex-col">
     <slot name="announcement" />

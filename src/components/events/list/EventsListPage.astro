@@ -39,7 +39,7 @@ const archivePath = getRelativeLocaleUrl(locale, ROUTE.EVENTS_ARCHIVE);
 const isEmpty = !content.next && !type;
 ---
 
-<SiteLayout title={t["eventsPage.title"]} description={t["eventsPage.description"]}>
+<SiteLayout title={t["eventsPage.pageTitle"]} description={t["eventsPage.description"]}>
   <WovenDefs />
   <EventsOpening
     view={EVENTS_VIEW.LIST}

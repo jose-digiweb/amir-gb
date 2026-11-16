@@ -3,10 +3,15 @@
 import { getLocale } from "../../../i18n/helpers";
 import { cacheContentPage } from "../../../lib/content/helpers";
 import { getEventPageContent } from "../../../lib/events/queries";
+import { COLLECTION } from "../../../lib/content/constants";
+import { getEntryAlternates } from "../../../lib/seo/queries";
 
 // Components
 import EventPage from "../../../components/events/event/EventPage.astro";
 import NotFoundPage from "../../404.astro";
+
+// Types
+import type { LanguageAlternate } from "../../../lib/seo/types";
 
 // An event page shows CMS content, so it renders per request
 export const prerender = false;
@@ -24,6 +29,13 @@ if (content) {
 } else {
   Astro.response.status = 404;
 }
+
+// Find a found event's language versions for search engines
+let alternates: LanguageAlternate[] = [];
+if (content) {
+  const site = new URL(Astro.site ?? Astro.url.origin);
+  alternates = await getEntryAlternates(COLLECTION.EVENTS, content.event.id, site);
+}
 ---
 
-{content ? <EventPage content={content} now={now} /> : <NotFoundPage />}
+{content ? <EventPage content={content} now={now} alternates={alternates} /> : <NotFoundPage />}

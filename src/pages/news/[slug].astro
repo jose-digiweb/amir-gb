@@ -4,6 +4,8 @@ import { getLocale } from "../../i18n/helpers";
 import { cacheContentPage } from "../../lib/content/helpers";
 import { NEWS_ARTICLE_READ } from "../../lib/news/constants";
 import { getNewsArticle } from "../../lib/news/queries";
+import { COLLECTION } from "../../lib/content/constants";
+import { getEntryAlternates } from "../../lib/seo/queries";
 
 // Components
 import NewsPostPage from "../../components/news/NewsPostPage.astro";
@@ -26,6 +28,10 @@ if (read.kind === NEWS_ARTICLE_READ.MOVED) {
 
 // Cache the page at the edge, set before rendering starts
 cacheContentPage(Astro.cache, read.article.cacheHints);
+
+// Find the post's language versions for search engines
+const site = new URL(Astro.site ?? Astro.url.origin);
+const alternates = await getEntryAlternates(COLLECTION.POSTS, read.article.post.id, site);
 ---
 
-<NewsPostPage article={read.article} />
+<NewsPostPage article={read.article} alternates={alternates} />

@@ -1,7 +1,9 @@
 ---
 // Dependencies
+import { DEFAULT_LOCALE } from "../../i18n/constants";
 import { getLocale, getTranslations } from "../../i18n/helpers";
 import { fillPostTitle } from "../../lib/news/helpers";
+import { getEntryPageSeo } from "../../lib/seo/helpers";
 
 // Components
 import SiteLayout from "../../layouts/SiteLayout.astro";
@@ -10,6 +12,7 @@ import PostSection from "./PostSection.astro";
 
 // Types
 import type { NewsArticle } from "../../lib/news/types";
+import type { LanguageAlternate } from "../../lib/seo/types";
 
 /**
  * The {@link Props} type
@@ -18,17 +21,27 @@ import type { NewsArticle } from "../../lib/news/types";
 type Props = {
   /** Everything the page shows, read by the page route before rendering starts. */
   article: NewsArticle;
+  /** The post's language versions for search engines. */
+  alternates: LanguageAlternate[];
 };
 
 // Read the article and its page title and summary
-const { article } = Astro.props;
+const { article, alternates } = Astro.props;
 const t = getTranslations(getLocale(Astro.currentLocale));
-const title = fillPostTitle(t["news.postTitle"], article.post.title);
+const title = fillPostTitle(t["news.postTitle"], article.seo?.title ?? article.post.title);
 const description = article.post.excerpt ?? t["news.description"];
 const hasMore = article.more.length > 0;
+const seo = getEntryPageSeo({
+  alternates,
+  isDutchOnly: article.post.isDutchOnly,
+  defaultLocale: DEFAULT_LOCALE,
+  seo: article.seo,
+  image: article.post.image?.src,
+  imageAlt: article.post.image?.alt,
+});
 ---
 
-<SiteLayout title={title} description={description}>
+<SiteLayout title={title} description={description} seo={seo}>
   <PostSection article={article} isLast={!hasMore} />
   {hasMore ? <MoreNewsSection posts={article.more} /> : null}
 </SiteLayout>

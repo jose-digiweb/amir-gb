@@ -11,6 +11,10 @@ import "../styles/global.css";
 
 // Components
 import { Font } from "astro:assets";
+import SeoHead from "../components/seo/SeoHead.astro";
+
+// Types
+import type { PageSeo } from "../lib/seo/types";
 
 /**
  * The {@link Props} type
@@ -21,10 +25,12 @@ type Props = {
   title: string;
   /** One-sentence summary for search results and link previews. */
   description: string;
+  /** What the page sets for search and link previews beyond its title and description. */
+  seo?: PageSeo;
 };
 
-// Read the page's title and description
-const { title, description } = Astro.props;
+// Read the page's title, description and search settings
+const { title, description, seo } = Astro.props;
 
 // Use the language of the URL, or the site's default language where Astro reports none
 const lang = Astro.currentLocale ?? i18n?.defaultLocale;
@@ -55,8 +61,7 @@ const lang = Astro.currentLocale ?? i18n?.defaultLocale;
         // Blocked storage leaves the page on Automatic
       }
     </script>
-    <title>{title}</title>
-    <meta name="description" content={description} />
+    <SeoHead title={title} description={description} seo={seo} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />

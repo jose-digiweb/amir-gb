@@ -1,5 +1,5 @@
 // Types
-import type { CacheHint, PortableTextBlock } from "emdash";
+import type { CacheHint, ContentSeo, PortableTextBlock } from "emdash";
 import type { MediaImage, PostType } from "../content/types";
 import type { NEWS_ARTICLE_READ, NEWS_LIST_STATE } from "./constants";
 
@@ -75,6 +75,7 @@ export type NewsArticle = {
   gallery: MediaImage[];
   boardNames?: string;
   event?: NewsEvent;
+  seo?: ContentSeo;
   more: NewsPost[];
   cacheHints: CacheHint[];
 };

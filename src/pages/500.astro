@@ -19,7 +19,7 @@ const t = getTranslations(locale);
 const retryHref = `${Astro.url.pathname}${Astro.url.search}`;
 ---
 
-<SiteLayout title={t["error.title"]} description={t["error.description"]}>
+<SiteLayout title={t["error.title"]} description={t["error.description"]} seo={{ noindex: true }}>
   <section class="grid items-center gap-8 bg-bg-alt px-margin pt-8 pb-16 tablet:px-margin-md tablet:pt-12 desktop:grid-cols-2 desktop:gap-16 desktop:px-margin-lg desktop:py-24">
     <ErrorLattice
       centrePiece={LATTICE_PIECE.KNOCKED}

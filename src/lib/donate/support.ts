@@ -85,12 +85,14 @@ export function isPrivateState(support: SupportState): boolean {
 
 /**
  * The {@link keepPagePrivate} helper
- * @description Tells browsers and Cloudflare not to keep a page that shows one donor's gift
+ * @description Tells browsers and Cloudflare not to keep a page that shows one donor's gift, and search engines not to list it
  * @param {Headers} headers - The page's response headers
  * @returns {void}
  */
 export function keepPagePrivate(headers: Headers): void {
+  // No cache keeps the page, and no search engine lists it
   headers.set(PRIVATE_PAGE.HEADER, PRIVATE_PAGE.VALUE);
+  headers.set(PRIVATE_PAGE.ROBOTS_HEADER, PRIVATE_PAGE.ROBOTS_VALUE);
 }
 
 /**

@@ -348,6 +348,7 @@ function toEventDetail(entry: Entry<"events">, locale: Locale): EventDetail {
     registrationLink: toSafeLink(data.registration_link),
     languages: orderEventLanguages(data.languages ?? []),
     content: data.content,
+    seo: data.seo,
   };
 }
 
