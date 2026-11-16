@@ -78,6 +78,11 @@ export const CONTACT = {
 export const LEGAL = {
   STREET: "Willem van Kesselstraat 21",
   POSTCODE_CITY: "4827 LJ Breda",
+  POSTCODE: "4827 LJ",
+  CITY: "Breda",
+  COUNTRY: "NL",
+  COUNTRY_NAME: "Nederland",
+  FOUNDED: "2026-07-20",
   KVK: "KvK 42120588",
   RSIN: "RSIN 869821118",
   KVK_NUMBER: "42120588",

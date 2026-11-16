@@ -337,6 +337,12 @@ Everything a search engine or a link preview reads lives in `src/lib/seo/` and `
   - `/sitemap-pages.xml`, every page in every language, built once (`SITEMAP_PAGES`; the archive is left out until there are past events);
   - `/sitemap-news.xml` and `/sitemap-events.xml`, every published post and event in its languages, joined to its translations, rendered per request and cached like the CMS pages. Entries an editor hid from search are left out.
 - **robots.txt** lets everyone read the site except `/_emdash/`, and names the sitemap.
+- **Structured data** (`src/lib/seo/structured-data.ts`), one JSON-LD graph in every page's head:
+  - every page describes AMIR-GB as an `NGO`: legal name, logo, the Breda address, phone, email, the KvK number as its identifier, its founding date, the Netherlands as the area it serves, and its social profiles once AMIR sends them. Plus the `WebSite` in the page's language.
+  - event pages add an `Event`: name, start and end, state (scheduled, rescheduled with its old date, cancelled), how to attend, the place, image, description, and AMIR-GB as organiser. An online event's location is its own page, since the link to join stays hidden until shortly before the start.
+  - post pages add a `NewsArticle` published by AMIR-GB.
+  - both add a `BreadcrumbList`: AMIR-GB, then News or What's on, then the page.
+  - A fact the editor left empty is left out, never filled in.
 - The trailing slash stays Astro's default. `trailingSlash: "always"` would make every address uniform, but EmDash's admin calls its API without slashes and would break.
 
 ## Design system files

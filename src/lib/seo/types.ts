@@ -1,6 +1,7 @@
 // Types
 import type { ContentSeo } from "emdash";
 import type { Locale } from "../../i18n/types";
+import type { EventStatus } from "../events/types";
 import type { OG_TYPE } from "./constants";
 
 /**
@@ -41,6 +42,7 @@ export type PageSeo = {
   imageAlt?: string;
   type?: OgType;
   contentLocale?: Locale;
+  structuredData?: JsonLdNode[];
 };
 
 /**
@@ -104,4 +106,76 @@ export type SitemapEntry = {
   path: string;
   lastmod: string;
   isHidden: boolean;
+};
+
+/**
+ * The {@link JsonLdValue} type
+ * @description Any value structured data can hold
+ */
+export type JsonLdValue =
+  | string
+  | number
+  | boolean
+  | JsonLdValue[]
+  | { [key: string]: JsonLdValue };
+
+/**
+ * The {@link JsonLdNode} type
+ * @description One thing described in structured data, such as AMIR-GB or an event
+ */
+export type JsonLdNode = { [key: string]: JsonLdValue };
+
+/**
+ * The {@link SiteSchemaInput} type
+ * @description What AMIR-GB's own structured data needs: the site's address, the page's language, its legal name, its logo and its social profiles
+ */
+export type SiteSchemaInput = {
+  site: URL;
+  locale: Locale;
+  legalName: string;
+  logo: string;
+  sameAs: string[];
+};
+
+/**
+ * The {@link EventSchemaInput} type
+ * @description An event as its structured data needs it
+ */
+export type EventSchemaInput = {
+  site: URL;
+  url: string;
+  name: string;
+  status: EventStatus;
+  startsAt: Date;
+  endsAt?: Date;
+  originalStartsAt?: Date;
+  placeName?: string;
+  address?: string;
+  isOnline: boolean;
+  image?: string;
+  description?: string;
+  locale: Locale;
+};
+
+/**
+ * The {@link ArticleSchemaInput} type
+ * @description A post as its structured data needs it
+ */
+export type ArticleSchemaInput = {
+  site: URL;
+  url: string;
+  headline: string;
+  publishedAt: Date;
+  image?: string;
+  description?: string;
+  locale: Locale;
+};
+
+/**
+ * The {@link BreadcrumbStep} type
+ * @description One step of a breadcrumb trail: its name and address
+ */
+export type BreadcrumbStep = {
+  name: string;
+  path: string;
 };

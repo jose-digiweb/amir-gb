@@ -5,13 +5,16 @@ import { DEFAULT_LOCALE, LOCALES } from "../../i18n/constants";
 import { getLocale, getPagePath, getTranslations } from "../../i18n/helpers";
 import { SEO } from "../../lib/seo/constants";
 import { buildHeadSeo } from "../../lib/seo/helpers";
+import { getSiteSchemas, renderJsonLd } from "../../lib/seo/structured-data";
+import { PENDING_LINK, SOCIAL_LINKS } from "../../site/constants";
+import logo from "../../assets/brand/amir-gb_horizontal-short_colour.svg";
 
 // Types
 import type { PageSeo } from "../../lib/seo/types";
 
 /**
  * The {@link Props} type
- * @description The props of the SeoHead component, a page's title, description, canonical address, language versions and link preview in the document head
+ * @description The props of the SeoHead component, a page's title, description, canonical address, language versions, link preview and structured data in the document head
  */
 type Props = {
   /** Page title, shown in the browser tab, search results and link previews. */
@@ -41,6 +44,14 @@ const head = buildHeadSeo({
   shareImageAlt: t["seo.shareImageAlt"],
   seo,
 });
+const siteSchemas = getSiteSchemas({
+  site,
+  locale,
+  legalName: t["footer.legalName"],
+  logo: logo.src,
+  sameAs: SOCIAL_LINKS.map((social) => social.href).filter((href) => href !== PENDING_LINK),
+});
+const jsonLd = renderJsonLd([...siteSchemas, ...(seo?.structuredData ?? [])]);
 const pageTitle = seo?.title ?? title;
 const pageDescription = seo?.description ?? description;
 ---
@@ -70,3 +81,4 @@ const pageDescription = seo?.description ?? description;
 <meta name="twitter:description" content={pageDescription} />
 <meta name="twitter:image" content={head.image.url} />
 <meta name="twitter:image:alt" content={head.image.alt} />
+<script type="application/ld+json" is:inline set:html={jsonLd} />

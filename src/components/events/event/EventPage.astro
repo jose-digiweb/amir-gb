@@ -5,7 +5,11 @@ import { getLocale, getTranslations } from "../../../i18n/helpers";
 import { EVENT_STATUS } from "../../../lib/content/constants";
 import { EVENT_PHASE } from "../../../lib/events/constants";
 import { isOnlineOnly } from "../../../lib/events/helpers";
-import { getEntryPageSeo } from "../../../lib/seo/helpers";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { SEO } from "../../../lib/seo/constants";
+import { getEntryPageSeo, toAbsoluteUrl } from "../../../lib/seo/helpers";
+import { getBreadcrumbSchema, getEventSchema } from "../../../lib/seo/structured-data";
+import { ROUTE } from "../../../site/constants";
 import { EVENTS_PLACEHOLDER } from "../constants";
 
 // Components
@@ -44,7 +48,8 @@ type Props = {
 // Read the event and its state, and describe the page for search and link previews
 const { content, now, alternates } = Astro.props;
 const { event, phase, storyHref, others } = content;
-const t = getTranslations(getLocale(Astro.currentLocale));
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
 const isCancelled = event.status === EVENT_STATUS.CANCELLED;
 const isMoved = event.status === EVENT_STATUS.MOVED;
 const isEnded = phase === EVENT_PHASE.ENDED && !isCancelled;
@@ -53,7 +58,7 @@ const title = t["event.pageTitle"].replace(
   EVENTS_PLACEHOLDER.TITLE,
   event.seo?.title ?? event.title,
 );
-const seo = getEntryPageSeo({
+const entrySeo = getEntryPageSeo({
   alternates,
   isDutchOnly: event.isDutchOnly,
   defaultLocale: DEFAULT_LOCALE,
@@ -61,6 +66,38 @@ const seo = getEntryPageSeo({
   image: event.image?.src,
   imageAlt: event.image?.alt,
 });
+
+// Describe the event and its place in the site for search engines, at its canonical address
+const site = new URL(Astro.site ?? Astro.url.origin);
+const pageUrl = entrySeo.canonical ?? toAbsoluteUrl(Astro.url.pathname, site);
+const seo = {
+  ...entrySeo,
+  structuredData: [
+    getEventSchema({
+      site,
+      url: pageUrl,
+      name: event.title,
+      status: event.status,
+      startsAt: event.startsAt,
+      endsAt: event.endsAt,
+      originalStartsAt: event.originalStartsAt,
+      placeName: event.placeName,
+      address: event.address,
+      isOnline: Boolean(event.onlineLink),
+      image: entrySeo.image,
+      description: entrySeo.description ?? event.summary,
+      locale: entrySeo.contentLocale ?? locale,
+    }),
+    getBreadcrumbSchema(
+      [
+        { name: SEO.SITE_NAME, path: getRelativeLocaleUrl(locale, ROUTE.HOME) },
+        { name: t["nav.events"], path: getRelativeLocaleUrl(locale, ROUTE.EVENTS) },
+        { name: event.title, path: pageUrl },
+      ],
+      site,
+    ),
+  ],
+};
 ---
 
 <SiteLayout title={title} description={description} seo={seo}>
