@@ -1,0 +1,37 @@
+diff --git a/dist/hook-result-CO4E3zDv.mjs b/dist/hook-result-CO4E3zDv.mjs
+index 83cff4aec98131afc14737ae52fe918852ed8e14..4c3ba8d7fc81f6b2879796113fc83f5cc3e168c2 100644
+--- a/dist/hook-result-CO4E3zDv.mjs
++++ b/dist/hook-result-CO4E3zDv.mjs
+@@ -1110,7 +1110,11 @@ async function handleContentCreate(db, collection, body) {
+ 		const item = await withTransaction(db, async (trx) => {
+ 			const repo = new ContentRepository(trx);
+ 			const bylineRepo = new BylineRepository(trx);
+-			const inheritedFields = body.translationOf ? (await trx.selectFrom("_emdash_fields as field").innerJoin("_emdash_collections as collection", "collection.id", "field.collection_id").select("field.slug").where("collection.slug", "=", collection).where("field.translatable", "=", 0).execute()).map((field) => field.slug) : [];
++			const inheritedFields = body.translationOf ? (await trx.selectFrom("_emdash_fields as field").innerJoin("_emdash_collections as collection", "collection.id", "field.collection_id").select([
++				"field.slug",
++				"field.type",
++				"field.validation"
++			]).where("collection.slug", "=", collection).where("field.translatable", "=", 0).execute()).filter((field) => !isStoragelessFieldRow(field)).map((field) => field.slug) : [];
+ 			const referenceWrites = [];
+ 			if (body.references) {
+ 				const entryGroup = body.translationOf ? (await repo.findById(collection, body.translationOf))?.translationGroup ?? null : null;
+diff --git a/src/api/handlers/content.ts b/src/api/handlers/content.ts
+index b9ab4a1d56445c8185664d9bf2c81fa5637163d7..150bbd1bda1b01299c75f7d372509b6f8eae58ea 100644
+--- a/src/api/handlers/content.ts
++++ b/src/api/handlers/content.ts
+@@ -1347,11 +1347,13 @@ export async function handleContentCreate(
+ 								"collection.id",
+ 								"field.collection_id",
+ 							)
+-							.select("field.slug")
++							.select(["field.slug", "field.type", "field.validation"])
+ 							.where("collection.slug", "=", collection)
+ 							.where("field.translatable", "=", 0)
+ 							.execute()
+-					).map((field) => field.slug)
++					)
++						.filter((field) => !isStoragelessFieldRow(field))
++						.map((field) => field.slug)
+ 				: [];
+ 
+ 			// Resolve the whole selection before the entry is written. On D1 the
