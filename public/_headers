@@ -1,0 +1,9 @@
+# The site's static pages: the browser may reuse one for a minute, so a page prefetched a moment
+# ago opens at once (Safari only reuses a prefetch that carries a rule like this). The rules only
+# match addresses ending in a slash, so the hashed files in /_astro/ keep the adapter's own rule.
+/
+  Cache-Control: public, max-age=60
+/:page/
+  Cache-Control: public, max-age=60
+/:locale/:page/
+  Cache-Control: public, max-age=60
