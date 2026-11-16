@@ -1,4 +1,10 @@
 /**
+ * The {@link OPENER_SEPARATOR} constant
+ * @description What separates the items of an opener label that lists several, such as its languages
+ */
+export const OPENER_SEPARATOR = " · ";
+
+/**
  * The {@link OPENER_TONE} constant
  * @description The grounds a section opener sits on: a light ground, or navy and photos
  */

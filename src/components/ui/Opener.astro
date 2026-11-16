@@ -1,6 +1,6 @@
 ---
 // Dependencies
-import { OPENER_TONE } from "./constants";
+import { OPENER_SEPARATOR, OPENER_TONE } from "./constants";
 
 // Components
 import StarMark from "./StarMark.astro";
@@ -22,6 +22,9 @@ type Props = {
 // Read the label and the ground, light by default
 const { label, tone = OPENER_TONE.LIGHT } = Astro.props;
 const isOnBrand = tone === OPENER_TONE.ON_BRAND;
+
+// Split a label that lists items: lines break between items and balance, and a separator at a line's start is clipped
+const items = label.split(OPENER_SEPARATOR);
 ---
 
 <p
@@ -31,5 +34,13 @@ const isOnBrand = tone === OPENER_TONE.ON_BRAND;
   ]}
 >
   <StarMark class="size-3" />
-  <span class="text-balance">{label}</span>
+  <span class="min-w-0 overflow-hidden">
+    <span class="-ms-4 block text-balance">
+      {items.map((item) => (
+        <span class="relative ms-4 inline-block before:absolute before:right-full before:w-4 before:text-center before:content-['·']">
+          {item}
+        </span>
+      ))}
+    </span>
+  </span>
 </p>
