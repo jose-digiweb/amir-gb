@@ -97,3 +97,40 @@ export const SITEMAP_PAGES = [
   ROUTE.DONATE,
   ROUTE.PRIVACY,
 ] as const;
+
+/**
+ * The {@link SCHEMA} constant
+ * @description The schema.org words the structured data uses: the context, the kinds of thing, the event states and ways to attend, and the anchors that tie the site's nodes together
+ */
+export const SCHEMA = {
+  CONTEXT: "https://schema.org",
+  TYPE: {
+    NGO: "NGO",
+    WEBSITE: "WebSite",
+    EVENT: "Event",
+    NEWS_ARTICLE: "NewsArticle",
+    PLACE: "Place",
+    POSTAL_ADDRESS: "PostalAddress",
+    VIRTUAL_LOCATION: "VirtualLocation",
+    BREADCRUMB_LIST: "BreadcrumbList",
+    LIST_ITEM: "ListItem",
+    COUNTRY: "Country",
+    PROPERTY_VALUE: "PropertyValue",
+    CONTACT_POINT: "ContactPoint",
+  },
+  EVENT_STATUS: {
+    SCHEDULED: "https://schema.org/EventScheduled",
+    RESCHEDULED: "https://schema.org/EventRescheduled",
+    CANCELLED: "https://schema.org/EventCancelled",
+  },
+  ATTENDANCE: {
+    OFFLINE: "https://schema.org/OfflineEventAttendanceMode",
+    ONLINE: "https://schema.org/OnlineEventAttendanceMode",
+    MIXED: "https://schema.org/MixedEventAttendanceMode",
+  },
+  ORGANIZATION_ANCHOR: "/#organization",
+  WEBSITE_ANCHOR: "/#website",
+  KVK_PROPERTY: "KvK",
+  CONTACT_TYPE: "customer support",
+  KRIOLU_TAG: "pov",
+} as const;

@@ -3,7 +3,11 @@
 import { DEFAULT_LOCALE } from "../../i18n/constants";
 import { getLocale, getTranslations } from "../../i18n/helpers";
 import { fillPostTitle } from "../../lib/news/helpers";
-import { getEntryPageSeo } from "../../lib/seo/helpers";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { SEO } from "../../lib/seo/constants";
+import { getEntryPageSeo, toAbsoluteUrl } from "../../lib/seo/helpers";
+import { getArticleSchema, getBreadcrumbSchema } from "../../lib/seo/structured-data";
+import { ROUTE } from "../../site/constants";
 
 // Components
 import SiteLayout from "../../layouts/SiteLayout.astro";
@@ -27,11 +31,12 @@ type Props = {
 
 // Read the article and its page title and summary
 const { article, alternates } = Astro.props;
-const t = getTranslations(getLocale(Astro.currentLocale));
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
 const title = fillPostTitle(t["news.postTitle"], article.seo?.title ?? article.post.title);
 const description = article.post.excerpt ?? t["news.description"];
 const hasMore = article.more.length > 0;
-const seo = getEntryPageSeo({
+const entrySeo = getEntryPageSeo({
   alternates,
   isDutchOnly: article.post.isDutchOnly,
   defaultLocale: DEFAULT_LOCALE,
@@ -39,6 +44,32 @@ const seo = getEntryPageSeo({
   image: article.post.image?.src,
   imageAlt: article.post.image?.alt,
 });
+
+// Describe the post and its place in the site for search engines, at its canonical address
+const site = new URL(Astro.site ?? Astro.url.origin);
+const pageUrl = entrySeo.canonical ?? toAbsoluteUrl(Astro.url.pathname, site);
+const seo = {
+  ...entrySeo,
+  structuredData: [
+    getArticleSchema({
+      site,
+      url: pageUrl,
+      headline: article.post.title,
+      publishedAt: article.post.publishedAt,
+      image: entrySeo.image,
+      description: entrySeo.description ?? article.post.excerpt,
+      locale: entrySeo.contentLocale ?? locale,
+    }),
+    getBreadcrumbSchema(
+      [
+        { name: SEO.SITE_NAME, path: getRelativeLocaleUrl(locale, ROUTE.HOME) },
+        { name: t["nav.news"], path: getRelativeLocaleUrl(locale, ROUTE.NEWS) },
+        { name: article.post.title, path: pageUrl },
+      ],
+      site,
+    ),
+  ],
+};
 ---
 
 <SiteLayout title={title} description={description} seo={seo}>
