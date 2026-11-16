@@ -40,6 +40,11 @@ export default defineConfig({
     defaultStrategy: "viewport",
   },
 
+  // A short address the editors can remember for EmDash's admin.
+  redirects: {
+    "/admin": "/_emdash/admin",
+  },
+
   // NL is the default language at the root; EN and PT get a prefix (src/i18n/constants.ts).
   // EmDash reads this same block. Keep the default locale unprefixed: EmDash's admin
   // returns 404 with prefixDefaultLocale or "prefix-always".

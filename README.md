@@ -78,6 +78,8 @@ EmDash holds content only: news articles, events and the like. The rest of the s
 
 EmDash's admin is at http://localhost:4321/_emdash/admin while the dev server runs. Locally its database, media and Durable Objects live in `.wrangler/` (git-ignored). Delete `.wrangler/state` to start the local CMS from scratch.
 
+On the live site editors reach the admin through a short address: the site's address followed by `/admin`. It is a permanent redirect in `astro.config.mjs` (`redirects`), which the Cloudflare adapter writes to `_redirects`, so it is answered without starting the Worker.
+
 The dev server writes `emdash-env.d.ts` (types for the content model) and `.emdash/`. Do not edit them by hand.
 
 ### Content model
