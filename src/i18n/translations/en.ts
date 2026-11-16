@@ -41,7 +41,7 @@ export const en = {
     "AMIR-GB, Association for the support of migrants and the Guinea-Bissau community in the Netherlands",
   "footer.manageGift": "Stop or change a monthly gift",
   "social.label": "AMIR-GB on social media",
-  "seo.shareImageAlt": "AMIR-GB: hands joined together",
+  "seo.shareImageAlt": "AMIR-GB: joined hands in a woven ring, with the help topics around them",
   "eventsPage.pageTitle": "What’s on · AMIR-GB",
   "eventsPage.calendarPageTitle": "What’s on: calendar · AMIR-GB",
   "archive.pageTitle": "Past events · AMIR-GB",

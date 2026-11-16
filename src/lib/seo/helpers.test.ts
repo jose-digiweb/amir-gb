@@ -66,6 +66,7 @@ describe("buildHeadSeo", () => {
       url: "https://www.amir-gb.nl/og/amir-gb.jpg",
       width: 1200,
       height: 630,
+      type: "image/jpeg",
       alt: "AMIR-GB",
     });
   });

@@ -70,7 +70,13 @@ export type HeadSeo = {
   ogType: OgType;
   ogLocale: string;
   ogLocaleAlternates: string[];
-  image: { url: string; width: number | null; height: number | null; alt: string };
+  image: {
+    url: string;
+    width: number | null;
+    height: number | null;
+    type: string | null;
+    alt: string;
+  };
 };
 
 /**

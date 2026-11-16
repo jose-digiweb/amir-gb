@@ -43,6 +43,7 @@ export const SHARE_IMAGE = {
   SRC: "/og/amir-gb.jpg",
   WIDTH: 1200,
   HEIGHT: 630,
+  TYPE: "image/jpeg",
 } as const;
 
 /**
