@@ -25,7 +25,7 @@ const t = getTranslations(locale);
 const donateHref = getRelativeLocaleUrl(locale, ROUTE.DONATE);
 ---
 
-<header class="sticky top-0 z-header pt-[env(safe-area-inset-top)] desktop:box-content desktop:h-20">
+<header class="sticky top-0 z-header pt-[env(safe-area-inset-top)] [view-transition-name:site-header] desktop:box-content desktop:h-20">
   <div class="site-header-bar flex h-16 items-center justify-between gap-3 border-b border-border bg-surface/72 pr-2 pl-margin backdrop-blur-lg backdrop-saturate-150 transition-[background-color,border-color] duration-base ease-standard tablet:pr-6 tablet:pl-margin-md desktop:absolute desktop:inset-x-0 desktop:h-20 desktop:gap-6 desktop:rounded-b-xl desktop:border-b-0 desktop:bg-bg desktop:px-margin-lg desktop:backdrop-blur-none">
     <SiteLogo />
     <div class="hidden desktop:block">
