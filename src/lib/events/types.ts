@@ -1,5 +1,5 @@
 // Types
-import type { CacheHint, PortableTextBlock } from "emdash";
+import type { CacheHint, ContentSeo, PortableTextBlock } from "emdash";
 import type { MediaImage, WeeklyActivity } from "../content/types";
 import type { EVENT_STATUS, EVENT_TYPE, FOR_WHOM } from "../content/constants";
 import type {
@@ -86,6 +86,7 @@ export type EventDetail = EventItem & {
   registrationLink?: string;
   languages: EventLanguage[];
   content?: PortableTextBlock[];
+  seo?: ContentSeo;
 };
 
 /**

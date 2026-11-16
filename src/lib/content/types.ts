@@ -1,5 +1,5 @@
 // Types
-import type { CacheHint, ContentEntry, EmDashCollections } from "emdash";
+import type { CacheHint, ContentEntry, ContentSeo, EmDashCollections } from "emdash";
 import type { Post } from "../../../emdash-env";
 import type { POST_TYPE, TILE_COLOUR, WEEKDAYS, WHATS_ON_STATE } from "./constants";
 
@@ -10,6 +10,14 @@ import type { POST_TYPE, TILE_COLOUR, WEEKDAYS, WHATS_ON_STATE } from "./constan
 export type TranslationMeta = {
   locale: string | null;
   translationGroup: string | null;
+};
+
+/**
+ * The {@link SeoMeta} type
+ * @description The search settings EmDash adds to an entry of a content type with its SEO panel switched on
+ */
+export type SeoMeta = {
+  seo?: ContentSeo;
 };
 
 /**
@@ -175,5 +183,5 @@ export type ContentRead<T> = {
  * @description An entry of a collection with its language fields
  */
 export type Entry<C extends keyof EmDashCollections> = ContentEntry<
-  EmDashCollections[C] & TranslationMeta
+  EmDashCollections[C] & TranslationMeta & SeoMeta
 >;

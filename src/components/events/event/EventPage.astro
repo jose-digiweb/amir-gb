@@ -1,9 +1,12 @@
 ---
 // Dependencies
+import { DEFAULT_LOCALE } from "../../../i18n/constants";
 import { getLocale, getTranslations } from "../../../i18n/helpers";
 import { EVENT_STATUS } from "../../../lib/content/constants";
 import { EVENT_PHASE } from "../../../lib/events/constants";
 import { isOnlineOnly } from "../../../lib/events/helpers";
+import { getEntryPageSeo } from "../../../lib/seo/helpers";
+import { EVENTS_PLACEHOLDER } from "../constants";
 
 // Components
 import SiteLayout from "../../../layouts/SiteLayout.astro";
@@ -23,6 +26,7 @@ import OtherEventsSection from "./OtherEventsSection.astro";
 
 // Types
 import type { EventPageContent } from "../../../lib/events/types";
+import type { LanguageAlternate } from "../../../lib/seo/types";
 
 /**
  * The {@link Props} type
@@ -33,19 +37,33 @@ type Props = {
   content: EventPageContent;
   /** The moment the page renders. */
   now: Date;
+  /** The event's language versions for search engines. */
+  alternates: LanguageAlternate[];
 };
 
 // Read the event and its state, and describe the page for search and link previews
-const { content, now } = Astro.props;
+const { content, now, alternates } = Astro.props;
 const { event, phase, storyHref, others } = content;
 const t = getTranslations(getLocale(Astro.currentLocale));
 const isCancelled = event.status === EVENT_STATUS.CANCELLED;
 const isMoved = event.status === EVENT_STATUS.MOVED;
 const isEnded = phase === EVENT_PHASE.ENDED && !isCancelled;
 const description = event.summary ?? t["eventsPage.description"];
+const title = t["event.pageTitle"].replace(
+  EVENTS_PLACEHOLDER.TITLE,
+  event.seo?.title ?? event.title,
+);
+const seo = getEntryPageSeo({
+  alternates,
+  isDutchOnly: event.isDutchOnly,
+  defaultLocale: DEFAULT_LOCALE,
+  seo: event.seo,
+  image: event.image?.src,
+  imageAlt: event.image?.alt,
+});
 ---
 
-<SiteLayout title={event.title} description={description}>
+<SiteLayout title={title} description={description} seo={seo}>
   <WovenDefs />
   <article
     data-footer-overlaps

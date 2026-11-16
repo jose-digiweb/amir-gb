@@ -20,7 +20,8 @@
       "admin": {
         "listColumns": ["type", "place_name"]
       },
-      "supports": ["drafts", "revisions", "search"],
+      "supports": ["drafts", "revisions", "search", "seo"],
+      "urlPattern": "/events/{slug}",
       "titleField": "title",
       "dateField": "starts_at",
       "fields": [
@@ -156,7 +157,8 @@
       "admin": {
         "listColumns": ["type"]
       },
-      "supports": ["drafts", "revisions", "search"],
+      "supports": ["drafts", "revisions", "search", "seo"],
+      "urlPattern": "/news/{slug}",
       "titleField": "title",
       "fields": [
         {

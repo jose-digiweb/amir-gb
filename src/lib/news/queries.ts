@@ -12,7 +12,7 @@ import { compareNewest, getGalleryImages, getMorePosts, planNewsList } from "./h
 import type { CacheHint, EntryResult, SelectedReferences } from "emdash";
 import type { Event, Post } from "../../../emdash-env";
 import type { Locale } from "../../i18n/types";
-import type { ContentRead, Entry, TranslationMeta } from "../content/types";
+import type { ContentRead, Entry, SeoMeta, TranslationMeta } from "../content/types";
 import type { NewsArticleRead, NewsEvent, NewsFilter, NewsList, NewsPost } from "./types";
 
 /**
@@ -152,7 +152,7 @@ function toNewsEvent(data: Event, locale: Locale): NewsEvent {
  * @description A post read on its own, with the event it is about
  */
 type PostEntryResult = EntryResult<
-  Post & TranslationMeta,
+  Post & TranslationMeta & SeoMeta,
   SelectedReferences<"posts", { event: true }>
 >;
 
@@ -164,7 +164,7 @@ type PostEntryResult = EntryResult<
  * @returns {Promise<PostEntryResult>} The entry, or null when the language has none, with its cache hint
  */
 async function readPostEntry(slug: string, locale: Locale): Promise<PostEntryResult> {
-  const result = await getEmDashEntry<"posts", Post & TranslationMeta, { event: true }>(
+  const result = await getEmDashEntry<"posts", Post & TranslationMeta & SeoMeta, { event: true }>(
     COLLECTION.POSTS,
     slug,
     { locale, references: { event: true } },
@@ -258,6 +258,7 @@ export async function getNewsArticle(locale: Locale, slug: string): Promise<News
       gallery: getGalleryImages(entry.data.gallery, entry.data.featured_image),
       boardNames: entry.data.board_names,
       event,
+      seo: entry.data.seo,
       more: getMorePosts(list.items, post.id),
       cacheHints: [local.cacheHint, result.cacheHint, ...list.cacheHints],
     },

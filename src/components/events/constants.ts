@@ -163,4 +163,5 @@ export const EVENTS_WEEK_DRAWINGS = {
  */
 export const EVENTS_PLACEHOLDER = {
   DATE: "{date}",
+  TITLE: "{title}",
 } as const;

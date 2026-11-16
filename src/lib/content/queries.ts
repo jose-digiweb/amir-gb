@@ -36,6 +36,7 @@ import type {
   HomeEvent,
   HomeStory,
   Localised,
+  SeoMeta,
   TranslationMeta,
   WeeklyActivity,
 } from "./types";
@@ -53,10 +54,13 @@ export async function readLocalised<C extends keyof EmDashCollections>(
   locale: Locale,
   filter: CollectionFilter,
 ): Promise<ContentRead<Localised<Entry<C>>>> {
-  const local = await getEmDashCollection<C, EmDashCollections[C] & TranslationMeta>(collection, {
-    ...filter,
-    locale,
-  });
+  const local = await getEmDashCollection<C, EmDashCollections[C] & TranslationMeta & SeoMeta>(
+    collection,
+    {
+      ...filter,
+      locale,
+    },
+  );
 
   // Dutch pages need nothing else
   if (locale === DEFAULT_LOCALE) {
@@ -67,10 +71,13 @@ export async function readLocalised<C extends keyof EmDashCollections>(
   }
 
   // Other languages add the Dutch entries that have no translation yet
-  const dutch = await getEmDashCollection<C, EmDashCollections[C] & TranslationMeta>(collection, {
-    ...filter,
-    locale: DEFAULT_LOCALE,
-  });
+  const dutch = await getEmDashCollection<C, EmDashCollections[C] & TranslationMeta & SeoMeta>(
+    collection,
+    {
+      ...filter,
+      locale: DEFAULT_LOCALE,
+    },
+  );
   return {
     items: mergeWithDutch(local.entries, dutch.entries),
     cacheHints: [local.cacheHint, dutch.cacheHint],
