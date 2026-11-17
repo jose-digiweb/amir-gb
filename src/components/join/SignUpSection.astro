@@ -1,10 +1,11 @@
 ---
 // Dependencies
+import { actions } from "astro:actions";
 import { getRelativeLocaleUrl } from "astro:i18n";
 import { getLocale, getTranslations } from "../../i18n/helpers";
 import { JOIN_PLACEHOLDER } from "../../lib/join/constants";
 import { CONTACT, ROUTE } from "../../site/constants";
-import { WHATSAPP_SHARE } from "./constants";
+import { JOIN_FORM_HASH, WHATSAPP_SHARE } from "./constants";
 import { getJoinFormCopy } from "./helpers";
 
 // Components
@@ -15,13 +16,20 @@ import WovenShade from "../ui/WovenShade.astro";
 import JoinSignUp from "./JoinSignUp.vue";
 import MemberCard from "./MemberCard.astro";
 
+// Types
+import type { JoinFormStart } from "./types";
+
 /**
  * The {@link Props} type
  * @description The props of the SignUpSection component: Join AMIR-GB, a member card, the sign-up form and what happens next
  */
-type Props = Record<string, never>;
+type Props = {
+  /** Where the form starts after a post without JavaScript. */
+  start?: JoinFormStart;
+};
 
 // Prepare the copy, the form's copy and its links in the page's language
+const { start } = Astro.props;
 const locale = getLocale(Astro.currentLocale);
 const t = getTranslations(locale);
 const copy = getJoinFormCopy(locale);
@@ -53,7 +61,14 @@ const links = {
     <p class="type-body text-pretty text-text">{t["joinPage.signUpIntro"]}</p>
   </div>
   <MemberCard class="ml-1.5 tablet:mr-3 tablet:ml-0 tablet:justify-self-end desktop:col-span-4 desktop:ml-4 desktop:justify-self-start" />
-  <JoinSignUp client:idle locale={locale} copy={copy} links={links}>
+  <JoinSignUp
+    client:idle
+    locale={locale}
+    copy={copy}
+    links={links}
+    action={`${actions.join}${JOIN_FORM_HASH}`}
+    start={start}
+  >
     <Opener label={t["joinPage.nextOpener"]} />
   </JoinSignUp>
 </section>

@@ -19,6 +19,7 @@ export const ROUTE = {
   ABOUT: "/about/",
   JOIN: "/join/",
   CONTACT: "/contact/",
+  CONTACT_SENT: "/contact/sent/",
   DONATE: "/donate/",
   PRIVACY: "/privacy/",
 } as const;

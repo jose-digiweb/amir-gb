@@ -10,6 +10,7 @@ import SignUpSection from "./SignUpSection.astro";
 import WaysSection from "./WaysSection.astro";
 
 // Types
+import type { JoinFormStart } from "./types";
 import type { GeneralMeeting } from "../../lib/content/types";
 
 /**
@@ -19,10 +20,12 @@ import type { GeneralMeeting } from "../../lib/content/types";
 type Props = {
   /** The next general meeting, when one is planned. */
   meeting?: GeneralMeeting;
+  /** Where the sign-up form starts after a post without JavaScript. */
+  start?: JoinFormStart;
 };
 
 // Read the meeting and the page's title and summary
-const { meeting } = Astro.props;
+const { meeting, start } = Astro.props;
 const t = getTranslations(getLocale(Astro.currentLocale));
 ---
 
@@ -30,5 +33,5 @@ const t = getTranslations(getLocale(Astro.currentLocale));
   <WovenDefs />
   <JoinOpening />
   <WaysSection meeting={meeting} />
-  <SignUpSection />
+  <SignUpSection start={start} />
 </SiteLayout>

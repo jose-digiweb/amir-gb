@@ -1,6 +1,6 @@
 // Dependencies
 import { actions, isInputError } from "astro:actions";
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import {
   CONTACT_CHECKED_FIELDS,
   CONTACT_FIELD,
@@ -8,9 +8,14 @@ import {
 } from "../../lib/contact/constants";
 import { checkContactValues, isContactError } from "../../lib/contact/helpers";
 import { CHECKBOX_ON } from "../../lib/forms/constants";
-import { listFieldNames } from "../../lib/forms/helpers";
+import { listFieldLinks } from "../../lib/forms/helpers";
 import { focusWhenDrawn, keepStandingErrors, readFieldErrors } from "../forms/helpers";
-import { CONTACT_FORM_ID, CONTACT_FORM_STATE } from "./constants";
+import {
+  CONTACT_FIELD_ID,
+  CONTACT_FORM_ID,
+  CONTACT_FORM_STATE,
+  CONTACT_START_FOCUS,
+} from "./constants";
 
 // Types
 import type { Locale } from "../../i18n/types";
@@ -21,7 +26,7 @@ import type {
   ContactTopic,
 } from "../../lib/contact/types";
 import type { AnswerLanguage } from "../../site/types";
-import type { ContactFormCopy, ContactFormState } from "./types";
+import type { ContactFormCopy, ContactFormStart, ContactFormState } from "./types";
 
 /**
  * The {@link ContactFormOptions} type
@@ -30,6 +35,7 @@ import type { ContactFormCopy, ContactFormState } from "./types";
 type ContactFormOptions = {
   locale: Locale;
   copy: ContactFormCopy;
+  start?: ContactFormStart;
 };
 
 /**
@@ -38,21 +44,22 @@ type ContactFormOptions = {
  * @param {ContactFormOptions} options - The page's language and the copy
  * @returns {ReturnType<typeof useContactForm>} The form's state and its handlers
  */
-export function useContactForm({ locale, copy }: ContactFormOptions) {
-  const name = ref("");
-  const reach = ref("");
-  const language = ref<AnswerLanguage>(locale);
-  const topic = ref<ContactTopic | "">("");
-  const message = ref("");
-  const consent = ref(false);
+export function useContactForm({ locale, copy, start }: ContactFormOptions) {
+  const given = start?.values;
+  const name = ref(given?.name ?? "");
+  const reach = ref(given?.reach ?? "");
+  const language = ref<AnswerLanguage>(given?.language ?? locale);
+  const topic = ref<ContactTopic | "">(given?.topic ?? "");
+  const message = ref(given?.message ?? "");
+  const consent = ref(given?.consent ?? false);
   const trap = ref("");
-  const state = ref<ContactFormState>(CONTACT_FORM_STATE.EDITING);
-  const serverErrors = ref<ContactErrors>({});
+  const state = ref<ContactFormState>(start?.state ?? CONTACT_FORM_STATE.EDITING);
+  const serverErrors = ref<ContactErrors>(start?.errors ?? {});
   const shownErrors = ref<ContactErrors>({});
   const summaryFields = ref<ContactCheckedField[]>([]);
-  const sentName = ref("");
-  const sentReach = ref("");
-  const sentLanguage = ref<AnswerLanguage>(locale);
+  const sentName = ref(given?.name ?? "");
+  const sentReach = ref(given?.reach ?? "");
+  const sentLanguage = ref<AnswerLanguage>(given?.language ?? locale);
 
   // The message as typed, trimmed the way the server reads it
   const values = computed(() => ({
@@ -78,10 +85,13 @@ export function useContactForm({ locale, copy }: ContactFormOptions) {
 
   // The summary's title and its sentence name the fields as they were at Send, so it does not change while the visitor types
   const summaryTitle = computed(() => copy.summaryTitles[summaryFields.value.length - 1] ?? "");
-  const summaryText = computed(() =>
-    listFieldNames(
+  const summaryParts = computed(() =>
+    listFieldLinks(
       locale,
-      summaryFields.value.map((field) => copy.summaryFields[field]),
+      summaryFields.value.map((field) => ({
+        id: CONTACT_FIELD_ID[field],
+        name: copy.summaryFields[field],
+      })),
     ),
   );
 
@@ -167,7 +177,8 @@ export function useContactForm({ locale, copy }: ContactFormOptions) {
 
     // Send it, keeping every field as typed
     state.value = CONTACT_FORM_STATE.SENDING;
-    const { error } = await actions.contact(toFormData()).catch((failure: Error) => ({
+    const { data, error } = await actions.contact(toFormData()).catch((failure: Error) => ({
+      data: undefined,
       error: failure,
     }));
 
@@ -181,7 +192,7 @@ export function useContactForm({ locale, copy }: ContactFormOptions) {
     }
 
     // It did not go: say so above the form, with the text still there
-    if (error) {
+    if (error || !data?.sent) {
       state.value = CONTACT_FORM_STATE.FAILED;
       await focusWhenDrawn(CONTACT_FORM_ID.FAILED);
       return;
@@ -211,6 +222,10 @@ export function useContactForm({ locale, copy }: ContactFormOptions) {
     await focusWhenDrawn(CONTACT_FORM_ID.NAME);
   }
 
+  // A form posted without JavaScript shows the server's errors, and points at what came back
+  showErrors(serverErrors.value);
+  onMounted(() => focusStart(start));
+
   // The form's state and its handlers
   return {
     name,
@@ -224,7 +239,7 @@ export function useContactForm({ locale, copy }: ContactFormOptions) {
     errors,
     errorFields,
     summaryTitle,
-    summaryText,
+    summaryParts,
     errorText,
     sentTitle,
     sentText,
@@ -232,4 +247,20 @@ export function useContactForm({ locale, copy }: ContactFormOptions) {
     send,
     startAgain,
   };
+}
+
+/**
+ * The {@link focusStart} helper
+ * @description Moves focus to what a form posted without JavaScript came back with: the thank you, the failure, or the errors
+ * @param {ContactFormStart | undefined} start - Where the form starts
+ * @returns {void}
+ */
+function focusStart(start: ContactFormStart | undefined): void {
+  // A plain visit leaves focus where it is
+  if (!start) {
+    return;
+  }
+
+  // The thank you, the failure or the summary takes focus
+  void focusWhenDrawn(CONTACT_START_FOCUS[start.state]);
 }

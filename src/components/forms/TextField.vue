@@ -36,7 +36,7 @@ type Props = {
   hint?: string;
   /** What to fix, once Send was pressed. */
   error?: string;
-  /** The field has to be filled in, which screen readers announce. */
+  /** The field has to be filled in: screen readers announce it, and the browser checks it until the form's script takes over. */
   required?: boolean;
   /** The field takes an address or a number, so the phone neither capitalises, corrects nor underlines it. */
   isIdentifier?: boolean;
@@ -82,7 +82,7 @@ const describedBy = computed(() => {
       :maxlength="props.maxlength"
       :placeholder="props.placeholder"
       :aria-invalid="props.error ? 'true' : undefined"
-      :aria-required="props.required ? 'true' : undefined"
+      :required="props.required"
       :aria-describedby="describedBy"
       :autocapitalize="props.isIdentifier ? 'none' : undefined"
       :autocorrect="props.isIdentifier ? 'off' : undefined"

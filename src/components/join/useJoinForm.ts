@@ -1,8 +1,8 @@
 // Dependencies
 import { actions, isInputError } from "astro:actions";
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { CHECKBOX_ON } from "../../lib/forms/constants";
-import { formatList, listFieldNames } from "../../lib/forms/helpers";
+import { formatList, listFieldLinks } from "../../lib/forms/helpers";
 import {
   JOIN_CHECKED_FIELDS,
   JOIN_FIELD,
@@ -11,7 +11,7 @@ import {
 } from "../../lib/join/constants";
 import { checkJoinValues, getFirstName, isJoinError, orderSkills } from "../../lib/join/helpers";
 import { focusWhenDrawn, keepStandingErrors, readFieldErrors } from "../forms/helpers";
-import { JOIN_FORM_ID, JOIN_FORM_STATE } from "./constants";
+import { JOIN_FIELD_ID, JOIN_FORM_ID, JOIN_FORM_STATE, JOIN_START_FOCUS } from "./constants";
 
 // Types
 import type { Locale } from "../../i18n/types";
@@ -24,7 +24,7 @@ import type {
   JoinValues,
 } from "../../lib/join/types";
 import type { AnswerLanguage } from "../../site/types";
-import type { JoinFormCopy, JoinFormState } from "./types";
+import type { JoinFormCopy, JoinFormStart, JoinFormState } from "./types";
 
 /**
  * The {@link JoinFormOptions} type
@@ -33,6 +33,7 @@ import type { JoinFormCopy, JoinFormState } from "./types";
 type JoinFormOptions = {
   locale: Locale;
   copy: JoinFormCopy;
+  start?: JoinFormStart;
 };
 
 /**
@@ -41,22 +42,23 @@ type JoinFormOptions = {
  * @param {JoinFormOptions} options - The page's language and the copy
  * @returns {ReturnType<typeof useJoinForm>} The form's state and its handlers
  */
-export function useJoinForm({ locale, copy }: JoinFormOptions) {
-  const mode = ref<JoinMode>(JOIN_MODE.MEMBER);
-  const name = ref("");
-  const email = ref("");
-  const phone = ref("");
-  const place = ref("");
-  const language = ref<AnswerLanguage>(locale);
-  const skills = ref<JoinSkill[]>([]);
-  const message = ref("");
-  const consent = ref(false);
+export function useJoinForm({ locale, copy, start }: JoinFormOptions) {
+  const given = start?.values;
+  const mode = ref<JoinMode>(given?.mode ?? JOIN_MODE.MEMBER);
+  const name = ref(given?.name ?? "");
+  const email = ref(given?.email ?? "");
+  const phone = ref(given?.phone ?? "");
+  const place = ref(given?.place ?? "");
+  const language = ref<AnswerLanguage>(given?.language ?? locale);
+  const skills = ref<JoinSkill[]>(given?.skills ?? []);
+  const message = ref(given?.message ?? "");
+  const consent = ref(given?.consent ?? false);
   const trap = ref("");
-  const state = ref<JoinFormState>(JOIN_FORM_STATE.EDITING);
-  const serverErrors = ref<JoinErrors>({});
+  const state = ref<JoinFormState>(start?.state ?? JOIN_FORM_STATE.EDITING);
+  const serverErrors = ref<JoinErrors>(start?.errors ?? {});
   const shownErrors = ref<JoinErrors>({});
   const summaryFields = ref<JoinCheckedField[]>([]);
-  const sent = ref<JoinValues>();
+  const sent = ref<JoinValues | undefined>(getSentValues(start));
 
   // The sign-up as typed, trimmed the way the server reads it; skills count only for a volunteer
   const values = computed<JoinValues>(() => {
@@ -95,10 +97,13 @@ export function useJoinForm({ locale, copy }: JoinFormOptions) {
 
   // The summary's title and its sentence name the fields as they were at Send, so it does not change while the visitor types
   const summaryTitle = computed(() => copy.summaryTitles[summaryFields.value.length - 1] ?? "");
-  const summaryText = computed(() =>
-    listFieldNames(
+  const summaryParts = computed(() =>
+    listFieldLinks(
       locale,
-      summaryFields.value.map((field) => copy.summaryFields[field]),
+      summaryFields.value.map((field) => ({
+        id: JOIN_FIELD_ID[field],
+        name: copy.summaryFields[field],
+      })),
     ),
   );
 
@@ -214,7 +219,8 @@ export function useJoinForm({ locale, copy }: JoinFormOptions) {
 
     // Send it, keeping every field as typed
     state.value = JOIN_FORM_STATE.SENDING;
-    const { error } = await actions.join(toFormData()).catch((failure: Error) => ({
+    const { data, error } = await actions.join(toFormData()).catch((failure: Error) => ({
+      data: undefined,
       error: failure,
     }));
 
@@ -228,7 +234,7 @@ export function useJoinForm({ locale, copy }: JoinFormOptions) {
     }
 
     // It did not go: say so above the form, with everything still there
-    if (error) {
+    if (error || !data?.sent) {
       state.value = JOIN_FORM_STATE.FAILED;
       await focusWhenDrawn(JOIN_FORM_ID.FAILED);
       return;
@@ -239,6 +245,10 @@ export function useJoinForm({ locale, copy }: JoinFormOptions) {
     state.value = JOIN_FORM_STATE.SENT;
     await focusWhenDrawn(JOIN_FORM_ID.SENT);
   }
+
+  // A form posted without JavaScript shows the server's errors, and points at what came back
+  showErrors(serverErrors.value);
+  onMounted(() => focusStart(start));
 
   // The form's state and its handlers
   return {
@@ -256,7 +266,7 @@ export function useJoinForm({ locale, copy }: JoinFormOptions) {
     errors,
     errorFields,
     summaryTitle,
-    summaryText,
+    summaryParts,
     errorText,
     sentTitle,
     sentText,
@@ -264,4 +274,36 @@ export function useJoinForm({ locale, copy }: JoinFormOptions) {
     onSubmit,
     send,
   };
+}
+
+/**
+ * The {@link getSentValues} helper
+ * @description The sign-up a form posted without JavaScript was thanked for, if it was
+ * @param {JoinFormStart | undefined} start - Where the form starts
+ * @returns {JoinValues | undefined} The sent sign-up
+ */
+function getSentValues(start: JoinFormStart | undefined): JoinValues | undefined {
+  // Only a sent sign-up is thanked
+  if (start?.state === JOIN_FORM_STATE.SENT) {
+    return start.values;
+  }
+
+  // Any other start has nothing to thank for yet
+  return undefined;
+}
+
+/**
+ * The {@link focusStart} helper
+ * @description Moves focus to what a form posted without JavaScript came back with: the thank you, the failure, or the errors
+ * @param {JoinFormStart | undefined} start - Where the form starts
+ * @returns {void}
+ */
+function focusStart(start: JoinFormStart | undefined): void {
+  // A plain visit leaves focus where it is
+  if (!start) {
+    return;
+  }
+
+  // The thank you, the failure or the summary takes focus
+  void focusWhenDrawn(JOIN_START_FOCUS[start.state]);
 }
