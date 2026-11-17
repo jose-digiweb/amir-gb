@@ -136,6 +136,17 @@ export function getShortDate(date: Date, locale: string): string {
 }
 
 /**
+ * The {@link getDayMonth} helper
+ * @description A day and its month written out, without weekday or year
+ * @param {Date} date - The day
+ * @param {string} locale - The page's language
+ * @returns {string} For example "8 November", or "8 de novembro" in Portuguese
+ */
+export function getDayMonth(date: Date, locale: string): string {
+  return formatInSiteTime(date, locale, { day: "numeric", month: "long" });
+}
+
+/**
  * The {@link getArchiveDate} helper
  * @description A past event's short weekday and date with the year
  * @param {Date} date - When the event started

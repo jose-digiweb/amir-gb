@@ -100,6 +100,9 @@ export const en = {
   "events.noneTitle": "No new dates yet",
   "events.noneText":
     "Our weekly activities carry on. New events are announced here first, and on our Facebook and Instagram.",
+  "events.noneSwipeText":
+    "Our weekly activities carry on, just here. New events are announced here first, and on our Facebook and Instagram.",
+  "events.swipe": "Swipe to see them",
   "events.online": "online",
   "events.and": "and",
   "weekly.label": "EVERY WEEK",

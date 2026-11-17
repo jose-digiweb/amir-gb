@@ -1,0 +1,37 @@
+---
+// Dependencies
+import { ArrowRight, CalendarDays } from "@lucide/astro";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+
+/**
+ * The {@link Props} type
+ * @description The props of the NoEventsRailCard component, the calm first card of the phone's What's on row while no event is announced, pointing on to the weekly activities
+ */
+type Props = Record<string, never>;
+
+// Read the card's copy in the page's language
+const t = getTranslations(getLocale(Astro.currentLocale));
+---
+
+<div class="no-events-rail flex h-full min-h-84 flex-col justify-between gap-4 rounded-lg p-5 text-on-brand">
+  <span class="grid size-14 place-items-center rounded-full bg-pressed-quiet-on-brand">
+    <CalendarDays class="size-icon-md" />
+  </span>
+  <span class="flex flex-col gap-2">
+    <span class="type-h3 text-balance">{t["events.noneTitle"]}</span>
+    <span class="type-body-sm text-pretty text-on-brand-muted">{t["events.noneSwipeText"]}</span>
+    <span class="flex items-center gap-1.5 type-button-sm">
+      {t["events.swipe"]}
+      <ArrowRight class="size-icon-sm" />
+    </span>
+  </span>
+</div>
+
+<style>
+  @reference "../../../styles/global.css";
+
+  .no-events-rail {
+    background: var(--hover-quiet-on-brand);
+    box-shadow: inset 0 0 0 var(--border-width) var(--pressed-quiet-on-brand);
+  }
+</style>

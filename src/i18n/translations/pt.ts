@@ -102,6 +102,9 @@ export const pt: Translations = {
   "events.noneTitle": "Ainda sem novas datas",
   "events.noneText":
     "As nossas atividades semanais continuam. Os novos eventos são anunciados primeiro aqui, e no nosso Facebook e Instagram.",
+  "events.noneSwipeText":
+    "As nossas atividades semanais continuam, aqui ao lado. Os novos eventos são anunciados primeiro aqui, e no nosso Facebook e Instagram.",
+  "events.swipe": "Deslize para as ver",
   "events.online": "online",
   "events.and": "e",
   "weekly.label": "TODAS AS SEMANAS",

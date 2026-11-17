@@ -20,12 +20,10 @@ import type { HomeEvent } from "../../../lib/content/types";
 type Props = {
   /** The event. */
   event: HomeEvent;
-  /** Visibility classes from the caller. */
-  class?: string;
 };
 
 // Read the event and write its day, times and place in the page's language
-const { event, class: className } = Astro.props;
+const { event } = Astro.props;
 const locale = getLocale(Astro.currentLocale);
 const t = getTranslations(locale);
 const intl = INTL_LOCALE[locale];
@@ -35,10 +33,7 @@ const where = getEventWhere(event, t["events.online"], t["events.and"]);
 
 <a
   href={event.href}
-  class:list={[
-    "flex h-full touch-manipulation flex-col overflow-hidden rounded-lg bg-surface text-text-heading transition-[scale] duration-fast ease-standard select-none active:scale-98",
-    className,
-  ]}
+  class="flex h-full touch-manipulation flex-col overflow-hidden rounded-lg bg-surface text-text-heading transition-[scale] duration-fast ease-standard select-none active:scale-98"
 >
   <span class="relative block h-42 shrink-0">
     <span class="absolute inset-0 isolate overflow-hidden bg-surface-sunken">

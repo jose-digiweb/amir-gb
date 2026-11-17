@@ -21,7 +21,7 @@ const { stories } = Astro.props;
 <ul class="story-row -mx-margin flex snap-x snap-mandatory gap-3 overflow-x-auto px-margin pb-1 tablet:hidden">
   {stories.map((story) => (
     <li class="shrink-0 snap-start">
-      <StoryRailCard story={story} />
+      <StoryRailCard story={story} class="h-62 w-39" />
     </li>
   ))}
 </ul>

@@ -14,7 +14,9 @@ import Opener from "../../ui/Opener.astro";
 import OpenerDots from "../OpenerDots.astro";
 import WovenShade from "../../ui/WovenShade.astro";
 import OneStory from "./OneStory.astro";
+import OneStoryCard from "./OneStoryCard.astro";
 import StoryTile from "./StoryTile.astro";
+import StoryRailCard from "./StoryRailCard.astro";
 import StoryRow from "./StoryRow.astro";
 import StoryWall from "./StoryWall.astro";
 
@@ -41,6 +43,7 @@ const one = layout === STORY_LAYOUT.ONE ? firstStory : undefined;
 const isPair = layout === STORY_LAYOUT.PAIR;
 const isWall = layout === STORY_LAYOUT.WALL;
 const hasRow = stories.length >= STORY_ROW_MIN;
+const hasPhonePair = isPair && !hasRow;
 ---
 
 <section
@@ -73,18 +76,31 @@ const hasRow = stories.length >= STORY_ROW_MIN;
       </Button>
     </div>
   </div>
-  {one ? <OneStory story={one} /> : null}
+  {one ? (
+    <>
+      <div class="tablet:hidden">
+        <OneStoryCard story={one} />
+      </div>
+      <div class="hidden tablet:block">
+        <OneStory story={one} />
+      </div>
+    </>
+  ) : null}
   {hasRow ? <StoryRow stories={stories} /> : null}
-  {isPair ? (
-    <ul
-      class:list={[
-        "grid grid-cols-2 gap-3 tablet:grid-cols-3 desktop:gap-6",
-        { "max-tablet:hidden": hasRow },
-      ]}
-    >
+  {hasPhonePair ? (
+    <ul class="grid grid-cols-2 gap-3 tablet:hidden">
       {stories.map((story) => (
-        <li class="nth-3:max-tablet:hidden">
-          <StoryTile story={story} class="h-65 tablet:h-90 desktop:h-105" />
+        <li>
+          <StoryRailCard story={story} class="h-62 w-full" />
+        </li>
+      ))}
+    </ul>
+  ) : null}
+  {isPair ? (
+    <ul class="hidden gap-3 tablet:grid tablet:grid-cols-3 desktop:gap-6">
+      {stories.map((story) => (
+        <li>
+          <StoryTile story={story} class="h-90 desktop:h-105" />
         </li>
       ))}
     </ul>

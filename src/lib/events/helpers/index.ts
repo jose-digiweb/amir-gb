@@ -5,6 +5,7 @@ export {
   getClockTime,
   getDayHeading,
   getDayKey,
+  getDayMonth,
   getEventPhase,
   getEventTimes,
   getLongDate,

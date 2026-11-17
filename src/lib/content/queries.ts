@@ -220,6 +220,7 @@ export async function getRecentStories(locale: Locale): Promise<ContentRead<Home
       title: entry.data.title,
       excerpt: entry.data.excerpt,
       image: entry.data.featured_image,
+      publishedAt: entry.data.publishedAt ?? undefined,
       isDutchOnly,
     }));
   return { items: stories.slice(0, HOME_LIMIT.STORIES), cacheHints };
