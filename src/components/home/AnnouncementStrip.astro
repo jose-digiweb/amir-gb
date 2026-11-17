@@ -3,10 +3,6 @@
 import { Megaphone, X } from "@lucide/astro";
 import { getLocale, getTranslations } from "../../i18n/helpers";
 import { ANNOUNCEMENT } from "../../lib/announcement/constants";
-import { ICON_BUTTON_TONE } from "../ui/constants";
-
-// Components
-import IconButton from "../ui/IconButton.astro";
 
 // Types
 import type { HomeAnnouncement } from "../../lib/content/types";
@@ -40,14 +36,16 @@ const linkLabel = announcement.linkLabel || t["announcement.more"];
       {linkLabel}
     </a>
   </p>
-  <IconButton
-    label={t["announcement.dismiss"]}
-    tone={ICON_BUTTON_TONE.BRAND}
+  <button
+    type="button"
+    aria-label={t["announcement.dismiss"]}
     data-dismiss-announcement
-    class="desktop:-mr-3"
+    class="group grid size-tap shrink-0 touch-manipulation place-items-center select-none desktop:-mr-3"
   >
-    <X />
-  </IconButton>
+    <span class="grid size-10 place-items-center rounded-pill transition-[background-color,scale] duration-fast ease-standard group-hover:bg-hover-quiet-on-brand group-active:scale-97 group-active:bg-pressed-quiet-on-brand [&_svg]:size-icon-md">
+      <X />
+    </span>
+  </button>
 </div>
 <script
   is:inline
