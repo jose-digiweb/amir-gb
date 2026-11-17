@@ -1,9 +1,9 @@
 ---
 // Dependencies
+import { NESTED_LOZENGE_HREF } from "../ui/constants";
 import { MapPin } from "@lucide/astro";
 import { getLocale, getTranslations } from "../../i18n/helpers";
 import { NESTED_LOZENGE_VIEW_BOX } from "../../lib/woven/constants";
-import { getNestedLozengePath } from "../../lib/woven/helpers";
 import { MUD_WEAVE } from "./constants";
 
 /**
@@ -14,7 +14,6 @@ type Props = Record<string, never>;
 
 // Prepare the city's name and the faint lozenge
 const t = getTranslations(getLocale(Astro.currentLocale));
-const figurePath = getNestedLozengePath();
 ---
 
 <div
@@ -45,7 +44,7 @@ const figurePath = getNestedLozengePath();
     viewBox={NESTED_LOZENGE_VIEW_BOX}
     class="absolute top-1/2 left-1/2 -z-10 size-72 -translate-1/2 fill-decor-strong desktop:size-96"
   >
-    <path d={figurePath}></path>
+    <use href={NESTED_LOZENGE_HREF}></use>
   </svg>
   <div class="absolute top-[46%] left-1/2 flex -translate-x-1/2 -translate-y-full flex-col items-center gap-1.5">
     <span class="inline-flex h-8.5 items-center rounded-pill bg-surface px-3.5 type-button-sm font-extrabold text-text-heading shadow-md">

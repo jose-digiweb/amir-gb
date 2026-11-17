@@ -1,8 +1,7 @@
 ---
 // Dependencies
 import { NESTED_LOZENGE_VIEW_BOX } from "../../lib/woven/constants";
-import { getNestedLozengePath } from "../../lib/woven/helpers";
-import { WOVEN_SHADE_TONE } from "./constants";
+import { NESTED_LOZENGE_HREF, WOVEN_SHADE_TONE } from "./constants";
 
 // Types
 import type { WovenShadeTone } from "./types";
@@ -16,10 +15,9 @@ type Props = {
   tone?: WovenShadeTone;
 };
 
-// Read the ground and draw the nested lozenge
+// Read the ground; the nested lozenge itself is drawn once per page
 const { tone = WOVEN_SHADE_TONE.LIGHT } = Astro.props;
 const isOnBrand = tone === WOVEN_SHADE_TONE.ON_BRAND;
-const path = getNestedLozengePath();
 ---
 
 <span
@@ -33,6 +31,6 @@ const path = getNestedLozengePath();
       { "fill-decor-strong": !isOnBrand, "fill-motif-band-on-brand": isOnBrand },
     ]}
   >
-    <path d={path}></path>
+    <use href={NESTED_LOZENGE_HREF}></use>
   </svg>
 </span>

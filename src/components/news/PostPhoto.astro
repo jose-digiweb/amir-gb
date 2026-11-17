@@ -47,7 +47,7 @@ const alt = getPhotoAlt(image, isDescribed);
     <img
       src={pintiPanel.src}
       alt=""
-      loading="lazy"
+      loading={priority ? "eager" : "lazy"}
       class="absolute inset-0 size-full object-cover"
     />
     <span class="relative grid size-10 place-items-center rounded-full bg-on-brand text-surface-brand shadow-md @min-[10rem]:size-16">

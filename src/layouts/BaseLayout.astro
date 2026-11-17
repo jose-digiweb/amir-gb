@@ -71,8 +71,8 @@ const speculationRules = JSON.stringify(SPECULATION_RULES);
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <Font cssVariable="--font-montserrat" preload />
-    <Font cssVariable="--font-inter" preload />
+    <Font cssVariable="--font-montserrat" preload={[{ weight: 800 }]} />
+    <Font cssVariable="--font-inter" preload={[{ weight: 400 }]} />
     <slot name="head" />
   </head>
   <body class="bg-bg type-body text-text">
