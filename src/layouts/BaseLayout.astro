@@ -7,7 +7,7 @@ import {
   THEME_SELECTOR,
   THEME_STORAGE_KEY,
 } from "../lib/theme/constants";
-import { SPECULATION_RULES } from "../site/constants";
+import { SITE_CONTENT_ID, SPECULATION_RULES } from "../site/constants";
 import "../styles/global.css";
 
 // Components
@@ -67,6 +67,7 @@ const speculationRules = JSON.stringify(SPECULATION_RULES);
     </script>
     <SeoHead title={title} description={description} seo={seo} />
     <script is:inline type="speculationrules" set:html={speculationRules} />
+    <link rel="expect" href={`#${SITE_CONTENT_ID}`} blocking="render" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />

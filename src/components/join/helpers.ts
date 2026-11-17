@@ -2,6 +2,7 @@
 import { getRelativeLocaleUrl } from "astro:i18n";
 import { getTranslations } from "../../i18n/helpers";
 import { TILE_COLOUR } from "../../lib/content/constants";
+import { getOpenerItems } from "../ui/helpers";
 import {
   JOIN_ERROR,
   JOIN_MODE,
@@ -26,6 +27,7 @@ import {
   HYPHEN,
   JOIN_ERROR_LABEL,
   JOIN_MODE_ID,
+  JOIN_SENT_OPENER_LANGS,
   JOIN_SUMMARY_TITLE,
   JOIN_WAY,
   SEAT_CIRCLE,
@@ -143,7 +145,7 @@ export function getJoinFormCopy(locale: Locale): JoinFormCopy {
       confirm,
       getStep(t, "joinPage.step.contact.title", "joinPage.step.contact.text"),
     ],
-    sentOpener: t["joinPage.sentOpener"],
+    sentOpener: getOpenerItems(t["joinPage.sentOpener"], JOIN_SENT_OPENER_LANGS),
     sentMemberTitle: keepNameWhole(t["joinPage.sentMemberTitle"], t["site.name"]),
     sentMemberText: t["joinPage.sentMemberText"],
     sentVolunteerTitle: t["joinPage.sentVolunteerTitle"],

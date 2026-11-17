@@ -1,6 +1,7 @@
 ---
 // Dependencies
 import { Image } from "emdash/ui";
+import { getPhotoAlt } from "../../lib/content/helpers";
 import pintiPanel from "../../assets/woven/pinti-panel.svg";
 
 // Components
@@ -20,18 +21,23 @@ type Props = {
   type: PostType;
   /** The widths the photo is shown at, for the browser to pick a file. */
   sizes: string;
+  /** The photo is a page's own lead photo, so it carries the editor's description; in a list the link's words say it. */
+  isDescribed?: boolean;
   /** The photo is the page's largest paint, so it loads first. */
   priority?: boolean;
 };
 
 // Read the photo and how it loads
-const { image, type, sizes, priority = false } = Astro.props;
+const { image, type, sizes, priority = false, isDescribed = false } = Astro.props;
+
+// A lead photo says what it shows; a photo in a list is left to the link's words
+const alt = getPhotoAlt(image, isDescribed);
 ---
 
 {image ? (
   <Image
     image={image}
-    alt=""
+    alt={alt}
     sizes={sizes}
     priority={priority}
     class="absolute inset-0 size-full object-cover"

@@ -20,7 +20,8 @@ const { startsAt, class: className } = Astro.props;
 const { day, month } = getEventDay(startsAt, INTL_LOCALE[getLocale(Astro.currentLocale)]);
 ---
 
-<span
+<time
+  datetime={startsAt.toISOString()}
   class:list={[
     "flex h-16 w-14 flex-col items-center justify-center rounded-md bg-on-brand text-surface-brand shadow-sm desktop:h-18 desktop:w-16",
     className,
@@ -28,4 +29,4 @@ const { day, month } = getEventDay(startsAt, INTL_LOCALE[getLocale(Astro.current
 >
   <b class="type-h2 font-extrabold desktop:type-h1 desktop:font-extrabold">{day}</b>
   <span class="type-tag uppercase">{month}</span>
-</span>
+</time>

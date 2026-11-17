@@ -31,8 +31,8 @@ const { event, class: className } = Astro.props;
 >
   <EventPhoto image={event.image} sizes="(min-width: 1180px) 300px, 256px" />
   <EventDate startsAt={event.startsAt} class="absolute top-3 left-3 tablet:top-4 tablet:left-4" />
-  <span class="absolute inset-x-4 bottom-4 type-h3 text-balance tablet:inset-x-5 tablet:bottom-5">
+  <h3 class="absolute inset-x-4 bottom-4 type-h3 text-balance tablet:inset-x-5 tablet:bottom-5">
     {event.title}
     {event.isDutchOnly ? <DutchOnlyMark /> : null}
-  </span>
+  </h3>
 </a>

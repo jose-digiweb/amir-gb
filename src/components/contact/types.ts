@@ -1,4 +1,5 @@
 // Types
+import type { OpenerItem } from "../ui/types";
 import type { ContactError } from "../../lib/contact/types";
 import type { AnswerLanguage } from "../../site/types";
 import type { ChoiceOption } from "../forms/types";
@@ -34,7 +35,7 @@ export type ContactFormCopy = {
   errors: Record<ContactError, string>;
   summaryTitles: string[];
   summaryFields: { name: string; reach: string; message: string; consent: string };
-  sentOpener: string;
+  sentOpener: OpenerItem[];
   sentTitle: string;
   sentText: string;
   languagesInSentence: Record<AnswerLanguage, string>;

@@ -3,13 +3,16 @@
 import { Check, MessageCircle } from "@lucide/vue";
 import { CONTACT_FORM_ID } from "./constants";
 
+// Types
+import type { OpenerItem } from "../ui/types";
+
 /**
  * The {@link Props} type
  * @description The props of the ContactSent component, the thank you that takes the form's place once a message is sent
  */
 type Props = {
   /** The thank you in three languages. */
-  opener: string;
+  opener: OpenerItem[];
   /** That the message arrived, with the visitor's name. */
   title: string;
   /** How and in which language AMIR-GB answers. */
@@ -32,7 +35,15 @@ const emit = defineEmits<{ again: [] }>();
     <span class="grid size-16 place-items-center rounded-full bg-success-bg text-success">
       <Check class="size-icon-lg" aria-hidden="true" />
     </span>
-    <p class="flex items-center gap-2 type-label text-text-accent">{{ props.opener }}</p>
+    <p class="type-label text-text-accent">
+      <span
+        v-for="item in props.opener"
+        :key="item.text"
+        :lang="item.lang"
+        class="not-first:before:mx-2 not-first:before:content-['·'_/_'']"
+        >{{ item.text }}</span
+      >
+    </p>
     <div class="flex flex-col gap-2">
       <h3
         :id="CONTACT_FORM_ID.SENT"

@@ -17,10 +17,11 @@ import type {
   EventDay,
   HomeEvent,
   Localised,
+  MediaImage,
   TileColour,
   Translated,
-  WeeklyActivity,
   Weekday,
+  WeeklyActivity,
   WhatsOnPlan,
 } from "./types";
 
@@ -296,4 +297,21 @@ export function toOptionalDate(value: string | undefined): Date | undefined {
 
   // A stored date is read as one
   return new Date(value);
+}
+
+/**
+ * The {@link getPhotoAlt} helper
+ * @description The text alternative of a CMS photo: a page's own lead photo says what it shows, a photo in a list leaves it to the link's words
+ * @param {MediaImage | undefined} image - The photo, if there is one
+ * @param {boolean} isDescribed - Whether the photo is the page's own lead photo
+ * @returns {string} The editor's description, or an empty alt
+ */
+export function getPhotoAlt(image: MediaImage | undefined, isDescribed: boolean): string {
+  // Only a lead photo with a description says what it shows
+  if (isDescribed && image?.alt) {
+    return image.alt;
+  }
+
+  // Any other photo is described by the link around it
+  return "";
 }

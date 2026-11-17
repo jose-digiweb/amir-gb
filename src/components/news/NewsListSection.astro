@@ -1,5 +1,6 @@
 ---
 // Dependencies
+import { getLocale, getTranslations } from "../../i18n/helpers";
 import { NEWS_LIST_STATE } from "../../lib/news/constants";
 
 // Components
@@ -36,6 +37,7 @@ type Props = {
 // Read what the list shows
 const { state, filter, featured, posts, nextHref, isEnd } = Astro.props;
 const hasPosts = posts.length > 0;
+const t = getTranslations(getLocale(Astro.currentLocale));
 ---
 
 <section
@@ -49,6 +51,7 @@ const hasPosts = posts.length > 0;
   />
 
   <div class="mx-auto max-w-page">
+    {featured || hasPosts ? <h2 class="sr-only">{t["news.listTitle"]}</h2> : null}
     {featured ? <FeaturedPostCard post={featured} /> : null}
     {hasPosts ? (
       <ul

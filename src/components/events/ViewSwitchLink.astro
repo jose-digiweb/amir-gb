@@ -20,7 +20,8 @@ const { href, isCurrent } = Astro.props;
   class:list={[
     "flex h-control touch-manipulation items-center justify-center gap-2 rounded-pill type-button transition-colors duration-base ease-standard select-none [&_svg]:size-4.5",
     {
-      "bg-surface-raised text-text-heading shadow-sm": isCurrent,
+      "bg-surface-raised text-text-heading shadow-sm forced-colors:border-2 forced-colors:border-[Highlight]":
+        isCurrent,
       "text-text-heading hover:bg-hover-quiet active:bg-pressed-quiet": !isCurrent,
     },
   ]}

@@ -1,7 +1,7 @@
 ---
 // Dependencies
 import { getLocale, getTranslations } from "../../i18n/helpers";
-import { SOCIAL_LINKS } from "../../site/constants";
+import { PUBLISHED_SOCIAL_LINKS } from "../../site/constants";
 
 // Components
 import IconButton from "../ui/IconButton.astro";
@@ -25,14 +25,16 @@ const { tone, class: className } = Astro.props;
 const t = getTranslations(getLocale(Astro.currentLocale));
 ---
 
-<ul aria-label={t["social.label"]} class:list={["flex gap-2", className]}>
-  {SOCIAL_LINKS.map((social) => (
-    <li>
-      <IconButton href={social.href} label={social.name} tone={tone}>
-        <svg aria-hidden="true" viewBox="0 0 24 24" class="fill-current">
-          <path d={social.path} />
-        </svg>
-      </IconButton>
-    </li>
-  ))}
-</ul>
+{PUBLISHED_SOCIAL_LINKS.length > 0 ? (
+  <ul aria-label={t["social.label"]} class:list={["flex gap-2", className]}>
+    {PUBLISHED_SOCIAL_LINKS.map((social) => (
+      <li>
+        <IconButton href={social.href} label={social.name} tone={tone}>
+          <svg aria-hidden="true" viewBox="0 0 24 24" class="fill-current">
+            <path d={social.path} />
+          </svg>
+        </IconButton>
+      </li>
+    ))}
+  </ul>
+) : null}

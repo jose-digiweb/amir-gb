@@ -50,13 +50,13 @@ const meta = [`${day} ${times}`, where].filter(Boolean).join(" · ");
         class="absolute -top-1.5 -left-1.5 origin-top-left scale-75 ring-3 ring-bg tablet:top-3 tablet:left-3 tablet:scale-100 tablet:ring-0"
       />
     </span>
-    <span class="flex min-w-0 flex-col gap-1.5 tablet:gap-2.5 tablet:p-5">
+    <div class="flex min-w-0 flex-col gap-1.5 tablet:gap-2.5 tablet:p-5">
       <EventTypeChip type={event.type} />
-      <span class="type-h3 text-balance text-text-heading group-hover:underline group-hover:underline-offset-4">
+      <h3 class="type-h3 text-balance text-text-heading group-hover:underline group-hover:underline-offset-4">
         {event.title}
         {event.isDutchOnly ? <DutchOnlyMark /> : null}
-      </span>
+      </h3>
       <span class="type-small text-text-muted">{meta}</span>
-    </span>
+    </div>
   </a>
 </li>

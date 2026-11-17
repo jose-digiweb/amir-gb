@@ -30,7 +30,8 @@ const { label, href, isCurrent, type } = Astro.props;
   class:list={[
     "inline-flex h-control shrink-0 touch-manipulation items-center gap-2 rounded-pill px-4 type-button-sm whitespace-nowrap transition-[background-color,scale] duration-base ease-standard select-none active:scale-97",
     {
-      "bg-selected text-on-selected inset-ring-2 inset-ring-border-strong": isCurrent,
+      "bg-selected text-on-selected inset-ring-2 inset-ring-border-strong forced-colors:border-2 forced-colors:border-[Highlight]":
+        isCurrent,
       "bg-surface text-text-heading inset-ring inset-ring-border hover:bg-hover-quiet": !isCurrent,
     },
   ]}

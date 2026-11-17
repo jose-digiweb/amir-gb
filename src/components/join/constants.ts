@@ -1,4 +1,5 @@
 // Dependencies
+import { LANGUAGE_TAG } from "../../i18n/constants";
 import { TILE_COLOUR } from "../../lib/content/constants";
 import { JOIN_ERROR, JOIN_MODE } from "../../lib/join/constants";
 import { CHIP_SIZE } from "../opening/constants";
@@ -198,3 +199,13 @@ export const JOIN_DRAWINGS = {
  * @description How the opening's threads are sewn: the inner circle and the thread to Your place
  */
 export const JOIN_STITCH = { width: 1.75, dash: "6 6" } as const;
+
+/**
+ * The {@link JOIN_SENT_OPENER_LANGS} constant
+ * @description The language of each welcome over the sign-up's thank you: Dutch, English and Kriolu
+ */
+export const JOIN_SENT_OPENER_LANGS = [
+  LANGUAGE_TAG.DUTCH,
+  LANGUAGE_TAG.ENGLISH,
+  LANGUAGE_TAG.KRIOL,
+] as const;

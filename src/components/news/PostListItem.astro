@@ -47,18 +47,23 @@ const day = getPostDay(post.publishedAt, INTL_LOCALE[locale], new Date());
         sizes="(min-width: 1180px) 400px, (min-width: 700px) 50vw, 92px"
       />
     </span>
-    <span class="flex min-w-0 flex-col gap-1.5 tablet:gap-3.5">
+    <div class="flex min-w-0 flex-col gap-1.5 tablet:gap-3.5">
       <span class="flex flex-wrap items-center gap-2 tablet:gap-3">
         <PostTypeTag type={post.type} class="bg-bg-alt tablet:bg-surface" />
-        <span class="type-small text-text-muted tablet:type-body-sm">{day}</span>
+        <time
+          datetime={post.publishedAt.toISOString()}
+          class="type-small text-text-muted tablet:type-body-sm"
+        >
+          {day}
+        </time>
       </span>
-      <span class="type-h4 text-balance hyphens-auto group-hover:underline group-hover:decoration-2 group-hover:underline-offset-4 tablet:type-h3">
+      <h3 class="type-h4 text-balance hyphens-auto group-hover:underline group-hover:decoration-2 group-hover:underline-offset-4 tablet:type-h3">
         <span lang={post.isDutchOnly ? LOCALE.NL : undefined}>{post.title}</span>
         {post.isDutchOnly ? <DutchOnlyMark /> : null}
-      </span>
+      </h3>
       {post.excerpt ? (
         <span class="hidden type-body-sm text-pretty text-text tablet:block">{post.excerpt}</span>
       ) : null}
-    </span>
+    </div>
   </a>
 </li>

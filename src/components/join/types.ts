@@ -3,6 +3,7 @@ import type { JoinError, JoinMode, JoinSkill } from "../../lib/join/types";
 import type { AnswerLanguage } from "../../site/types";
 import type { TileColour } from "../../lib/content/types";
 import type { ChoiceOption } from "../forms/types";
+import type { OpenerItem } from "../ui/types";
 import type { ChipSize, Disc, DotField, DrawingFrame, Sparkle } from "../opening/types";
 import type { JOIN_FORM_STATE, JOIN_WAY } from "./constants";
 
@@ -80,7 +81,7 @@ export type JoinFormCopy = {
   summaryFields: { name: string; email: string; place: string; skills: string; consent: string };
   memberSteps: JoinStepCopy[];
   volunteerSteps: JoinStepCopy[];
-  sentOpener: string;
+  sentOpener: OpenerItem[];
   sentMemberTitle: string;
   sentMemberText: string;
   sentVolunteerTitle: string;

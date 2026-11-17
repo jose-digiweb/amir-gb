@@ -31,7 +31,7 @@ const privacyHref = getRelativeLocaleUrl(locale, ROUTE.PRIVACY);
 const bridgeStyle = `background-image: url(${bridgeLine.src})`;
 ---
 
-<footer class="site-footer flex flex-col gap-8 overflow-hidden rounded-t-xl bg-surface-inverse px-margin pt-12 pb-8 text-on-brand tablet:px-margin-md tablet:pt-16 desktop:gap-12 desktop:px-margin-lg desktop:pt-20 desktop:pb-10">
+<footer class="site-footer flex flex-col gap-8 overflow-hidden rounded-t-xl bg-surface-inverse px-margin pt-12 pb-8 text-on-brand [--focus:var(--focus-on-brand)] tablet:px-margin-md tablet:pt-16 desktop:gap-12 desktop:px-margin-lg desktop:pt-20 desktop:pb-10">
   <section
     aria-labelledby="footer-talk"
     data-footer-talk
@@ -137,7 +137,7 @@ const bridgeStyle = `background-image: url(${bridgeLine.src})`;
           {t["footer.privacy"]}
         </a>
       </div>
-      <ul aria-label={t["language.label"]} class="ml-auto flex gap-4">
+      <ul aria-label={t["language.label"]} class="ml-auto flex gap-1">
         {languages.map((language) => (
           <li>
             <a
@@ -146,9 +146,10 @@ const bridgeStyle = `background-image: url(${bridgeLine.src})`;
               lang={language.locale}
               hreflang={language.locale}
               aria-current={language.isCurrent ? "true" : undefined}
-              class="inline-flex min-h-tap items-center aria-[current=true]:font-bold aria-[current=true]:text-on-brand aria-[current=true]:underline"
+              class="inline-flex min-h-tap min-w-tap items-center justify-center px-2 aria-[current=true]:font-bold aria-[current=true]:text-on-brand aria-[current=true]:underline"
             >
               {language.code}
+              <span class="sr-only">{language.name}</span>
             </a>
           </li>
         ))}

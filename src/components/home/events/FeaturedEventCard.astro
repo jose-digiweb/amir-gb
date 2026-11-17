@@ -39,11 +39,11 @@ const meta = getEventMeta(event, INTL_LOCALE[locale], t);
 >
   <EventPhoto image={event.image} sizes="(min-width: 1180px) 640px, 100vw" />
   <EventDate startsAt={event.startsAt} class="absolute top-4 left-4" />
-  <span class="absolute inset-x-5 bottom-5 flex flex-col gap-1.5">
-    <span class="type-h2 text-balance">
+  <div class="absolute inset-x-5 bottom-5 flex flex-col gap-1.5">
+    <h3 class="type-h2 text-balance">
       {event.title}
       {event.isDutchOnly ? <DutchOnlyMark /> : null}
-    </span>
+    </h3>
     <span class="type-body-sm font-semibold text-on-brand-muted">{meta}</span>
-  </span>
+  </div>
 </a>

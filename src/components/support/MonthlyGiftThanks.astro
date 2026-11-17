@@ -4,7 +4,7 @@ import { Check } from "@lucide/astro";
 import { STRIPE_PORTAL_URL } from "astro:env/server";
 import { getLocale, getTranslations } from "../../i18n/helpers";
 import { fillAmount, formatAmount } from "../../lib/donate/helpers";
-import { RETURN_TONE } from "./constants";
+import { GIFT_THANKS_OPENER_LANGS, RETURN_TONE } from "./constants";
 
 // Components
 import GiftShareLink from "./GiftShareLink.astro";
@@ -30,6 +30,7 @@ const text = fillAmount(t["gift.monthlyText"], formatAmount(locale, amountCents)
 <ReturnCard
   tone={RETURN_TONE.SUCCESS}
   opener={t["gift.thanksOpener"]}
+  openerLangs={GIFT_THANKS_OPENER_LANGS}
   title={t["gift.thanksTitle"]}
   text={text}
 >
