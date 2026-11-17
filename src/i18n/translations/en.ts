@@ -134,6 +134,7 @@ export const en = {
   "donate.secure": "Secure with iDEAL",
   "donate.secureMonthly": "Secure with iDEAL · Stop any time",
   "donate.tooSmall": "The smallest gift is €1.",
+  "donate.notAnAmount": "Type an amount in euros, for example 15 or 12.50.",
   "donate.tooLarge": "For more than €10,000, please use the bank transfer below.",
   "donate.startFailed": "The payment could not start. Try again, or use the bank transfer below.",
   "gift.thanksOpener": "THANK\u00a0YOU · DANK\u00a0JE · OBRIGADU",

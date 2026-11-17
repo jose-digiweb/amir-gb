@@ -13,7 +13,7 @@ import { readCheckoutSession } from "./stripe";
 // Types
 import type { AstroGlobal } from "astro";
 import type { ActionError } from "astro:actions";
-import type { DonateError, SupportState } from "./types";
+import type { DonateError, DonateResult, SupportState } from "./types";
 
 /**
  * The {@link getFormError} helper
@@ -28,8 +28,14 @@ function getFormError(error: ActionError): DonateError {
   }
 
   // An amount over the largest gift says so
-  if (error.fields[DONATE_FIELD.OTHER]?.[0] === DONATE_ERROR.TOO_LARGE) {
+  const fieldError = error.fields[DONATE_FIELD.OTHER]?.[0];
+  if (fieldError === DONATE_ERROR.TOO_LARGE) {
     return DONATE_ERROR.TOO_LARGE;
+  }
+
+  // Typed text that is not an amount says so
+  if (fieldError === DONATE_ERROR.NOT_AN_AMOUNT) {
+    return DONATE_ERROR.NOT_AN_AMOUNT;
   }
 
   // Any other input error is an amount too small to give
@@ -37,19 +43,46 @@ function getFormError(error: ActionError): DonateError {
 }
 
 /**
+ * The {@link getCheckoutUrl} helper
+ * @description Stripe's payment page a just posted gift goes to, when the action made one
+ * @param {DonateResult | undefined} result - The donate action's result, if the form was just posted
+ * @returns {string | undefined} The payment page's address
+ */
+export function getCheckoutUrl(result: DonateResult | undefined): string | undefined {
+  // Only a result with a payment page has somewhere to go
+  if (result && "url" in result) {
+    return result.url;
+  }
+
+  // Anything else stays on the page
+  return undefined;
+}
+
+/**
  * The {@link getSupportState} helper
  * @description What the Support section shows for a request: a return from Stripe, the form with the error of a failed try, or the plain form
  * @param {URL} url - The page's address
  * @param {ActionError | undefined} error - The donate action's error when the form was just posted without JavaScript
+ * @param {DonateResult} [result] - The donate action's result when the form was just posted
  * @returns {Promise<SupportState>} The state to render
  */
 export async function getSupportState(
   url: URL,
   error: ActionError | undefined,
+  result?: DonateResult,
 ): Promise<SupportState> {
   // A failed try keeps the form, with its error
   if (error) {
     return { state: GIFT_STATE.FORM, error: getFormError(error) };
+  }
+
+  // Stripe did not answer: the form says so and keeps the donor's choice
+  if (result && "failedChoice" in result) {
+    return {
+      state: GIFT_STATE.FORM,
+      error: DONATE_ERROR.START_FAILED,
+      choice: result.failedChoice,
+    };
   }
 
   // A plain visit shows the form

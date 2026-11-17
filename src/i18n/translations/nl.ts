@@ -137,6 +137,7 @@ export const nl: Translations = {
   "donate.secure": "Veilig met iDEAL",
   "donate.secureMonthly": "Veilig met iDEAL · Altijd te stoppen",
   "donate.tooSmall": "De kleinste gift is € 1.",
+  "donate.notAnAmount": "Typ een bedrag in euro, bijvoorbeeld 15 of 12,50.",
   "donate.tooLarge": "Voor meer dan € 10.000 gebruik je de bankoverschrijving hieronder.",
   "donate.startFailed":
     "De betaling kon niet starten. Probeer het opnieuw, of gebruik de bankoverschrijving hieronder.",

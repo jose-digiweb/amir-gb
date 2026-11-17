@@ -47,3 +47,9 @@ export type JoinErrors = {
   skills?: JoinError;
   consent?: JoinError;
 };
+
+/**
+ * The {@link JoinCheckedField} type
+ * @description A field that can keep a sign-up from being sent
+ */
+export type JoinCheckedField = keyof JoinErrors;

@@ -93,6 +93,52 @@ export function checkAmount(cents: number | null): AmountError | undefined {
 }
 
 /**
+ * The {@link getAmountError} helper
+ * @description What is wrong with the amount a donor chose: typed text that is not an amount, or an amount that cannot be given
+ * @param {string | null | undefined} preset - The picked preset in euros
+ * @param {string | null | undefined} other - The typed amount
+ * @returns {AmountError | undefined} The amount's error, or nothing when it can be given
+ */
+export function getAmountError(
+  preset: string | null | undefined,
+  other: string | null | undefined,
+): AmountError | undefined {
+  // Typed text that is not an amount says so
+  if (other?.trim() && parseAmount(other) === null) {
+    return DONATE_ERROR.NOT_AN_AMOUNT;
+  }
+
+  // Otherwise the chosen amount must be one that can be given
+  return checkAmount(getChosenAmount(preset, other));
+}
+
+/**
+ * The {@link getInitialAmount} helper
+ * @description How the form shows a choice it starts from: its preset when the amount is one, otherwise the amount typed in the field
+ * @param {GiftChoice | undefined} choice - The choice of a try that came back, if any
+ * @returns {{ preset: number | null; other: string }} The picked preset and the typed amount
+ */
+export function getInitialAmount(choice: GiftChoice | undefined): {
+  preset: number | null;
+  other: string;
+} {
+  // No choice starts on the default preset
+  if (!choice) {
+    return { preset: DONATION.DEFAULT_AMOUNT, other: "" };
+  }
+
+  // A preset amount picks that preset
+  const euros = choice.amountCents / DONATION.CENTS_PER_EURO;
+  const presetAmount = DONATION.AMOUNTS.find((amount) => amount === euros);
+  if (presetAmount !== undefined) {
+    return { preset: presetAmount, other: "" };
+  }
+
+  // Any other amount is typed back in the field
+  return { preset: null, other: toEuroText(choice.amountCents) };
+}
+
+/**
  * The {@link getChosenAmount} helper
  * @description The amount a donor chose: the typed amount when there is one, otherwise the preset
  * @param {string | null | undefined} preset - The picked preset in euros
@@ -305,6 +351,7 @@ export function getDonateFormCopy(t: Translations): DonateFormCopy {
     secure: t["donate.secure"],
     secureMonthly: t["donate.secureMonthly"],
     tooSmall: t["donate.tooSmall"],
+    notAnAmount: t["donate.notAnAmount"],
     tooLarge: t["donate.tooLarge"],
     startFailed: t["donate.startFailed"],
   };

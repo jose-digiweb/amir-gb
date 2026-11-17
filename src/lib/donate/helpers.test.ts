@@ -6,9 +6,11 @@ import {
   checkAmount,
   fillAmount,
   formatAmount,
+  getAmountError,
   getChoiceLabel,
   getChosenAmount,
   getGiftFormHref,
+  getInitialAmount,
   getReturnUrls,
   getSessionState,
   parseAmount,
@@ -254,5 +256,42 @@ describe("DONATE_INPUT", () => {
     expect(DONATE_INPUT.safeParse({ frequency: "once", amount: "25", locale: "fr" }).success).toBe(
       false,
     );
+  });
+});
+
+describe("getAmountError", () => {
+  it("says typed text that is not an amount is not one", () => {
+    expect(getAmountError(null, "12a")).toBe(DONATE_ERROR.NOT_AN_AMOUNT);
+  });
+
+  it("checks a typed amount against the smallest and largest gift", () => {
+    expect(getAmountError(null, "0,50")).toBe(DONATE_ERROR.TOO_SMALL);
+    expect(getAmountError(null, "20000")).toBe(DONATE_ERROR.TOO_LARGE);
+    expect(getAmountError(null, "12,50")).toBeUndefined();
+  });
+
+  it("checks the preset when nothing is typed", () => {
+    expect(getAmountError("25", "")).toBeUndefined();
+    expect(getAmountError(null, "")).toBe(DONATE_ERROR.TOO_SMALL);
+  });
+});
+
+describe("getInitialAmount", () => {
+  it("starts on the default preset without a choice", () => {
+    expect(getInitialAmount(undefined)).toEqual({ preset: 25, other: "" });
+  });
+
+  it("picks the preset a choice came back with", () => {
+    expect(getInitialAmount({ frequency: FREQUENCY.MONTHLY, amountCents: 5000 })).toEqual({
+      preset: 50,
+      other: "",
+    });
+  });
+
+  it("types back any other amount", () => {
+    expect(getInitialAmount({ frequency: FREQUENCY.ONCE, amountCents: 4000 })).toEqual({
+      preset: null,
+      other: "40",
+    });
   });
 });

@@ -243,6 +243,13 @@ Placeholders until AMIR sends them: the three PDFs and the board photos.
 
 **Shared form parts.** Contact and Join share what has no domain knowledge: `src/lib/forms/` (`sendToInbox` with the `FORM_INBOX` binding and `CONTACT_FROM_ADDRESS`, the hidden trap field's name, `toOneLine` for header-safe values, the email pattern, list formatting) and `src/components/forms/` (`TextField`, `TextArea`, `ChoiceChip`, `ConsentField`, `TrapField`, `FieldError`, `FormSummary`, `FormFailed`, focus and server-error helpers). The answer languages (Nederlands, English, Kriolu, Português) live in `src/site/constants.ts` with the `answerLanguage.*` copy. Each form keeps its own fields, rules, copy and email body.
 
+**How the forms behave**, checked against the modern web guidance in November 2026:
+
+- **Errors show at Send and only clear while typing.** Pressing Send checks every field; the summary at the top takes focus and names the fields as they were at that moment. While the visitor types, a fixed field's error goes away, but typing never adds an error or changes one (`keepStandingErrors` in `src/components/forms/helpers.ts`, tested); the next Send checks again. The summary is not a live region, as focus moving to it already reads it.
+- **Required fields say so to screen readers** (`required` on `TextField`, `TextArea` and `ConsentField` renders `aria-required`). The form keeps `novalidate`, so the browser never marks an empty field before Send.
+- **Addresses and numbers are typed as typed.** Fields with `is-identifier` (Contact's email or phone, Join's email) turn off capitals, autocorrect and spell check on phones; Contact's field no longer forces the email keyboard, since a phone number is just as welcome.
+- **Sending keeps focus.** The Send button stays enabled while it sends (a second press does nothing) and a hidden status line says "Sending".
+
 Verified locally: every state on a phone (errors, Sending, Sent as a member and as a volunteer, Did not send), the emails in `.wrangler/tmp/email/`, the action's refusals (another origin, the trap field, server-side errors), the not set up path for both forms, and the page at 360, 390, 834, 1180 and 1440 in light and dark, in NL, EN and PT.
 
 Placeholders until AMIR sends them: the fee (`[FEE]`, `[CONTRIBUTIE]`, `[QUOTA]`).
@@ -316,7 +323,7 @@ One-off and monthly gifts go through Stripe Checkout, Stripe's own payment page.
 
 On the three thank you cards the round check mark grows in once from 90% while it fades in (`ReturnCard.astro`, a one-shot CSS animation over `duration-slow` with `ease-enter`, so it plays on the first paint after Stripe's redirect). The words never wait for it, and with reduced motion it is simply there.
 
-A bank's refusal shows on Stripe's own page, which lets the donor try again, so the failed card is rare. A page that shows a return or a failed try is sent with `Cache-Control: private, no-store` and never reaches the edge cache, so no donor sees another's gift. When Stripe does not answer, the form says the payment could not start and points at the bank transfer; the Worker's logs say why.
+A bank's refusal shows on Stripe's own page, which lets the donor try again, so the failed card is rare. A page that shows a return or a failed try is sent with `Cache-Control: private, no-store` and never reaches the edge cache, so no donor sees another's gift. When Stripe does not answer, the form says the payment could not start and points at the bank transfer, with the donor's choice still picked: the action returns the choice (`{ failedChoice }`, read by `getSupportState`) and the form starts from it (`getInitialAmount`). The Worker's logs say why. An amount that cannot be given (too small, too large, or typed text that is not an amount, which has its own sentence) moves focus to the amount field, whose error describes it, both after Send and when the page comes back from the server with that error (`getAmountError`).
 
 **Stopping or changing a monthly gift.** Stripe's customer portal, through its login page (`STRIPE_PORTAL_URL`): the donor types their email and gets a link. It is linked from the monthly thank you, from the Donate page's Giving monthly? card and from the footer's small print. The portal stops a gift and changes the payment method; it cannot change an amount, so a new amount means stopping and starting again.
 
