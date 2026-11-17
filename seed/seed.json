@@ -133,10 +133,13 @@
         {
           "slug": "summary",
           "label": "Korte samenvatting (een of twee zinnen, voor overzichten en WhatsApp)",
-          "type": "string",
+          "type": "text",
           "searchable": true,
           "validation": {
             "maxLength": 200
+          },
+          "options": {
+            "rows": 3
           }
         },
         {
@@ -188,10 +191,13 @@
         {
           "slug": "excerpt",
           "label": "Korte samenvatting (een of twee zinnen, voor overzichten en WhatsApp)",
-          "type": "string",
+          "type": "text",
           "searchable": true,
           "validation": {
             "maxLength": 200
+          },
+          "options": {
+            "rows": 3
           }
         },
         {
@@ -244,9 +250,12 @@
         {
           "slug": "strip_text",
           "label": "Zin in de balk (ongeveer 90 tekens)",
-          "type": "string",
+          "type": "text",
           "validation": {
             "maxLength": 120
+          },
+          "options": {
+            "rows": 3
           }
         },
         {
