@@ -6,6 +6,7 @@ import { SITE_CONTENT_ID } from "../site/constants";
 // Components
 import SiteFooter from "../components/site/SiteFooter.astro";
 import SiteHeader from "../components/site/SiteHeader.astro";
+import NestedLozengeDefs from "../components/ui/NestedLozengeDefs.astro";
 import BaseLayout from "./BaseLayout.astro";
 
 // Types
@@ -37,6 +38,7 @@ const t = getTranslations(getLocale(Astro.currentLocale));
   >
     {t["site.skipToContent"]}
   </a>
+  <NestedLozengeDefs />
   <div class="flex min-h-svh flex-col">
     <slot name="announcement" />
     <SiteHeader />

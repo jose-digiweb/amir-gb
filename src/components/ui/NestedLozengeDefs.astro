@@ -1,0 +1,20 @@
+---
+// Dependencies
+import { getNestedLozengePath } from "../../lib/woven/helpers";
+import { WOVEN_DEFS } from "./constants";
+
+/**
+ * The {@link Props} type
+ * @description The props of the NestedLozengeDefs component, the nested lozenge drawn once per page for every woven shade and figure to reuse
+ */
+type Props = Record<string, never>;
+
+// Draw the nested lozenge once
+const path = getNestedLozengePath();
+---
+
+<svg aria-hidden="true" class="absolute size-0 overflow-hidden">
+  <defs>
+    <path id={WOVEN_DEFS.NESTED_LOZENGE} d={path}></path>
+  </defs>
+</svg>

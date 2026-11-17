@@ -4,9 +4,8 @@ import { MessageCircle, Phone } from "@lucide/astro";
 import { Picture } from "astro:assets";
 import { getLocale, getTranslations } from "../../i18n/helpers";
 import { NESTED_LOZENGE_VIEW_BOX } from "../../lib/woven/constants";
-import { getNestedLozengePath } from "../../lib/woven/helpers";
 import { CONTACT } from "../../site/constants";
-import { BUTTON_TONE } from "../ui/constants";
+import { BUTTON_TONE, NESTED_LOZENGE_HREF } from "../ui/constants";
 import homeworkHelp from "../../assets/photos/homework-help.jpg";
 import volunteerHelping from "../../assets/photos/volunteer-helping.jpg";
 
@@ -25,7 +24,6 @@ type Props = Record<string, never>;
 
 // Prepare the copy and the faint woven figure behind the desktop opening
 const t = getTranslations(getLocale(Astro.currentLocale));
-const figurePath = getNestedLozengePath();
 ---
 
 <section
@@ -38,7 +36,7 @@ const figurePath = getNestedLozengePath();
     viewBox={NESTED_LOZENGE_VIEW_BOX}
     class="pointer-events-none absolute -bottom-95 -left-75 -z-10 hidden size-140 fill-decor-strong desktop:block"
   >
-    <path d={figurePath}></path>
+    <use href={NESTED_LOZENGE_HREF}></use>
   </svg>
   <div class="absolute top-24 -right-22 -z-10 h-46 w-44 tablet:top-27 tablet:-right-18 tablet:aspect-square tablet:h-auto tablet:w-5/12 desktop:top-24 desktop:right-16 desktop:w-3/8">
     <div class="opening-blob size-full overflow-hidden bg-border">

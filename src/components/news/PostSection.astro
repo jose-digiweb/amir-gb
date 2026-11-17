@@ -55,7 +55,7 @@ const hasPhoto = Boolean(post.image);
       <PostPhoto
         image={post.image}
         type={post.type}
-        sizes="(min-width: 1280px) 1280px, 100vw"
+        sizes="(min-width: 1440px) 1280px, (min-width: 1180px) calc(100vw - 160px), (min-width: 700px) calc(100vw - 80px), calc(100vw - 40px)"
         isDescribed
         priority
       />

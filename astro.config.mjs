@@ -30,6 +30,9 @@ export default defineConfig({
   // resizes images from domains listed here, and otherwise sends the original upload.
   image: {
     domains: [new URL(SITE).hostname],
+    // Astro's own widths for photos start at 640; these start smaller, so a thumbnail on a phone
+    // gets a small file. Astro keeps only the widths a photo can fill.
+    breakpoints: [320, 480, 640, 750, 828, 1080, 1280, 1668, 2048, 2560],
   },
 
   // Pages that show CMS content are cached at Cloudflare's edge (experimental provider) and
