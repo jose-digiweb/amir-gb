@@ -23,7 +23,7 @@ type Props = {
   href: string;
   /** What to fix, once Send was pressed. */
   error?: string;
-  /** The field has to be filled in, which screen readers announce. */
+  /** The field has to be filled in: screen readers announce it, and the browser checks it until the form's script takes over. */
   required?: boolean;
 };
 
@@ -44,7 +44,7 @@ const errorId = computed(() => `${props.id}${FIELD_ID_SUFFIX.ERROR}`);
         type="checkbox"
         :name="props.name"
         :aria-invalid="props.error ? 'true' : undefined"
-        :aria-required="props.required ? 'true' : undefined"
+        :required="props.required"
         :aria-describedby="props.error ? errorId : undefined"
         class="mt-0.5 size-6 shrink-0 cursor-pointer rounded-sm accent-text-heading"
       />

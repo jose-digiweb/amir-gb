@@ -69,3 +69,12 @@ export type QrDrawing = {
  * @description A field that can keep a message from being sent
  */
 export type ContactCheckedField = keyof ContactErrors;
+
+/**
+ * The {@link ContactResult} type
+ * @description What the contact action returns: whether the message reached AMIR-GB, and the message itself, so a page posted without JavaScript can thank the visitor or give their text back
+ */
+export type ContactResult = {
+  sent: boolean;
+  values: ContactValues;
+};

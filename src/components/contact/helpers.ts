@@ -1,6 +1,14 @@
 // Dependencies
+import { isContactError } from "../../lib/contact/helpers";
+import { readFieldErrors } from "../forms/helpers";
+import { isInputError } from "astro:actions";
 import { getTranslations } from "../../i18n/helpers";
-import { CONTACT_ERROR, CONTACT_TOPIC_LABEL, CONTACT_TOPICS } from "../../lib/contact/constants";
+import {
+  CONTACT_CHECKED_FIELDS,
+  CONTACT_ERROR,
+  CONTACT_TOPICS,
+  CONTACT_TOPIC_LABEL,
+} from "../../lib/contact/constants";
 import {
   ANSWER_LANGUAGE,
   ANSWER_LANGUAGE_IN_SENTENCE,
@@ -8,11 +16,18 @@ import {
   ANSWER_LANGUAGES,
 } from "../../site/constants";
 import { getOpenerItems } from "../ui/helpers";
-import { CONTACT_ERROR_LABEL, CONTACT_SENT_OPENER_LANGS, CONTACT_SUMMARY_TITLE } from "./constants";
+import {
+  CONTACT_ERROR_LABEL,
+  CONTACT_FORM_STATE,
+  CONTACT_SENT_OPENER_LANGS,
+  CONTACT_SUMMARY_TITLE,
+} from "./constants";
 
 // Types
+import type { ContactResult } from "../../lib/contact/types";
+import type { ActionError } from "astro:actions";
 import type { Locale } from "../../i18n/types";
-import type { ContactFormCopy } from "./types";
+import type { ContactFormCopy, ContactFormStart } from "./types";
 
 /**
  * The {@link getContactFormCopy} helper
@@ -67,4 +82,40 @@ export function getContactFormCopy(locale: Locale): ContactFormCopy {
     failedText: t["contactPage.failedText"],
     tryAgain: t["contactPage.tryAgain"],
   };
+}
+
+/**
+ * The {@link getContactFormStart} helper
+ * @description Where the message form starts after it was posted without JavaScript: thanked, with the server's errors, or not sent with the message given back
+ * @param {ContactResult | undefined} data - The contact action's result, when it ran
+ * @param {ActionError | undefined} error - The contact action's error, when it failed
+ * @returns {ContactFormStart | undefined} The form's start, or nothing when the page was not posted
+ */
+export function getContactFormStart(
+  data: ContactResult | undefined,
+  error: ActionError | undefined,
+): ContactFormStart | undefined {
+  // Input the server refused shows its errors
+  if (error && isInputError(error)) {
+    return {
+      state: CONTACT_FORM_STATE.EDITING,
+      errors: readFieldErrors(error.fields, CONTACT_CHECKED_FIELDS, isContactError),
+    };
+  }
+
+  // Any other error means it did not go
+  if (error) {
+    return { state: CONTACT_FORM_STATE.FAILED };
+  }
+
+  // A message that reached AMIR-GB is thanked; one that did not is given back
+  if (data) {
+    return {
+      state: data.sent ? CONTACT_FORM_STATE.SENT : CONTACT_FORM_STATE.FAILED,
+      values: data.values,
+    };
+  }
+
+  // A plain visit starts empty
+  return undefined;
 }

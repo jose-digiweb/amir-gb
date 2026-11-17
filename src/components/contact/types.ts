@@ -1,6 +1,6 @@
 // Types
 import type { OpenerItem } from "../ui/types";
-import type { ContactError } from "../../lib/contact/types";
+import type { ContactError, ContactErrors, ContactValues } from "../../lib/contact/types";
 import type { AnswerLanguage } from "../../site/types";
 import type { ChoiceOption } from "../forms/types";
 import type { RingSpec } from "../../lib/woven/types";
@@ -98,4 +98,14 @@ export type ContactDrawingLayout = {
   bubbleSize: BubbleSize;
   bubbles: readonly WelcomeBubbleSpot[];
   sparkles: readonly Sparkle[];
+};
+
+/**
+ * The {@link ContactFormStart} type
+ * @description Where the message form starts after a post without JavaScript: thanked, with its errors, or not sent with the message given back
+ */
+export type ContactFormStart = {
+  state: ContactFormState;
+  values?: ContactValues;
+  errors?: ContactErrors;
 };

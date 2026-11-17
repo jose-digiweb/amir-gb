@@ -3,6 +3,7 @@
 import { LoaderCircle, Send } from "@lucide/vue";
 import { CONTACT_FIELD, CONTACT_LIMIT } from "../../lib/contact/constants";
 import { CONTACT_FORM_ID, CONTACT_FORM_STATE } from "./constants";
+import { useFormEnhanced } from "../forms/useFormEnhanced";
 import { useContactForm } from "./useContactForm";
 
 // Components
@@ -17,7 +18,7 @@ import ContactSent from "./ContactSent.vue";
 
 // Types
 import type { Locale } from "../../i18n/types";
-import type { ContactFormCopy, ContactFormLinks } from "./types";
+import type { ContactFormCopy, ContactFormLinks, ContactFormStart } from "./types";
 
 /**
  * The {@link Props} type
@@ -30,6 +31,10 @@ type Props = {
   copy: ContactFormCopy;
   /** The WhatsApp and privacy links. */
   links: ContactFormLinks;
+  /** Where the form posts without JavaScript: the contact action on its own small page. */
+  action: string;
+  /** Where the form starts after a post without JavaScript. */
+  start?: ContactFormStart;
 };
 
 // Read the props and the form's state
@@ -46,14 +51,17 @@ const {
   errors,
   errorFields,
   summaryTitle,
-  summaryText,
+  summaryParts,
   errorText,
   sentTitle,
   sentText,
   onSubmit,
   send,
   startAgain,
-} = useContactForm({ locale: props.locale, copy: props.copy });
+} = useContactForm({ locale: props.locale, copy: props.copy, start: props.start });
+
+// The browser checks the required fields until this form's script takes over
+const isEnhanced = useFormEnhanced();
 </script>
 
 <template>
@@ -70,7 +78,8 @@ const {
   <form
     v-else
     method="post"
-    novalidate
+    :action="props.action"
+    :novalidate="isEnhanced"
     class="flex flex-col gap-5 desktop:gap-6"
     @submit="onSubmit"
   >
@@ -78,7 +87,7 @@ const {
       v-if="errorFields.length > 0"
       :id="CONTACT_FORM_ID.SUMMARY"
       :title="summaryTitle"
-      :text="summaryText"
+      :parts="summaryParts"
     />
     <FormFailed
       v-if="state === CONTACT_FORM_STATE.FAILED"

@@ -150,17 +150,6 @@ export const STRIPE_LOG = {
 } as const;
 
 /**
- * The {@link PRIVATE_PAGE} constant
- * @description The headers for a page that shows one donor's gift, so no cache keeps it and no search engine lists it
- */
-export const PRIVATE_PAGE = {
-  HEADER: "Cache-Control",
-  VALUE: "private, no-store",
-  ROBOTS_HEADER: "X-Robots-Tag",
-  ROBOTS_VALUE: "noindex",
-} as const;
-
-/**
  * The {@link DONATE_PAGE_CACHE} constant
  * @description How long the edge keeps the Donate page with the plain form, in seconds: it reads nothing from EmDash or the clock, so it stays until the next deploy clears it
  */

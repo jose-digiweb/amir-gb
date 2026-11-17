@@ -53,3 +53,12 @@ export type JoinErrors = {
  * @description A field that can keep a sign-up from being sent
  */
 export type JoinCheckedField = keyof JoinErrors;
+
+/**
+ * The {@link JoinResult} type
+ * @description What the join action returns: whether the sign-up reached AMIR-GB, and the sign-up itself, so a page posted without JavaScript can thank the visitor or give their text back
+ */
+export type JoinResult = {
+  sent: boolean;
+  values: JoinValues;
+};

@@ -1,5 +1,5 @@
 // Types
-import type { JoinError, JoinMode, JoinSkill } from "../../lib/join/types";
+import type { JoinError, JoinErrors, JoinMode, JoinSkill, JoinValues } from "../../lib/join/types";
 import type { AnswerLanguage } from "../../site/types";
 import type { TileColour } from "../../lib/content/types";
 import type { ChoiceOption } from "../forms/types";
@@ -142,4 +142,14 @@ export type JoinDrawingLayout = {
   inner: string | null;
   chip: { x: number; y: number; size: ChipSize; thread: string | null };
   sparkles: readonly Sparkle[];
+};
+
+/**
+ * The {@link JoinFormStart} type
+ * @description Where the sign-up form starts after a post without JavaScript: thanked, with its errors, or not sent with the sign-up given back
+ */
+export type JoinFormStart = {
+  state: JoinFormState;
+  values?: JoinValues;
+  errors?: JoinErrors;
 };
