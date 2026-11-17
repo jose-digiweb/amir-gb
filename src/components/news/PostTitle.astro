@@ -1,0 +1,35 @@
+---
+// Dependencies
+import { LOCALE } from "../../i18n/constants";
+
+// Components
+import DutchOnlyNote from "./DutchOnlyNote.astro";
+
+// Types
+import type { NewsPost } from "../../lib/news/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the PostTitle component: the note for a post only in Dutch, the title and the lead, at the top of the reading column
+ */
+type Props = {
+  /** The post. */
+  post: NewsPost;
+};
+
+// Read the post; a post only in Dutch is marked as Dutch
+const { post } = Astro.props;
+const lang = post.isDutchOnly ? LOCALE.NL : undefined;
+---
+
+<div class="flex flex-col gap-3.5">
+  {post.isDutchOnly ? <DutchOnlyNote type={post.type} /> : null}
+  <h1 lang={lang} class="type-section-title text-balance hyphens-auto text-text-heading">
+    {post.title}
+  </h1>
+  {post.excerpt ? (
+    <p lang={lang} class="type-body text-pretty text-text tablet:type-lead">
+      {post.excerpt}
+    </p>
+  ) : null}
+</div>

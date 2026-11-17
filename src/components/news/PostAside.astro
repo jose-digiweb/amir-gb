@@ -1,0 +1,52 @@
+---
+// Dependencies
+import { ChevronLeft } from "@lucide/astro";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { INTL_LOCALE } from "../../i18n/constants";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { getPostDate } from "../../lib/news/helpers";
+import { ROUTE } from "../../site/constants";
+
+// Components
+import PostShareAside from "./PostShareAside.astro";
+import PostTypeTag from "./PostTypeTag.astro";
+
+// Types
+import type { NewsPost } from "../../lib/news/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the PostAside component, the desktop side column beside the reading column: back to all news, the post's type, date and author, and share; it stays in view while reading
+ */
+type Props = {
+  /** The post. */
+  post: NewsPost;
+};
+
+// Read the post and write its date in the page's language
+const { post } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const date = getPostDate(post.publishedAt, INTL_LOCALE[locale]);
+---
+
+<aside
+  aria-label={t["news.aboutPost"]}
+  class="sticky top-30 hidden flex-col gap-4.5 pt-1.5 desktop:flex"
+>
+  <a
+    href={getRelativeLocaleUrl(locale, ROUTE.NEWS)}
+    class="-ml-1.5 inline-flex min-h-tap items-center gap-1.5 self-start type-button-sm text-text-heading hover:underline hover:decoration-2 hover:underline-offset-4"
+  >
+    <ChevronLeft class="size-icon-md" />
+    {t["news.allNews"]}
+  </a>
+  <p class="flex flex-col items-start gap-2.5 border-t border-border pt-4.5">
+    <PostTypeTag type={post.type} class="bg-bg-alt" />
+    <span class="flex flex-col type-body-sm text-text-muted">
+      <time datetime={post.publishedAt.toISOString()}>{date}</time>
+      <span>{t["news.byline"]}</span>
+    </span>
+  </p>
+  <PostShareAside title={post.title} />
+</aside>

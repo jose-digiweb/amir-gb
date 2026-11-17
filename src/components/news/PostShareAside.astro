@@ -1,0 +1,68 @@
+---
+// Dependencies
+import { Check, Link, MessageCircle } from "@lucide/astro";
+import { getLocale, getTranslations } from "../../i18n/helpers";
+import { getWhatsAppShareHref } from "../../lib/share/helpers";
+import { BUTTON_SIZE, BUTTON_TONE } from "../ui/constants";
+
+// Components
+import Button from "../ui/Button.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the PostShareAside component: Share this in the desktop side column, with WhatsApp and Copy link as full-width buttons
+ */
+type Props = {
+  /** The post's title, which the WhatsApp message starts with. */
+  title: string;
+};
+
+// Read the title and prepare the WhatsApp message with the page's address
+const { title } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
+const shareHref = getWhatsAppShareHref(title, Astro.url.href);
+---
+
+<div data-copy-share class="group flex flex-col gap-2.5 border-t border-border pt-4.5">
+  <p class="type-button-sm text-text-heading">{t["news.share"]}</p>
+  <Button
+    href={shareHref}
+    tone={BUTTON_TONE.OUTLINE}
+    size={BUTTON_SIZE.COMPACT}
+    block
+    target="_blank"
+    rel="noopener"
+    class="type-button-sm"
+  >
+    <MessageCircle />
+    {t["news.shareWhatsApp"]}
+  </Button>
+  <Button
+    data-copy-link
+    tone={BUTTON_TONE.OUTLINE}
+    size={BUTTON_SIZE.COMPACT}
+    block
+    class="type-button-sm"
+  >
+    <Link class="group-data-copied:hidden" />
+    <Check class="hidden text-success group-data-copied:block" />
+    <span class="group-data-copied:hidden">{t["news.copyLink"]}</span>
+    <span class="hidden group-data-copied:inline">{t["news.copied"]}</span>
+  </Button>
+  <p class="hidden type-small text-text-muted group-data-failed:block">{t["news.copyFailed"]}</p>
+  <span
+    role="status"
+    class="sr-only"
+    data-copy-status
+    data-copied-text={t["news.copied"]}
+    data-failed-text={t["news.copyFailed"]}
+  ></span>
+</div>
+
+<script>
+  // Dependencies
+  import { enableCopyLink } from "../../lib/news/helpers";
+
+  // Copy link copies the page's address and says so
+  enableCopyLink();
+</script>

@@ -19,3 +19,12 @@ export const TEXT_ALIGN = {
   CENTER: "center",
   RIGHT: "right",
 } as const;
+
+/**
+ * The {@link RICH_TEXT_SIZE} constant
+ * @description The sizes rich text's paragraphs take: the body size, or one step larger from tablet up for a long read such as a news post
+ */
+export const RICH_TEXT_SIZE = {
+  BODY: "body",
+  READ: "read",
+} as const;

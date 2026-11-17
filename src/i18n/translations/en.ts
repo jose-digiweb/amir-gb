@@ -616,6 +616,8 @@ export const en = {
   "news.followInstagram": "Follow us on Instagram",
   "news.galleryOpener": "PHOTOS FROM THE DAY",
   "news.share": "Share this",
+  "news.byline": "By AMIR-GB",
+  "news.aboutPost": "About this post",
   "news.copyLink": "Copy link",
   "news.listTitle": "All posts",
   "news.copied": "Link copied",

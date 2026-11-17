@@ -102,6 +102,7 @@ export const COPY_LINK = {
   GROUP: "[data-copy-share]",
   BUTTON: "[data-copy-link]",
   CLICK: "click",
+  READY: "copyShareReady",
 } as const;
 
 /**
