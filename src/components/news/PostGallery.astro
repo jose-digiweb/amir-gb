@@ -11,7 +11,7 @@ import type { MediaImage } from "../../lib/content/types";
 
 /**
  * The {@link Props} type
- * @description The props of the PostGallery component, the photos from the day: two columns that end on one line on phone, rows of two on tablet (a last odd photo only on desktop), one large and four small on desktop
+ * @description The props of the PostGallery component, Photos from the day: a two-column grid inside the reading column, the first photo spanning it larger
  */
 type Props = {
   /** The photos, in the editor's order. */
@@ -21,16 +21,28 @@ type Props = {
 // Read the photos and the opener's copy
 const { images } = Astro.props;
 const t = getTranslations(getLocale(Astro.currentLocale));
+
+// The first photo leads, spanning the column; the rest share it two by two
+const [lead, ...rest] = images;
 ---
 
-<div class="mt-10 tablet:mt-16">
+<div class="mt-10 flex flex-col gap-3.5 tablet:mt-14">
   <Opener label={t["news.galleryOpener"]} />
-  <ul class="gallery mt-3.5 tablet:mt-4">
-    {images.map((image) => (
-      <li class="gallery-photo relative overflow-hidden rounded-lg bg-surface-sunken">
+  <ul class="grid grid-cols-2 gap-2.5 tablet:gap-3.5">
+    {lead ? (
+      <li class="relative col-span-2 h-55 overflow-hidden rounded-lg bg-surface-sunken tablet:h-85 desktop:h-95">
+        <Image
+          image={lead}
+          sizes="(min-width: 1180px) 720px, (min-width: 700px) 640px, calc(100vw - 40px)"
+          class="absolute inset-0 size-full object-cover"
+        />
+      </li>
+    ) : null}
+    {rest.map((image) => (
+      <li class="gallery-photo relative h-37.5 overflow-hidden rounded-lg bg-surface-sunken tablet:h-52.5 desktop:h-57.5">
         <Image
           image={image}
-          sizes="(min-width: 1180px) 640px, 50vw"
+          sizes="(min-width: 1180px) 360px, (min-width: 700px) 320px, 50vw"
           class="absolute inset-0 size-full object-cover"
         />
       </li>
@@ -41,46 +53,8 @@ const t = getTranslations(getLocale(Astro.currentLocale));
 <style>
   @reference "../../styles/global.css";
 
-  .gallery {
-    @apply columns-2 gap-2.5 tablet:grid tablet:grid-cols-2 tablet:gap-4 desktop:auto-rows-50 desktop:grid-cols-4;
-  }
-
-  .gallery-photo {
-    @apply mb-2.5 h-40 break-inside-avoid tablet:mb-0 tablet:h-55 desktop:h-auto;
-  }
-
-  .gallery-photo:first-child,
-  .gallery-photo:last-child:nth-child(even),
-  .gallery-photo:nth-last-child(2):nth-child(even) {
-    @apply h-55 desktop:h-auto;
-  }
-
-  .gallery-photo:last-child:nth-child(odd):not(:first-child) {
-    @apply hidden desktop:block;
-  }
-
-  .gallery-photo:only-child {
-    column-span: all;
-  }
-
-  .gallery-photo:nth-child(-n + 2) {
-    @apply tablet:h-75 desktop:h-auto;
-  }
-
-  .gallery-photo:first-child {
-    @apply desktop:col-span-2 desktop:row-span-2;
-  }
-
-  .gallery-photo:only-child {
-    @apply tablet:col-span-2 desktop:col-span-4;
-  }
-
-  .gallery-photo:first-child:nth-last-child(2) ~ .gallery-photo {
-    @apply desktop:col-span-2 desktop:row-span-2;
-  }
-
-  .gallery-photo:first-child:nth-last-child(3) ~ .gallery-photo,
-  .gallery-photo:first-child:nth-last-child(4) ~ .gallery-photo:last-child {
-    @apply desktop:col-span-2;
+  /* A last photo left alone in its row spans the column */
+  .gallery-photo:last-child:nth-child(even) {
+    @apply col-span-2;
   }
 </style>

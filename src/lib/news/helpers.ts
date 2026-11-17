@@ -349,11 +349,18 @@ function focusAfterLoad(added: HTMLElement[], footer: HTMLElement): void {
 
 /**
  * The {@link enableCopyLink} helper
- * @description Makes Copy link copy the page's address and say so for a few seconds
+ * @description Makes each Copy link copy the page's address and say so for a few seconds; the side column and the share row both call it, and each is set up once
  * @returns {void}
  */
 export function enableCopyLink(): void {
   for (const group of document.querySelectorAll<HTMLElement>(COPY_LINK.GROUP)) {
+    // A share group already set up by another caller is left as it is
+    if (group.dataset[COPY_LINK.READY] !== undefined) {
+      continue;
+    }
+
+    // Copy on a press of its button
+    group.dataset[COPY_LINK.READY] = "";
     const button = group.querySelector<HTMLButtonElement>(COPY_LINK.BUTTON);
     button?.addEventListener(COPY_LINK.CLICK, () => copyLink(group));
   }

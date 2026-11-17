@@ -621,6 +621,8 @@ export const pt: Translations = {
   "news.followInstagram": "Siga-nos no Instagram",
   "news.galleryOpener": "FOTOGRAFIAS DO DIA",
   "news.share": "Partilhar",
+  "news.byline": "Por AMIR-GB",
+  "news.aboutPost": "Sobre esta publicação",
   "news.copyLink": "Copiar ligação",
   "news.listTitle": "Todas as publicações",
   "news.copied": "Ligação copiada",

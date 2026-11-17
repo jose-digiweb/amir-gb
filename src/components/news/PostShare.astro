@@ -10,7 +10,7 @@ import Button from "../ui/Button.astro";
 
 /**
  * The {@link Props} type
- * @description The props of the PostShare component: share the post on WhatsApp, or copy its link
+ * @description The props of the PostShare component, Share this at the end of a post on phone and tablet (the desktop side column has its own): share the post on WhatsApp, or copy its link
  */
 type Props = {
   /** The post's title, the message WhatsApp starts with. */
@@ -25,18 +25,16 @@ const shareHref = getWhatsAppShareHref(title, Astro.url.href);
 
 <div
   data-copy-share
-  class="group mx-auto mt-8 flex max-w-160 flex-wrap items-center gap-2.5 border-t border-border pt-6 tablet:mt-12 desktop:max-w-180"
+  class="group mt-9 grid grid-cols-2 gap-2.5 border-t border-border pt-6 tablet:mt-12 tablet:flex tablet:flex-wrap tablet:items-center desktop:hidden"
 >
-  <p class="basis-full type-button-sm text-text-heading tablet:mr-1 tablet:basis-auto">
-    {t["news.share"]}
-  </p>
+  <p class="col-span-2 type-button-sm text-text-heading tablet:mr-1">{t["news.share"]}</p>
   <Button
     href={shareHref}
     tone={BUTTON_TONE.OUTLINE}
     size={BUTTON_SIZE.COMPACT}
     target="_blank"
     rel="noopener"
-    class="flex-1 px-4 type-button-sm tablet:flex-none"
+    class="px-3 type-button-sm tablet:px-4.5"
   >
     <MessageCircle />
     {t["news.shareWhatsApp"]}
@@ -45,14 +43,14 @@ const shareHref = getWhatsAppShareHref(title, Astro.url.href);
     data-copy-link
     tone={BUTTON_TONE.OUTLINE}
     size={BUTTON_SIZE.COMPACT}
-    class="flex-1 px-4 type-button-sm tablet:flex-none"
+    class="px-3 type-button-sm tablet:px-4.5"
   >
     <Link class="group-data-copied:hidden" />
     <Check class="hidden text-success group-data-copied:block" />
     <span class="group-data-copied:hidden">{t["news.copyLink"]}</span>
     <span class="hidden group-data-copied:inline">{t["news.copied"]}</span>
   </Button>
-  <p class="hidden basis-full type-small text-text-muted group-data-failed:block">
+  <p class="col-span-2 hidden basis-full type-small text-text-muted group-data-failed:block">
     {t["news.copyFailed"]}
   </p>
   <span

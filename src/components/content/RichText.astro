@@ -1,11 +1,13 @@
 ---
 // Dependencies
+import { RICH_TEXT_SIZE } from "./constants";
 import { Block, PortableText } from "emdash/ui";
 
 // Components
 import RichTextHeading from "./RichTextHeading.astro";
 
 // Types
+import type { RichTextSize } from "./types";
 import type { PortableTextBlock } from "emdash";
 
 /**
@@ -15,13 +17,15 @@ import type { PortableTextBlock } from "emdash";
 type Props = {
   /** The text as EmDash stores it. */
   value: PortableTextBlock[] | undefined;
+  /** The size of its paragraphs: the body size, or a step larger from tablet up for a long read. */
+  size?: RichTextSize;
 };
 
 // Read the text; EmDash renders every block (quotes too, grouped), the headings move under the page title
-const { value } = Astro.props;
+const { value, size = RICH_TEXT_SIZE.BODY } = Astro.props;
 ---
 
-<div class="rich-text flex flex-col gap-5">
+<div class="rich-text flex flex-col gap-5" data-size={size}>
   <PortableText
     value={value}
     components={{
@@ -44,6 +48,11 @@ const { value } = Astro.props;
   .rich-text :global(p),
   .rich-text :global(li) {
     @apply type-body text-pretty text-text;
+  }
+
+  .rich-text[data-size="read"] :global(p),
+  .rich-text[data-size="read"] :global(li) {
+    @apply tablet:type-lead;
   }
 
   .rich-text :global(strong) {

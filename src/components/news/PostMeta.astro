@@ -2,13 +2,12 @@
 // Dependencies
 import { ChevronLeft } from "@lucide/astro";
 import { getRelativeLocaleUrl } from "astro:i18n";
-import { INTL_LOCALE, LOCALE } from "../../i18n/constants";
+import { INTL_LOCALE } from "../../i18n/constants";
 import { getLocale, getTranslations } from "../../i18n/helpers";
 import { getPostDate } from "../../lib/news/helpers";
 import { ROUTE } from "../../site/constants";
 
 // Components
-import DutchOnlyNote from "./DutchOnlyNote.astro";
 import PostTypeTag from "./PostTypeTag.astro";
 
 // Types
@@ -16,7 +15,7 @@ import type { NewsPost } from "../../lib/news/types";
 
 /**
  * The {@link Props} type
- * @description The props of the PostHeader component: back to News, the type and date, the title and the lead
+ * @description The props of the PostMeta component: back to News, then the post's type and date, over the title on phone and tablet
  */
 type Props = {
   /** The post. */
@@ -28,10 +27,9 @@ const { post } = Astro.props;
 const locale = getLocale(Astro.currentLocale);
 const t = getTranslations(locale);
 const date = getPostDate(post.publishedAt, INTL_LOCALE[locale]);
-const lang = post.isDutchOnly ? LOCALE.NL : undefined;
 ---
 
-<header class="mx-auto flex max-w-160 flex-col gap-3 tablet:gap-4 desktop:max-w-180">
+<div class="flex flex-col gap-3.5 desktop:hidden">
   <a
     href={getRelativeLocaleUrl(locale, ROUTE.NEWS)}
     class="-ml-1.5 inline-flex min-h-tap items-center gap-1.5 self-start type-button-sm text-text-heading hover:underline hover:decoration-2 hover:underline-offset-4"
@@ -39,8 +37,7 @@ const lang = post.isDutchOnly ? LOCALE.NL : undefined;
     <ChevronLeft class="size-icon-md" />
     {t["nav.news"]}
   </a>
-  {post.isDutchOnly ? <DutchOnlyNote type={post.type} /> : null}
-  <p class="flex flex-wrap items-center gap-3">
+  <p class="flex flex-wrap items-center gap-2.5">
     <PostTypeTag type={post.type} class="bg-bg-alt" />
     <span class="type-body-sm text-text-muted">
       <time datetime={post.publishedAt.toISOString()}>{date}</time>
@@ -48,12 +45,4 @@ const lang = post.isDutchOnly ? LOCALE.NL : undefined;
       <span class="whitespace-nowrap">{t["site.name"]}</span>
     </span>
   </p>
-  <h1 lang={lang} class="type-h1 text-balance hyphens-auto tablet:type-display">
-    {post.title}
-  </h1>
-  {post.excerpt ? (
-    <p lang={lang} class="max-w-measure type-body text-pretty text-text tablet:type-lead">
-      {post.excerpt}
-    </p>
-  ) : null}
-</header>
+</div>

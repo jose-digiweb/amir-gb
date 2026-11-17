@@ -621,6 +621,8 @@ export const nl: Translations = {
   "news.followInstagram": "Volg ons op Instagram",
   "news.galleryOpener": "FOTO’S VAN DE DAG",
   "news.share": "Deel dit",
+  "news.byline": "Door AMIR-GB",
+  "news.aboutPost": "Over dit bericht",
   "news.copyLink": "Kopieer link",
   "news.listTitle": "Alle berichten",
   "news.copied": "Link gekopieerd",
