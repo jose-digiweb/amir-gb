@@ -183,10 +183,8 @@ export const BANK_TRANSFER = {
 export const COPY_ACCOUNT = {
   ROOT: "[data-copy-account]",
   BUTTON: "[data-copy-account-button]",
-  COPIED: "copied",
   READY: "copyAccountReady",
   VALUE_ATTRIBUTE: "data-copy-account",
-  RESET_MS: 3000,
   CLICK: "click",
   SPACES: /\s+/g,
 } as const;

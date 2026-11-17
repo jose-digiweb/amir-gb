@@ -23,7 +23,10 @@ const t = getTranslations(getLocale(Astro.currentLocale));
 const shareHref = getWhatsAppShareHref(title, Astro.url.href);
 ---
 
-<div class="mx-auto mt-8 flex max-w-160 flex-wrap items-center gap-2.5 border-t border-border pt-6 tablet:mt-12 desktop:max-w-180">
+<div
+  data-copy-share
+  class="group mx-auto mt-8 flex max-w-160 flex-wrap items-center gap-2.5 border-t border-border pt-6 tablet:mt-12 desktop:max-w-180"
+>
   <p class="basis-full type-button-sm text-text-heading tablet:mr-1 tablet:basis-auto">
     {t["news.share"]}
   </p>
@@ -42,15 +45,23 @@ const shareHref = getWhatsAppShareHref(title, Astro.url.href);
     data-copy-link
     tone={BUTTON_TONE.OUTLINE}
     size={BUTTON_SIZE.COMPACT}
-    class="group flex-1 px-4 type-button-sm tablet:flex-none"
+    class="flex-1 px-4 type-button-sm tablet:flex-none"
   >
     <Link class="group-data-copied:hidden" />
     <Check class="hidden text-success group-data-copied:block" />
-    <span aria-live="polite">
-      <span class="group-data-copied:hidden">{t["news.copyLink"]}</span>
-      <span class="hidden group-data-copied:inline">{t["news.copied"]}</span>
-    </span>
+    <span class="group-data-copied:hidden">{t["news.copyLink"]}</span>
+    <span class="hidden group-data-copied:inline">{t["news.copied"]}</span>
   </Button>
+  <p class="hidden basis-full type-small text-text-muted group-data-failed:block">
+    {t["news.copyFailed"]}
+  </p>
+  <span
+    role="status"
+    class="sr-only"
+    data-copy-status
+    data-copied-text={t["news.copied"]}
+    data-failed-text={t["news.copyFailed"]}
+  ></span>
 </div>
 
 <script>

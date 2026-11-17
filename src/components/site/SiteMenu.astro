@@ -111,10 +111,13 @@ const donateHref = getRelativeLocaleUrl(locale, ROUTE.DONATE);
 
 <script>
   // Dependencies
-  import { enableDialogFallbacks } from "../../lib/dom/helpers";
+  import { closeLayersOnLeave, enableDialogFallbacks } from "../../lib/dom/helpers";
 
   // Older browsers open, close and light-dismiss the menu by script
   enableDialogFallbacks();
+
+  // Leaving the page closes the menu and any open popover, so the back button finds them closed
+  closeLayersOnLeave();
 </script>
 
 <style>

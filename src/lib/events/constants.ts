@@ -119,6 +119,9 @@ export const ONLINE_LINK = {
   SELECTOR: "[data-online-from]",
   DATA_FROM: "onlineFrom",
   LONGEST_WAIT: 86_400_000,
+  VISIBILITY_CHANGE: "visibilitychange",
+  PAGE_SHOW: "pageshow",
+  VISIBLE: "visible",
 } as const;
 
 /**
