@@ -44,6 +44,7 @@ export const nl: Translations = {
     "AMIR-GB, Vereniging voor de ondersteuning van migranten en de Guinee-Bissause gemeenschap in Nederland",
   "footer.manageGift": "Maandelijkse gift stoppen of wijzigen",
   "social.label": "AMIR-GB op sociale media",
+  "site.skipToContent": "Naar de inhoud",
   "seo.shareImageAlt":
     "AMIR-GB: handen ineen in een geweven kring, met de hulponderwerpen eromheen",
   "eventsPage.pageTitle": "Agenda · AMIR-GB",
@@ -619,6 +620,7 @@ export const nl: Translations = {
   "news.galleryOpener": "FOTO’S VAN DE DAG",
   "news.share": "Deel dit",
   "news.copyLink": "Kopieer link",
+  "news.listTitle": "Alle berichten",
   "news.copied": "Link gekopieerd",
   "news.moreOpener": "LEES VERDER",
   "news.moreTitle": "Meer nieuws",

@@ -19,7 +19,7 @@ type Props = Record<string, never>;
 const t = getTranslations(getLocale(Astro.currentLocale));
 ---
 
-<article class="relative isolate flex flex-col gap-4 overflow-hidden rounded-lg bg-surface-brand p-5 text-on-brand desktop:p-6">
+<article class="relative isolate flex flex-col gap-4 overflow-hidden rounded-lg bg-surface-brand p-5 text-on-brand [--focus:var(--focus-on-brand)] desktop:p-6">
   <DecorBead ringed class="top-6 right-6 size-7" />
   <span class="grid size-14 place-items-center rounded-full bg-pressed-quiet-on-brand desktop:size-16">
     <MessageCircleQuestionMark class="size-icon-lg" />

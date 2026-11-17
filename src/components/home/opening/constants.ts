@@ -1,4 +1,5 @@
 // Dependencies
+import { LANGUAGE_TAG } from "../../../i18n/constants";
 import { TILE_COLOUR } from "../../../lib/content/constants";
 import { HELP_SERVICE } from "../../../lib/help/constants";
 import { VALUE } from "../../../site/constants";
@@ -127,3 +128,13 @@ export const DESKTOP_CONSTELLATION = {
  */
 export const CONSTELLATION_PHOTO_SIZES =
   "(min-width: 1180px) 190px, (min-width: 700px) 17.9vh, 38.4vw";
+
+/**
+ * The {@link OPENING_OPENER_LANGS} constant
+ * @description The language of each welcome in the opening's label: Dutch, English and Kriolu
+ */
+export const OPENING_OPENER_LANGS = [
+  LANGUAGE_TAG.DUTCH,
+  LANGUAGE_TAG.ENGLISH,
+  LANGUAGE_TAG.KRIOL,
+] as const;

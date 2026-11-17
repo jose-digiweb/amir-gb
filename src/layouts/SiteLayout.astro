@@ -1,4 +1,8 @@
 ---
+// Dependencies
+import { getLocale, getTranslations } from "../i18n/helpers";
+import { SITE_CONTENT_ID } from "../site/constants";
+
 // Components
 import SiteFooter from "../components/site/SiteFooter.astro";
 import SiteHeader from "../components/site/SiteHeader.astro";
@@ -22,14 +26,21 @@ type Props = {
 
 // Pass the page's title, description and search settings to the document shell
 const { title, description, seo } = Astro.props;
+const t = getTranslations(getLocale(Astro.currentLocale));
 ---
 
 <BaseLayout title={title} description={description} seo={seo}>
   <slot name="head" slot="head" />
+  <a
+    href={`#${SITE_CONTENT_ID}`}
+    class="sr-only z-overlay rounded-pill bg-surface-raised type-button text-text-heading shadow-lg focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:px-5 focus:py-3"
+  >
+    {t["site.skipToContent"]}
+  </a>
   <div class="flex min-h-svh flex-col">
     <slot name="announcement" />
     <SiteHeader />
-    <main class="flex-1">
+    <main id={SITE_CONTENT_ID} tabindex="-1" class="flex-1 outline-none">
       <slot />
     </main>
     <SiteFooter />

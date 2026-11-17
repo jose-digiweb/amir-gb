@@ -1,7 +1,7 @@
 ---
 // Dependencies
 import { getLocale, getTranslations } from "../../i18n/helpers";
-import { SOCIAL_LINKS } from "../../site/constants";
+import { PUBLISHED_SOCIAL_LINKS } from "../../site/constants";
 
 /**
  * The {@link Props} type
@@ -14,7 +14,7 @@ const t = getTranslations(getLocale(Astro.currentLocale));
 ---
 
 <ul aria-label={t["social.label"]} class="flex flex-wrap gap-2">
-  {SOCIAL_LINKS.map((social) => (
+  {PUBLISHED_SOCIAL_LINKS.map((social) => (
     <li>
       <a
         href={social.href}

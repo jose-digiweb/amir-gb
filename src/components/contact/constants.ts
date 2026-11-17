@@ -1,4 +1,5 @@
 // Dependencies
+import { LANGUAGE_TAG } from "../../i18n/constants";
 import { CONTACT_ERROR } from "../../lib/contact/constants";
 
 // Types
@@ -241,3 +242,13 @@ export const CONTACT_DRAWINGS = {
     ],
   },
 } as const satisfies Record<string, ContactDrawingLayout>;
+
+/**
+ * The {@link CONTACT_SENT_OPENER_LANGS} constant
+ * @description The language of each thank you over the sent message: Kriolu, Dutch and English
+ */
+export const CONTACT_SENT_OPENER_LANGS = [
+  LANGUAGE_TAG.KRIOL,
+  LANGUAGE_TAG.DUTCH,
+  LANGUAGE_TAG.ENGLISH,
+] as const;

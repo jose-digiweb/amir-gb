@@ -24,7 +24,7 @@ const links = getPageLinks(MAIN_NAV, locale, Astro.url.pathname);
           href={link.href}
           data-astro-prefetch={PREFETCH_ON_HOVER}
           aria-current={link.isCurrent ? "page" : undefined}
-          class="relative flex min-h-tap touch-manipulation items-center rounded-pill px-3 type-button-sm text-text-heading transition-colors duration-fast select-none after:absolute after:bottom-1 after:left-1/2 after:h-1 after:w-5 after:-translate-x-1/2 after:rounded-pill after:bg-text-heading after:opacity-0 hover:bg-hover-quiet active:bg-pressed-quiet aria-[current=page]:after:opacity-100"
+          class="relative flex min-h-tap touch-manipulation items-center rounded-pill px-3 type-button-sm text-text-heading transition-colors duration-fast select-none after:absolute after:bottom-1 after:left-1/2 after:h-1 after:w-5 after:-translate-x-1/2 after:rounded-pill after:bg-text-heading after:opacity-0 hover:bg-hover-quiet active:bg-pressed-quiet aria-[current=page]:after:opacity-100 forced-colors:after:bg-[CanvasText]"
         >
           {link.label}
         </a>

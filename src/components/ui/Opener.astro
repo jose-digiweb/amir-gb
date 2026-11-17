@@ -1,6 +1,7 @@
 ---
 // Dependencies
-import { OPENER_SEPARATOR, OPENER_TONE } from "./constants";
+import { OPENER_TONE } from "./constants";
+import { getOpenerItems } from "./helpers";
 
 // Components
 import StarMark from "./StarMark.astro";
@@ -17,14 +18,16 @@ type Props = {
   label: string;
   /** The ground it sits on. */
   tone?: OpenerTone;
+  /** Each item's language tag, in order, when the label mixes languages. */
+  langs?: readonly string[];
 };
 
 // Read the label and the ground, light by default
-const { label, tone = OPENER_TONE.LIGHT } = Astro.props;
+const { label, tone = OPENER_TONE.LIGHT, langs } = Astro.props;
 const isOnBrand = tone === OPENER_TONE.ON_BRAND;
 
 // Split a label that lists items: lines break between items and balance, and a separator at a line's start is clipped
-const items = label.split(OPENER_SEPARATOR);
+const items = getOpenerItems(label, langs);
 ---
 
 <p
@@ -37,8 +40,11 @@ const items = label.split(OPENER_SEPARATOR);
   <span class="min-w-0 overflow-hidden">
     <span class="-ms-4 block text-balance">
       {items.map((item) => (
-        <span class="relative ms-4 inline-block before:absolute before:right-full before:w-4 before:text-center before:content-['·']">
-          {item}
+        <span
+          lang={item.lang}
+          class="relative ms-4 inline-block before:absolute before:right-full before:w-4 before:text-center before:content-['·'_/_'']"
+        >
+          {item.text}
         </span>
       ))}
     </span>

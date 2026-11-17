@@ -12,6 +12,7 @@ import {
   mergeWithDutch,
   planWhatsOn,
   toClockTime,
+  getPhotoAlt,
 } from "./helpers";
 
 // Types
@@ -182,5 +183,21 @@ describe("cacheContentPage", () => {
       { tags: ["events"] },
     ]);
     expect(calls).toHaveLength(0);
+  });
+});
+
+describe("getPhotoAlt", () => {
+  const image = { id: "photo", alt: "A volunteer helping at a table" } as const;
+
+  it("gives a lead photo the editor's description", () => {
+    expect(getPhotoAlt(image, true)).toBe("A volunteer helping at a table");
+  });
+
+  it("leaves a photo in a list to the link's words", () => {
+    expect(getPhotoAlt(image, false)).toBe("");
+  });
+
+  it("leaves a lead photo with no description empty", () => {
+    expect(getPhotoAlt(undefined, true)).toBe("");
   });
 });

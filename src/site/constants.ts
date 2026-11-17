@@ -24,6 +24,12 @@ export const ROUTE = {
 } as const;
 
 /**
+ * The {@link SITE_CONTENT_ID} constant
+ * @description The id of every page's main content, where the skip link leads and what a page transition waits for
+ */
+export const SITE_CONTENT_ID = "content";
+
+/**
  * The {@link PREFETCH_ON_HOVER} constant
  * @description The prefetch strategy for links that are on every page (header, footer, languages), so they load only when hovered instead of whenever they show
  */
@@ -141,6 +147,12 @@ export const SOCIAL_LINKS = [
   SOCIAL_PROFILE.TIKTOK,
   SOCIAL_PROFILE.INSTAGRAM,
 ] as const;
+
+/**
+ * The {@link PUBLISHED_SOCIAL_LINKS} constant
+ * @description The social profiles whose address AMIR has sent; a profile still pending is not shown, so no link leads nowhere
+ */
+export const PUBLISHED_SOCIAL_LINKS = SOCIAL_LINKS.filter((link) => link.href !== PENDING_LINK);
 
 /**
  * The {@link VALUE} constant

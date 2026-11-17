@@ -39,3 +39,14 @@ export const INTL_LOCALE = {
   [LOCALE.EN]: "en-GB",
   [LOCALE.PT]: "pt-PT",
 } as const;
+
+/**
+ * The {@link LANGUAGE_TAG} constant
+ * @description The language tags for words written in a language other than the page's, Kriolu (Guinea-Bissau Creole) included
+ */
+export const LANGUAGE_TAG = {
+  DUTCH: "nl",
+  ENGLISH: "en",
+  PORTUGUESE: "pt",
+  KRIOL: "pov",
+} as const;

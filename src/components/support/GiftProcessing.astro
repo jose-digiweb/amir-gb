@@ -3,7 +3,7 @@
 import { Check } from "@lucide/astro";
 import { getLocale, getTranslations } from "../../i18n/helpers";
 import { fillAmount, formatAmount } from "../../lib/donate/helpers";
-import { RETURN_TONE } from "./constants";
+import { GIFT_THANKS_OPENER_LANGS, RETURN_TONE } from "./constants";
 
 // Components
 import GiftShareLink from "./GiftShareLink.astro";
@@ -29,6 +29,7 @@ const text = fillAmount(t["gift.processingText"], formatAmount(locale, amountCen
 <ReturnCard
   tone={RETURN_TONE.SUCCESS}
   opener={t["gift.thanksOpener"]}
+  openerLangs={GIFT_THANKS_OPENER_LANGS}
   title={t["gift.thanksTitle"]}
   text={text}
 >

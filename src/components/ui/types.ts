@@ -43,3 +43,12 @@ export type WovenShadeTone = (typeof WOVEN_SHADE_TONE)[keyof typeof WOVEN_SHADE_
  * @description One of the {@link DECOR_TONE} values
  */
 export type DecorTone = (typeof DECOR_TONE)[keyof typeof DECOR_TONE];
+
+/**
+ * The {@link OpenerItem} type
+ * @description One item of an opener label that lists several, with its language when it differs from the page's
+ */
+export type OpenerItem = {
+  text: string;
+  lang?: string;
+};

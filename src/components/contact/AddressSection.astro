@@ -3,7 +3,7 @@
 import { MapPinned } from "@lucide/astro";
 import { getLocale, getTranslations } from "../../i18n/helpers";
 import { CONTACT_PLACEHOLDER_LEGAL } from "./constants";
-import { LEGAL } from "../../site/constants";
+import { LEGAL, PUBLISHED_SOCIAL_LINKS } from "../../site/constants";
 import { BUTTON_TONE } from "../ui/constants";
 
 // Components
@@ -53,10 +53,12 @@ const legal = t["contactPage.legal"]
         {t["contactPage.openMaps"]}
       </Button>
     </div>
-    <div class="mt-6 flex flex-col gap-3 desktop:mt-9">
-      <Opener label={t["contactPage.followOpener"]} />
-      <SocialPills />
-    </div>
+    {PUBLISHED_SOCIAL_LINKS.length > 0 ? (
+      <div class="mt-6 flex flex-col gap-3 desktop:mt-9">
+        <Opener label={t["contactPage.followOpener"]} />
+        <SocialPills />
+      </div>
+    ) : null}
     <p class="mt-5 type-small text-pretty text-text-muted desktop:mt-7">{legal}</p>
   </div>
 </section>

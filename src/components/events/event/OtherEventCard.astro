@@ -54,16 +54,16 @@ const meta = [`${getShortWeekday(event.startsAt, intl)} ${times}`, where]
         <EventDate startsAt={event.startsAt} />
       </span>
     </span>
-    <span class="flex min-w-0 flex-col gap-1 tablet:gap-2.5 tablet:p-5">
+    <div class="flex min-w-0 flex-col gap-1 tablet:gap-2.5 tablet:p-5">
       <span class="hidden tablet:flex">
         <EventTypeChip type={event.type} />
       </span>
       <span class="type-small font-semibold text-text-muted tablet:hidden">{phoneMeta}</span>
-      <span class="type-h4 text-text-heading group-hover:underline group-hover:underline-offset-4 tablet:type-h3">
+      <h3 class="type-h4 text-text-heading group-hover:underline group-hover:underline-offset-4 tablet:type-h3">
         {event.title}
         {event.isDutchOnly ? <DutchOnlyMark /> : null}
-      </span>
+      </h3>
       <span class="hidden type-small text-text-muted tablet:block">{meta}</span>
-    </span>
+    </div>
   </a>
 </li>

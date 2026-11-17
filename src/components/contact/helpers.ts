@@ -7,7 +7,8 @@ import {
   ANSWER_LANGUAGE_LABEL,
   ANSWER_LANGUAGES,
 } from "../../site/constants";
-import { CONTACT_ERROR_LABEL, CONTACT_SUMMARY_TITLE } from "./constants";
+import { getOpenerItems } from "../ui/helpers";
+import { CONTACT_ERROR_LABEL, CONTACT_SENT_OPENER_LANGS, CONTACT_SUMMARY_TITLE } from "./constants";
 
 // Types
 import type { Locale } from "../../i18n/types";
@@ -51,7 +52,7 @@ export function getContactFormCopy(locale: Locale): ContactFormCopy {
       message: t["contactPage.summaryField.message"],
       consent: t["contactPage.summaryField.consent"],
     },
-    sentOpener: t["contactPage.sentOpener"],
+    sentOpener: getOpenerItems(t["contactPage.sentOpener"], CONTACT_SENT_OPENER_LANGS),
     sentTitle: t["contactPage.sentTitle"],
     sentText: t["contactPage.sentText"],
     languagesInSentence: {
