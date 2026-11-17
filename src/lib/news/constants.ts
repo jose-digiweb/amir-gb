@@ -99,10 +99,9 @@ export const OLDER_POSTS = {
  * @description The hooks of the Copy link button and how long it says the link was copied, in milliseconds
  */
 export const COPY_LINK = {
+  GROUP: "[data-copy-share]",
   BUTTON: "[data-copy-link]",
-  COPIED: "data-copied",
   CLICK: "click",
-  RESET_MS: 3000,
 } as const;
 
 /**

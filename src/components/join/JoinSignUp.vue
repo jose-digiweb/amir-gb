@@ -5,6 +5,7 @@ import { computed } from "vue";
 import { JOIN_FIELD, JOIN_LIMIT, JOIN_MODE } from "../../lib/join/constants";
 import { FIELD_ID_SUFFIX } from "../forms/constants";
 import { JOIN_FORM_ID, JOIN_FORM_STATE, JOIN_MODE_ID } from "./constants";
+import { useFormEnhanced } from "../forms/useFormEnhanced";
 import { useJoinForm } from "./useJoinForm";
 import { useJoinModeLinks } from "./useJoinModeLinks";
 
@@ -24,7 +25,7 @@ import SkillChip from "./SkillChip.vue";
 
 // Types
 import type { Locale } from "../../i18n/types";
-import type { JoinFormCopy, JoinFormLinks } from "./types";
+import type { JoinFormCopy, JoinFormLinks, JoinFormStart } from "./types";
 
 /**
  * The {@link Props} type
@@ -37,6 +38,10 @@ type Props = {
   copy: JoinFormCopy;
   /** The privacy, WhatsApp, What's on and tell a friend links. */
   links: JoinFormLinks;
+  /** Where the form posts without JavaScript: the join action on this page. */
+  action: string;
+  /** Where the form starts after a post without JavaScript. */
+  start?: JoinFormStart;
 };
 
 // Read the props and the form's state, and let the page's mode links pick the mode
@@ -56,14 +61,17 @@ const {
   errors,
   errorFields,
   summaryTitle,
-  summaryText,
+  summaryParts,
   errorText,
   sentTitle,
   sentText,
   stepsMode,
   onSubmit,
   send,
-} = useJoinForm({ locale: props.locale, copy: props.copy });
+} = useJoinForm({ locale: props.locale, copy: props.copy, start: props.start });
+
+// The browser checks the required fields until this form's script takes over
+const isEnhanced = useFormEnhanced();
 useJoinModeLinks(mode);
 
 // Skills show for a volunteer, and the next steps follow the mode
@@ -94,7 +102,8 @@ const skillsErrorId = `${JOIN_FORM_ID.SKILLS}${FIELD_ID_SUFFIX.ERROR}`;
     <form
       v-else
       method="post"
-      novalidate
+      :action="props.action"
+      :novalidate="isEnhanced"
       class="flex flex-col gap-5 desktop:gap-6"
       @submit="onSubmit"
     >
@@ -102,7 +111,7 @@ const skillsErrorId = `${JOIN_FORM_ID.SKILLS}${FIELD_ID_SUFFIX.ERROR}`;
         v-if="errorFields.length > 0"
         :id="JOIN_FORM_ID.SUMMARY"
         :title="summaryTitle"
-        :text="summaryText"
+        :parts="summaryParts"
       />
       <FormFailed
         v-if="state === JOIN_FORM_STATE.FAILED"
@@ -141,6 +150,7 @@ const skillsErrorId = `${JOIN_FORM_ID.SKILLS}${FIELD_ID_SUFFIX.ERROR}`;
             :name="JOIN_FIELD.NAME"
             :label="props.copy.nameLabel"
             autocomplete="name"
+            required
             :maxlength="JOIN_LIMIT.NAME"
             :placeholder="props.copy.namePlaceholder"
             :error="errorText(errors.name)"
@@ -152,6 +162,8 @@ const skillsErrorId = `${JOIN_FORM_ID.SKILLS}${FIELD_ID_SUFFIX.ERROR}`;
             :label="props.copy.emailLabel"
             type="email"
             autocomplete="email"
+            required
+            is-identifier
             :maxlength="JOIN_LIMIT.EMAIL"
             :error="errorText(errors.email)"
           />
@@ -171,6 +183,7 @@ const skillsErrorId = `${JOIN_FORM_ID.SKILLS}${FIELD_ID_SUFFIX.ERROR}`;
             :name="JOIN_FIELD.PLACE"
             :label="props.copy.placeLabel"
             autocomplete="address-level2"
+            required
             :maxlength="JOIN_LIMIT.PLACE"
             :hint="props.copy.placeHint"
             :error="errorText(errors.place)"
@@ -233,15 +246,18 @@ const skillsErrorId = `${JOIN_FORM_ID.SKILLS}${FIELD_ID_SUFFIX.ERROR}`;
           :text="props.copy.consent"
           :link-label="props.copy.privacy"
           :href="props.links.privacy"
+          required
           :error="errorText(errors.consent)"
         />
       </fieldset>
 
+      <p role="status" class="sr-only">
+        {{ state === JOIN_FORM_STATE.SENDING ? props.copy.sending : "" }}
+      </p>
       <button
         type="submit"
-        :disabled="state === JOIN_FORM_STATE.SENDING"
         :aria-busy="state === JOIN_FORM_STATE.SENDING ? 'true' : undefined"
-        class="inline-flex h-control-lg w-full touch-manipulation items-center justify-center gap-2 rounded-pill bg-primary px-8 type-button text-on-primary transition-[background-color,scale] duration-fast ease-standard select-none hover:bg-primary-hover active:scale-97 active:bg-primary-pressed disabled:cursor-progress tablet:w-auto tablet:self-start [&_svg]:size-icon-md [&_svg]:shrink-0"
+        class="inline-flex h-control-lg w-full touch-manipulation items-center justify-center gap-2 rounded-pill bg-primary px-8 type-button text-on-primary transition-[background-color,scale] duration-fast ease-standard select-none hover:bg-primary-hover active:scale-97 active:bg-primary-pressed aria-busy:cursor-progress tablet:w-auto tablet:self-start [&_svg]:size-icon-md [&_svg]:shrink-0"
       >
         <LoaderCircle
           v-if="state === JOIN_FORM_STATE.SENDING"

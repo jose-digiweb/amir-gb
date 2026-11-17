@@ -137,6 +137,7 @@ export const nl: Translations = {
   "donate.secure": "Veilig met iDEAL",
   "donate.secureMonthly": "Veilig met iDEAL · Altijd te stoppen",
   "donate.tooSmall": "De kleinste gift is € 1.",
+  "donate.notAnAmount": "Typ een bedrag in euro, bijvoorbeeld 15 of 12,50.",
   "donate.tooLarge": "Voor meer dan € 10.000 gebruik je de bankoverschrijving hieronder.",
   "donate.startFailed":
     "De betaling kon niet starten. Probeer het opnieuw, of gebruik de bankoverschrijving hieronder.",
@@ -165,6 +166,7 @@ export const nl: Translations = {
   "bank.copy": "Kopieer",
   "bank.copyLabel": "Kopieer het rekeningnummer",
   "bank.copied": "Gekopieerd. Plak het in je bankapp.",
+  "bank.copyFailed": "Kopiëren lukte niet. Selecteer het nummer om het over te nemen.",
   "announcement.label": "Aankondiging",
   "announcement.more": "Lees meer",
   "announcement.dismiss": "Sluit deze aankondiging",
@@ -622,6 +624,7 @@ export const nl: Translations = {
   "news.copyLink": "Kopieer link",
   "news.listTitle": "Alle berichten",
   "news.copied": "Link gekopieerd",
+  "news.copyFailed": "Kopiëren lukte niet. Kopieer het adres uit de adresbalk.",
   "news.moreOpener": "LEES VERDER",
   "news.moreTitle": "Meer nieuws",
   "news.allNews": "Al het nieuws",

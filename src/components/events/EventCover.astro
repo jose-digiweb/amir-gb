@@ -18,10 +18,12 @@ type Props = {
   sizes: string;
   /** The photo is a page's own lead photo, so it carries the editor's description; in a list the link's words say it. */
   isDescribed?: boolean;
+  /** The photo is the page's largest paint, so it loads first. */
+  priority?: boolean;
 };
 
 // Read the image and how wide it shows
-const { image, sizes, isDescribed = false } = Astro.props;
+const { image, sizes, isDescribed = false, priority = false } = Astro.props;
 
 // A lead photo says what it shows; a photo in a list is left to the link's words
 const alt = getPhotoAlt(image, isDescribed);
@@ -32,9 +34,14 @@ const alt = getPhotoAlt(image, isDescribed);
     image={image}
     alt={alt}
     sizes={sizes}
-    loading="lazy"
+    priority={priority}
     class="absolute inset-0 size-full object-cover"
   />
 ) : (
-  <img src={pintiPanel.src} alt="" loading="lazy" class="absolute inset-0 size-full object-cover" />
+  <img
+    src={pintiPanel.src}
+    alt=""
+    loading={priority ? "eager" : "lazy"}
+    class="absolute inset-0 size-full object-cover"
+  />
 )}

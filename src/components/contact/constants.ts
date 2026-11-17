@@ -3,6 +3,7 @@ import { LANGUAGE_TAG } from "../../i18n/constants";
 import { CONTACT_ERROR } from "../../lib/contact/constants";
 
 // Types
+import type { ContactCheckedField } from "../../lib/contact/types";
 import type { ContactDrawingLayout } from "./types";
 
 /**
@@ -53,6 +54,28 @@ export const CONTACT_FORM_ID = {
   MESSAGE: "contact-message",
   CONSENT: "contact-consent",
 } as const;
+
+/**
+ * The {@link CONTACT_START_FOCUS} constant
+ * @description What takes focus when the message form comes back from a post without JavaScript
+ */
+export const CONTACT_START_FOCUS = {
+  [CONTACT_FORM_STATE.EDITING]: CONTACT_FORM_ID.SUMMARY,
+  [CONTACT_FORM_STATE.SENDING]: CONTACT_FORM_ID.SUMMARY,
+  [CONTACT_FORM_STATE.SENT]: CONTACT_FORM_ID.SENT,
+  [CONTACT_FORM_STATE.FAILED]: CONTACT_FORM_ID.FAILED,
+} as const;
+
+/**
+ * The {@link CONTACT_FIELD_ID} constant
+ * @description The id of each field the error summary links to
+ */
+export const CONTACT_FIELD_ID = {
+  name: CONTACT_FORM_ID.NAME,
+  reach: CONTACT_FORM_ID.REACH,
+  message: CONTACT_FORM_ID.MESSAGE,
+  consent: CONTACT_FORM_ID.CONSENT,
+} as const satisfies Record<ContactCheckedField, string>;
 
 /**
  * The {@link MUD_WEAVE} constant

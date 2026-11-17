@@ -54,6 +54,7 @@ const shareHref = getWhatsAppShareHref(
       <EventCover
         image={event.image}
         sizes="(min-width: 1180px) 740px, (min-width: 700px) 380px, 100vw"
+        priority
       />
       <EventDate startsAt={event.startsAt} class="absolute top-4 left-4 @5xl:top-5 @5xl:left-5" />
       <EventTypeChip type={event.type} onPhoto class="absolute top-4 right-4 @2xl:hidden" />

@@ -10,13 +10,20 @@ import ContactOpening from "./ContactOpening.astro";
 import MessageSection from "./MessageSection.astro";
 import ReachSection from "./ReachSection.astro";
 
+// Types
+import type { ContactFormStart } from "./types";
+
 /**
  * The {@link Props} type
  * @description The props of the ContactPage component, the Contact page in the page's language
  */
-type Props = Record<string, never>;
+type Props = {
+  /** Where the message form starts after a post without JavaScript. */
+  start?: ContactFormStart;
+};
 
-// Read the page's title and summary
+// Read where the form starts and the page's title and summary
+const { start } = Astro.props;
 const t = getTranslations(getLocale(Astro.currentLocale));
 ---
 
@@ -24,6 +31,6 @@ const t = getTranslations(getLocale(Astro.currentLocale));
   <WovenDefs />
   <ContactOpening />
   <ReachSection />
-  <MessageSection />
+  <MessageSection start={start} />
   <AddressSection />
 </SiteLayout>

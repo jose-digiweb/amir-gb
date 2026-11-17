@@ -59,7 +59,14 @@ export const WOVEN_SHADE_TONE = {
 export const WOVEN_DEFS = {
   SOLID: "woven-bead-solid",
   RINGED: "woven-bead-ringed",
+  NESTED_LOZENGE: "woven-nested-lozenge",
 } as const;
+
+/**
+ * The {@link NESTED_LOZENGE_HREF} constant
+ * @description Where a drawing points to reuse the nested lozenge, drawn once per page
+ */
+export const NESTED_LOZENGE_HREF = `#${WOVEN_DEFS.NESTED_LOZENGE}`;
 
 /**
  * The {@link DECOR_TONE} constant

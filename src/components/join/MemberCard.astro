@@ -51,7 +51,13 @@ const ringed = MEMBER_CARD_BEADS.RINGED.map((y) => `translate(0 ${y})`);
       </g>
     ))}
   </svg>
-  <img src={logoReverse.src} alt="" class="h-8 w-auto self-start" />
+  <img
+    src={logoReverse.src}
+    width={logoReverse.width}
+    height={logoReverse.height}
+    alt=""
+    class="h-8 w-auto self-start"
+  />
   <span class="flex flex-col gap-1">
     <span class="type-tag text-on-brand-accent">{t["joinPage.cardMember"]}</span>
     <span class="type-h3 font-extrabold">{t["joinPage.cardName"]}</span>

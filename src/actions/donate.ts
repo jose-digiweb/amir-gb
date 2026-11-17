@@ -2,14 +2,13 @@
 import { ActionError, defineAction } from "astro:actions";
 import { getRelativeLocaleUrl } from "astro:i18n";
 import { isForeignPost } from "../lib/actions/helpers";
-import { DONATE_ERROR } from "../lib/donate/constants";
 import { getGiftPageRoute } from "../lib/donate/pages";
 import { DONATE_INPUT } from "../lib/donate/schema";
 import { startCheckout } from "../lib/donate/stripe";
 
 /**
  * The {@link donate} action
- * @description Starts a gift: makes the Stripe Checkout Session for the donor's choice and returns its payment page, which the page it was posted from redirects to
+ * @description Starts a gift: makes the Stripe Checkout Session for the donor's choice and returns its payment page, which the page it was posted from redirects to, or the choice back when Stripe did not answer
  */
 export const donate = defineAction({
   accept: "form",
@@ -25,9 +24,9 @@ export const donate = defineAction({
     const pageUrl = new URL(getRelativeLocaleUrl(locale, route), context.url.origin).href;
     const url = await startCheckout(choice, locale, pageUrl);
 
-    // Without a payment page the donor stays on the form and is told
+    // Without a payment page the donor stays on the form, told, with their choice kept
     if (!url) {
-      throw new ActionError({ code: "SERVICE_UNAVAILABLE", message: DONATE_ERROR.START_FAILED });
+      return { failedChoice: choice };
     }
 
     // Stripe's payment page for this gift

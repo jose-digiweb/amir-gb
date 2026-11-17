@@ -45,3 +45,12 @@ export const INBOX_LOG = {
   NOT_SET_UP: "[forms] CONTACT_FROM_ADDRESS is not set; the email was not sent",
   SEND_FAILED: "[forms] Email Service did not send the email",
 } as const;
+
+/**
+ * The {@link SUMMARY_SENTENCE} constant
+ * @description What the error summary's sentence ends with, and what turns a field's id into a link to it
+ */
+export const SUMMARY_SENTENCE = {
+  FULL_STOP: ".",
+  FRAGMENT: "#",
+} as const;

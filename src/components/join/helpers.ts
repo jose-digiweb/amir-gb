@@ -1,5 +1,9 @@
 // Dependencies
+import { isInputError } from "astro:actions";
 import { getRelativeLocaleUrl } from "astro:i18n";
+import { JOIN_CHECKED_FIELDS } from "../../lib/join/constants";
+import { isJoinError } from "../../lib/join/helpers";
+import { readFieldErrors } from "../forms/helpers";
 import { getTranslations } from "../../i18n/helpers";
 import { TILE_COLOUR } from "../../lib/content/constants";
 import { getOpenerItems } from "../ui/helpers";
@@ -26,6 +30,7 @@ import {
   HASH_SIGN,
   HYPHEN,
   JOIN_ERROR_LABEL,
+  JOIN_FORM_STATE,
   JOIN_MODE_ID,
   JOIN_SENT_OPENER_LANGS,
   JOIN_SUMMARY_TITLE,
@@ -37,11 +42,13 @@ import {
 
 // Types
 import type { Locale, TranslationKey, Translations } from "../../i18n/types";
-import type { JoinMode } from "../../lib/join/types";
+import type { ActionError } from "astro:actions";
+import type { JoinMode, JoinResult } from "../../lib/join/types";
 import type { Disc } from "../opening/types";
 import type {
   FeeSentence,
   JoinFormCopy,
+  JoinFormStart,
   JoinStepCopy,
   Seat,
   SeatCircle,
@@ -254,4 +261,40 @@ export function getSeats(photo: Disc, circle: SeatCircle): Seat[] {
       isOpen: place === circle.open,
     };
   });
+}
+
+/**
+ * The {@link getJoinFormStart} helper
+ * @description Where the sign-up form starts after it was posted without JavaScript: thanked, with the server's errors, or not sent with the sign-up given back
+ * @param {JoinResult | undefined} data - The join action's result, when it ran
+ * @param {ActionError | undefined} error - The join action's error, when it failed
+ * @returns {JoinFormStart | undefined} The form's start, or nothing when the page was not posted
+ */
+export function getJoinFormStart(
+  data: JoinResult | undefined,
+  error: ActionError | undefined,
+): JoinFormStart | undefined {
+  // Input the server refused shows its errors
+  if (error && isInputError(error)) {
+    return {
+      state: JOIN_FORM_STATE.EDITING,
+      errors: readFieldErrors(error.fields, JOIN_CHECKED_FIELDS, isJoinError),
+    };
+  }
+
+  // Any other error means it did not go
+  if (error) {
+    return { state: JOIN_FORM_STATE.FAILED };
+  }
+
+  // A sign-up that reached AMIR-GB is thanked; one that did not is given back
+  if (data) {
+    return {
+      state: data.sent ? JOIN_FORM_STATE.SENT : JOIN_FORM_STATE.FAILED,
+      values: data.values,
+    };
+  }
+
+  // A plain visit starts empty
+  return undefined;
 }

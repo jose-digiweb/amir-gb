@@ -5,6 +5,7 @@ import { JOIN_ERROR, JOIN_MODE } from "../../lib/join/constants";
 import { CHIP_SIZE } from "../opening/constants";
 
 // Types
+import type { JoinCheckedField } from "../../lib/join/types";
 import type { JoinDrawingLayout } from "./types";
 
 /**
@@ -36,6 +37,35 @@ export const JOIN_FORM_ID = {
   MESSAGE: "join-message",
   CONSENT: "join-consent",
 } as const;
+
+/**
+ * The {@link JOIN_FORM_HASH} constant
+ * @description Where a post without JavaScript lands on the page: the sign-up section
+ */
+export const JOIN_FORM_HASH = "#sign-up";
+
+/**
+ * The {@link JOIN_START_FOCUS} constant
+ * @description What takes focus when the sign-up form comes back from a post without JavaScript
+ */
+export const JOIN_START_FOCUS = {
+  [JOIN_FORM_STATE.EDITING]: JOIN_FORM_ID.SUMMARY,
+  [JOIN_FORM_STATE.SENDING]: JOIN_FORM_ID.SUMMARY,
+  [JOIN_FORM_STATE.SENT]: JOIN_FORM_ID.SENT,
+  [JOIN_FORM_STATE.FAILED]: JOIN_FORM_ID.FAILED,
+} as const;
+
+/**
+ * The {@link JOIN_FIELD_ID} constant
+ * @description The id of each field the error summary links to
+ */
+export const JOIN_FIELD_ID = {
+  name: JOIN_FORM_ID.NAME,
+  email: JOIN_FORM_ID.EMAIL,
+  place: JOIN_FORM_ID.PLACE,
+  skills: JOIN_FORM_ID.SKILLS,
+  consent: JOIN_FORM_ID.CONSENT,
+} as const satisfies Record<JoinCheckedField, string>;
 
 /**
  * The {@link JOIN_MODE_ID} constant

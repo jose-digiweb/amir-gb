@@ -1,5 +1,7 @@
 // Dependencies
 import { INTL_LOCALE } from "../../i18n/constants";
+import { COPY_OUTCOME } from "../dom/constants";
+import { showCopyOutcome } from "../dom/helpers";
 import {
   AMOUNT_PLACEHOLDER,
   AMOUNT_TEXT,
@@ -90,6 +92,52 @@ export function checkAmount(cents: number | null): AmountError | undefined {
 
   // Anything else can be given
   return undefined;
+}
+
+/**
+ * The {@link getAmountError} helper
+ * @description What is wrong with the amount a donor chose: typed text that is not an amount, or an amount that cannot be given
+ * @param {string | null | undefined} preset - The picked preset in euros
+ * @param {string | null | undefined} other - The typed amount
+ * @returns {AmountError | undefined} The amount's error, or nothing when it can be given
+ */
+export function getAmountError(
+  preset: string | null | undefined,
+  other: string | null | undefined,
+): AmountError | undefined {
+  // Typed text that is not an amount says so
+  if (other?.trim() && parseAmount(other) === null) {
+    return DONATE_ERROR.NOT_AN_AMOUNT;
+  }
+
+  // Otherwise the chosen amount must be one that can be given
+  return checkAmount(getChosenAmount(preset, other));
+}
+
+/**
+ * The {@link getInitialAmount} helper
+ * @description How the form shows a choice it starts from: its preset when the amount is one, otherwise the amount typed in the field
+ * @param {GiftChoice | undefined} choice - The choice of a try that came back, if any
+ * @returns {{ preset: number | null; other: string }} The picked preset and the typed amount
+ */
+export function getInitialAmount(choice: GiftChoice | undefined): {
+  preset: number | null;
+  other: string;
+} {
+  // No choice starts on the default preset
+  if (!choice) {
+    return { preset: DONATION.DEFAULT_AMOUNT, other: "" };
+  }
+
+  // A preset amount picks that preset
+  const euros = choice.amountCents / DONATION.CENTS_PER_EURO;
+  const presetAmount = DONATION.AMOUNTS.find((amount) => amount === euros);
+  if (presetAmount !== undefined) {
+    return { preset: presetAmount, other: "" };
+  }
+
+  // Any other amount is typed back in the field
+  return { preset: null, other: toEuroText(choice.amountCents) };
 }
 
 /**
@@ -305,6 +353,7 @@ export function getDonateFormCopy(t: Translations): DonateFormCopy {
     secure: t["donate.secure"],
     secureMonthly: t["donate.secureMonthly"],
     tooSmall: t["donate.tooSmall"],
+    notAnAmount: t["donate.notAnAmount"],
     tooLarge: t["donate.tooLarge"],
     startFailed: t["donate.startFailed"],
   };
@@ -331,7 +380,7 @@ export function enableCopyAccount(): void {
 
 /**
  * The {@link copyAccount} helper
- * @description Copies the account number without spaces and marks its bar or card copied until the reset
+ * @description Copies the account number without spaces and shows on its bar or card that it was copied, or that it could not be
  * @param {HTMLElement} root - The bank transfer bar or card
  * @returns {Promise<void>}
  */
@@ -341,16 +390,14 @@ async function copyAccount(root: HTMLElement): Promise<void> {
     "",
   );
 
-  // A blocked clipboard leaves the bar as it was, the number stays readable to copy by hand
+  // A blocked clipboard says so, and the number stays readable to copy by hand
   try {
     await navigator.clipboard.writeText(iban);
   } catch {
+    showCopyOutcome(root, COPY_OUTCOME.FAILED);
     return;
   }
 
-  // Show the copied state, then return to the copy button
-  root.dataset[COPY_ACCOUNT.COPIED] = "";
-  window.setTimeout(() => {
-    delete root.dataset[COPY_ACCOUNT.COPIED];
-  }, COPY_ACCOUNT.RESET_MS);
+  // Show it was copied for a few seconds
+  showCopyOutcome(root, COPY_OUTCOME.COPIED);
 }

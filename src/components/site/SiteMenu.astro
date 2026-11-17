@@ -4,10 +4,9 @@ import { ChevronRight, Menu, X } from "@lucide/astro";
 import { getRelativeLocaleUrl } from "astro:i18n";
 import { getLocale, getTranslations } from "../../i18n/helpers";
 import { NESTED_LOZENGE_VIEW_BOX } from "../../lib/woven/constants";
-import { getNestedLozengePath } from "../../lib/woven/helpers";
 import { MAIN_NAV, ROUTE } from "../../site/constants";
 import { getPageLinks } from "../../site/helpers";
-import { ICON_BUTTON_TONE } from "../ui/constants";
+import { ICON_BUTTON_TONE, NESTED_LOZENGE_HREF } from "../ui/constants";
 
 // Components
 import ThemeToggle from "../theme/ThemeToggle.astro";
@@ -33,7 +32,6 @@ const links = getPageLinks(MAIN_NAV, locale, Astro.url.pathname).map((link, inde
   cascade: `--cascade: ${index}`,
 }));
 const donateHref = getRelativeLocaleUrl(locale, ROUTE.DONATE);
-const shadePath = getNestedLozengePath();
 ---
 
 <IconButton
@@ -58,7 +56,7 @@ const shadePath = getNestedLozengePath();
       viewBox={NESTED_LOZENGE_VIEW_BOX}
       class="pointer-events-none absolute -right-12 -bottom-16 -z-10 size-32 fill-decor-strong"
     >
-      <path d={shadePath}></path>
+      <use href={NESTED_LOZENGE_HREF}></use>
     </svg>
 
     <div class="flex h-16 shrink-0 items-center justify-between pt-[env(safe-area-inset-top)] pr-2 pl-margin tablet:h-20 tablet:pr-4 tablet:pl-8">
@@ -113,10 +111,13 @@ const shadePath = getNestedLozengePath();
 
 <script>
   // Dependencies
-  import { enableDialogFallbacks } from "../../lib/dom/helpers";
+  import { closeLayersOnLeave, enableDialogFallbacks } from "../../lib/dom/helpers";
 
   // Older browsers open, close and light-dismiss the menu by script
   enableDialogFallbacks();
+
+  // Leaving the page closes the menu and any open popover, so the back button finds them closed
+  closeLayersOnLeave();
 </script>
 
 <style>

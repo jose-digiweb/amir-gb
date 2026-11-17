@@ -24,6 +24,7 @@ const { event } = Astro.props;
     image={event.image}
     sizes="(min-width: 1180px) 820px, (min-width: 700px) 754px, 100vw"
     isDescribed
+    priority
   />
   <EventDate startsAt={event.startsAt} class="absolute top-4 left-4 tablet:top-5 tablet:left-5" />
 </div>

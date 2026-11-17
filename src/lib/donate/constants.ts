@@ -36,7 +36,17 @@ export const FREQUENCIES = [FREQUENCY.ONCE, FREQUENCY.MONTHLY] as const;
 export const DONATE_ERROR = {
   TOO_SMALL: "too-small",
   TOO_LARGE: "too-large",
+  NOT_AN_AMOUNT: "not-an-amount",
   START_FAILED: "start-failed",
+} as const;
+
+/**
+ * The {@link DONATE_FORM_ID} constant
+ * @description The ids of the donation form's typed amount and its error, which the field, its description and focus use
+ */
+export const DONATE_FORM_ID = {
+  OTHER: "donate-other",
+  ERROR: "donate-error",
 } as const;
 
 /**
@@ -140,17 +150,6 @@ export const STRIPE_LOG = {
 } as const;
 
 /**
- * The {@link PRIVATE_PAGE} constant
- * @description The headers for a page that shows one donor's gift, so no cache keeps it and no search engine lists it
- */
-export const PRIVATE_PAGE = {
-  HEADER: "Cache-Control",
-  VALUE: "private, no-store",
-  ROBOTS_HEADER: "X-Robots-Tag",
-  ROBOTS_VALUE: "noindex",
-} as const;
-
-/**
  * The {@link DONATE_PAGE_CACHE} constant
  * @description How long the edge keeps the Donate page with the plain form, in seconds: it reads nothing from EmDash or the clock, so it stays until the next deploy clears it
  */
@@ -173,10 +172,8 @@ export const BANK_TRANSFER = {
 export const COPY_ACCOUNT = {
   ROOT: "[data-copy-account]",
   BUTTON: "[data-copy-account-button]",
-  COPIED: "copied",
   READY: "copyAccountReady",
   VALUE_ATTRIBUTE: "data-copy-account",
-  RESET_MS: 3000,
   CLICK: "click",
   SPACES: /\s+/g,
 } as const;

@@ -4,7 +4,8 @@ import { actions } from "astro:actions";
 import { getLocale } from "../i18n/helpers";
 import { cacheContentPage } from "../lib/content/helpers";
 import { getHomeContent } from "../lib/content/queries";
-import { getSupportState, isPrivateState, keepPagePrivate } from "../lib/donate/support";
+import { getCheckoutUrl, getSupportState, isPrivateState } from "../lib/donate/support";
+import { keepPagePrivate } from "../lib/browser-cache/helpers";
 
 // Components
 import HomePage from "../components/home/HomePage.astro";
@@ -14,14 +15,15 @@ export const prerender = false;
 
 // A posted gift without JavaScript goes straight to Stripe's payment page
 const donation = Astro.getActionResult(actions.donate);
-if (donation?.data) {
-  return Astro.redirect(donation.data.url, 303);
+const checkoutUrl = getCheckoutUrl(donation?.data);
+if (checkoutUrl) {
+  return Astro.redirect(checkoutUrl, 303);
 }
 
 // Read the content and what Support shows: the form, a failed try, or a return from Stripe
 const [content, support] = await Promise.all([
   getHomeContent(getLocale(Astro.currentLocale), new Date()),
-  getSupportState(Astro.url, donation?.error),
+  getSupportState(Astro.url, donation?.error, donation?.data),
 ]);
 
 // A page with one donor's gift is never cached; any other is cached at the edge, set before rendering starts

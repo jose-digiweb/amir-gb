@@ -136,6 +136,7 @@ export const pt: Translations = {
   "donate.secure": "Seguro com iDEAL",
   "donate.secureMonthly": "Seguro com iDEAL · Pare quando quiser",
   "donate.tooSmall": "O donativo mínimo é de 1 €.",
+  "donate.notAnAmount": "Escreva um valor em euros, por exemplo 15 ou 12,50.",
   "donate.tooLarge": "Para mais de 10 000 €, use a transferência bancária abaixo.",
   "donate.startFailed":
     "Não foi possível iniciar o pagamento. Tente de novo, ou use a transferência bancária abaixo.",
@@ -164,6 +165,7 @@ export const pt: Translations = {
   "bank.copy": "Copiar",
   "bank.copyLabel": "Copiar o número da conta",
   "bank.copied": "Copiado. Cole-o na app do seu banco.",
+  "bank.copyFailed": "Não foi possível copiar. Selecione o número para o copiar.",
   "announcement.label": "Anúncio",
   "announcement.more": "Ler mais",
   "announcement.dismiss": "Fechar este anúncio",
@@ -622,6 +624,7 @@ export const pt: Translations = {
   "news.copyLink": "Copiar ligação",
   "news.listTitle": "Todas as publicações",
   "news.copied": "Ligação copiada",
+  "news.copyFailed": "Não foi possível copiar. Copie o endereço na barra de endereço.",
   "news.moreOpener": "CONTINUE A LER",
   "news.moreTitle": "Mais notícias",
   "news.allNews": "Todas as notícias",

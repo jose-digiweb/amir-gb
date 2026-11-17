@@ -36,6 +36,10 @@ type Props = {
   hint?: string;
   /** What to fix, once Send was pressed. */
   error?: string;
+  /** The field has to be filled in: screen readers announce it, and the browser checks it until the form's script takes over. */
+  required?: boolean;
+  /** The field takes an address or a number, so the phone neither capitalises, corrects nor underlines it. */
+  isIdentifier?: boolean;
 };
 
 // Read the field and its typed value
@@ -78,7 +82,11 @@ const describedBy = computed(() => {
       :maxlength="props.maxlength"
       :placeholder="props.placeholder"
       :aria-invalid="props.error ? 'true' : undefined"
+      :required="props.required"
       :aria-describedby="describedBy"
+      :autocapitalize="props.isIdentifier ? 'none' : undefined"
+      :autocorrect="props.isIdentifier ? 'off' : undefined"
+      :spellcheck="props.isIdentifier ? 'false' : undefined"
       class="h-control-lg rounded-md bg-surface px-4 type-body text-text inset-ring inset-ring-border-control placeholder:text-text-muted aria-invalid:inset-ring-2 aria-invalid:inset-ring-danger"
     />
     <p v-if="props.hint" :id="hintId" class="type-body-sm text-text-muted">{{ props.hint }}</p>

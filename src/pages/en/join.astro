@@ -1,5 +1,8 @@
 ---
 // Dependencies
+import { actions } from "astro:actions";
+import { getJoinFormStart } from "../../components/join/helpers";
+import { keepPagePrivate } from "../../lib/browser-cache/helpers";
 import { getLocale } from "../../i18n/helpers";
 import { cacheContentPage } from "../../lib/content/helpers";
 import { getGeneralMeeting } from "../../lib/content/queries";
@@ -10,9 +13,17 @@ import JoinPage from "../../components/join/JoinPage.astro";
 // The join page shows the next general meeting from the CMS, so it renders per request
 export const prerender = false;
 
-// Read the meeting, and cache the page at the edge, set before rendering starts
+// Read the meeting, and what a sign-up posted without JavaScript came back with, before rendering starts
 const meeting = await getGeneralMeeting(getLocale(Astro.currentLocale), new Date());
-cacheContentPage(Astro.cache, meeting.cacheHints);
+const result = Astro.getActionResult(actions.join);
+const start = getJoinFormStart(result?.data, result?.error);
+
+// A page with one visitor's sign-up is never kept; the plain page is cached at the edge
+if (start) {
+  keepPagePrivate(Astro.response.headers);
+} else {
+  cacheContentPage(Astro.cache, meeting.cacheHints);
+}
 ---
 
-<JoinPage meeting={meeting.items[0]} />
+<JoinPage meeting={meeting.items[0]} start={start} />

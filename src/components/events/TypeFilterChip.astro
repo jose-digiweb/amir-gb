@@ -26,7 +26,7 @@ const label = chip.type ? t[`eventType.${chip.type}`] : t["eventsPage.all"];
 <li class="shrink-0">
   <a
     href={chip.href}
-    aria-current={chip.isCurrent ? "true" : undefined}
+    aria-current={chip.isCurrent ? "page" : undefined}
     class:list={[
       "relative inline-flex h-10 touch-manipulation items-center gap-2 rounded-pill px-4 type-button-sm whitespace-nowrap transition-[background-color,scale] duration-base ease-standard select-none after:absolute after:inset-x-0 after:-inset-y-1 active:scale-97",
       {

@@ -1,5 +1,5 @@
 // Dependencies
-import { BROWSER_CACHE } from "./constants";
+import { BROWSER_CACHE, PRIVATE_PAGE } from "./constants";
 
 // Types
 import type { AstroGlobal } from "astro";
@@ -25,4 +25,16 @@ export function letBrowserKeepPage(
   const kept = new Response(response.body, response);
   kept.headers.set(BROWSER_CACHE.HEADER, BROWSER_CACHE.VALUE);
   return kept;
+}
+
+/**
+ * The {@link keepPagePrivate} helper
+ * @description Tells browsers and Cloudflare not to keep a page that shows one visitor's own result (a gift, a sent message or sign-up), and search engines not to list it
+ * @param {Headers} headers - The page's response headers
+ * @returns {void}
+ */
+export function keepPagePrivate(headers: Headers): void {
+  // No cache keeps the page, and no search engine lists it
+  headers.set(PRIVATE_PAGE.HEADER, PRIVATE_PAGE.VALUE);
+  headers.set(PRIVATE_PAGE.ROBOTS_HEADER, PRIVATE_PAGE.ROBOTS_VALUE);
 }
