@@ -1,5 +1,6 @@
 // Dependencies
-import { STORY_CSS, STORY_LAYOUT, STORY_WALL } from "./constants";
+import { getDayMonth } from "../../../lib/events/helpers";
+import { STORY_CSS, STORY_LABEL_SEPARATOR, STORY_LAYOUT, STORY_WALL } from "./constants";
 
 // Types
 import type { StoryLayout, StoryWallPattern, StoryWallPlan } from "./types";
@@ -70,4 +71,26 @@ export function planStoryWall(count: number): StoryWallPlan {
 
   // The wall, ready to render
   return { grid, tiles };
+}
+
+/**
+ * The {@link getStoryLabel} helper
+ * @description The small label over a story's title on phone: STORY, then its date when it has one
+ * @param {string} label - The word for a story in the page's language
+ * @param {Date | undefined} publishedAt - When the story was published
+ * @param {string} locale - The page's date locale
+ * @returns {string} For example "STORY · 8 November"
+ */
+export function getStoryLabel(
+  label: string,
+  publishedAt: Date | undefined,
+  locale: string,
+): string {
+  // Without a date the word stands alone
+  if (!publishedAt) {
+    return label;
+  }
+
+  // With one, the date follows the word
+  return `${label}${STORY_LABEL_SEPARATOR}${getDayMonth(publishedAt, locale)}`;
 }

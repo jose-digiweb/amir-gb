@@ -1,0 +1,36 @@
+---
+// Components
+import StoryRailCard from "./StoryRailCard.astro";
+
+// Types
+import type { HomeStory } from "../../../lib/content/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the StoryRow component, the phone's swipe row of tall story cards
+ */
+type Props = {
+  /** The stories, newest first. */
+  stories: HomeStory[];
+};
+
+// Read the stories
+const { stories } = Astro.props;
+---
+
+<ul class="story-row -mx-margin flex snap-x snap-mandatory gap-3 overflow-x-auto px-margin pb-1 tablet:hidden">
+  {stories.map((story) => (
+    <li class="shrink-0 snap-start">
+      <StoryRailCard story={story} class="h-62 w-39" />
+    </li>
+  ))}
+</ul>
+
+<style>
+  @reference "../../../styles/global.css";
+
+  .story-row {
+    scrollbar-width: none;
+    scroll-padding-inline: var(--grid-margin);
+  }
+</style>

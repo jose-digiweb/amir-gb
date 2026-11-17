@@ -57,3 +57,15 @@ export const STORY_CSS = {
   SHOWN: "block",
   SIZES: ["sm", "md", "lg"],
 } as const;
+
+/**
+ * The {@link STORY_ROW_MIN} constant
+ * @description How many stories the phone needs before it shows them as a swipe row; fewer keep their own layout
+ */
+export const STORY_ROW_MIN = 3;
+
+/**
+ * The {@link STORY_LABEL_SEPARATOR} constant
+ * @description What sits between STORY and its date in a story's label
+ */
+export const STORY_LABEL_SEPARATOR = " · ";

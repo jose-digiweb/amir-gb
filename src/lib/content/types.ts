@@ -1,6 +1,7 @@
 // Types
 import type { CacheHint, ContentEntry, ContentSeo, EmDashCollections } from "emdash";
 import type { Post } from "../../../emdash-env";
+import type { EventType } from "../events/types";
 import type { POST_TYPE, TILE_COLOUR, WEEKDAYS, WHATS_ON_STATE } from "./constants";
 
 /**
@@ -69,6 +70,7 @@ export type HomeEvent = {
   id: string;
   href: string;
   title: string;
+  type: EventType;
   startsAt: Date;
   endsAt?: Date;
   placeName?: string;
@@ -117,6 +119,7 @@ export type HomeStory = {
   title: string;
   excerpt?: string;
   image?: MediaImage;
+  publishedAt?: Date;
   isDutchOnly: boolean;
 };
 
@@ -146,6 +149,17 @@ export type WhatsOnPlan = {
   weekly: WeeklyActivity[];
   columns: number;
   wideSpan: number;
+};
+
+/**
+ * The {@link PhoneRowPlan} type
+ * @description What the phone's What's on row holds after the events: the calm card first when there are none, and the weekly activities
+ */
+export type PhoneRowPlan = {
+  isRow: boolean;
+  hasCalm: boolean;
+  weekly: WeeklyActivity[];
+  count: number;
 };
 
 /**

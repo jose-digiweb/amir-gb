@@ -1,6 +1,7 @@
 // Dependencies
 import { describe, expect, it } from "vitest";
 import { en } from "../../i18n/translations/en";
+import { EVENT_TYPE } from "./constants";
 import {
   cacheContentPage,
   compareWeekly,
@@ -10,6 +11,7 @@ import {
   getWeeklyTint,
   isStripActive,
   mergeWithDutch,
+  planPhoneRow,
   planWhatsOn,
   toClockTime,
   getPhotoAlt,
@@ -98,6 +100,7 @@ describe("planWhatsOn", () => {
     id: "e",
     href: "#",
     title: "E",
+    type: EVENT_TYPE.COMMUNITY,
     startsAt: new Date(),
     isOnline: false,
     isDutchOnly: false,
@@ -132,6 +135,59 @@ describe("planWhatsOn", () => {
     expect(planWhatsOn([], [])).toMatchObject({ state: "none", columns: 1, wideSpan: 1 });
     expect(planWhatsOn([event], [weekly])).toMatchObject({ columns: 3, wideSpan: 2 });
     expect(planWhatsOn([event, event], [])).toMatchObject({ state: "cards", columns: 2 });
+  });
+});
+
+describe("planPhoneRow", () => {
+  const event = {
+    id: "e",
+    href: "#",
+    title: "E",
+    type: EVENT_TYPE.COMMUNITY,
+    startsAt: new Date(),
+    isOnline: false,
+    isDutchOnly: false,
+  };
+  const weekly = {
+    id: "w",
+    name: "W",
+    weekday: "dinsdag",
+    startTime: "10:00",
+    endTime: "13:00",
+    tileColour: "forest",
+    isDutchOnly: false,
+  } as const;
+  const activities = [weekly, weekly];
+
+  it("lets three or more events fill the row alone", () => {
+    const events = [event, event, event];
+    expect(planPhoneRow(events, planWhatsOn(events, activities))).toEqual({
+      isRow: true,
+      hasCalm: false,
+      weekly: [],
+      count: 3,
+    });
+  });
+
+  it("follows one or two events with the weekly activities", () => {
+    expect(planPhoneRow([event], planWhatsOn([event], activities))).toMatchObject({
+      isRow: true,
+      count: 3,
+    });
+    expect(planPhoneRow([event, event], planWhatsOn([event, event], activities)).count).toBe(4);
+  });
+
+  it("puts the calm card first when there are no events", () => {
+    expect(planPhoneRow([], planWhatsOn([], activities))).toMatchObject({
+      isRow: true,
+      hasCalm: true,
+      count: 3,
+    });
+  });
+
+  it("is no row when only one card would be left", () => {
+    expect(planPhoneRow([], planWhatsOn([], [])).isRow).toBe(false);
+    expect(planPhoneRow([event], planWhatsOn([event], [])).isRow).toBe(false);
   });
 });
 

@@ -81,6 +81,9 @@ export const pt: Translations = {
   "help.health": "Saúde e cuidados",
   "help.culture": "Cultura e eventos",
   "help.ask": "Tem dúvidas? Pergunte-nos",
+  "help.notSureTitle": "Não sabe por onde começar?",
+  "help.notSureText": "Pergunte-nos pelo WhatsApp, na sua língua",
+  "dock.label": "Ajuda rápida",
   "help.photoAlt": "Uma voluntária ajuda uma mulher numa mesa de café",
   "values.solidarity": "Solidariedade",
   "values.welcome": "Acolhimento",
@@ -99,6 +102,9 @@ export const pt: Translations = {
   "events.noneTitle": "Ainda sem novas datas",
   "events.noneText":
     "As nossas atividades semanais continuam. Os novos eventos são anunciados primeiro aqui, e no nosso Facebook e Instagram.",
+  "events.noneSwipeText":
+    "As nossas atividades semanais continuam, aqui ao lado. Os novos eventos são anunciados primeiro aqui, e no nosso Facebook e Instagram.",
+  "events.swipe": "Deslize para as ver",
   "events.online": "online",
   "events.and": "e",
   "weekly.label": "TODAS AS SEMANAS",

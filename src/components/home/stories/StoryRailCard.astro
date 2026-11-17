@@ -1,0 +1,53 @@
+---
+// Dependencies
+import { Image } from "emdash/ui";
+
+// Components
+import DutchOnlyMark from "../../site/DutchOnlyMark.astro";
+
+// Types
+import type { HomeStory } from "../../../lib/content/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the StoryRailCard component, a story on phone: a tall photo with its title in white over a fade, in the swipe row or beside one other story
+ */
+type Props = {
+  /** The story. */
+  story: HomeStory;
+  /** Size classes from the caller: the swipe row's fixed card, or a column's width. */
+  class: string;
+};
+
+// Read the story
+const { story, class: className } = Astro.props;
+---
+
+<a
+  href={story.href}
+  class:list={[
+    "relative isolate flex touch-manipulation items-end overflow-hidden rounded-lg bg-surface-sunken p-3 text-on-brand transition-[scale] duration-fast ease-standard select-none active:scale-98",
+    className,
+  ]}
+>
+  <Image
+    image={story.image}
+    alt=""
+    sizes="156px"
+    loading="lazy"
+    class="absolute inset-0 -z-10 size-full object-cover"
+  />
+  <span aria-hidden="true" class="story-fade absolute inset-0 -z-10"></span>
+  <span class="type-h4 text-balance hyphens-auto">
+    {story.title}
+    {story.isDutchOnly ? <DutchOnlyMark /> : null}
+  </span>
+</a>
+
+<style>
+  @reference "../../../styles/global.css";
+
+  .story-fade {
+    background: linear-gradient(to top, var(--surface-inverse) 0%, transparent 64%);
+  }
+</style>

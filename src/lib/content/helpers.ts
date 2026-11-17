@@ -2,6 +2,7 @@
 import {
   CLOCK_TIME,
   CONTENT_CACHE,
+  PHONE_ROW,
   SITE_TIME_ZONE,
   WEEKDAYS,
   WEEKLY_TINTS,
@@ -18,6 +19,7 @@ import type {
   HomeEvent,
   Localised,
   MediaImage,
+  PhoneRowPlan,
   TileColour,
   Translated,
   Weekday,
@@ -168,6 +170,25 @@ export function planWhatsOn(events: HomeEvent[], activities: WeeklyActivity[]): 
     columns: WHATS_ON_SLOTS.WIDE + weekly.length,
     wideSpan: WHATS_ON_SLOTS.WIDE,
   };
+}
+
+/**
+ * The {@link planPhoneRow} helper
+ * @description Decides what the phone's What's on row holds: events, then the weekly activities while there are few, with the calm card first when there are none
+ * @param {HomeEvent[]} events - The upcoming events
+ * @param {WhatsOnPlan} plan - The band's plan, whose weekly activities fill the places left
+ * @returns {PhoneRowPlan} Whether it is a row, and the cards after the events
+ */
+export function planPhoneRow(events: HomeEvent[], plan: WhatsOnPlan): PhoneRowPlan {
+  // From three events the events fill the row alone
+  if (events.length >= PHONE_ROW.EVENTS_ALONE_FROM) {
+    return { isRow: true, hasCalm: false, weekly: [], count: events.length };
+  }
+
+  // Fewer events take the weekly activities after them, and none puts the calm card first
+  const hasCalm = events.length === 0;
+  const count = events.length + plan.weekly.length + Number(hasCalm);
+  return { isRow: count >= PHONE_ROW.MIN_CARDS, hasCalm, weekly: plan.weekly, count };
 }
 
 /**

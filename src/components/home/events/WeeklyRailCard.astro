@@ -1,0 +1,65 @@
+---
+// Dependencies
+import { Repeat } from "@lucide/astro";
+import { INTL_LOCALE } from "../../../i18n/constants";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { TILE_COLOUR } from "../../../lib/content/constants";
+import { getWeeklyNextTexts } from "../../events/helpers";
+
+// Components
+import DutchOnlyMark from "../../site/DutchOnlyMark.astro";
+
+// Types
+import type { WeeklyActivity } from "../../../lib/content/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the WeeklyRailCard component, a weekly activity in the phone's What's on row: a tinted card as big as an event's, with its day, times and next date
+ */
+type Props = {
+  /** The weekly activity. */
+  activity: WeeklyActivity;
+  /** Where the card goes. */
+  href: string;
+  /** The moment the page renders, to work out the next date from. */
+  now: Date;
+};
+
+// Read the activity and write its day, times and next date in the page's language
+const { activity, href, now } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const day = t[`weekly.${activity.weekday}`];
+const times = `${activity.startTime} ${t["weekly.until"]} ${activity.endTime}`;
+const next = getWeeklyNextTexts(activity, now, INTL_LOCALE[locale], t);
+---
+
+<a
+  href={href}
+  class:list={[
+    "flex h-full min-h-84 touch-manipulation flex-col justify-between gap-4 rounded-lg p-5 text-text-heading transition-[scale] duration-fast ease-standard select-none active:scale-98",
+    {
+      "bg-tint-gold": activity.tileColour === TILE_COLOUR.GOLD,
+      "bg-tint-forest": activity.tileColour === TILE_COLOUR.FOREST,
+      "bg-tint-brick": activity.tileColour === TILE_COLOUR.BRICK,
+      "bg-tint-navy": activity.tileColour === TILE_COLOUR.NAVY,
+    },
+  ]}
+>
+  <span class="grid size-15 shrink-0 place-items-center rounded-full bg-tile-icon">
+    <Repeat class="size-icon-md" />
+  </span>
+  <span class="flex flex-col gap-1.5">
+    <span class="type-label opacity-80">{t["weekly.label"]}</span>
+    <h3 class="type-h3 text-balance">
+      {activity.name}
+      {activity.isDutchOnly ? <DutchOnlyMark /> : null}
+    </h3>
+    <span class="type-body-sm font-semibold opacity-85">
+      {day}
+      <br />
+      {times}
+    </span>
+    <span class="type-small font-semibold opacity-75">{next.long}</span>
+  </span>
+</a>

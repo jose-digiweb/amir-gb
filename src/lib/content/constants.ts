@@ -180,3 +180,12 @@ export const WHATS_ON_SLOTS = {
   WIDE: 2,
   RAIL_FROM: 4,
 } as const;
+
+/**
+ * The {@link PHONE_ROW} constant
+ * @description How the phone's What's on row fills: from three events the events fill it alone, and it needs two cards to be a row
+ */
+export const PHONE_ROW = {
+  EVENTS_ALONE_FROM: 3,
+  MIN_CARDS: 2,
+} as const;

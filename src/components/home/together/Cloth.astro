@@ -31,7 +31,7 @@ const t = getTranslations(getLocale(Astro.currentLocale));
   role="img"
   aria-label={t["together.clothLabel"]}
   class:list={[
-    "flex aspect-[350/300] items-end gap-1.5 tablet:aspect-[406/480] desktop:aspect-[698/600]",
+    "flex aspect-[348/196] items-end gap-1.5 tablet:aspect-[406/480] desktop:aspect-[698/600]",
     className,
   ]}
 >
@@ -40,9 +40,9 @@ const t = getTranslations(getLocale(Astro.currentLocale));
     alt=""
     id="cloth-fringe-drummer"
     focus="object-[42%_40%]"
-    class="order-2 h-full grow-[126] desktop:order-1 desktop:h-[96%] desktop:grow-[186]"
+    class="order-1 h-[92%] grow-[146] tablet:order-2 tablet:h-full tablet:grow-[126] desktop:order-1 desktop:h-[96%] desktop:grow-[186]"
   />
-  <div class="relative order-1 h-[93%] grow-[40] basis-0 desktop:order-2 desktop:h-full desktop:grow-[76]">
+  <div class="relative order-2 h-full grow-[28] basis-0 tablet:order-1 tablet:h-[93%] tablet:grow-[40] desktop:order-2 desktop:h-full desktop:grow-[76]">
     <ClothStripNavy class="size-full rounded-t-lg" />
     <ClothStitches
       side={CLOTH_SIDE.LEFT}
@@ -57,12 +57,16 @@ const t = getTranslations(getLocale(Astro.currentLocale));
     alt=""
     id="cloth-fringe-friends"
     focus="object-[52%_30%]"
-    class="order-4 h-[97%] grow-[126] desktop:order-3 desktop:h-[93%] desktop:grow-[186]"
+    class="order-3 h-[92%] grow-[128] tablet:order-4 tablet:h-[97%] tablet:grow-[126] desktop:order-3 desktop:h-[93%] desktop:grow-[186]"
   />
-  <div class="relative order-3 h-[88%] grow-[40] basis-0 desktop:order-4 desktop:h-[98%] desktop:grow-[76]">
+  <div class="relative order-4 h-full grow-[28] basis-0 tablet:order-3 tablet:h-[88%] tablet:grow-[40] desktop:order-4 desktop:h-[98%] desktop:grow-[76]">
     <ClothStripGold class="size-full rounded-t-lg" />
     <ClothStitches side={CLOTH_SIDE.LEFT} id="cloth-stitch-gold-left" />
-    <ClothStitches side={CLOTH_SIDE.RIGHT} id="cloth-stitch-gold-right" />
+    <ClothStitches
+      side={CLOTH_SIDE.RIGHT}
+      id="cloth-stitch-gold-right"
+      class="hidden tablet:block"
+    />
     <ClothFringe id="cloth-fringe-gold" />
   </div>
   <ClothPhoto

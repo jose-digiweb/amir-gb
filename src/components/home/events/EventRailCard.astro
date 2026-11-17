@@ -1,0 +1,55 @@
+---
+// Dependencies
+import { INTL_LOCALE } from "../../../i18n/constants";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { getEventTimes, getEventWhere, getLongWeekday } from "../../../lib/events/helpers";
+
+// Components
+import EventCover from "../../events/EventCover.astro";
+import EventTypeChip from "../../events/EventTypeChip.astro";
+import DutchOnlyMark from "../../site/DutchOnlyMark.astro";
+import EventDate from "./EventDate.astro";
+
+// Types
+import type { HomeEvent } from "../../../lib/content/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the EventRailCard component, an upcoming event in the phone's swipe row: the photo with its date badge, then the type, the name, the day and time, and the place
+ */
+type Props = {
+  /** The event. */
+  event: HomeEvent;
+};
+
+// Read the event and write its day, times and place in the page's language
+const { event } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = getTranslations(locale);
+const intl = INTL_LOCALE[locale];
+const when = `${getLongWeekday(event.startsAt, intl)}, ${getEventTimes(event, intl, t["weekly.until"], t["eventsPage.from"])}`;
+const where = getEventWhere(event, t["events.online"], t["events.and"]);
+---
+
+<a
+  href={event.href}
+  class="flex h-full touch-manipulation flex-col overflow-hidden rounded-lg bg-surface text-text-heading transition-[scale] duration-fast ease-standard select-none active:scale-98"
+>
+  <span class="relative block h-42 shrink-0">
+    <span class="absolute inset-0 isolate overflow-hidden bg-surface-sunken">
+      <EventCover image={event.image} sizes="272px" />
+    </span>
+    <EventDate startsAt={event.startsAt} class="absolute top-3 left-3" />
+  </span>
+  <span class="flex flex-col gap-2 px-4 pt-3 pb-4">
+    <EventTypeChip type={event.type} />
+    <h3 class="type-h4 text-balance">
+      {event.title}
+      {event.isDutchOnly ? <DutchOnlyMark /> : null}
+    </h3>
+    <span class="flex flex-col type-body-sm text-text-muted">
+      <span>{when}</span>
+      {where ? <span>{where}</span> : null}
+    </span>
+  </span>
+</a>

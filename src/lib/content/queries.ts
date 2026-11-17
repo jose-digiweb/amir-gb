@@ -109,6 +109,7 @@ export async function getUpcomingEvents(
       id: entry.data.id,
       href: getRelativeLocaleUrl(locale, `${ROUTE.EVENTS}${entry.data.slug ?? ""}/`),
       title: entry.data.title,
+      type: entry.data.type,
       startsAt: new Date(entry.data.starts_at),
       endsAt: entry.data.ends_at ? new Date(entry.data.ends_at) : undefined,
       placeName: entry.data.place_name,
@@ -219,6 +220,7 @@ export async function getRecentStories(locale: Locale): Promise<ContentRead<Home
       title: entry.data.title,
       excerpt: entry.data.excerpt,
       image: entry.data.featured_image,
+      publishedAt: entry.data.publishedAt ?? undefined,
       isDutchOnly,
     }));
   return { items: stories.slice(0, HOME_LIMIT.STORIES), cacheHints };

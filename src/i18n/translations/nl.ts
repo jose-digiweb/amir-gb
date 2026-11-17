@@ -82,6 +82,9 @@ export const nl: Translations = {
   "help.health": "Gezondheid en zorg",
   "help.culture": "Cultuur en activiteiten",
   "help.ask": "Twijfel je? Vraag het ons",
+  "help.notSureTitle": "Weet je niet waar je moet beginnen?",
+  "help.notSureText": "Vraag het ons via WhatsApp, in je eigen taal",
+  "dock.label": "Snel hulp",
   "help.photoAlt": "Een vrijwilliger helpt een vrouw aan een tafeltje in een café",
   "values.solidarity": "Solidariteit",
   "values.welcome": "Welkom",
@@ -100,6 +103,9 @@ export const nl: Translations = {
   "events.noneTitle": "Nog geen nieuwe data",
   "events.noneText":
     "Onze wekelijkse activiteiten gaan gewoon door. Nieuwe activiteiten maken we hier als eerste bekend, en op Facebook en Instagram.",
+  "events.noneSwipeText":
+    "Onze wekelijkse activiteiten gaan gewoon door, hiernaast. Nieuwe activiteiten maken we hier als eerste bekend, en op Facebook en Instagram.",
+  "events.swipe": "Veeg om ze te zien",
   "events.online": "online",
   "events.and": "en",
   "weekly.label": "ELKE WEEK",

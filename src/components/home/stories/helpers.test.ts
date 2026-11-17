@@ -1,6 +1,6 @@
 // Dependencies
 import { describe, expect, it } from "vitest";
-import { getStoryLayout, planStoryWall } from "./helpers";
+import { getStoryLabel, getStoryLayout, planStoryWall } from "./helpers";
 
 describe("getStoryLayout", () => {
   it("shows one story with its words, two or three side by side, and four or more as the wall", () => {
@@ -23,5 +23,17 @@ describe("planStoryWall", () => {
 
   it("fills the four column wall with seven stories", () => {
     expect(planStoryWall(7).grid).toContain("--columns-lg: 4");
+  });
+});
+
+describe("getStoryLabel", () => {
+  it("adds the story's date after the word", () => {
+    expect(getStoryLabel("STORY", new Date("2026-11-08T10:00:00Z"), "en-GB")).toBe(
+      "STORY · 8 November",
+    );
+  });
+
+  it("leaves the word alone without a date", () => {
+    expect(getStoryLabel("STORY", undefined, "en-GB")).toBe("STORY");
   });
 });

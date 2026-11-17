@@ -6,6 +6,7 @@ import { getLocale, getTranslations } from "../../i18n/helpers";
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import AnnouncementStrip from "./AnnouncementStrip.astro";
 import WhatsOnSection from "./events/WhatsOnSection.astro";
+import HomeDock from "./dock/HomeDock.astro";
 import HelpSection from "./help/HelpSection.astro";
 import OpeningSection from "./opening/OpeningSection.astro";
 import LifeSection from "./stories/LifeSection.astro";
@@ -45,4 +46,5 @@ const hasStories = content.stories.length > 0;
   <WhatsOnSection events={content.events} activities={content.activities} />
   {hasStories ? <LifeSection stories={content.stories} /> : null}
   <SupportSection support={support} />
+  <HomeDock />
 </SiteLayout>

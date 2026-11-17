@@ -136,6 +136,17 @@ export function getShortDate(date: Date, locale: string): string {
 }
 
 /**
+ * The {@link getDayMonth} helper
+ * @description A day and its month written out, without weekday or year
+ * @param {Date} date - The day
+ * @param {string} locale - The page's language
+ * @returns {string} For example "8 November", or "8 de novembro" in Portuguese
+ */
+export function getDayMonth(date: Date, locale: string): string {
+  return formatInSiteTime(date, locale, { day: "numeric", month: "long" });
+}
+
+/**
  * The {@link getArchiveDate} helper
  * @description A past event's short weekday and date with the year
  * @param {Date} date - When the event started
@@ -164,6 +175,17 @@ export function getShortWeekday(date: Date, locale: string): string {
   const text = formatInSiteTime(date, locale, { weekday: "short" });
   // Drop the dot some languages add, and lead with a capital
   return capitalise(text.replace(".", ""));
+}
+
+/**
+ * The {@link getLongWeekday} helper
+ * @description An event's weekday written out, for a card's when line
+ * @param {Date} date - When the event starts
+ * @param {string} locale - The page's language
+ * @returns {string} For example "Saturday"
+ */
+export function getLongWeekday(date: Date, locale: string): string {
+  return capitalise(formatInSiteTime(date, locale, { weekday: "long" }));
 }
 
 /**

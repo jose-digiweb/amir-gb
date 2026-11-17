@@ -1,0 +1,53 @@
+---
+// Dependencies
+import { TILE_COLOUR } from "../../../lib/content/constants";
+
+// Components
+import HelpServiceIcon from "../../help/HelpServiceIcon.astro";
+
+// Types
+import type { TileColour } from "../../../lib/content/types";
+import type { HelpService } from "../../../lib/help/types";
+
+/**
+ * The {@link Props} type
+ * @description The props of the HelpLauncherItem component, one help service on the phone's launcher: a tinted square with its pictogram and its name under it
+ */
+type Props = {
+  /** The help service it opens. */
+  service: HelpService;
+  /** The square's tint. */
+  tint: TileColour;
+  /** The service's name. */
+  label: string;
+  /** Where it goes. */
+  href: string;
+};
+
+// Read the service, tint, name and link
+const { service, tint, label, href } = Astro.props;
+---
+
+<a
+  href={href}
+  class="group flex w-full touch-manipulation flex-col items-center gap-2 text-center text-text-heading select-none"
+>
+  <span
+    class:list={[
+      "grid aspect-square w-full max-w-24 place-items-center rounded-lg transition-[scale] duration-fast ease-standard group-active:scale-97",
+      {
+        "bg-tint-gold": tint === TILE_COLOUR.GOLD,
+        "bg-tint-forest": tint === TILE_COLOUR.FOREST,
+        "bg-tint-brick": tint === TILE_COLOUR.BRICK,
+        "bg-tint-navy": tint === TILE_COLOUR.NAVY,
+      },
+    ]}
+  >
+    <span class="grid size-14 place-items-center rounded-full bg-tile-icon">
+      <HelpServiceIcon service={service} class="size-icon-md" />
+    </span>
+  </span>
+  <span class="type-button-sm text-balance hyphens-auto [hyphenate-limit-chars:12_5_5]">
+    {label}
+  </span>
+</a>
