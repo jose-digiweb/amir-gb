@@ -326,3 +326,42 @@
 @utility z-toast {
   z-index: var(--z-toast);
 }
+
+/* dark: follows the same switch as the tokens: the system setting, unless data-theme on <html> says otherwise.
+   Colour never needs it. Use it for what a token cannot switch, such as showing the reverse logo. */
+@custom-variant dark {
+  @media (prefers-color-scheme: dark) {
+    &:where(:root:not([data-theme="light"]), :root:not([data-theme="light"]) *) {
+      @slot;
+    }
+  }
+  &:where(:root[data-theme="dark"], :root[data-theme="dark"] *) {
+    @slot;
+  }
+}
+
+/* focus ring: focus-ring on bg, bg-alt and surface; focus-ring-on-brand on navy and photos */
+@utility focus-ring {
+  &:focus-visible {
+    outline: var(--focus-width) solid var(--focus);
+    outline-offset: var(--focus-offset);
+  }
+}
+@utility focus-ring-on-brand {
+  &:focus-visible {
+    outline: var(--focus-width) solid var(--focus-on-brand);
+    outline-offset: var(--focus-offset);
+  }
+}
+
+/* base: the page ground, the text colour and family, and the colour of a plain "border" */
+@layer base {
+  *, ::before, ::after, ::backdrop, ::file-selector-button {
+    border-color: var(--border);
+  }
+  html {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: var(--font-text);
+  }
+}

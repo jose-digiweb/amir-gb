@@ -4,19 +4,6 @@
 @import "./design-system/amir-tokens.css";
 @import "./design-system/amir-tailwind.css";
 
-/* Dark as the tokens define it: the system setting, unless data-theme on <html> says otherwise.
-   For swapping a file such as the logo; colour never needs it, the tokens switch by themselves. */
-@custom-variant theme-dark {
-  @media (prefers-color-scheme: dark) {
-    &:where(:root:not([data-theme="light"]) *) {
-      @slot;
-    }
-  }
-  &:where([data-theme="dark"] *) {
-    @slot;
-  }
-}
-
 /* The visitor's appearance choice, for showing what is picked: none set is Automatic. */
 @custom-variant choice-auto (&:where(:root:not([data-theme]) *));
 @custom-variant choice-light (&:where([data-theme="light"] *));
