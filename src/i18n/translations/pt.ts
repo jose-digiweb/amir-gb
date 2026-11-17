@@ -136,6 +136,7 @@ export const pt: Translations = {
   "donate.secure": "Seguro com iDEAL",
   "donate.secureMonthly": "Seguro com iDEAL · Pare quando quiser",
   "donate.tooSmall": "O donativo mínimo é de 1 €.",
+  "donate.notAnAmount": "Escreva um valor em euros, por exemplo 15 ou 12,50.",
   "donate.tooLarge": "Para mais de 10 000 €, use a transferência bancária abaixo.",
   "donate.startFailed":
     "Não foi possível iniciar o pagamento. Tente de novo, ou use a transferência bancária abaixo.",

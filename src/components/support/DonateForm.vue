@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // Dependencies
 import { CircleAlert, Heart, LoaderCircle, Lock } from "@lucide/vue";
-import { DONATE_FIELD, DONATION, FREQUENCY } from "../../lib/donate/constants";
+import { DONATE_FIELD, DONATE_FORM_ID, DONATION, FREQUENCY } from "../../lib/donate/constants";
 import { formatAmount } from "../../lib/donate/helpers";
 import { useDonateForm } from "./useDonateForm";
 
@@ -11,7 +11,7 @@ import FrequencyChoice from "./FrequencyChoice.vue";
 
 // Types
 import type { Locale } from "../../i18n/types";
-import type { DonateError, DonateFormCopy } from "../../lib/donate/types";
+import type { DonateError, DonateFormCopy, GiftChoice } from "../../lib/donate/types";
 
 /**
  * The {@link Props} type
@@ -26,6 +26,8 @@ type Props = {
   action: string;
   /** The error of a try that came back from the server. */
   initialError?: DonateError;
+  /** The choice of a try that came back, so the donor does not choose again. */
+  initialChoice?: GiftChoice;
 };
 
 // Read the props, the form's state and the presets as the page's language writes them
@@ -34,6 +36,7 @@ const form = useDonateForm({
   locale: props.locale,
   copy: props.copy,
   initialError: props.initialError,
+  initialChoice: props.initialChoice,
 });
 const {
   frequency,
@@ -93,6 +96,7 @@ const presets = DONATION.AMOUNTS.map((amount) => ({
     >
       <span aria-hidden="true">€</span>
       <input
+        :id="DONATE_FORM_ID.OTHER"
         v-model="other"
         type="text"
         :name="DONATE_FIELD.OTHER"
@@ -101,14 +105,13 @@ const presets = DONATION.AMOUNTS.map((amount) => ({
         :placeholder="props.copy.other"
         :aria-label="props.copy.otherLabel"
         :aria-invalid="amountError ? 'true' : undefined"
-        :aria-describedby="amountError ? 'donate-error' : undefined"
+        :aria-describedby="amountError ? DONATE_FORM_ID.ERROR : undefined"
         class="h-full min-w-0 flex-1 bg-transparent type-body text-text outline-none placeholder:text-text-muted"
       />
     </label>
     <p
       v-if="amountError"
-      id="donate-error"
-      role="alert"
+      :id="DONATE_FORM_ID.ERROR"
       class="-mt-1.5 flex items-center gap-2 px-2 type-body-sm font-semibold text-danger"
     >
       <CircleAlert class="size-icon-sm shrink-0" aria-hidden="true" />

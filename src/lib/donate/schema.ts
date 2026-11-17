@@ -2,7 +2,7 @@
 import { z } from "astro/zod";
 import { LOCALES } from "../../i18n/constants";
 import { DONATE_FIELD, FREQUENCIES } from "./constants";
-import { checkAmount, getChosenAmount } from "./helpers";
+import { getAmountError, getChosenAmount } from "./helpers";
 
 /**
  * The {@link DONATE_INPUT} constant
@@ -17,7 +17,7 @@ export const DONATE_INPUT = z
   })
   .transform((input, context) => {
     const amountCents = getChosenAmount(input.amount, input.other);
-    const error = checkAmount(amountCents);
+    const error = getAmountError(input.amount, input.other);
 
     // An amount that cannot be given is reported on the typed field, with its error's name
     if (error || amountCents === null) {

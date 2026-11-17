@@ -25,6 +25,8 @@ type Props = {
   placeholder?: string;
   /** What to fix, once Send was pressed. */
   error?: string;
+  /** The field has to be filled in, which screen readers announce. */
+  required?: boolean;
 };
 
 // Read the box and its typed text
@@ -54,6 +56,7 @@ const errorId = computed(() => `${props.id}${FIELD_ID_SUFFIX.ERROR}`);
       :maxlength="props.maxlength"
       :placeholder="props.placeholder"
       :aria-invalid="props.error ? 'true' : undefined"
+      :aria-required="props.required ? 'true' : undefined"
       :aria-describedby="props.error ? errorId : undefined"
       class="min-h-36 resize-y rounded-md bg-surface px-4 py-3 type-body text-text inset-ring inset-ring-border-control placeholder:text-text-muted aria-invalid:inset-ring-2 aria-invalid:inset-ring-danger"
     ></textarea>

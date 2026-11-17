@@ -141,6 +141,7 @@ const skillsErrorId = `${JOIN_FORM_ID.SKILLS}${FIELD_ID_SUFFIX.ERROR}`;
             :name="JOIN_FIELD.NAME"
             :label="props.copy.nameLabel"
             autocomplete="name"
+            required
             :maxlength="JOIN_LIMIT.NAME"
             :placeholder="props.copy.namePlaceholder"
             :error="errorText(errors.name)"
@@ -152,6 +153,8 @@ const skillsErrorId = `${JOIN_FORM_ID.SKILLS}${FIELD_ID_SUFFIX.ERROR}`;
             :label="props.copy.emailLabel"
             type="email"
             autocomplete="email"
+            required
+            is-identifier
             :maxlength="JOIN_LIMIT.EMAIL"
             :error="errorText(errors.email)"
           />
@@ -171,6 +174,7 @@ const skillsErrorId = `${JOIN_FORM_ID.SKILLS}${FIELD_ID_SUFFIX.ERROR}`;
             :name="JOIN_FIELD.PLACE"
             :label="props.copy.placeLabel"
             autocomplete="address-level2"
+            required
             :maxlength="JOIN_LIMIT.PLACE"
             :hint="props.copy.placeHint"
             :error="errorText(errors.place)"
@@ -233,15 +237,18 @@ const skillsErrorId = `${JOIN_FORM_ID.SKILLS}${FIELD_ID_SUFFIX.ERROR}`;
           :text="props.copy.consent"
           :link-label="props.copy.privacy"
           :href="props.links.privacy"
+          required
           :error="errorText(errors.consent)"
         />
       </fieldset>
 
+      <p role="status" class="sr-only">
+        {{ state === JOIN_FORM_STATE.SENDING ? props.copy.sending : "" }}
+      </p>
       <button
         type="submit"
-        :disabled="state === JOIN_FORM_STATE.SENDING"
         :aria-busy="state === JOIN_FORM_STATE.SENDING ? 'true' : undefined"
-        class="inline-flex h-control-lg w-full touch-manipulation items-center justify-center gap-2 rounded-pill bg-primary px-8 type-button text-on-primary transition-[background-color,scale] duration-fast ease-standard select-none hover:bg-primary-hover active:scale-97 active:bg-primary-pressed disabled:cursor-progress tablet:w-auto tablet:self-start [&_svg]:size-icon-md [&_svg]:shrink-0"
+        class="inline-flex h-control-lg w-full touch-manipulation items-center justify-center gap-2 rounded-pill bg-primary px-8 type-button text-on-primary transition-[background-color,scale] duration-fast ease-standard select-none hover:bg-primary-hover active:scale-97 active:bg-primary-pressed aria-busy:cursor-progress tablet:w-auto tablet:self-start [&_svg]:size-icon-md [&_svg]:shrink-0"
       >
         <LoaderCircle
           v-if="state === JOIN_FORM_STATE.SENDING"

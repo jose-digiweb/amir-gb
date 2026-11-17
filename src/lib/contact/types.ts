@@ -63,3 +63,9 @@ export type QrDrawing = {
   size: number;
   path: string;
 };
+
+/**
+ * The {@link ContactCheckedField} type
+ * @description A field that can keep a message from being sent
+ */
+export type ContactCheckedField = keyof ContactErrors;

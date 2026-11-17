@@ -40,7 +40,7 @@ export type GiftPageRoute = typeof ROUTE.HOME | typeof ROUTE.DONATE;
  * @description What the Support section shows: the form, with an error when the last try failed, or the result of a return from Stripe
  */
 export type SupportState =
-  | { state: typeof GIFT_STATE.FORM; error?: DonateError }
+  | { state: typeof GIFT_STATE.FORM; error?: DonateError; choice?: GiftChoice }
   | { state: typeof GIFT_STATE.PAID; amountCents: number }
   | { state: typeof GIFT_STATE.PAID_MONTHLY; amountCents: number }
   | { state: typeof GIFT_STATE.PROCESSING; amountCents: number }
@@ -83,6 +83,13 @@ export type DonateFormCopy = {
   secure: string;
   secureMonthly: string;
   tooSmall: string;
+  notAnAmount: string;
   tooLarge: string;
   startFailed: string;
 };
+
+/**
+ * The {@link DonateResult} type
+ * @description What the donate action returns: Stripe's payment page to go to, or the choice back when Stripe did not answer
+ */
+export type DonateResult = { url: string } | { failedChoice: GiftChoice };

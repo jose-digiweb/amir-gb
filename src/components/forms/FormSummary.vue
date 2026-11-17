@@ -23,7 +23,6 @@ const props = defineProps<Props>();
   <div
     :id="props.id"
     tabindex="-1"
-    role="alert"
     class="flex gap-3 rounded-md bg-danger-bg p-4 text-text-heading"
   >
     <CircleAlert class="mt-0.5 size-icon-md shrink-0 text-danger" aria-hidden="true" />

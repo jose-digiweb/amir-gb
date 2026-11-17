@@ -9,12 +9,17 @@ import {
 import { checkContactValues, isContactError } from "../../lib/contact/helpers";
 import { CHECKBOX_ON } from "../../lib/forms/constants";
 import { listFieldNames } from "../../lib/forms/helpers";
-import { focusWhenDrawn, readFieldErrors } from "../forms/helpers";
+import { focusWhenDrawn, keepStandingErrors, readFieldErrors } from "../forms/helpers";
 import { CONTACT_FORM_ID, CONTACT_FORM_STATE } from "./constants";
 
 // Types
 import type { Locale } from "../../i18n/types";
-import type { ContactError, ContactErrors, ContactTopic } from "../../lib/contact/types";
+import type {
+  ContactCheckedField,
+  ContactError,
+  ContactErrors,
+  ContactTopic,
+} from "../../lib/contact/types";
 import type { AnswerLanguage } from "../../site/types";
 import type { ContactFormCopy, ContactFormState } from "./types";
 
@@ -42,8 +47,9 @@ export function useContactForm({ locale, copy }: ContactFormOptions) {
   const consent = ref(false);
   const trap = ref("");
   const state = ref<ContactFormState>(CONTACT_FORM_STATE.EDITING);
-  const wasSubmitted = ref(false);
   const serverErrors = ref<ContactErrors>({});
+  const shownErrors = ref<ContactErrors>({});
+  const summaryFields = ref<ContactCheckedField[]>([]);
   const sentName = ref("");
   const sentReach = ref("");
   const sentLanguage = ref<AnswerLanguage>(locale);
@@ -57,25 +63,38 @@ export function useContactForm({ locale, copy }: ContactFormOptions) {
     consent: consent.value,
   }));
 
-  // Errors show only once Send was pressed, then follow what is typed
-  const errors = computed<ContactErrors>(() => {
-    if (!wasSubmitted.value) {
-      return {};
-    }
-    return { ...serverErrors.value, ...checkContactValues(values.value) };
-  });
+  // Errors show once Send was pressed; typing clears each one once its field is fixed, never adds one
+  const errors = computed<ContactErrors>(() =>
+    keepStandingErrors(
+      CONTACT_CHECKED_FIELDS,
+      shownErrors.value,
+      checkContactValues(values.value),
+      serverErrors.value,
+    ),
+  );
 
-  // The fields still to fix, for the summary at the top
+  // The fields still to fix, so the summary shows while any is left
   const errorFields = computed(() => CONTACT_CHECKED_FIELDS.filter((field) => errors.value[field]));
 
-  // The summary's title and its sentence naming the fields, in the page's language
-  const summaryTitle = computed(() => copy.summaryTitles[errorFields.value.length - 1] ?? "");
+  // The summary's title and its sentence name the fields as they were at Send, so it does not change while the visitor types
+  const summaryTitle = computed(() => copy.summaryTitles[summaryFields.value.length - 1] ?? "");
   const summaryText = computed(() =>
     listFieldNames(
       locale,
-      errorFields.value.map((field) => copy.summaryFields[field]),
+      summaryFields.value.map((field) => copy.summaryFields[field]),
     ),
   );
+
+  /**
+   * The {@link showErrors} helper
+   * @description Shows the errors found at Send, and names their fields in the summary
+   * @param {ContactErrors} found - The errors by field
+   * @returns {void}
+   */
+  function showErrors(found: ContactErrors): void {
+    shownErrors.value = found;
+    summaryFields.value = CONTACT_CHECKED_FIELDS.filter((field) => found[field]);
+  }
 
   // Each field's sentence, empty when it is fine
   const errorText = (error: ContactError | undefined) => (error ? copy.errors[error] : "");
@@ -121,6 +140,11 @@ export function useContactForm({ locale, copy }: ContactFormOptions) {
    */
   async function onSubmit(event: SubmitEvent): Promise<void> {
     event.preventDefault();
+
+    // A second press while it sends does nothing
+    if (state.value === CONTACT_FORM_STATE.SENDING) {
+      return;
+    }
     await send();
   }
 
@@ -130,11 +154,12 @@ export function useContactForm({ locale, copy }: ContactFormOptions) {
    * @returns {Promise<void>}
    */
   async function send(): Promise<void> {
-    wasSubmitted.value = true;
     serverErrors.value = {};
+    const found = checkContactValues(values.value);
+    showErrors(found);
 
     // Errors stay on the page, named at the top
-    if (Object.keys(checkContactValues(values.value)).length > 0) {
+    if (Object.keys(found).length > 0) {
       state.value = CONTACT_FORM_STATE.EDITING;
       await focusWhenDrawn(CONTACT_FORM_ID.SUMMARY);
       return;
@@ -149,6 +174,7 @@ export function useContactForm({ locale, copy }: ContactFormOptions) {
     // The server found something the page did not
     if (error && isInputError(error)) {
       serverErrors.value = readFieldErrors(error.fields, CONTACT_CHECKED_FIELDS, isContactError);
+      showErrors(serverErrors.value);
       state.value = CONTACT_FORM_STATE.EDITING;
       await focusWhenDrawn(CONTACT_FORM_ID.SUMMARY);
       return;
@@ -180,7 +206,7 @@ export function useContactForm({ locale, copy }: ContactFormOptions) {
     topic.value = "";
     message.value = "";
     consent.value = false;
-    wasSubmitted.value = false;
+    showErrors({});
     state.value = CONTACT_FORM_STATE.EDITING;
     await focusWhenDrawn(CONTACT_FORM_ID.NAME);
   }

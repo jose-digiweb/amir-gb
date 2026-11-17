@@ -1,20 +1,28 @@
 // Dependencies
 import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
-import { DONATE_ERROR, DONATION, FREQUENCY, PAGE_SHOW } from "../../lib/donate/constants";
-import { checkAmount, getChoiceLabel, getChosenAmount } from "../../lib/donate/helpers";
+import { DONATE_ERROR, DONATE_FORM_ID, FREQUENCY, PAGE_SHOW } from "../../lib/donate/constants";
+import {
+  checkAmount,
+  getAmountError,
+  getChoiceLabel,
+  getChosenAmount,
+  getInitialAmount,
+} from "../../lib/donate/helpers";
+import { focusWhenDrawn } from "../forms/helpers";
 
 // Types
 import type { Locale } from "../../i18n/types";
-import type { DonateError, DonateFormCopy, Frequency } from "../../lib/donate/types";
+import type { DonateError, DonateFormCopy, Frequency, GiftChoice } from "../../lib/donate/types";
 
 /**
  * The {@link DonateFormOptions} type
- * @description What the donation form starts from: the page's language, its copy and the error of a failed try
+ * @description What the donation form starts from: the page's language, its copy, and the error and choice of a failed try
  */
 type DonateFormOptions = {
   locale: Locale;
   copy: DonateFormCopy;
   initialError?: DonateError;
+  initialChoice?: GiftChoice;
 };
 
 /**
@@ -23,10 +31,11 @@ type DonateFormOptions = {
  * @param {DonateFormOptions} options - The page's language, the copy and a starting error
  * @returns {ReturnType<typeof useDonateForm>} The form's state and its submit handler
  */
-export function useDonateForm({ locale, copy, initialError }: DonateFormOptions) {
-  const frequency = ref<Frequency>(FREQUENCY.ONCE);
-  const preset = ref<number | null>(DONATION.DEFAULT_AMOUNT);
-  const other = ref("");
+export function useDonateForm({ locale, copy, initialError, initialChoice }: DonateFormOptions) {
+  const initialAmount = getInitialAmount(initialChoice);
+  const frequency = ref<Frequency>(initialChoice?.frequency ?? FREQUENCY.ONCE);
+  const preset = ref<number | null>(initialAmount.preset);
+  const other = ref(initialAmount.other);
   const error = ref<DonateError | undefined>(initialError);
   const isBusy = ref(false);
 
@@ -49,6 +58,11 @@ export function useDonateForm({ locale, copy, initialError }: DonateFormOptions)
     // Over the largest gift
     if (error.value === DONATE_ERROR.TOO_LARGE) {
       return copy.tooLarge;
+    }
+
+    // Typed text that is not an amount
+    if (error.value === DONATE_ERROR.NOT_AN_AMOUNT) {
+      return copy.notAnAmount;
     }
 
     // Under the smallest gift, or no amount
@@ -120,11 +134,12 @@ export function useDonateForm({ locale, copy, initialError }: DonateFormOptions)
       return;
     }
 
-    // An amount that cannot be given stays here with its reason
-    const reason = checkAmount(amountCents.value);
+    // An amount that cannot be given stays here with its reason, and the field takes focus
+    const reason = getAmountError(preset.value?.toString(), other.value);
     if (reason) {
       event.preventDefault();
       error.value = reason;
+      void focusWhenDrawn(DONATE_FORM_ID.OTHER);
       return;
     }
 
@@ -146,8 +161,15 @@ export function useDonateForm({ locale, copy, initialError }: DonateFormOptions)
     }
   }
 
-  // Listen for the back button only while the form is on the page
-  onMounted(() => window.addEventListener(PAGE_SHOW, onPageShow));
+  // Listen for the back button only while the form is on the page, and point at an amount that came back wrong
+  onMounted(() => {
+    window.addEventListener(PAGE_SHOW, onPageShow);
+
+    // An amount the server refused takes focus, so its error is read
+    if (amountError.value) {
+      void focusWhenDrawn(DONATE_FORM_ID.OTHER);
+    }
+  });
   onBeforeUnmount(() => window.removeEventListener(PAGE_SHOW, onPageShow));
 
   // Everything the form renders and its submit handler

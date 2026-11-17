@@ -36,7 +36,17 @@ export const FREQUENCIES = [FREQUENCY.ONCE, FREQUENCY.MONTHLY] as const;
 export const DONATE_ERROR = {
   TOO_SMALL: "too-small",
   TOO_LARGE: "too-large",
+  NOT_AN_AMOUNT: "not-an-amount",
   START_FAILED: "start-failed",
+} as const;
+
+/**
+ * The {@link DONATE_FORM_ID} constant
+ * @description The ids of the donation form's typed amount and its error, which the field, its description and focus use
+ */
+export const DONATE_FORM_ID = {
+  OTHER: "donate-other",
+  ERROR: "donate-error",
 } as const;
 
 /**

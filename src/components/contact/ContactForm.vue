@@ -101,6 +101,7 @@ const {
           :name="CONTACT_FIELD.NAME"
           :label="props.copy.nameLabel"
           autocomplete="name"
+          required
           :maxlength="CONTACT_LIMIT.NAME"
           :placeholder="props.copy.namePlaceholder"
           :error="errorText(errors.name)"
@@ -111,7 +112,8 @@ const {
           :name="CONTACT_FIELD.REACH"
           :label="props.copy.reachLabel"
           autocomplete="email"
-          inputmode="email"
+          required
+          is-identifier
           :maxlength="CONTACT_LIMIT.REACH"
           :placeholder="props.copy.reachPlaceholder"
           :error="errorText(errors.reach)"
@@ -155,6 +157,7 @@ const {
         v-model="message"
         :name="CONTACT_FIELD.MESSAGE"
         :label="props.copy.messageLabel"
+        required
         :maxlength="CONTACT_LIMIT.MESSAGE"
         :placeholder="props.copy.messagePlaceholder"
         :error="errorText(errors.message)"
@@ -169,15 +172,18 @@ const {
         :text="props.copy.consent"
         :link-label="props.copy.privacy"
         :href="props.links.privacy"
+        required
         :error="errorText(errors.consent)"
       />
     </fieldset>
 
+    <p role="status" class="sr-only">
+      {{ state === CONTACT_FORM_STATE.SENDING ? props.copy.sending : "" }}
+    </p>
     <button
       type="submit"
-      :disabled="state === CONTACT_FORM_STATE.SENDING"
       :aria-busy="state === CONTACT_FORM_STATE.SENDING ? 'true' : undefined"
-      class="inline-flex h-control-lg w-full touch-manipulation items-center justify-center gap-2 rounded-pill bg-primary px-8 type-button text-on-primary transition-[background-color,scale] duration-fast ease-standard select-none hover:bg-primary-hover active:scale-97 active:bg-primary-pressed disabled:cursor-progress tablet:w-auto tablet:self-start [&_svg]:size-icon-md [&_svg]:shrink-0"
+      class="inline-flex h-control-lg w-full touch-manipulation items-center justify-center gap-2 rounded-pill bg-primary px-8 type-button text-on-primary transition-[background-color,scale] duration-fast ease-standard select-none hover:bg-primary-hover active:scale-97 active:bg-primary-pressed aria-busy:cursor-progress tablet:w-auto tablet:self-start [&_svg]:size-icon-md [&_svg]:shrink-0"
     >
       <LoaderCircle
         v-if="state === CONTACT_FORM_STATE.SENDING"

@@ -44,6 +44,7 @@ const formAction = `${actions.donate}${GIFT_RETURN.HASH}`;
       copy={formCopy}
       action={formAction}
       initialError={support.error}
+      initialChoice={support.choice}
     />
   ) : null}
   {support.state === GIFT_STATE.PAID ? <GiftThanks amountCents={support.amountCents} /> : null}

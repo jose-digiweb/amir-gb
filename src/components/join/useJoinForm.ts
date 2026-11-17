@@ -10,12 +10,19 @@ import {
   JOIN_PLACEHOLDER,
 } from "../../lib/join/constants";
 import { checkJoinValues, getFirstName, isJoinError, orderSkills } from "../../lib/join/helpers";
-import { focusWhenDrawn, readFieldErrors } from "../forms/helpers";
+import { focusWhenDrawn, keepStandingErrors, readFieldErrors } from "../forms/helpers";
 import { JOIN_FORM_ID, JOIN_FORM_STATE } from "./constants";
 
 // Types
 import type { Locale } from "../../i18n/types";
-import type { JoinError, JoinErrors, JoinMode, JoinSkill, JoinValues } from "../../lib/join/types";
+import type {
+  JoinCheckedField,
+  JoinError,
+  JoinErrors,
+  JoinMode,
+  JoinSkill,
+  JoinValues,
+} from "../../lib/join/types";
 import type { AnswerLanguage } from "../../site/types";
 import type { JoinFormCopy, JoinFormState } from "./types";
 
@@ -46,8 +53,9 @@ export function useJoinForm({ locale, copy }: JoinFormOptions) {
   const consent = ref(false);
   const trap = ref("");
   const state = ref<JoinFormState>(JOIN_FORM_STATE.EDITING);
-  const wasSubmitted = ref(false);
   const serverErrors = ref<JoinErrors>({});
+  const shownErrors = ref<JoinErrors>({});
+  const summaryFields = ref<JoinCheckedField[]>([]);
   const sent = ref<JoinValues>();
 
   // The sign-up as typed, trimmed the way the server reads it; skills count only for a volunteer
@@ -69,28 +77,41 @@ export function useJoinForm({ locale, copy }: JoinFormOptions) {
     };
   });
 
-  // Errors show only once Send was pressed, then follow what is typed
-  const errors = computed<JoinErrors>(() => {
-    if (!wasSubmitted.value) {
-      return {};
-    }
-    return { ...serverErrors.value, ...checkJoinValues(values.value) };
-  });
+  // Errors show once Send was pressed; typing clears each one once its field is fixed, never adds one
+  const errors = computed<JoinErrors>(() =>
+    keepStandingErrors(
+      JOIN_CHECKED_FIELDS,
+      shownErrors.value,
+      checkJoinValues(values.value),
+      serverErrors.value,
+    ),
+  );
 
   // The mode What happens next follows: the sent sign-up's once it is sent, the form's before
   const stepsMode = computed<JoinMode>(() => sent.value?.mode ?? mode.value);
 
-  // The fields still to fix, for the summary at the top
+  // The fields still to fix, so the summary shows while any is left
   const errorFields = computed(() => JOIN_CHECKED_FIELDS.filter((field) => errors.value[field]));
 
-  // The summary's title and its sentence naming the fields, in the page's language
-  const summaryTitle = computed(() => copy.summaryTitles[errorFields.value.length - 1] ?? "");
+  // The summary's title and its sentence name the fields as they were at Send, so it does not change while the visitor types
+  const summaryTitle = computed(() => copy.summaryTitles[summaryFields.value.length - 1] ?? "");
   const summaryText = computed(() =>
     listFieldNames(
       locale,
-      errorFields.value.map((field) => copy.summaryFields[field]),
+      summaryFields.value.map((field) => copy.summaryFields[field]),
     ),
   );
+
+  /**
+   * The {@link showErrors} helper
+   * @description Shows the errors found at Send, and names their fields in the summary
+   * @param {JoinErrors} found - The errors by field
+   * @returns {void}
+   */
+  function showErrors(found: JoinErrors): void {
+    shownErrors.value = found;
+    summaryFields.value = JOIN_CHECKED_FIELDS.filter((field) => found[field]);
+  }
 
   // Each field's sentence, empty when it is fine
   const errorText = (error: JoinError | undefined) => (error ? copy.errors[error] : "");
@@ -166,6 +187,11 @@ export function useJoinForm({ locale, copy }: JoinFormOptions) {
    */
   async function onSubmit(event: SubmitEvent): Promise<void> {
     event.preventDefault();
+
+    // A second press while it sends does nothing
+    if (state.value === JOIN_FORM_STATE.SENDING) {
+      return;
+    }
     await send();
   }
 
@@ -175,11 +201,12 @@ export function useJoinForm({ locale, copy }: JoinFormOptions) {
    * @returns {Promise<void>}
    */
   async function send(): Promise<void> {
-    wasSubmitted.value = true;
     serverErrors.value = {};
+    const found = checkJoinValues(values.value);
+    showErrors(found);
 
     // Errors stay on the page, named at the top
-    if (Object.keys(checkJoinValues(values.value)).length > 0) {
+    if (Object.keys(found).length > 0) {
       state.value = JOIN_FORM_STATE.EDITING;
       await focusWhenDrawn(JOIN_FORM_ID.SUMMARY);
       return;
@@ -194,6 +221,7 @@ export function useJoinForm({ locale, copy }: JoinFormOptions) {
     // The server found something the page did not
     if (error && isInputError(error)) {
       serverErrors.value = readFieldErrors(error.fields, JOIN_CHECKED_FIELDS, isJoinError);
+      showErrors(serverErrors.value);
       state.value = JOIN_FORM_STATE.EDITING;
       await focusWhenDrawn(JOIN_FORM_ID.SUMMARY);
       return;
