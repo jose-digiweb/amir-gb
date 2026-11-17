@@ -23,9 +23,12 @@ const t = getTranslations(getLocale(Astro.currentLocale));
   <BuildingComplex slot="icon" />
   <div data-copy-account={BANK_TRANSFER.IBAN} class="group flex flex-1 flex-col gap-4">
     <p class="flex flex-col gap-1">
-      <span aria-live="polite" class="type-body-sm text-text-muted">
-        <span class="group-data-copied:hidden">{t["donatePage.bankLine"]}</span>
+      <span class="type-body-sm text-text-muted">
+        <span class="group-data-copied:hidden group-data-failed:hidden">
+          {t["donatePage.bankLine"]}
+        </span>
         <span class="hidden group-data-copied:inline">{t["bank.copied"]}</span>
+        <span class="hidden group-data-failed:inline">{t["bank.copyFailed"]}</span>
       </span>
       <span class="type-h4 tracking-wider whitespace-nowrap text-text-heading tabular-nums tablet:type-h3">
         {BANK_TRANSFER.IBAN}
@@ -43,6 +46,13 @@ const t = getTranslations(getLocale(Astro.currentLocale));
       <span class="tablet:hidden">{t["bank.copy"]}</span>
       <span class="hidden tablet:inline">{t["bank.copyLabel"]}</span>
     </Button>
+    <span
+      role="status"
+      class="sr-only"
+      data-copy-status
+      data-copied-text={t["bank.copied"]}
+      data-failed-text={t["bank.copyFailed"]}
+    ></span>
   </div>
 </WayCard>
 

@@ -1,5 +1,7 @@
 // Dependencies
 import { INTL_LOCALE } from "../../i18n/constants";
+import { COPY_OUTCOME } from "../dom/constants";
+import { showCopyOutcome } from "../dom/helpers";
 import {
   AMOUNT_PLACEHOLDER,
   AMOUNT_TEXT,
@@ -378,7 +380,7 @@ export function enableCopyAccount(): void {
 
 /**
  * The {@link copyAccount} helper
- * @description Copies the account number without spaces and marks its bar or card copied until the reset
+ * @description Copies the account number without spaces and shows on its bar or card that it was copied, or that it could not be
  * @param {HTMLElement} root - The bank transfer bar or card
  * @returns {Promise<void>}
  */
@@ -388,16 +390,14 @@ async function copyAccount(root: HTMLElement): Promise<void> {
     "",
   );
 
-  // A blocked clipboard leaves the bar as it was, the number stays readable to copy by hand
+  // A blocked clipboard says so, and the number stays readable to copy by hand
   try {
     await navigator.clipboard.writeText(iban);
   } catch {
+    showCopyOutcome(root, COPY_OUTCOME.FAILED);
     return;
   }
 
-  // Show the copied state, then return to the copy button
-  root.dataset[COPY_ACCOUNT.COPIED] = "";
-  window.setTimeout(() => {
-    delete root.dataset[COPY_ACCOUNT.COPIED];
-  }, COPY_ACCOUNT.RESET_MS);
+  // Show it was copied for a few seconds
+  showCopyOutcome(root, COPY_OUTCOME.COPIED);
 }

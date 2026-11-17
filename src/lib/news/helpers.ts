@@ -1,4 +1,6 @@
 // Dependencies
+import { COPY_OUTCOME } from "../dom/constants";
+import { showCopyOutcome } from "../dom/helpers";
 import { SITE_TIME_ZONE } from "../content/constants";
 import {
   COPY_LINK,
@@ -351,26 +353,27 @@ function focusAfterLoad(added: HTMLElement[], footer: HTMLElement): void {
  * @returns {void}
  */
 export function enableCopyLink(): void {
-  for (const button of document.querySelectorAll<HTMLButtonElement>(COPY_LINK.BUTTON)) {
-    button.addEventListener(COPY_LINK.CLICK, () => copyLink(button));
+  for (const group of document.querySelectorAll<HTMLElement>(COPY_LINK.GROUP)) {
+    const button = group.querySelector<HTMLButtonElement>(COPY_LINK.BUTTON);
+    button?.addEventListener(COPY_LINK.CLICK, () => copyLink(group));
   }
 }
 
 /**
  * The {@link copyLink} helper
- * @description Copies the page's address and marks the button copied until the reset
- * @param {HTMLButtonElement} button - The Copy link button
+ * @description Copies the page's address and shows that it was copied, or that it could not be
+ * @param {HTMLElement} group - The share row that holds the Copy link button
  * @returns {Promise<void>}
  */
-async function copyLink(button: HTMLButtonElement): Promise<void> {
-  // A blocked clipboard leaves the button as it was; the address bar still has the link
+async function copyLink(group: HTMLElement): Promise<void> {
+  // A blocked clipboard says so; the address bar still has the link
   try {
     await navigator.clipboard.writeText(window.location.href);
   } catch {
+    showCopyOutcome(group, COPY_OUTCOME.FAILED);
     return;
   }
 
-  // Say it was copied, then rest again
-  button.setAttribute(COPY_LINK.COPIED, "");
-  window.setTimeout(() => button.removeAttribute(COPY_LINK.COPIED), COPY_LINK.RESET_MS);
+  // Say it was copied for a few seconds
+  showCopyOutcome(group, COPY_OUTCOME.COPIED);
 }

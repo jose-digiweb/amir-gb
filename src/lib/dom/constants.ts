@@ -23,6 +23,18 @@ export const FEATURE = {
 export const SELECTOR = {
   COMMAND_BUTTON: "button[commandfor]",
   LIGHT_DISMISS_DIALOG: 'dialog[closedby="any"]',
+  OPEN_DIALOG: "dialog[open]",
+  OPEN_POPOVER: ":popover-open",
+} as const;
+
+/**
+ * The {@link PAGE_EVENT} constant
+ * @description The events a page's open layers and fallbacks listen for
+ */
+export const PAGE_EVENT = {
+  CLICK: "click",
+  CLOSE: "close",
+  PAGE_HIDE: "pagehide",
 } as const;
 
 /**
@@ -32,4 +44,27 @@ export const SELECTOR = {
 export const ATTRIBUTE = {
   COMMAND: "command",
   COMMAND_FOR: "commandfor",
+  EXPANDED: "aria-expanded",
+} as const;
+
+/**
+ * The {@link ARIA_STATE} constant
+ * @description The values an expanded state takes
+ */
+export const ARIA_STATE = {
+  TRUE: "true",
+  FALSE: "false",
+} as const;
+
+/**
+ * The {@link COPY_OUTCOME} constant
+ * @description How a copy button shows what happened: the data mark on its group, the status line screen readers hear, the words that line takes, and how long the mark stays
+ */
+export const COPY_OUTCOME = {
+  COPIED: "copied",
+  FAILED: "failed",
+  STATUS: "[data-copy-status]",
+  COPIED_TEXT: "copiedText",
+  FAILED_TEXT: "failedText",
+  RESET_MS: 3000,
 } as const;

@@ -19,9 +19,10 @@ const t = getTranslations(getLocale(Astro.currentLocale));
   class="group @container flex min-h-16 items-center gap-3 rounded-lg bg-surface py-2.5 pr-2.5 pl-5 shadow-sm"
 >
   <p class="flex min-w-0 flex-1 flex-col gap-0.5">
-    <span aria-live="polite" class="type-small text-text-muted">
-      <span class="group-data-copied:hidden">{t["bank.line"]}</span>
+    <span class="type-small text-text-muted">
+      <span class="group-data-copied:hidden group-data-failed:hidden">{t["bank.line"]}</span>
       <span class="hidden group-data-copied:inline">{t["bank.copied"]}</span>
+      <span class="hidden group-data-failed:inline">{t["bank.copyFailed"]}</span>
     </span>
     <span class="type-body-strong tracking-wider whitespace-nowrap text-text-heading tabular-nums @max-xs:type-body-sm @max-xs:font-semibold">
       {BANK_TRANSFER.IBAN}
@@ -39,6 +40,13 @@ const t = getTranslations(getLocale(Astro.currentLocale));
       {t["bank.copy"]}
     </span>
   </button>
+  <span
+    role="status"
+    class="sr-only"
+    data-copy-status
+    data-copied-text={t["bank.copied"]}
+    data-failed-text={t["bank.copyFailed"]}
+  ></span>
 </div>
 
 <script>
