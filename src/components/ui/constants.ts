@@ -34,10 +34,11 @@ export const BUTTON_SIZE = {
 
 /**
  * The {@link ICON_BUTTON_TONE} constant
- * @description A round icon control's ground: none, a quiet tint, the sunken surface, or navy
+ * @description A round icon control's ground: none, a quiet tint, the sunken surface, navy, or an outline beside an outline or gold button
  */
 export const ICON_BUTTON_TONE = {
   PLAIN: "plain",
+  OUTLINE: "outline",
   TINTED: "tinted",
   SUNKEN: "sunken",
   BRAND: "brand",

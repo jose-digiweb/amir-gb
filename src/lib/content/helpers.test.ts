@@ -1,6 +1,7 @@
 // Dependencies
 import { describe, expect, it } from "vitest";
 import { en } from "../../i18n/translations/en";
+import { EVENT_TYPE } from "./constants";
 import {
   cacheContentPage,
   compareWeekly,
@@ -98,6 +99,7 @@ describe("planWhatsOn", () => {
     id: "e",
     href: "#",
     title: "E",
+    type: EVENT_TYPE.COMMUNITY,
     startsAt: new Date(),
     isOnline: false,
     isDutchOnly: false,

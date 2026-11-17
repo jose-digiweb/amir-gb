@@ -9,31 +9,30 @@ import type { ConstellationLayout } from "./types";
 
 /**
  * The {@link PHONE_CONSTELLATION} constant
- * @description The phone's constellation from the Main board, in its 390 wide drawing: three icon discs, no values
+ * @description The phone's crown from the Main board, cut below the header: the joined hands in their ring with the six help services round them
  */
 export const PHONE_CONSTELLATION = {
-  frame: { width: 390, height: 372, cropX: 0, cropY: 0 },
-  ring: { centreX: 296, centreY: 206, radius: 106, count: 20, size: 14 },
-  photo: { centreX: 296, centreY: 206, size: 150 },
+  frame: { width: 390, height: 380, cropX: 0, cropY: 64 },
+  ring: { centreX: 195, centreY: 222, radius: 108, count: 20, size: 18 },
+  photo: { centreX: 195, centreY: 222, size: 150 },
   threads: {
-    paths: [
-      "M190.6 194.8 Q173.2 167.4 176.9 146.6",
-      "M204.2 259.0 Q173.8 247.1 164.4 228.1",
-      "M253.0 302.9 Q221.6 311.0 203.0 301.2",
-    ],
-    stitch: { width: 1.5, dash: "4 4" },
+    paths: ["M195.0 114.0 Q190.2 125.0 195.0 136.0", "M195.0 330.0 Q199.8 319.0 195.0 308.0"],
+    stitch: { width: 1.75, dash: "6 6" },
   },
-  dots: { centreX: 296, centreY: 326, radius: 430, step: 40 },
+  dots: { centreX: 195, centreY: 222, radius: 260, step: 28 },
   discs: [
-    { service: HELP_SERVICE.LETTERS, tint: TILE_COLOUR.GOLD, x: 138, y: 83, size: 58 },
-    { service: HELP_SERVICE.DUTCH, tint: TILE_COLOUR.FOREST, x: 107, y: 177, size: 58 },
-    { service: HELP_SERVICE.WORK, tint: TILE_COLOUR.BRICK, x: 138, y: 271, size: 58 },
+    { service: HELP_SERVICE.LETTERS, tint: TILE_COLOUR.GOLD, x: 169, y: 72, size: 52 },
+    { service: HELP_SERVICE.DUTCH, tint: TILE_COLOUR.FOREST, x: 302, y: 134, size: 52 },
+    { service: HELP_SERVICE.WORK, tint: TILE_COLOUR.BRICK, x: 302, y: 258, size: 52 },
+    { service: HELP_SERVICE.KIDS, tint: TILE_COLOUR.NAVY, x: 169, y: 320, size: 52 },
+    { service: HELP_SERVICE.HEALTH, tint: TILE_COLOUR.FOREST, x: 36, y: 258, size: 52 },
+    { service: HELP_SERVICE.CULTURE, tint: TILE_COLOUR.GOLD, x: 36, y: 134, size: 52 },
   ],
   pills: [],
   lozenges: [
-    { x: 34, y: 114, size: 13, isRinged: true },
-    { x: 28, y: 324, size: 13, isRinged: false },
-    { x: 354, y: 346, size: 13, isRinged: true },
+    { x: 24, y: 94, size: 12, isRinged: true },
+    { x: 354, y: 324, size: 12, isRinged: false },
+    { x: 28, y: 332, size: 12, isRinged: false },
   ],
   hasLabels: false,
 } as const satisfies ConstellationLayout;
@@ -127,7 +126,7 @@ export const DESKTOP_CONSTELLATION = {
  * @description The joined hands' sizes, shared by all three drawings so the page fetches one photo; the breakpoints repeat --breakpoint-desktop and --breakpoint-tablet
  */
 export const CONSTELLATION_PHOTO_SIZES =
-  "(min-width: 1180px) 190px, (min-width: 700px) 17.9vh, 38.4vw";
+  "(min-width: 1180px) 190px, (min-width: 700px) 17.9vh, 150px";
 
 /**
  * The {@link OPENING_OPENER_LANGS} constant

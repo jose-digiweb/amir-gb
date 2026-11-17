@@ -167,6 +167,17 @@ export function getShortWeekday(date: Date, locale: string): string {
 }
 
 /**
+ * The {@link getLongWeekday} helper
+ * @description An event's weekday written out, for a card's when line
+ * @param {Date} date - When the event starts
+ * @param {string} locale - The page's language
+ * @returns {string} For example "Saturday"
+ */
+export function getLongWeekday(date: Date, locale: string): string {
+  return capitalise(formatInSiteTime(date, locale, { weekday: "long" }));
+}
+
+/**
  * The {@link getClockTime} helper
  * @description A moment's time of day in Dutch time
  * @param {Date} date - The moment

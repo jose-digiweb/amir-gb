@@ -1,0 +1,70 @@
+---
+// Dependencies
+import { MessageCircle, Phone } from "@lucide/astro";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { CONTACT } from "../../../site/constants";
+import { BUTTON_SIZE, ICON_BUTTON_TONE } from "../../ui/constants";
+
+// Components
+import Button from "../../ui/Button.astro";
+import IconButton from "../../ui/IconButton.astro";
+
+/**
+ * The {@link Props} type
+ * @description The props of the HomeDock component, the phone's bar pinned to the bottom of the home page with WhatsApp us and Call
+ */
+type Props = Record<string, never>;
+
+// Read the dock's copy in the page's language
+const t = getTranslations(getLocale(Astro.currentLocale));
+---
+
+<div
+  role="region"
+  aria-label={t["dock.label"]}
+  data-home-dock
+  class="home-dock fixed inset-x-0 bottom-0 z-30 border-t border-border bg-surface/72 px-4 pt-3 backdrop-blur-lg backdrop-saturate-150 tablet:hidden"
+>
+  <div class="flex gap-3">
+    <Button href={CONTACT.WHATSAPP_HREF} size={BUTTON_SIZE.COMPACT} class="flex-1">
+      <MessageCircle />
+      {t["contact.whatsapp"]}
+    </Button>
+    <IconButton href={CONTACT.PHONE_HREF} label={t["contact.call"]} tone={ICON_BUTTON_TONE.OUTLINE}>
+      <Phone />
+    </IconButton>
+  </div>
+</div>
+
+<script>
+  // Dependencies
+  import { enableHomeDock } from "./enableHomeDock";
+
+  // The dock follows the page's scroll and the keyboard
+  enableHomeDock();
+</script>
+
+<style>
+  @reference "../../../styles/global.css";
+
+  .home-dock {
+    padding-bottom: calc(var(--space-3) + env(safe-area-inset-bottom));
+    translate: 0 100%;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      translate var(--duration-fast) var(--ease-exit),
+      opacity var(--duration-fast) var(--ease-exit),
+      visibility 0s linear var(--duration-fast);
+  }
+
+  .home-dock[data-shown] {
+    translate: 0 0;
+    opacity: 1;
+    visibility: visible;
+    transition:
+      translate var(--duration-base) var(--ease-enter),
+      opacity var(--duration-base) var(--ease-enter),
+      visibility 0s;
+  }
+</style>

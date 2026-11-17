@@ -4,6 +4,7 @@ import { ArrowRight } from "@lucide/astro";
 import { getRelativeLocaleUrl } from "astro:i18n";
 import { getLocale, getTranslations } from "../../../i18n/helpers";
 import { WHATS_ON_STATE } from "../../../lib/content/constants";
+import { EVENTS_RAIL_ID } from "./constants";
 import { planWhatsOn } from "../../../lib/content/helpers";
 import { ROUTE } from "../../../site/constants";
 import { BUTTON_TONE, DECOR_TONE, OPENER_TONE, WOVEN_SHADE_TONE } from "../../ui/constants";
@@ -14,6 +15,8 @@ import Opener from "../../ui/Opener.astro";
 import OpenerDots from "../OpenerDots.astro";
 import WovenShade from "../../ui/WovenShade.astro";
 import EventCard from "./EventCard.astro";
+import EventRailCard from "./EventRailCard.astro";
+import RailDots from "../rail/RailDots.astro";
 import FeaturedEventCard from "./FeaturedEventCard.astro";
 import NoEventsCard from "./NoEventsCard.astro";
 import WeeklyTile from "./WeeklyTile.astro";
@@ -49,7 +52,7 @@ const hasWeekly = plan.weekly.length > 0;
 <section
   id="events"
   aria-labelledby="events-title"
-  class="relative isolate z-20 -mt-8 overflow-x-clip rounded-xl bg-surface-brand pt-12 pb-28 text-on-brand [--focus:var(--focus-on-brand)] tablet:-mt-10 tablet:pt-15 tablet:pb-36 desktop:-mt-14 desktop:px-margin-lg desktop:pt-22 desktop:pb-48"
+  class="relative isolate z-20 -mt-8 overflow-x-clip rounded-xl bg-surface-brand pt-10 pb-20 text-on-brand [--focus:var(--focus-on-brand)] tablet:-mt-10 tablet:pt-15 tablet:pb-36 desktop:-mt-14 desktop:px-margin-lg desktop:pt-22 desktop:pb-48"
 >
   <WovenShade tone={WOVEN_SHADE_TONE.ON_BRAND} />
   <div class="flex items-end justify-between gap-4 px-margin pb-6 tablet:px-margin-md tablet:pb-7 desktop:px-0 desktop:pb-10">
@@ -75,13 +78,21 @@ const hasWeekly = plan.weekly.length > 0;
   </div>
 
   {isRail ? (
-    <ul class="events-rail flex snap-x snap-mandatory gap-3 overflow-x-auto px-margin pb-1 tablet:gap-4 tablet:px-margin-md desktop:grid desktop:grid-cols-4 desktop:gap-6 desktop:overflow-visible desktop:px-0">
-      {events.map((event) => (
-        <li class="w-62 shrink-0 snap-start tablet:w-64 desktop:w-auto">
-          <EventCard event={event} class="h-82 tablet:h-90 desktop:h-105" />
-        </li>
-      ))}
-    </ul>
+    <>
+      <ul
+        id={EVENTS_RAIL_ID}
+        data-rail={EVENTS_RAIL_ID}
+        class="events-rail flex snap-x snap-mandatory gap-3 overflow-x-auto px-margin pb-1 tablet:gap-4 tablet:px-margin-md desktop:grid desktop:grid-cols-4 desktop:gap-6 desktop:overflow-visible desktop:px-0"
+      >
+        {events.map((event) => (
+          <li class="w-68 shrink-0 snap-start tablet:w-64 desktop:w-auto">
+            <EventRailCard event={event} class="tablet:hidden" />
+            <EventCard event={event} class="hidden h-90 tablet:block desktop:h-105" />
+          </li>
+        ))}
+      </ul>
+      <RailDots count={events.length} railId={EVENTS_RAIL_ID} isOnBrand />
+    </>
   ) : (
     <ul
       style={gridStyle}

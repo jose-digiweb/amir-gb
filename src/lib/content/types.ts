@@ -1,6 +1,7 @@
 // Types
 import type { CacheHint, ContentEntry, ContentSeo, EmDashCollections } from "emdash";
 import type { Post } from "../../../emdash-env";
+import type { EventType } from "../events/types";
 import type { POST_TYPE, TILE_COLOUR, WEEKDAYS, WHATS_ON_STATE } from "./constants";
 
 /**
@@ -69,6 +70,7 @@ export type HomeEvent = {
   id: string;
   href: string;
   title: string;
+  type: EventType;
   startsAt: Date;
   endsAt?: Date;
   placeName?: string;

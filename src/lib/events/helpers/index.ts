@@ -8,6 +8,7 @@ export {
   getEventPhase,
   getEventTimes,
   getLongDate,
+  getLongWeekday,
   getMonthKey,
   getMonthMark,
   getMonthName,

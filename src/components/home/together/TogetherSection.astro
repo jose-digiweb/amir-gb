@@ -27,23 +27,25 @@ const joinHref = getRelativeLocaleUrl(locale, ROUTE.JOIN);
 
 <section
   aria-labelledby="together-title"
-  class="relative isolate z-10 overflow-hidden rounded-t-xl bg-bg-alt px-margin pt-12 pb-36 tablet:px-margin-md tablet:pt-18 tablet:pb-44 desktop:px-margin-lg desktop:pt-24 desktop:pb-64"
+  class="relative isolate z-10 -mt-8 overflow-hidden rounded-t-xl bg-bg-alt px-margin pt-10 pb-20 tablet:mt-0 tablet:px-margin-md tablet:pt-18 tablet:pb-44 desktop:px-margin-lg desktop:pt-24 desktop:pb-64"
 >
   <WovenShade />
   <div class="flex flex-col tablet:flex-row tablet:items-center tablet:justify-between tablet:gap-6 desktop:gap-12">
-    <div class="relative flex flex-col tablet:w-81 desktop:w-132 desktop:shrink-0">
-      <OpenerDots id="opener-dots-together" />
-      <Opener label={t["together.opener"]} />
-      <h2 id="together-title" class="mt-2 type-section-title text-text-heading desktop:mt-3">
-        <span class="whitespace-nowrap tablet:block desktop:inline">
-          {t["together.titleStart"]}
-        </span>{" "}
-        <span class="whitespace-nowrap">{t["together.titleEnd"]}</span>
-      </h2>
-      <p class="mt-4 type-body text-pretty text-text-muted desktop:mt-6 desktop:max-w-120 desktop:type-lead">
+    <div class="contents tablet:flex tablet:w-81 tablet:flex-col desktop:w-132 desktop:shrink-0">
+      <div class="relative flex flex-col">
+        <OpenerDots id="opener-dots-together" />
+        <Opener label={t["together.opener"]} />
+        <h2 id="together-title" class="mt-2 type-section-title text-text-heading desktop:mt-3">
+          <span class="whitespace-nowrap tablet:block desktop:inline">
+            {t["together.titleStart"]}
+          </span>{" "}
+          <span class="whitespace-nowrap">{t["together.titleEnd"]}</span>
+        </h2>
+      </div>
+      <p class="order-2 mt-5 type-body text-pretty text-text-muted tablet:order-none tablet:mt-4 desktop:mt-6 desktop:max-w-120 desktop:type-lead">
         {t["together.text"]}
       </p>
-      <div class="mt-5 desktop:mt-7">
+      <div class="order-3 mt-5 tablet:order-none desktop:mt-7">
         <MottoChips />
       </div>
       <div class="mt-8 hidden tablet:flex desktop:mt-10">
@@ -53,11 +55,11 @@ const joinHref = getRelativeLocaleUrl(locale, ROUTE.JOIN);
         </Button>
       </div>
     </div>
-    <div class="relative mt-10 tablet:mt-0 tablet:w-102 tablet:shrink-0 desktop:w-auto desktop:max-w-174 desktop:min-w-0 desktop:flex-1">
+    <div class="relative order-1 mt-6 tablet:order-none tablet:mt-0 tablet:w-102 tablet:shrink-0 desktop:w-auto desktop:max-w-174 desktop:min-w-0 desktop:flex-1">
       <Cloth />
     </div>
   </div>
-  <Button href={joinHref} block class="mt-8 tablet:hidden">
+  <Button href={joinHref} block class="mt-6 tablet:hidden">
     {t["opening.join"]}
     <ArrowRight />
   </Button>

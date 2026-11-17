@@ -109,6 +109,7 @@ export async function getUpcomingEvents(
       id: entry.data.id,
       href: getRelativeLocaleUrl(locale, `${ROUTE.EVENTS}${entry.data.slug ?? ""}/`),
       title: entry.data.title,
+      type: entry.data.type,
       startsAt: new Date(entry.data.starts_at),
       endsAt: entry.data.ends_at ? new Date(entry.data.ends_at) : undefined,
       placeName: entry.data.place_name,

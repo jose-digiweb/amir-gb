@@ -1,0 +1,48 @@
+---
+// Dependencies
+import { RAIL } from "./constants";
+
+/**
+ * The {@link Props} type
+ * @description The props of the RailDots component, the page dots under a phone swipe row, the current one long
+ */
+type Props = {
+  /** How many cards the row holds. */
+  count: number;
+  /** The row's id, so the dots follow it. */
+  railId: string;
+  /** The dots on navy or on paper. */
+  isOnBrand: boolean;
+};
+
+// One dot per card
+const { count, railId, isOnBrand } = Astro.props;
+const dots = Array.from({ length: count }, (_, index) => index);
+---
+
+<div
+  aria-hidden="true"
+  data-rail-dots={railId}
+  class="mt-4 flex justify-center gap-1.5 tablet:hidden"
+>
+  {dots.map((index) => (
+    <i
+      data-current={index === 0 ? RAIL.CURRENT : null}
+      class:list={[
+        "h-1.5 w-1.5 rounded-pill data-current:w-4",
+        {
+          "bg-on-brand/35 data-current:bg-on-brand": isOnBrand,
+          "bg-text-heading/25 data-current:bg-text-heading": !isOnBrand,
+        },
+      ]}
+    ></i>
+  ))}
+</div>
+
+<script>
+  // Dependencies
+  import { enableRailDots } from "./enableRailDots";
+
+  // Each row's dots follow its scroll
+  enableRailDots();
+</script>

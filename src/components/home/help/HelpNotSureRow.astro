@@ -1,0 +1,29 @@
+---
+// Dependencies
+import { ChevronRight, MessageCircle } from "@lucide/astro";
+import { getLocale, getTranslations } from "../../../i18n/helpers";
+import { CONTACT } from "../../../site/constants";
+
+/**
+ * The {@link Props} type
+ * @description The props of the HelpNotSureRow component, the phone's row under the launcher that opens WhatsApp for anyone who does not know where to start
+ */
+type Props = Record<string, never>;
+
+// Read the row's copy in the page's language
+const t = getTranslations(getLocale(Astro.currentLocale));
+---
+
+<a
+  href={CONTACT.WHATSAPP_HREF}
+  class="mt-3 flex touch-manipulation items-center gap-4 rounded-lg bg-surface px-4 py-3 text-text-heading inset-ring inset-ring-border transition-[scale] duration-fast ease-standard select-none active:scale-98"
+>
+  <span class="grid size-11 shrink-0 place-items-center rounded-full bg-tint-gold">
+    <MessageCircle class="size-icon-md" />
+  </span>
+  <span class="flex min-w-0 flex-1 flex-col gap-0.5">
+    <span class="type-button text-balance">{t["help.notSureTitle"]}</span>
+    <span class="type-body-sm text-pretty text-text-muted">{t["help.notSureText"]}</span>
+  </span>
+  <ChevronRight class="size-icon-md shrink-0" />
+</a>

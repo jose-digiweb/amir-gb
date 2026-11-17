@@ -5,7 +5,7 @@ import { getRelativeLocaleUrl } from "astro:i18n";
 import { getLocale, getTranslations } from "../../../i18n/helpers";
 import { ROUTE } from "../../../site/constants";
 import { BUTTON_TONE } from "../../ui/constants";
-import { STORY_LAYOUT } from "./constants";
+import { STORY_LAYOUT, STORY_ROW_MIN } from "./constants";
 import { getStoryLayout } from "./helpers";
 
 // Components
@@ -15,6 +15,7 @@ import OpenerDots from "../OpenerDots.astro";
 import WovenShade from "../../ui/WovenShade.astro";
 import OneStory from "./OneStory.astro";
 import StoryTile from "./StoryTile.astro";
+import StoryRow from "./StoryRow.astro";
 import StoryWall from "./StoryWall.astro";
 
 // Types
@@ -39,11 +40,12 @@ const [firstStory] = stories;
 const one = layout === STORY_LAYOUT.ONE ? firstStory : undefined;
 const isPair = layout === STORY_LAYOUT.PAIR;
 const isWall = layout === STORY_LAYOUT.WALL;
+const hasRow = stories.length >= STORY_ROW_MIN;
 ---
 
 <section
   aria-labelledby="life-title"
-  class="relative isolate flex flex-col gap-3 overflow-x-clip px-margin pt-14 pb-28 tablet:px-margin-md tablet:pt-16 tablet:pb-32 desktop:px-margin-lg desktop:pt-28 desktop:pb-48"
+  class="relative isolate z-20 -mt-8 flex flex-col gap-3 overflow-x-clip rounded-t-xl bg-bg px-margin pt-10 pb-20 tablet:z-auto tablet:mt-0 tablet:rounded-none tablet:px-margin-md tablet:pt-16 tablet:pb-32 desktop:px-margin-lg desktop:pt-28 desktop:pb-48"
 >
   <WovenShade />
   <span
@@ -72,8 +74,14 @@ const isWall = layout === STORY_LAYOUT.WALL;
     </div>
   </div>
   {one ? <OneStory story={one} /> : null}
+  {hasRow ? <StoryRow stories={stories} /> : null}
   {isPair ? (
-    <ul class="grid grid-cols-2 gap-3 tablet:grid-cols-3 desktop:gap-6">
+    <ul
+      class:list={[
+        "grid grid-cols-2 gap-3 tablet:grid-cols-3 desktop:gap-6",
+        { "max-tablet:hidden": hasRow },
+      ]}
+    >
       {stories.map((story) => (
         <li class="nth-3:max-tablet:hidden">
           <StoryTile story={story} class="h-65 tablet:h-90 desktop:h-105" />
@@ -81,7 +89,11 @@ const isWall = layout === STORY_LAYOUT.WALL;
       ))}
     </ul>
   ) : null}
-  {isWall ? <StoryWall stories={stories} /> : null}
+  {isWall ? (
+    <div class="hidden tablet:block">
+      <StoryWall stories={stories} />
+    </div>
+  ) : null}
 </section>
 
 <style>
