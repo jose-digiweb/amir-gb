@@ -5,6 +5,7 @@ import {
   getEntrySitemapUrls,
   getPageSitemapUrls,
   renderRobots,
+  renderStagingRobots,
   renderSitemapIndex,
   renderUrlset,
 } from "./sitemap";
@@ -98,5 +99,11 @@ describe("the files", () => {
     expect(renderRobots("https://www.amir-gb.nl/sitemap.xml", "/_emdash/")).toBe(
       "User-agent: *\nAllow: /\nDisallow: /_emdash/\n\nSitemap: https://www.amir-gb.nl/sitemap.xml\n",
     );
+  });
+});
+
+describe("renderStagingRobots", () => {
+  it("keeps every search engine out of every page", () => {
+    expect(renderStagingRobots()).toBe("User-agent: *\nDisallow: /\n");
   });
 });

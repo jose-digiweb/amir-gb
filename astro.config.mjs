@@ -11,6 +11,10 @@ import { DEFAULT_LOCALE, LOCALES } from "./src/i18n/constants.ts";
 
 import vue from "@astrojs/vue";
 
+// The public address every canonical, language link and sitemap entry uses: AMIR-GB's own domain
+// once SITE_URL names it at build time, the preview address until then.
+const SITE = process.env.SITE_URL ?? "https://amir-gb.josefurtado-digital.workers.dev";
+
 // https://astro.build/config
 export default defineConfig({
   // The site is static: pages are built once and served as files. Only the pages that show
@@ -19,10 +23,14 @@ export default defineConfig({
   output: "static",
   adapter: cloudflare(),
 
-  // The public address every canonical, language link and sitemap entry uses: AMIR-GB's own
-  // domain once SITE_URL names it at build time, the preview address until then. On the preview
-  // address every page asks search engines to stay away (src/lib/seo).
-  site: process.env.SITE_URL ?? "https://amir-gb.josefurtado-digital.workers.dev",
+  // On the preview address every page asks search engines to stay away (src/lib/seo).
+  site: SITE,
+
+  // EmDash's Image asks Astro to resize a photo by its full address on this site; Astro only
+  // resizes images from domains listed here, and otherwise sends the original upload.
+  image: {
+    domains: [new URL(SITE).hostname],
+  },
 
   // Pages that show CMS content are cached at Cloudflare's edge (experimental provider) and
   // purged by the cache hints EmDash's queries return, so publishing shows at once.

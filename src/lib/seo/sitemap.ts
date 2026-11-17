@@ -135,3 +135,12 @@ export function renderRobots(sitemap: string, privatePath: string): string {
     "",
   ].join("\n");
 }
+
+/**
+ * The {@link renderStagingRobots} helper
+ * @description robots.txt while the site is in staging: every search engine stays out of every page
+ * @returns {string} The file's text
+ */
+export function renderStagingRobots(): string {
+  return ["User-agent: *", "Disallow: /", ""].join("\n");
+}
