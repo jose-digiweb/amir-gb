@@ -17,3 +17,15 @@ export const PRIVATE_PAGE = {
   ROBOTS_HEADER: "X-Robots-Tag",
   ROBOTS_VALUE: "noindex",
 } as const;
+
+/**
+ * The {@link STALE_PAGE} constant
+ * @description How a page kept from an earlier deploy finds that its own files are gone, and reloads once to get the current page
+ */
+export const STALE_PAGE = {
+  ASSET_PATH: "/_astro/",
+  STORAGE_KEY: "amir-gb-reloaded:",
+  RELOAD_GAP_MS: 60_000,
+  HYDRATION_ERROR_EVENT: "astro:hydration-error",
+  IMPORT_ERRORS: ["dynamically imported module", "Importing a module script failed"],
+} as const;

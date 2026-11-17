@@ -1,6 +1,7 @@
 ---
 // Dependencies
 import { i18n } from "astro:config/server";
+import { STALE_PAGE } from "../lib/browser-cache/constants";
 import {
   COLOR_SCHEME_AUTO,
   THEME_OVERRIDES,
@@ -46,6 +47,78 @@ const speculationRules = JSON.stringify(SPECULATION_RULES);
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="color-scheme" content={COLOR_SCHEME_AUTO} />
+    <script
+      is:inline
+      define:vars={{
+        assetPath: STALE_PAGE.ASSET_PATH,
+        reloadPrefix: STALE_PAGE.STORAGE_KEY,
+        reloadGap: STALE_PAGE.RELOAD_GAP_MS,
+        hydrationErrorEvent: STALE_PAGE.HYDRATION_ERROR_EVENT,
+        importErrors: STALE_PAGE.IMPORT_ERRORS,
+      }}
+    >
+      // Reload once when this page's own files are gone, as happens to a page kept from before a deploy
+      const reloadKey = reloadPrefix + location.pathname;
+      const reloadOnce = () => {
+        // A page rendered ahead of a tap reloads once it is shown
+        if (document.prerendering) {
+          document.addEventListener("prerenderingchange", reloadOnce, { once: true });
+          return;
+        }
+
+        // A reload within the last minute means the file is missing for real, so the page stays
+        try {
+          if (Date.now() - Number(sessionStorage.getItem(reloadKey)) < reloadGap) {
+            return;
+          }
+          sessionStorage.setItem(reloadKey, String(Date.now()));
+        } catch {
+          // Blocked storage cannot stop a loop, so the page stays
+          return;
+        }
+        location.reload();
+      };
+
+      // A failed import names the missing module in its message
+      const isFailedImport = (error) =>
+        importErrors.some((text) => String(error?.message ?? error).includes(text));
+
+      // Only a script or a stylesheet holds the page's code
+      const sourceOf = (element) => {
+        if (element instanceof HTMLScriptElement) {
+          return element.src;
+        }
+        if (element instanceof HTMLLinkElement) {
+          return element.href;
+        }
+        return "";
+      };
+
+      // A script or stylesheet of the site that did not load
+      window.addEventListener(
+        "error",
+        (event) => {
+          if (sourceOf(event.target).includes(assetPath)) {
+            reloadOnce();
+          }
+        },
+        true,
+      );
+
+      // Code loaded on demand that did not load, outside an island
+      window.addEventListener("unhandledrejection", (event) => {
+        if (isFailedImport(event.reason)) {
+          reloadOnce();
+        }
+      });
+
+      // An island whose code did not load, after Astro's own retry
+      window.addEventListener(hydrationErrorEvent, (event) => {
+        if (isFailedImport(event.detail?.error)) {
+          reloadOnce();
+        }
+      });
+    </script>
     <script
       is:inline
       define:vars={{
